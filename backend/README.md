@@ -13,6 +13,16 @@ uv run pytest                             # tests
 uv run ruff check . && uv run ruff format --check .
 ```
 
+## The contract file
+
+`docs/openapi.json` is generated from `app/schemas/` and `app/routers/`. The frontend's
+typed client is generated from it, so it is committed and must stay current: the test
+suite fails when it is not.
+
+```bash
+uv run python scripts/export_openapi.py
+```
+
 ## Layout
 
 | Path | Owner | Contents |

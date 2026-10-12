@@ -190,3 +190,11 @@ def test_operation_ids_are_plain_function_names() -> None:
     operation = app.openapi()["paths"]["/api/cook/sessions"]["post"]
 
     assert operation["operationId"] == "start_cook_session"
+
+
+def test_committed_openapi_file_is_current() -> None:
+    from scripts.export_openapi import OPENAPI_PATH, render
+
+    assert OPENAPI_PATH.read_text() == render(), (
+        "docs/openapi.json is out of date. Run: uv run python scripts/export_openapi.py"
+    )
