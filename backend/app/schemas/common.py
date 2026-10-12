@@ -108,3 +108,15 @@ class FreshnessStatus(StrEnum):
     USE_SOON = "use_soon"
     CHECK = "check"
     EXPIRED = "expired"
+
+
+class TasteTag(StrEnum):
+    """Describes a recipe. Role 5 owns the list; recipes in seed/ may only use these."""
+
+    LIGHT = "light"
+    RICH = "rich"
+    SPICY = "spicy"
+    SOUPY = "soupy"
+    LOW_OIL = "low_oil"
+    HIGH_PROTEIN = "high_protein"
+    VEGETABLE_RICH = "vegetable_rich"
