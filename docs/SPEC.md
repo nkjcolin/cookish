@@ -107,7 +107,7 @@ cookish/
 ├── infra/                   SAM template, scripts (Role 3)
 ├── eval/                    load/, reco_scenarios/, image_set/, user_study/
 ├── docs/                    openapi.json (generated), diagrams/
-└── docker-compose.yml       Local stack and EC2 fallback
+└── docker-compose.yml       Whole stack locally: frontend, backend, Postgres
 ```
 
 **Rule:** routers contain no business logic. A router validates input, calls one service function, and returns its result. Stubs are replaced by swapping the body of the service function, so nobody edits another role's files.
@@ -262,7 +262,7 @@ Base path `/api` (served by `api` Lambda) and `/ai` (served by `ai` Lambda). All
 
 ### A8. Environments and conventions
 
-- One AWS account, one region, **one deployed environment**: a single stack named `cookish`. Resources are named `cookish-<thing>` and tagged `project=cookish`. Day-to-day development runs locally under Docker Compose; the deployed stack is what the user study, the load test and the demo use.
+- One AWS account, one region, **one deployed environment**: a single stack named `cookish`. Resources are named `cookish-<thing>` and tagged `project=cookish`. Locally, `docker compose up` starts the frontend, the backend and Postgres together, and the part you are editing can run directly on your machine instead (`pnpm dev`, `uv run uvicorn`). Each person's local database is their own and is not shared: everyone gets the same starting data from the migrations and seed files in the repository. the deployed stack is what the user study, the load test and the demo use.
 - Nobody creates resources by clicking in the console except to experiment; anything that survives goes into `infra/template.yaml`.
 - Git: trunk-based. `main` is protected and auto-deploys to the stack. Short-lived branches, pull requests with one reviewer, CI must pass.
 - Secrets live in Secrets Manager or SSM Parameter Store, never in the repo. `.env.example` documents the variables.

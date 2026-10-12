@@ -6,7 +6,7 @@ Cookish keeps a low-maintenance record of what is in your kitchen and answers tw
 
 ## Status
 
-Project skeleton. The development specification is in [docs/SPEC.md](docs/SPEC.md); read Part A, then the brief for your role in Part B.
+Contract and stubs are in place; features are being filled in. The development specification is in [docs/SPEC.md](docs/SPEC.md); read Part A, then the brief for your role in Part B.
 
 ## Repository layout
 
@@ -25,4 +25,22 @@ Project skeleton. The development specification is in [docs/SPEC.md](docs/SPEC.m
 - This repository is public. Never commit credentials, account details, participant data or course materials.
 - AI assistance is allowed and must be declared in the final report.
 
-Setup instructions are added as each part is created.
+## Run it locally
+
+With Docker, one command starts everything:
+
+```bash
+docker compose up
+```
+
+| Service | Address |
+|---|---|
+| Web app | http://localhost:5173 |
+| API and interactive docs | http://localhost:8000/api/docs |
+| Postgres | `postgres://cookish:cookish@localhost:5432/cookish` |
+
+Edits to `frontend/` and `backend/` reload automatically. To work on one part, run it directly on your machine and keep the rest in Docker; see [frontend/README.md](frontend/README.md) and [backend/README.md](backend/README.md).
+
+Your local database is yours alone. `docker compose down -v` wipes it and the next start gives you a clean one.
+
+Every endpoint currently returns fixed sample data. The API contract is [docs/openapi.json](docs/openapi.json); how to replace a stub with real logic is described in [backend/README.md](backend/README.md).

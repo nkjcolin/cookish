@@ -1,0 +1,56 @@
+# The whole stack with one command: docker compose up
+#
+#   frontend  http://localhost:5173
+#   backend   http://localhost:8000/api/docs
+#   db        postgres://cookish:cookish@localhost:5432/cookish
+#
+# Source folders are mounted, so edits reload without rebuilding. If you are working on
+# one part, you can run just that part on your machine and leave the rest here, e.g.
+#   docker compose up db backend     # then `pnpm dev` in frontend/
+#
+# Database data lives in a volume on your own machine and is not shared with anyone.
+# Start again from a clean database with: docker compose down -v
+
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: cookish
+      POSTGRES_PASSWORD: cookish
+      POSTGRES_DB: cookish
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cookish -d cookish"]
+      interval: 2s
+      timeout: 3s
+      retries: 15
+
+  backend:
+    build: ./backend
+    environment:
+      DATABASE_URL: postgresql+psycopg://cookish:cookish@db:5432/cookish
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build: ./frontend
+    environment:
+      VITE_PROXY_TARGET: http://backend:8000
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+
+volumes:
+  db-data:
