@@ -164,7 +164,7 @@ def inventory_items() -> dict[str, InventoryItem]:
               freshness=FreshnessStatus.CHECK, source=ItemSource.PHOTO),
         _item("tofu", "firm tofu", count=1, use_first_in_days=4,
               label=LabelDateKind.USE_BY, source=ItemSource.VOICE),
-        _item("rice", "rice", bought_days_ago=30),
+        _item("rice", "rice", state=RemainingState.UNKNOWN, bought_days_ago=30),
     ]  # fmt: skip
     return {str(i.id): i for i in items}
 

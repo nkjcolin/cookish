@@ -46,5 +46,7 @@ const change = unwrap(
 | Path | Contents |
 |---|---|
 | `src/api/` | Generated types, typed client, query hooks |
+| `src/assets/icons/` | SVGs exported from the Figma file; use them through `components/Icon.tsx`, do not redraw them |
+| `src/index.css` | Design tokens (colours, radii, font) from the Figma file |
 | `src/components/` | Shared components and the app layout |
 | `src/pages/` | One file per screen |
