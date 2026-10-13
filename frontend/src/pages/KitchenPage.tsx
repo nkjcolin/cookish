@@ -5,6 +5,8 @@ import { useInventory } from "../api/queries";
 import { Chip } from "../components/Chip";
 import { Icon } from "../components/Icon";
 import { Level } from "../components/Level";
+import { UndoToast } from "../components/UndoToast";
+import { useArrivalState, type KitchenChanged } from "../lib/arrival";
 import { UpdateItemSheet } from "./kitchen/UpdateItemSheet";
 import {
   buildKitchenView,
@@ -31,6 +33,8 @@ export function KitchenPage() {
   const inventory = useInventory();
   const [filter, setFilter] = useState<KitchenFilter>("all");
   const [editing, setEditing] = useState<KitchenRow | null>(null);
+  const changed = useArrivalState<KitchenChanged>();
+  const [showToast, setShowToast] = useState(changed !== null);
   const view = useMemo(
     () => (inventory.data ? buildKitchenView(inventory.data, new Date()) : null),
     [inventory.data],
@@ -82,6 +86,10 @@ export function KitchenPage() {
 
           <Sections rows={filterRows(view.rows, filter)} onEdit={setEditing} />
         </>
+      )}
+
+      {changed && showToast && (
+        <UndoToast eventId={changed.eventId} message={changed.message} onDismiss={() => setShowToast(false)} />
       )}
 
       {editing && (

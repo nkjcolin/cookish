@@ -9,6 +9,7 @@ import checkToast from "../assets/icons/check-toast.svg";
 import checkWhite from "../assets/icons/check-white.svg";
 import chevronLeft from "../assets/icons/chevron-left.svg";
 import chevronRight from "../assets/icons/chevron-right.svg";
+import chevronRightPrimary from "../assets/icons/chevron-right-primary.svg";
 import chevronRightSm from "../assets/icons/chevron-right-sm.svg";
 import clock from "../assets/icons/clock.svg";
 import clockInfo from "../assets/icons/clock-info.svg";
@@ -24,6 +25,7 @@ import lockSm from "../assets/icons/lock-sm.svg";
 import mic from "../assets/icons/mic.svg";
 import pencil from "../assets/icons/pencil.svg";
 import plus from "../assets/icons/plus.svg";
+import plusMuted from "../assets/icons/plus-muted.svg";
 import gridActive from "../assets/icons/grid-active.svg";
 import pot from "../assets/icons/pot.svg";
 import potActive from "../assets/icons/pot-active.svg";
@@ -31,6 +33,7 @@ import potHero from "../assets/icons/pot-hero.svg";
 import potInk from "../assets/icons/pot-ink.svg";
 import potWarn from "../assets/icons/pot-warn.svg";
 import receipt from "../assets/icons/receipt.svg";
+import receiptPrimary from "../assets/icons/receipt-primary.svg";
 import refresh from "../assets/icons/refresh.svg";
 import refreshSm from "../assets/icons/refresh-sm.svg";
 import search from "../assets/icons/search.svg";
@@ -93,6 +96,9 @@ const icons = {
   "search-lg": { src: searchLg, size: 28, inset: "16.67% 12.5% 12.5% 16.67%", bleed: "-4.54%" },
   "clock-info": { src: clockInfo, size: 20, inset: "12.5%", bleed: "-6.33%" },
   "pot-warn": { src: potWarn, size: 20, inset: "8.33% 8.33% 12.5% 8.33%", bleed: "-6% -5.7%" },
+  "receipt-primary": { src: receiptPrimary, size: 20, inset: "8.33% 16.67%", bleed: "-5.7% -7.12% -5.7% -7.13%" },
+  "chevron-right-primary": { src: chevronRightPrimary, size: 18, inset: "25% 37.5%", bleed: "-10.56% -21.11%" },
+  "plus-muted": { src: plusMuted, size: 16, inset: "20.83%", bleed: "-11.79%" },
   pencil: { src: pencil, size: 16, inset: "8.29% 8.2% 8.33% 8.33%", bleed: "-7.12% -7.11%" },
   pot: { src: pot, size: 22, inset: "8.33% 8.33% 12.5% 8.33%", bleed: "-5.17% -4.91%" },
   "pot-active": { src: potActive, size: 22, inset: "8.33% 8.33% 12.5% 8.33%", bleed: "-6.03% -5.73%" },

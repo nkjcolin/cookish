@@ -1,5 +1,5 @@
-import { useEffect, useState, type FormEvent } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useState, type FormEvent } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { ApiError, type Schemas } from "../api/client";
 import {
@@ -16,6 +16,7 @@ import { Chip } from "../components/Chip";
 import { Icon } from "../components/Icon";
 import { Tag } from "../components/Tag";
 import { UndoToast } from "../components/UndoToast";
+import { useArrivalState } from "../lib/arrival";
 import { AdjustSheet } from "./cook/AdjustSheet";
 import { FeedbackCard } from "./cook/FeedbackCard";
 import { NoMatch } from "./cook/NoMatch";
@@ -50,15 +51,10 @@ export function CookPage() {
   const [noMatch, setNoMatch] = useState<{ constraints: CookConstraints; relaxable: string[] } | null>(null);
   const [request, setRequest] = useState("");
   const [sheet, setSheet] = useState<"adjust" | "check" | null>(null);
-  // Set when arriving from a meal that was just confirmed. It is taken out of the browser
-  // history straight away, so a reload does not ask about the same meal again.
-  const location = useLocation();
-  const [cooked] = useState(location.state as CookedState | null);
+  // Set when arriving from a meal that was just confirmed.
+  const cooked = useArrivalState<CookedState>();
   const [askRating, setAskRating] = useState(cooked !== null);
   const [showToast, setShowToast] = useState(cooked !== null);
-  useEffect(() => {
-    if (location.state !== null) navigate(location.pathname, { replace: true, state: null });
-  }, [location, navigate]);
 
   const now = new Date();
   const meal = mealName(now);

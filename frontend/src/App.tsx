@@ -2,6 +2,8 @@ import { Navigate, Route, Routes } from "react-router-dom";
 
 import { AppLayout } from "./components/AppLayout";
 import { AddIngredientsPage } from "./pages/AddIngredientsPage";
+import { BuyPage } from "./pages/BuyPage";
+import { ConfirmPurchasePage } from "./pages/ConfirmPurchasePage";
 import { CookPage } from "./pages/CookPage";
 import { KitchenPage } from "./pages/KitchenPage";
 import { MorePage } from "./pages/MorePage";
@@ -16,13 +18,14 @@ export function App() {
       <Route element={<AppLayout />}>
         <Route index element={<Navigate to="/cook" replace />} />
         <Route path="/cook" element={<CookPage />} />
-        <Route path="/buy" element={<PlaceholderPage title="Buy" />} />
+        <Route path="/buy" element={<BuyPage />} />
         <Route path="/more" element={<MorePage />} />
         <Route path="/more/kitchen" element={<KitchenPage />} />
         <Route path="/more/add" element={<AddIngredientsPage />} />
         <Route path="/more/history" element={<PlaceholderPage title="Kitchen history & undo" />} />
       </Route>
       <Route element={<AppLayout tabBar={false} />}>
+        <Route path="/buy/confirm" element={<ConfirmPurchasePage />} />
         <Route path="/cook/recipe" element={<RecipePage />} />
         <Route path="/more/add/review" element={<ReviewDraftPage />} />
         <Route path="/more/preferences" element={<PreferencesPage />} />
