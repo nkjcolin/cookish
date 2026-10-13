@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 
 import type { Schemas } from "../api/client";
-import { useCookRecord, useCurrentSuggestion, useRecipe, useStarRecipe } from "../api/cook";
+import { useCookRecord, useCurrentSuggestion, useFinishCooking, useRecipe, useStarRecipe } from "../api/cook";
+import type { CookedState } from "./cook/view";
 import { BottomBar } from "../components/BottomBar";
 import { Button } from "../components/Button";
 import { Icon } from "../components/Icon";
@@ -26,6 +27,7 @@ export function RecipePage() {
   const suggestion = useCurrentSuggestion();
   const recipe = useRecipe(record?.recipe.id);
   const star = useStarRecipe();
+  const finishCooking = useFinishCooking();
   const [starred, setStarred] = useState(record?.recipe.starred ?? false);
   const [confirming, setConfirming] = useState(false);
 
@@ -144,7 +146,16 @@ export function RecipePage() {
         <WhatsLeftSheet
           record={record}
           onClose={() => setConfirming(false)}
-          onDone={(result) => navigate("/cook/done", { state: { eventId: result.event.id } })}
+          onDone={(result) => {
+            const cooked: CookedState = {
+              recordId: record.id,
+              title: summary.title,
+              eventId: result.event.id,
+              itemCount: result.event.lines.length,
+            };
+            finishCooking();
+            navigate("/cook", { state: cooked });
+          }}
         />
       )}
     </div>

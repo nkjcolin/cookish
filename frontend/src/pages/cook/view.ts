@@ -68,3 +68,6 @@ export function describeAdjust(adjust: Schemas["CookAdjust"]): string {
   if (adjust.people != null) parts.push(`${adjust.people} ${adjust.people === 1 ? "person" : "people"}`);
   return parts.length > 0 ? parts.join(" · ") : "nothing we can change";
 }
+
+/** Handed from the recipe screen to Cook through router state once a meal is confirmed. */
+export type CookedState = { recordId: string; title: string; eventId: string; itemCount: number };

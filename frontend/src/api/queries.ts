@@ -65,3 +65,16 @@ export function useSavePreferences() {
       queryClient.setQueryData<Schemas["Me"]>(["me"], (me) => (me ? { ...me, preferences } : me)),
   });
 }
+
+export function useUndoStockEvent() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (eventId: string) =>
+      unwrap(
+        await api.POST("/api/stock-events/{event_id}/undo", {
+          params: { path: { event_id: eventId }, header: idempotencyKey() },
+        }),
+      ),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["inventory"] }),
+  });
+}

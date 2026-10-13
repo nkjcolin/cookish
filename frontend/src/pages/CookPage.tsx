@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import type { Schemas } from "../api/client";
 import { useCookStep, useCookSuggestion, useInterpret, useSelectSuggestion, useStarRecipe } from "../api/cook";
@@ -7,9 +7,18 @@ import { Button } from "../components/Button";
 import { Chip } from "../components/Chip";
 import { Icon } from "../components/Icon";
 import { Tag } from "../components/Tag";
+import { UndoToast } from "../components/UndoToast";
 import { AdjustSheet } from "./cook/AdjustSheet";
+import { FeedbackCard } from "./cook/FeedbackCard";
 import { QuickCheckSheet } from "./cook/QuickCheckSheet";
-import { COOK_TAG_LABELS, TASTE_TAG_LABELS, difficultyLabel, ingredientLines, mealName } from "./cook/view";
+import {
+  COOK_TAG_LABELS,
+  TASTE_TAG_LABELS,
+  difficultyLabel,
+  ingredientLines,
+  mealName,
+  type CookedState,
+} from "./cook/view";
 
 type Suggestion = Schemas["Suggestion"];
 type CookTag = Schemas["CookTag"];
@@ -28,6 +37,10 @@ export function CookPage() {
   const interpret = useInterpret();
   const [request, setRequest] = useState("");
   const [sheet, setSheet] = useState<"adjust" | "check" | null>(null);
+  // Set when arriving from a meal that was just confirmed.
+  const cooked = useLocation().state as CookedState | null;
+  const [askRating, setAskRating] = useState(cooked !== null);
+  const [showToast, setShowToast] = useState(cooked !== null);
 
   const now = new Date();
   const meal = mealName(now);
@@ -79,6 +92,10 @@ export function CookPage() {
           <Icon name="sliders-ink" />
         </button>
       </div>
+
+      {cooked && askRating && (
+        <FeedbackCard recordId={cooked.recordId} title={cooked.title} onDone={() => setAskRating(false)} />
+      )}
 
       {session.isPending && <p className="text-[14px] text-ink-muted">Finding something to cook…</p>}
       {failure && (
@@ -153,6 +170,14 @@ export function CookPage() {
             />
           )}
         </>
+      )}
+
+      {cooked && showToast && (
+        <UndoToast
+          eventId={cooked.eventId}
+          message={`Kitchen updated · ${cooked.itemCount} ${cooked.itemCount === 1 ? "item" : "items"}`}
+          onDismiss={() => setShowToast(false)}
+        />
       )}
     </div>
   );

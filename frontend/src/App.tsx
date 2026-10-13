@@ -24,7 +24,6 @@ export function App() {
       </Route>
       <Route element={<AppLayout tabBar={false} />}>
         <Route path="/cook/recipe" element={<RecipePage />} />
-        <Route path="/cook/done" element={<PlaceholderPage title="Kitchen updated" />} />
         <Route path="/more/add/review" element={<ReviewDraftPage />} />
         <Route path="/more/preferences" element={<PreferencesPage />} />
       </Route>

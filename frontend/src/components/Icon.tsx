@@ -5,6 +5,7 @@ import camera from "../assets/icons/camera.svg";
 import cartActive from "../assets/icons/cart-active.svg";
 import checkFreshSm from "../assets/icons/check-fresh-sm.svg";
 import checkGreen from "../assets/icons/check-green.svg";
+import checkToast from "../assets/icons/check-toast.svg";
 import checkWhite from "../assets/icons/check-white.svg";
 import chevronLeft from "../assets/icons/chevron-left.svg";
 import chevronRight from "../assets/icons/chevron-right.svg";
@@ -36,6 +37,8 @@ import slidersInk from "../assets/icons/sliders-ink.svg";
 import sparkleSm from "../assets/icons/sparkle-sm.svg";
 import star from "../assets/icons/star.svg";
 import starLg from "../assets/icons/star-lg.svg";
+import thumbDown from "../assets/icons/thumb-down.svg";
+import thumbUp from "../assets/icons/thumb-up.svg";
 import undo from "../assets/icons/undo.svg";
 import undoSm from "../assets/icons/undo-sm.svg";
 import users from "../assets/icons/users.svg";
@@ -81,6 +84,9 @@ const icons = {
   "pot-hero": { src: potHero, size: 84, inset: "8.33% 8.33% 12.5% 8.33%", bleed: "-0.98% -0.93%" },
   "star-lg": { src: starLg, size: 20, inset: "11.67% 11.67% 15.42% 11.67%", bleed: "-6.51% -6.2%" },
   "undo-sm": { src: undoSm, size: 14, inset: "29.17% 12.5%", bleed: "-18.86% -10.48%" },
+  "thumb-down": { src: thumbDown, size: 18, inset: "8.33% 8.33% 8.33% 9.04%", bleed: "-6.67% -6.72%" },
+  "thumb-up": { src: thumbUp, size: 18, inset: "8.33% 9.04% 8.33% 8.33%", bleed: "-6.67% -6.72%" },
+  "check-toast": { src: checkToast, size: 18, inset: "25% 16.67% 29.17% 16.67%", bleed: "-14.55% -10%" },
   pencil: { src: pencil, size: 16, inset: "8.29% 8.2% 8.33% 8.33%", bleed: "-7.12% -7.11%" },
   pot: { src: pot, size: 22, inset: "8.33% 8.33% 12.5% 8.33%", bleed: "-5.17% -4.91%" },
   "pot-active": { src: potActive, size: 22, inset: "8.33% 8.33% 12.5% 8.33%", bleed: "-6.03% -5.73%" },

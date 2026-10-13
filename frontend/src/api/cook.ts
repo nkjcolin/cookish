@@ -104,3 +104,25 @@ export function useConfirmCook(recordId: string) {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["inventory"] }),
   });
 }
+
+/** One tap after the meal. Only a cooked dish can be rated. */
+export function useRateCook() {
+  return useMutation({
+    mutationFn: async ({ recordId, rating }: { recordId: string; rating: Schemas["Rating"] }) =>
+      unwrap(
+        await api.POST("/api/cook/records/{record_id}/feedback", {
+          params: { path: { record_id: recordId } },
+          body: { rating },
+        }),
+      ),
+  });
+}
+
+/** After a meal is confirmed: forget the finished dish and start a fresh session. */
+export function useFinishCooking() {
+  const queryClient = useQueryClient();
+  return () => {
+    queryClient.removeQueries({ queryKey: COOK_RECORD_KEY });
+    void queryClient.resetQueries({ queryKey: SUGGESTION_KEY });
+  };
+}
