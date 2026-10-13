@@ -1,14 +1,19 @@
 import cart from "../assets/icons/cart.svg";
+import arrowUp from "../assets/icons/arrow-up.svg";
 import camera from "../assets/icons/camera.svg";
 import cartActive from "../assets/icons/cart-active.svg";
+import checkGreen from "../assets/icons/check-green.svg";
 import checkWhite from "../assets/icons/check-white.svg";
 import chevronLeft from "../assets/icons/chevron-left.svg";
 import chevronRight from "../assets/icons/chevron-right.svg";
 import chevronRightSm from "../assets/icons/chevron-right-sm.svg";
 import clock from "../assets/icons/clock.svg";
+import clockSm from "../assets/icons/clock-sm.svg";
 import fridge from "../assets/icons/fridge.svg";
 import grid from "../assets/icons/grid.svg";
 import help from "../assets/icons/help.svg";
+import helpSm from "../assets/icons/help-sm.svg";
+import leafHero from "../assets/icons/leaf-hero.svg";
 import lock from "../assets/icons/lock.svg";
 import mic from "../assets/icons/mic.svg";
 import pencil from "../assets/icons/pencil.svg";
@@ -21,6 +26,8 @@ import receipt from "../assets/icons/receipt.svg";
 import refresh from "../assets/icons/refresh.svg";
 import search from "../assets/icons/search.svg";
 import sliders from "../assets/icons/sliders.svg";
+import slidersInk from "../assets/icons/sliders-ink.svg";
+import star from "../assets/icons/star.svg";
 import undo from "../assets/icons/undo.svg";
 import users from "../assets/icons/users.svg";
 import x from "../assets/icons/x.svg";
@@ -47,6 +54,13 @@ const icons = {
   users: { src: users, size: 18, inset: "12.5% 8.33%", bleed: "-7.04% -6.33%" },
   "pot-ink": { src: potInk, size: 18, inset: "8.33% 8.33% 12.5% 8.33%", bleed: "-6.67% -6.33%" },
   "chevron-right-sm": { src: chevronRightSm, size: 16, inset: "25% 37.5%", bleed: "-11.87% -23.75%" },
+  "sliders-ink": { src: slidersInk, size: 20, inset: "8.33% 12.5%", bleed: "-5.7% -6.33%" },
+  "leaf-hero": { src: leafHero, size: 61, inset: "8.33% 12.5% 12.5% 8.33%", bleed: "-1.66%" },
+  star: { src: star, size: 18, inset: "11.67% 11.67% 15.42% 11.67%", bleed: "-7.24% -6.88%" },
+  "clock-sm": { src: clockSm, size: 13, inset: "12.5%", bleed: "-11.28%" },
+  "check-green": { src: checkGreen, size: 14, inset: "25% 16.67% 29.17% 16.67%", bleed: "-20.26% -13.93%" },
+  "help-sm": { src: helpSm, size: 14, inset: "12.5%", bleed: "-10.48%" },
+  "arrow-up": { src: arrowUp, size: 18, inset: "20.83%", bleed: "-9.05%" },
   pencil: { src: pencil, size: 16, inset: "8.29% 8.2% 8.33% 8.33%", bleed: "-7.12% -7.11%" },
   pot: { src: pot, size: 22, inset: "8.33% 8.33% 12.5% 8.33%", bleed: "-5.17% -4.91%" },
   "pot-active": { src: potActive, size: 22, inset: "8.33% 8.33% 12.5% 8.33%", bleed: "-6.03% -5.73%" },

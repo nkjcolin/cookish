@@ -9,7 +9,7 @@ const tones = {
 export function Tag({ tone = "muted", children }: { tone?: keyof typeof tones; children: ReactNode }) {
   return (
     <span
-      className={`shrink-0 rounded-pill px-[9px] py-[4px] text-[11.5px] font-semibold whitespace-nowrap ${tones[tone]}`}
+      className={`flex shrink-0 items-center gap-[4px] rounded-pill px-[9px] py-[4px] text-[11.5px] font-semibold whitespace-nowrap ${tones[tone]}`}
     >
       {children}
     </span>
