@@ -6,7 +6,7 @@ Cookish keeps a low-maintenance record of what is in your kitchen and answers tw
 
 ## Status
 
-Contract and stubs are in place; features are being filled in. The development specification is in [docs/SPEC.md](docs/SPEC.md); read Part A, then the brief for your role in Part B.
+The contract, the stubs and the whole frontend are in place; the backend still returns sample data. **Start with [docs/init.md](docs/init.md)**: it says where the project stands and what each role does next. The design decisions are in [docs/SPEC.md](docs/SPEC.md).
 
 ## Repository layout
 
