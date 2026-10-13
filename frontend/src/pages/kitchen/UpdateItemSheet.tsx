@@ -5,6 +5,7 @@ import { useUpdateInventoryItem } from "../../api/queries";
 import { Button } from "../../components/Button";
 import { Icon } from "../../components/Icon";
 import { Level } from "../../components/Level";
+import { Segmented } from "../../components/Segmented";
 import { Sheet } from "../../components/Sheet";
 import { freshnessNote, lastConfirmedText } from "./view";
 
@@ -126,25 +127,7 @@ export function UpdateItemSheet({ name, batch, batchCount, onClose }: UpdateItem
       )}
 
       <p className="text-[15px] font-bold">Stored in</p>
-      <div role="radiogroup" aria-label="Stored in" className="flex gap-[6px]">
-        {STORAGE_OPTIONS.map((option) => {
-          const selected = option.value === storage;
-          return (
-            <button
-              key={option.value}
-              type="button"
-              role="radio"
-              aria-checked={selected}
-              onClick={() => setStorage(option.value)}
-              className={`flex min-w-px flex-1 items-center justify-center rounded-pill py-[9px] text-[13px] font-bold whitespace-nowrap ${
-                selected ? "bg-dark text-surface" : "border border-border bg-surface text-ink"
-              }`}
-            >
-              {option.label}
-            </button>
-          );
-        })}
-      </div>
+      <Segmented label="Stored in" options={STORAGE_OPTIONS} value={storage} onChange={setStorage} />
 
       {note && (
         <div className="flex items-start gap-[10px] rounded-md bg-surface-sunken px-[14px] py-[12px]">

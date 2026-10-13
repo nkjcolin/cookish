@@ -1,5 +1,6 @@
 import cart from "../assets/icons/cart.svg";
 import arrowUp from "../assets/icons/arrow-up.svg";
+import box from "../assets/icons/box.svg";
 import camera from "../assets/icons/camera.svg";
 import cartActive from "../assets/icons/cart-active.svg";
 import checkGreen from "../assets/icons/check-green.svg";
@@ -13,8 +14,10 @@ import fridge from "../assets/icons/fridge.svg";
 import grid from "../assets/icons/grid.svg";
 import help from "../assets/icons/help.svg";
 import helpSm from "../assets/icons/help-sm.svg";
+import leaf from "../assets/icons/leaf.svg";
 import leafHero from "../assets/icons/leaf-hero.svg";
 import lock from "../assets/icons/lock.svg";
+import lockSm from "../assets/icons/lock-sm.svg";
 import mic from "../assets/icons/mic.svg";
 import pencil from "../assets/icons/pencil.svg";
 import plus from "../assets/icons/plus.svg";
@@ -27,6 +30,7 @@ import refresh from "../assets/icons/refresh.svg";
 import search from "../assets/icons/search.svg";
 import sliders from "../assets/icons/sliders.svg";
 import slidersInk from "../assets/icons/sliders-ink.svg";
+import sparkleSm from "../assets/icons/sparkle-sm.svg";
 import star from "../assets/icons/star.svg";
 import undo from "../assets/icons/undo.svg";
 import users from "../assets/icons/users.svg";
@@ -61,6 +65,10 @@ const icons = {
   "check-green": { src: checkGreen, size: 14, inset: "25% 16.67% 29.17% 16.67%", bleed: "-20.26% -13.93%" },
   "help-sm": { src: helpSm, size: 14, inset: "12.5%", bleed: "-10.48%" },
   "arrow-up": { src: arrowUp, size: 18, inset: "20.83%", bleed: "-9.05%" },
+  "lock-sm": { src: lockSm, size: 14, inset: "12.5% 16.67%", bleed: "-10.48% -11.79%" },
+  "sparkle-sm": { src: sparkleSm, size: 14, inset: "8.38%", bleed: "-8.58%" },
+  leaf: { src: leaf, size: 20, inset: "8.33% 12.5% 12.5% 8.33%", bleed: "-6%" },
+  box: { src: box, size: 20, inset: "8.34% 12.5% 8.33% 12.5%", bleed: "-5.7% -6.33%" },
   pencil: { src: pencil, size: 16, inset: "8.29% 8.2% 8.33% 8.33%", bleed: "-7.12% -7.11%" },
   pot: { src: pot, size: 22, inset: "8.33% 8.33% 12.5% 8.33%", bleed: "-5.17% -4.91%" },
   "pot-active": { src: potActive, size: 22, inset: "8.33% 8.33% 12.5% 8.33%", bleed: "-6.03% -5.73%" },

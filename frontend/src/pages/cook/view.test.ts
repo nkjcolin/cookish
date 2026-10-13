@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import type { Schemas } from "../../api/client";
-import { difficultyLabel, ingredientLines, mealName } from "./view";
+import { describeAdjust, difficultyLabel, ingredientLines, mealName } from "./view";
 
 function suggestion(statuses: [string, Schemas["IngredientStatus"]][]): Schemas["Suggestion"] {
   return {
@@ -47,5 +47,15 @@ describe("labels", () => {
     expect(mealName(new Date(2026, 9, 13, 8))).toBe("breakfast");
     expect(mealName(new Date(2026, 9, 13, 12))).toBe("lunch");
     expect(mealName(new Date(2026, 9, 13, 18))).toBe("dinner");
+  });
+});
+
+describe("describeAdjust", () => {
+  it("lists what a request was understood as", () => {
+    expect(describeAdjust({ tags: ["quicker", "less_oil"], max_minutes: 20 })).toBe("+ Quicker · + Less oil · ≤ 20 min");
+  });
+
+  it("admits when nothing was understood", () => {
+    expect(describeAdjust({ tags: [] })).toBe("nothing we can change");
   });
 });

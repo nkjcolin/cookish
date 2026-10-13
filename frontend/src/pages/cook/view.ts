@@ -53,3 +53,18 @@ export function ingredientLines(suggestion: Suggestion): IngredientLine[] {
   add("ask", "Check first", names("check"));
   return lines;
 }
+
+export const FRESHNESS_REASONS: Record<Schemas["FreshnessReason"], string> = {
+  past_use_by: "Past its use-by date",
+  past_best_before: "Past its best-before date",
+  past_estimate: "Past our estimated date",
+  no_date: "No date recorded",
+};
+
+/** "+ Quicker · ≤ 20 min": how a free-text request was understood, in the user's terms. */
+export function describeAdjust(adjust: Schemas["CookAdjust"]): string {
+  const parts = (adjust.tags ?? []).map((tag) => `+ ${COOK_TAG_LABELS[tag]}`);
+  if (adjust.max_minutes != null) parts.push(`≤ ${adjust.max_minutes} min`);
+  if (adjust.people != null) parts.push(`${adjust.people} ${adjust.people === 1 ? "person" : "people"}`);
+  return parts.length > 0 ? parts.join(" · ") : "nothing we can change";
+}

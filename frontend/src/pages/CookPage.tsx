@@ -7,6 +7,8 @@ import { Button } from "../components/Button";
 import { Chip } from "../components/Chip";
 import { Icon } from "../components/Icon";
 import { Tag } from "../components/Tag";
+import { AdjustSheet } from "./cook/AdjustSheet";
+import { QuickCheckSheet } from "./cook/QuickCheckSheet";
 import { COOK_TAG_LABELS, TASTE_TAG_LABELS, difficultyLabel, ingredientLines, mealName } from "./cook/view";
 
 type Suggestion = Schemas["Suggestion"];
@@ -25,11 +27,23 @@ export function CookPage() {
   const select = useSelectSuggestion(suggestion?.session_id);
   const interpret = useInterpret();
   const [request, setRequest] = useState("");
+  const [sheet, setSheet] = useState<"adjust" | "check" | null>(null);
 
   const now = new Date();
   const meal = mealName(now);
   const busy = step.isPending || select.isPending || interpret.isPending;
   const failure = session.error ?? step.error ?? select.error ?? interpret.error;
+
+  function showRecipe() {
+    setSheet(null);
+    select.mutate(undefined, { onSuccess: () => navigate("/cook/recipe") });
+  }
+
+  function cookThis() {
+    const unsure = suggestion && suggestion.needs_check.length + suggestion.freshness_check.length > 0;
+    if (unsure) setSheet("check");
+    else showRecipe();
+  }
 
   function nudge(tag: CookTag) {
     step.mutate({ kind: "adjust", body: { tags: [tag] } });
@@ -58,6 +72,8 @@ export function CookPage() {
         <button
           type="button"
           aria-label="Adjust"
+          disabled={!suggestion}
+          onClick={() => setSheet("adjust")}
           className="flex size-[40px] shrink-0 items-center justify-center rounded-pill border border-border bg-surface"
         >
           <Icon name="sliders-ink" />
@@ -73,13 +89,13 @@ export function CookPage() {
 
       {suggestion && (
         <>
-          <Constraints suggestion={suggestion} />
+          <Constraints suggestion={suggestion} onEdit={() => setSheet("adjust")} />
           <SuggestionCard
             suggestion={suggestion}
             busy={busy}
             onSkip={() => step.mutate({ kind: "next" })}
             onPrevious={() => step.mutate({ kind: "previous" })}
-            onCook={() => select.mutate(undefined, { onSuccess: () => navigate("/cook/recipe") })}
+            onCook={cookThis}
           />
 
           <section className="flex flex-col gap-[10px]">
@@ -116,21 +132,50 @@ export function CookPage() {
               </button>
             </form>
           </section>
+
+          {sheet === "adjust" && (
+            <AdjustSheet
+              suggestion={suggestion}
+              meal={meal}
+              onApply={(body) => step.mutate({ kind: "adjust", body })}
+              onClose={() => setSheet(null)}
+            />
+          )}
+          {sheet === "check" && (
+            <QuickCheckSheet
+              suggestion={suggestion}
+              onProceed={showRecipe}
+              onUnavailable={() => {
+                setSheet(null);
+                step.mutate({ kind: "next" });
+              }}
+              onClose={() => setSheet(null)}
+            />
+          )}
         </>
       )}
     </div>
   );
 }
 
-function Constraints({ suggestion }: { suggestion: Suggestion }) {
-  const { max_minutes: maxMinutes } = suggestion.applied_constraints;
-  const chip = "flex shrink-0 items-center rounded-pill px-[14px] py-[8px] text-[13px] font-semibold whitespace-nowrap";
+/** What this session is currently held to; tapping any of it opens the adjust sheet. */
+function Constraints({ suggestion, onEdit }: { suggestion: Suggestion; onEdit: () => void }) {
+  const { max_minutes: maxMinutes, tags } = suggestion.applied_constraints;
   return (
-    <div className="flex items-start gap-[8px]">
-      {maxMinutes !== null && <span className={`${chip} bg-dark text-surface`}>≤ {maxMinutes} min</span>}
-      <span className={`${chip} border border-border bg-surface text-ink`}>
+    <div className="-mx-[20px] flex items-start gap-[8px] overflow-x-auto px-[20px] [scrollbar-width:none]">
+      {maxMinutes !== null && (
+        <Chip selected onClick={onEdit}>
+          ≤ {maxMinutes} min
+        </Chip>
+      )}
+      <Chip onClick={onEdit}>
         {suggestion.people} {suggestion.people === 1 ? "person" : "people"}
-      </span>
+      </Chip>
+      {tags.map((tag) => (
+        <Chip key={tag} selected onClick={onEdit}>
+          {COOK_TAG_LABELS[tag]}
+        </Chip>
+      ))}
     </div>
   );
 }
