@@ -17,6 +17,7 @@ from app.schemas.cook import (
     CookRecord,
     CookRecordStatus,
     CookSessionCreate,
+    NoResultDetails,
     Suggestion,
     UseFirstItem,
     UseFirstList,
@@ -30,6 +31,13 @@ def start_session(user: CurrentUser, body: CookSessionCreate) -> Suggestion:
 
 
 def adjust(user: CurrentUser, session_id: UUID, body: CookAdjust) -> Suggestion:
+    # The stub has nothing under 20 minutes, so that the "nothing fits" screen can be built.
+    if body.max_minutes is not None and body.max_minutes < 20:
+        raise ApiError(
+            ErrorCode.NO_RESULT,
+            "Nothing fits all of that",
+            NoResultDetails(relaxable=["max_minutes", "tags"]).model_dump(),
+        )
     return mock.suggestion(
         "cabbage-tofu",
         people=body.people or 2,

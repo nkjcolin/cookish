@@ -198,3 +198,14 @@ def test_committed_openapi_file_is_current() -> None:
     assert OPENAPI_PATH.read_text() == render(), (
         "docs/openapi.json is out of date. Run: uv run python scripts/export_openapi.py"
     )
+
+
+def test_no_result_lists_what_can_be_relaxed() -> None:
+    response = client.post(f"/api/cook/sessions/{ANY}/adjust", json={"max_minutes": 15})
+
+    assert response.status_code == 404
+    assert response.json()["error"] == {
+        "code": "NO_RESULT",
+        "message": "Nothing fits all of that",
+        "details": {"relaxable": ["max_minutes", "tags"]},
+    }

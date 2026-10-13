@@ -126,3 +126,28 @@ export function useFinishCooking() {
     void queryClient.resetQueries({ queryKey: SUGGESTION_KEY });
   };
 }
+
+export type CookConstraints = { people: number; tags: Schemas["CookTag"][]; maxMinutes: number | null };
+
+/**
+ * Starts the session again with a reduced set of constraints. Adjustments only ever
+ * accumulate on a session, so dropping one means beginning a new session with the rest.
+ */
+export function useRestartCook() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (constraints: CookConstraints): Promise<Suggestion> => {
+      const first = unwrap(await api.POST("/api/cook/sessions", { body: { people: constraints.people } }));
+      if (constraints.tags.length === 0 && constraints.maxMinutes === null) return first;
+      const body: Schemas["CookAdjust"] = { tags: constraints.tags };
+      if (constraints.maxMinutes !== null) body.max_minutes = constraints.maxMinutes;
+      return unwrap(
+        await api.POST("/api/cook/sessions/{session_id}/adjust", {
+          params: { path: { session_id: first.session_id } },
+          body,
+        }),
+      );
+    },
+    onSuccess: (suggestion) => queryClient.setQueryData(SUGGESTION_KEY, suggestion),
+  });
+}

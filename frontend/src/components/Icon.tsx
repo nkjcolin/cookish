@@ -11,6 +11,7 @@ import chevronLeft from "../assets/icons/chevron-left.svg";
 import chevronRight from "../assets/icons/chevron-right.svg";
 import chevronRightSm from "../assets/icons/chevron-right-sm.svg";
 import clock from "../assets/icons/clock.svg";
+import clockInfo from "../assets/icons/clock-info.svg";
 import clockSm from "../assets/icons/clock-sm.svg";
 import fridge from "../assets/icons/fridge.svg";
 import grid from "../assets/icons/grid.svg";
@@ -28,10 +29,12 @@ import pot from "../assets/icons/pot.svg";
 import potActive from "../assets/icons/pot-active.svg";
 import potHero from "../assets/icons/pot-hero.svg";
 import potInk from "../assets/icons/pot-ink.svg";
+import potWarn from "../assets/icons/pot-warn.svg";
 import receipt from "../assets/icons/receipt.svg";
 import refresh from "../assets/icons/refresh.svg";
 import refreshSm from "../assets/icons/refresh-sm.svg";
 import search from "../assets/icons/search.svg";
+import searchLg from "../assets/icons/search-lg.svg";
 import sliders from "../assets/icons/sliders.svg";
 import slidersInk from "../assets/icons/sliders-ink.svg";
 import sparkleSm from "../assets/icons/sparkle-sm.svg";
@@ -87,6 +90,9 @@ const icons = {
   "thumb-down": { src: thumbDown, size: 18, inset: "8.33% 8.33% 8.33% 9.04%", bleed: "-6.67% -6.72%" },
   "thumb-up": { src: thumbUp, size: 18, inset: "8.33% 9.04% 8.33% 8.33%", bleed: "-6.67% -6.72%" },
   "check-toast": { src: checkToast, size: 18, inset: "25% 16.67% 29.17% 16.67%", bleed: "-14.55% -10%" },
+  "search-lg": { src: searchLg, size: 28, inset: "16.67% 12.5% 12.5% 16.67%", bleed: "-4.54%" },
+  "clock-info": { src: clockInfo, size: 20, inset: "12.5%", bleed: "-6.33%" },
+  "pot-warn": { src: potWarn, size: 20, inset: "8.33% 8.33% 12.5% 8.33%", bleed: "-6% -5.7%" },
   pencil: { src: pencil, size: 16, inset: "8.29% 8.2% 8.33% 8.33%", bleed: "-7.12% -7.11%" },
   pot: { src: pot, size: 22, inset: "8.33% 8.33% 12.5% 8.33%", bleed: "-5.17% -4.91%" },
   "pot-active": { src: potActive, size: 22, inset: "8.33% 8.33% 12.5% 8.33%", bleed: "-6.03% -5.73%" },

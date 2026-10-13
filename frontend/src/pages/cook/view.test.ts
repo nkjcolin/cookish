@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import type { Schemas } from "../../api/client";
-import { describeAdjust, difficultyLabel, ingredientLines, mealName } from "./view";
+import { describeAdjust, difficultyLabel, ingredientLines, mealName, mergeConstraints } from "./view";
 
 function suggestion(statuses: [string, Schemas["IngredientStatus"]][]): Schemas["Suggestion"] {
   return {
@@ -57,5 +57,19 @@ describe("describeAdjust", () => {
 
   it("admits when nothing was understood", () => {
     expect(describeAdjust({ tags: [] })).toBe("nothing we can change");
+  });
+});
+
+describe("mergeConstraints", () => {
+  it("adds a failed adjustment to what was already applied", () => {
+    const current = suggestion([]);
+    current.applied_constraints = { tags: ["quicker"], max_minutes: 30, max_difficulty: null };
+
+    expect(mergeConstraints(current, { tags: ["less_oil", "quicker"], max_minutes: 15 })).toEqual({
+      people: 2,
+      tags: ["quicker", "less_oil"],
+      maxMinutes: 15,
+    });
+    expect(mergeConstraints(current, null)).toEqual({ people: 2, tags: ["quicker"], maxMinutes: 30 });
   });
 });

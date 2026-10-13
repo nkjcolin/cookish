@@ -71,3 +71,18 @@ export function describeAdjust(adjust: Schemas["CookAdjust"]): string {
 
 /** Handed from the recipe screen to Cook through router state once a meal is confirmed. */
 export type CookedState = { recordId: string; title: string; eventId: string; itemCount: number };
+
+type Constraints = { people: number; tags: Schemas["CookTag"][]; maxMinutes: number | null };
+
+/** What the session would be held to if `adjust` were applied on top of `suggestion`. */
+export function mergeConstraints(suggestion: Suggestion, adjust: Schemas["CookAdjust"] | null): Constraints {
+  const applied = suggestion.applied_constraints;
+  return {
+    people: adjust?.people ?? suggestion.people,
+    tags: [...new Set([...applied.tags, ...(adjust?.tags ?? [])])],
+    maxMinutes: adjust?.max_minutes ?? applied.max_minutes,
+  };
+}
+
+/** Minutes added when the user agrees to relax the time limit. */
+export const RELAX_MINUTES = 15;

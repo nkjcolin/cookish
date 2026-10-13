@@ -1,8 +1,16 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import type { Schemas } from "../api/client";
-import { useCookStep, useCookSuggestion, useInterpret, useSelectSuggestion, useStarRecipe } from "../api/cook";
+import { ApiError, type Schemas } from "../api/client";
+import {
+  useCookStep,
+  useCookSuggestion,
+  useInterpret,
+  useRestartCook,
+  useSelectSuggestion,
+  useStarRecipe,
+  type CookConstraints,
+} from "../api/cook";
 import { Button } from "../components/Button";
 import { Chip } from "../components/Chip";
 import { Icon } from "../components/Icon";
@@ -10,6 +18,7 @@ import { Tag } from "../components/Tag";
 import { UndoToast } from "../components/UndoToast";
 import { AdjustSheet } from "./cook/AdjustSheet";
 import { FeedbackCard } from "./cook/FeedbackCard";
+import { NoMatch } from "./cook/NoMatch";
 import { QuickCheckSheet } from "./cook/QuickCheckSheet";
 import {
   COOK_TAG_LABELS,
@@ -17,6 +26,7 @@ import {
   difficultyLabel,
   ingredientLines,
   mealName,
+  mergeConstraints,
   type CookedState,
 } from "./cook/view";
 
@@ -35,17 +45,51 @@ export function CookPage() {
   const step = useCookStep(suggestion?.session_id);
   const select = useSelectSuggestion(suggestion?.session_id);
   const interpret = useInterpret();
+  const restart = useRestartCook();
+  // Set when the service has nothing that satisfies the session (NO_RESULT).
+  const [noMatch, setNoMatch] = useState<{ constraints: CookConstraints; relaxable: string[] } | null>(null);
   const [request, setRequest] = useState("");
   const [sheet, setSheet] = useState<"adjust" | "check" | null>(null);
-  // Set when arriving from a meal that was just confirmed.
-  const cooked = useLocation().state as CookedState | null;
+  // Set when arriving from a meal that was just confirmed. It is taken out of the browser
+  // history straight away, so a reload does not ask about the same meal again.
+  const location = useLocation();
+  const [cooked] = useState(location.state as CookedState | null);
   const [askRating, setAskRating] = useState(cooked !== null);
   const [showToast, setShowToast] = useState(cooked !== null);
+  useEffect(() => {
+    if (location.state !== null) navigate(location.pathname, { replace: true, state: null });
+  }, [location, navigate]);
 
   const now = new Date();
   const meal = mealName(now);
-  const busy = step.isPending || select.isPending || interpret.isPending;
-  const failure = session.error ?? step.error ?? select.error ?? interpret.error;
+  const busy = step.isPending || select.isPending || interpret.isPending || restart.isPending;
+  // "Nothing fits" is a state of its own (see NoMatch), not an error to report.
+  const unlessNoResult = (error: Error | null) => (relaxableOf(error) ? null : error);
+  const failure =
+    session.error ?? unlessNoResult(step.error) ?? select.error ?? interpret.error ?? unlessNoResult(restart.error);
+
+  /** Runs a step; when nothing fits, shows what could be relaxed instead of an error. */
+  function run(next: Parameters<typeof step.mutate>[0]) {
+    step.mutate(next, {
+      onSuccess: () => setNoMatch(null),
+      onError: (error) => {
+        const relaxable = relaxableOf(error);
+        if (!suggestion || !relaxable) return;
+        setNoMatch({ constraints: mergeConstraints(suggestion, next.kind === "adjust" ? next.body : null), relaxable });
+      },
+    });
+  }
+
+  /** Tries again with fewer constraints; if that still fits nothing, offers to relax more. */
+  function relax(constraints: CookConstraints) {
+    restart.mutate(constraints, {
+      onSuccess: () => setNoMatch(null),
+      onError: (error) => {
+        const relaxable = relaxableOf(error);
+        if (relaxable) setNoMatch({ constraints, relaxable });
+      },
+    });
+  }
 
   function showRecipe() {
     setSheet(null);
@@ -59,7 +103,7 @@ export function CookPage() {
   }
 
   function nudge(tag: CookTag) {
-    step.mutate({ kind: "adjust", body: { tags: [tag] } });
+    run({ kind: "adjust", body: { tags: [tag] } });
   }
 
   async function ask(event: FormEvent) {
@@ -67,7 +111,8 @@ export function CookPage() {
     const text = request.trim();
     if (!text) return;
     const { adjust } = await interpret.mutateAsync(text);
-    step.mutate({ kind: "adjust", body: adjust }, { onSuccess: () => setRequest("") });
+    run({ kind: "adjust", body: adjust });
+    setRequest("");
   }
 
   return (
@@ -104,14 +149,29 @@ export function CookPage() {
         </p>
       )}
 
-      {suggestion && (
+      {suggestion && noMatch && (
+        <NoMatch
+          constraints={noMatch.constraints}
+          relaxable={noMatch.relaxable}
+          busy={busy}
+          onAllowMoreTime={(minutes) =>
+            // The adjustment that failed was never applied, so everything it asked for is sent again.
+            run({ kind: "adjust", body: { tags: noMatch.constraints.tags, people: noMatch.constraints.people, max_minutes: minutes } })
+          }
+          onDropTime={() => relax({ ...noMatch.constraints, maxMinutes: null })}
+          onDropTag={(tag) => relax({ ...noMatch.constraints, tags: noMatch.constraints.tags.filter((t) => t !== tag) })}
+          onStartOver={() => relax({ people: noMatch.constraints.people, tags: [], maxMinutes: null })}
+        />
+      )}
+
+      {suggestion && !noMatch && (
         <>
           <Constraints suggestion={suggestion} onEdit={() => setSheet("adjust")} />
           <SuggestionCard
             suggestion={suggestion}
             busy={busy}
-            onSkip={() => step.mutate({ kind: "next" })}
-            onPrevious={() => step.mutate({ kind: "previous" })}
+            onSkip={() => run({ kind: "next" })}
+            onPrevious={() => run({ kind: "previous" })}
             onCook={cookThis}
           />
 
@@ -154,7 +214,7 @@ export function CookPage() {
             <AdjustSheet
               suggestion={suggestion}
               meal={meal}
-              onApply={(body) => step.mutate({ kind: "adjust", body })}
+              onApply={(body) => run({ kind: "adjust", body })}
               onClose={() => setSheet(null)}
             />
           )}
@@ -164,7 +224,7 @@ export function CookPage() {
               onProceed={showRecipe}
               onUnavailable={() => {
                 setSheet(null);
-                step.mutate({ kind: "next" });
+                run({ kind: "next" });
               }}
               onClose={() => setSheet(null)}
             />
@@ -181,6 +241,12 @@ export function CookPage() {
       )}
     </div>
   );
+}
+
+/** The soft conditions a NO_RESULT error says could be relaxed; null for any other error. */
+function relaxableOf(error: unknown): string[] | null {
+  if (!(error instanceof ApiError) || error.code !== "NO_RESULT") return null;
+  return Array.isArray(error.details.relaxable) ? (error.details.relaxable as string[]) : [];
 }
 
 /** What this session is currently held to; tapping any of it opens the adjust sheet. */
