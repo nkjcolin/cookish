@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 
 import { AppLayout } from "./components/AppLayout";
+import { AddIngredientsPage } from "./pages/AddIngredientsPage";
 import { KitchenPage } from "./pages/KitchenPage";
 import { MorePage } from "./pages/MorePage";
 import { PlaceholderPage } from "./pages/PlaceholderPage";
@@ -14,7 +15,7 @@ export function App() {
         <Route path="/buy" element={<PlaceholderPage title="Buy" />} />
         <Route path="/more" element={<MorePage />} />
         <Route path="/more/kitchen" element={<KitchenPage />} />
-        <Route path="/more/add" element={<PlaceholderPage title="Add Ingredients" />} />
+        <Route path="/more/add" element={<AddIngredientsPage />} />
         <Route path="/more/preferences" element={<PlaceholderPage title="Preferences" />} />
         <Route path="/more/history" element={<PlaceholderPage title="Kitchen history & undo" />} />
       </Route>
