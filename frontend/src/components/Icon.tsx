@@ -1,12 +1,14 @@
 import cart from "../assets/icons/cart.svg";
 import cartActive from "../assets/icons/cart-active.svg";
 import chevronLeft from "../assets/icons/chevron-left.svg";
+import clock from "../assets/icons/clock.svg";
 import grid from "../assets/icons/grid.svg";
 import gridActive from "../assets/icons/grid-active.svg";
 import pot from "../assets/icons/pot.svg";
 import potActive from "../assets/icons/pot-active.svg";
 import refresh from "../assets/icons/refresh.svg";
 import search from "../assets/icons/search.svg";
+import x from "../assets/icons/x.svg";
 
 // Each entry places an exported SVG inside its icon box exactly as the design does:
 // `inset` positions the artwork, `bleed` leaves room for the stroke around it.
@@ -14,6 +16,8 @@ const icons = {
   "chevron-left": { src: chevronLeft, size: 20, inset: "25% 37.5%", bleed: "-9.5% -19%" },
   search: { src: search, size: 20, inset: "16.67% 12.5% 12.5% 16.67%", bleed: "-6.71%" },
   refresh: { src: refresh, size: 20, inset: "12.5%", bleed: "-6.67%" },
+  x: { src: x, size: 18, inset: "25%", bleed: "-10.56%" },
+  clock: { src: clock, size: 16, inset: "12.5%", bleed: "-9.17%" },
   pot: { src: pot, size: 22, inset: "8.33% 8.33% 12.5% 8.33%", bleed: "-5.17% -4.91%" },
   "pot-active": { src: potActive, size: 22, inset: "8.33% 8.33% 12.5% 8.33%", bleed: "-6.03% -5.73%" },
   cart: { src: cart, size: 22, inset: "8.54% 7.96% 8.33% 8.54%", bleed: "-4.92% -4.9%" },

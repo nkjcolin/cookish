@@ -1,12 +1,15 @@
 @import "@fontsource-variable/plus-jakarta-sans";
+@import "@fontsource-variable/fraunces/full.css";
 @import "tailwindcss";
 
 /* Design tokens from the Figma file "Cookish – User Flow Demo". */
 @theme {
   --font-sans: "Plus Jakarta Sans Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Fraunces Variable", ui-serif, Georgia, serif;
 
   --color-bg: #faf6ef;
   --color-surface: #ffffff;
+  --color-surface-sunken: #f3ece1;
   --color-dark: #231d17;
   --color-ink: #231d17;
   --color-ink-muted: #7b7064;

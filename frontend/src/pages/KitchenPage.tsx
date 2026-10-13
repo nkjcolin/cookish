@@ -5,6 +5,7 @@ import { useInventory } from "../api/queries";
 import { Chip } from "../components/Chip";
 import { Icon } from "../components/Icon";
 import { Level } from "../components/Level";
+import { UpdateItemSheet } from "./kitchen/UpdateItemSheet";
 import {
   buildKitchenView,
   filterRows,
@@ -29,6 +30,7 @@ const roundButton =
 export function KitchenPage() {
   const inventory = useInventory();
   const [filter, setFilter] = useState<KitchenFilter>("all");
+  const [editing, setEditing] = useState<KitchenRow | null>(null);
   const view = useMemo(
     () => (inventory.data ? buildKitchenView(inventory.data, new Date()) : null),
     [inventory.data],
@@ -78,8 +80,18 @@ export function KitchenPage() {
             </Chip>
           </div>
 
-          <Sections rows={filterRows(view.rows, filter)} />
+          <Sections rows={filterRows(view.rows, filter)} onEdit={setEditing} />
         </>
+      )}
+
+      {editing && (
+        <UpdateItemSheet
+          key={editing.editBatch.id}
+          name={editing.name}
+          batch={editing.editBatch}
+          batchCount={editing.batchCount}
+          onClose={() => setEditing(null)}
+        />
       )}
     </div>
   );
@@ -106,7 +118,7 @@ function CatchUpBanner({ days, toCheck, onStart }: { days: number; toCheck: numb
   );
 }
 
-function Sections({ rows }: { rows: KitchenRow[] }) {
+function Sections({ rows, onEdit }: { rows: KitchenRow[]; onEdit: (row: KitchenRow) => void }) {
   if (rows.length === 0) return <p className="text-[14px] text-ink-muted">Nothing here.</p>;
 
   return SECTION_ORDER.map((section) => {
@@ -117,19 +129,22 @@ function Sections({ rows }: { rows: KitchenRow[] }) {
         <h2 className="text-[12px] font-bold tracking-[0.72px] text-ink-muted uppercase">{SECTION_TITLES[section]}</h2>
         <ul className="flex flex-col rounded-lg border border-border bg-surface px-[14px] py-[2px]">
           {sectionRows.map((row) => (
-            <li
-              key={row.key}
-              className="flex items-center gap-[10px] border-b border-border py-[12px] last:border-b-0"
-            >
-              <div className="flex min-w-px flex-1 flex-col gap-px">
-                <p className="text-[14px] font-bold">{row.name}</p>
-                <p
-                  className={`text-[12px] ${row.detailIsWarning ? "font-semibold text-warn" : "text-ink-muted"}`}
-                >
-                  {row.detail}
-                </p>
-              </div>
-              <RowAction row={row} />
+            <li key={row.key} className="border-b border-border last:border-b-0">
+              <button
+                type="button"
+                onClick={() => onEdit(row)}
+                className="flex w-full items-center gap-[10px] py-[12px] text-left"
+              >
+                <div className="flex min-w-px flex-1 flex-col gap-px">
+                  <p className="text-[14px] font-bold">{row.name}</p>
+                  <p
+                    className={`text-[12px] ${row.detailIsWarning ? "font-semibold text-warn" : "text-ink-muted"}`}
+                  >
+                    {row.detail}
+                  </p>
+                </div>
+                <RowAction row={row} />
+              </button>
             </li>
           ))}
         </ul>
@@ -141,16 +156,13 @@ function Sections({ rows }: { rows: KitchenRow[] }) {
 function RowAction({ row }: { row: KitchenRow }) {
   if (row.section === "not-sure") {
     return (
-      <button
-        type="button"
-        className="shrink-0 rounded-pill border border-border bg-surface px-[12px] py-[6px] text-[12px] font-bold whitespace-nowrap"
-      >
+      <span className="shrink-0 rounded-pill border border-border bg-surface px-[12px] py-[6px] text-[12px] font-bold whitespace-nowrap">
         Check
-      </button>
+      </span>
     );
   }
   if (row.amount.kind === "count") {
     return <p className="shrink-0 text-[12px] font-semibold whitespace-nowrap text-ink">{row.amount.text}</p>;
   }
-  return <Level level={row.amount.level} />;
+  return <Level state={row.amount.state} />;
 }

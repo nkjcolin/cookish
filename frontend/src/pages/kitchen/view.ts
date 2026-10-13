@@ -1,5 +1,4 @@
 import type { Schemas } from "../../api/client";
-import type { LevelName } from "../../components/Level";
 
 type Inventory = Schemas["Inventory"];
 type Group = Schemas["InventoryGroup"];
@@ -16,9 +15,11 @@ export type KitchenRow = {
   /** The detail line is a date printed on the package or an overdue estimate. */
   detailIsWarning: boolean;
   /** Countable ingredients show their total; the rest show a coarse level. */
-  amount: { kind: "count"; text: string } | { kind: "level"; level: LevelName };
+  amount: { kind: "count"; text: string } | { kind: "level"; state: Batch["remaining_state"] };
   inFreezer: boolean;
-  batchIds: string[];
+  /** The batch that should be used first; this is the one the update sheet edits. */
+  editBatch: Batch;
+  batchCount: number;
 };
 
 export type KitchenView = {
@@ -30,14 +31,6 @@ export type KitchenView = {
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 const NEEDS_ATTENTION = new Set<Batch["freshness_status"]>(["use_soon", "check", "expired"]);
-
-// Interim mapping: the contract has three states, the design has four filled levels.
-const LEVEL: Record<Batch["remaining_state"], LevelName> = {
-  enough: "plenty",
-  low: "a-bit",
-  out: "almost-out",
-  unknown: "unsure",
-};
 
 function capitalise(word: string): string {
   return word.charAt(0).toUpperCase() + word.slice(1);
@@ -67,12 +60,34 @@ function sectionOf(batches: Batch[]): KitchenSection {
   return "rest";
 }
 
+export function lastConfirmedText(batch: Batch, today: Date): string {
+  const days = daysBetween(new Date(batch.last_confirmed_at), today);
+  if (days <= 0) return "Last confirmed today";
+  return `Last confirmed ${days} ${days === 1 ? "day" : "days"} ago`;
+}
+
+/** The line under "Stored in": what we know about when to use this batch, or null. */
+export function freshnessNote(batch: Batch, today: Date): string | null {
+  if (batch.label_date !== null) {
+    const date = parseDate(batch.label_date).toLocaleDateString("en-GB", {
+      weekday: "short",
+      day: "numeric",
+      month: "short",
+    });
+    const phrase = batch.label_date_kind === "use_by" ? "Use by" : "Best before";
+    return `${phrase} ${date} — the date on the package.`;
+  }
+  if (batch.est_use_first_date === null) return null;
+  const daysLeft = daysBetween(today, parseDate(batch.est_use_first_date));
+  const estimate = "an estimate from storage type, not a food-safety date.";
+  if (daysLeft < 0) return `Past its estimated use-first date. Check it before using — ${estimate}`;
+  if (daysLeft === 0) return `Use today — ${estimate}`;
+  return `Use within ~${daysLeft} ${daysLeft === 1 ? "day" : "days"} — ${estimate}`;
+}
+
 function detailOf(section: KitchenSection, batch: Batch, today: Date): { text: string; warning: boolean } {
   const storage = capitalise(batch.storage);
-  if (section === "not-sure") {
-    const days = daysBetween(new Date(batch.last_confirmed_at), today);
-    return { text: `Last confirmed ${days} ${days === 1 ? "day" : "days"} ago`, warning: false };
-  }
+  if (section === "not-sure") return { text: lastConfirmedText(batch, today), warning: false };
   if (section === "rest" || batch.est_use_first_date === null) return { text: storage, warning: false };
 
   const useFirst = parseDate(batch.est_use_first_date);
@@ -94,7 +109,7 @@ function amountOf(group: Group): KitchenRow["amount"] {
     const unit = counted[0]?.unit;
     return { kind: "count", text: unit ? `${total} ${unit}` : `${total}` };
   }
-  return { kind: "level", level: LEVEL[firstToUse(group.batches).remaining_state] };
+  return { kind: "level", state: firstToUse(group.batches).remaining_state };
 }
 
 export function buildKitchenView(inventory: Inventory, today: Date): KitchenView {
@@ -102,7 +117,8 @@ export function buildKitchenView(inventory: Inventory, today: Date): KitchenView
     .filter((group) => group.batches.length > 0)
     .map((group): KitchenRow => {
       const section = sectionOf(group.batches);
-      const detail = detailOf(section, firstToUse(group.batches), today);
+      const editBatch = firstToUse(group.batches);
+      const detail = detailOf(section, editBatch, today);
       return {
         key: group.ingredient_id ?? `free:${group.name}`,
         name: group.name,
@@ -111,7 +127,8 @@ export function buildKitchenView(inventory: Inventory, today: Date): KitchenView
         detailIsWarning: detail.warning,
         amount: amountOf(group),
         inFreezer: group.batches.some((b) => b.storage === "freezer"),
-        batchIds: group.batches.map((b) => b.id),
+        editBatch,
+        batchCount: group.batches.length,
       };
     });
 

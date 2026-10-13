@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import type { Schemas } from "../../api/client";
-import { buildKitchenView, filterRows } from "./view";
+import { buildKitchenView, filterRows, freshnessNote } from "./view";
 
 type Batch = Schemas["InventoryItem"];
 
@@ -53,10 +53,11 @@ describe("buildKitchenView", () => {
   });
 
   it("describes the batch that should be used first", () => {
-    const row = rowFor([
-      batch({ est_use_first_date: "2026-10-26", freshness_status: "ok" }),
-      batch({ est_use_first_date: "2026-10-14", freshness_status: "use_soon" }),
-    ]);
+    const soonest = batch({ est_use_first_date: "2026-10-14", freshness_status: "use_soon" });
+    const row = rowFor([batch({ est_use_first_date: "2026-10-26", freshness_status: "ok" }), soonest]);
+
+    expect(row.editBatch).toBe(soonest);
+    expect(row.batchCount).toBe(2);
 
     expect(row.section).toBe("use-soon");
     expect(row.detail).toBe("Fridge · ~2 days");
@@ -89,7 +90,7 @@ describe("buildKitchenView", () => {
 
     expect(row.section).toBe("not-sure");
     expect(row.detail).toBe("Last confirmed 9 days ago");
-    expect(row.amount).toEqual({ kind: "level", level: "unsure" });
+    expect(row.amount).toEqual({ kind: "level", state: "unknown" });
   });
 
   it("counts rows per filter and measures time since the latest confirmation", () => {
@@ -112,5 +113,27 @@ describe("buildKitchenView", () => {
 
   it("reports no update time for an empty kitchen", () => {
     expect(buildKitchenView({ groups: [] }, TODAY).daysSinceUpdate).toBeNull();
+  });
+});
+
+describe("freshnessNote", () => {
+  it("labels an estimate as an estimate", () => {
+    expect(freshnessNote(batch({ est_use_first_date: "2026-10-15" }), TODAY)).toBe(
+      "Use within ~3 days — an estimate from storage type, not a food-safety date.",
+    );
+  });
+
+  it("quotes a package date as a package date", () => {
+    const labelled = batch({ est_use_first_date: "2026-10-15", label_date: "2026-10-15", label_date_kind: "use_by" });
+
+    expect(freshnessNote(labelled, TODAY)).toBe("Use by Thu 15 Oct — the date on the package.");
+  });
+
+  it("asks for a check once the estimate has passed", () => {
+    expect(freshnessNote(batch({ est_use_first_date: "2026-10-10" }), TODAY)).toMatch(/^Past its estimated/);
+  });
+
+  it("says nothing when there is no date", () => {
+    expect(freshnessNote(batch(), TODAY)).toBeNull();
   });
 });
