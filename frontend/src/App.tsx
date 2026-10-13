@@ -7,6 +7,7 @@ import { KitchenPage } from "./pages/KitchenPage";
 import { MorePage } from "./pages/MorePage";
 import { PlaceholderPage } from "./pages/PlaceholderPage";
 import { PreferencesPage } from "./pages/PreferencesPage";
+import { RecipePage } from "./pages/RecipePage";
 import { ReviewDraftPage } from "./pages/ReviewDraftPage";
 
 export function App() {
@@ -15,7 +16,6 @@ export function App() {
       <Route element={<AppLayout />}>
         <Route index element={<Navigate to="/cook" replace />} />
         <Route path="/cook" element={<CookPage />} />
-        <Route path="/cook/recipe" element={<PlaceholderPage title="Recipe" />} />
         <Route path="/buy" element={<PlaceholderPage title="Buy" />} />
         <Route path="/more" element={<MorePage />} />
         <Route path="/more/kitchen" element={<KitchenPage />} />
@@ -23,6 +23,8 @@ export function App() {
         <Route path="/more/history" element={<PlaceholderPage title="Kitchen history & undo" />} />
       </Route>
       <Route element={<AppLayout tabBar={false} />}>
+        <Route path="/cook/recipe" element={<RecipePage />} />
+        <Route path="/cook/done" element={<PlaceholderPage title="Kitchen updated" />} />
         <Route path="/more/add/review" element={<ReviewDraftPage />} />
         <Route path="/more/preferences" element={<PreferencesPage />} />
       </Route>

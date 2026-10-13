@@ -4,6 +4,8 @@ const tones = {
   muted: "bg-surface-sunken text-ink-muted",
   primary: "bg-primary-soft text-primary",
   info: "bg-info-soft text-info",
+  fresh: "bg-fresh-soft text-fresh",
+  warn: "bg-warn-soft text-warn",
 } as const;
 
 export function Tag({ tone = "muted", children }: { tone?: keyof typeof tones; children: ReactNode }) {

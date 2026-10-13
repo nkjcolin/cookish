@@ -1,10 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { api, unwrap, type Schemas } from "./client";
+import { api, idempotencyKey, unwrap, type Schemas } from "./client";
 
 type Suggestion = Schemas["Suggestion"];
 
-const SUGGESTION_KEY = ["cook", "suggestion"];
+export const SUGGESTION_KEY = ["cook", "suggestion"];
 export const COOK_RECORD_KEY = ["cook", "record"];
 
 /**
@@ -67,5 +67,40 @@ export function useSelectSuggestion(sessionId: string | undefined) {
 export function useInterpret() {
   return useMutation({
     mutationFn: async (text: string) => unwrap(await api.POST("/ai/interpret", { body: { text } })),
+  });
+}
+
+/** The dish chosen with "Cook this", if any. Set by useSelectSuggestion. */
+export function useCookRecord() {
+  const queryClient = useQueryClient();
+  return queryClient.getQueryData<Schemas["CookRecord"]>(COOK_RECORD_KEY);
+}
+
+export function useCurrentSuggestion() {
+  const queryClient = useQueryClient();
+  return queryClient.getQueryData<Suggestion>(SUGGESTION_KEY);
+}
+
+export function useRecipe(recipeId: string | undefined) {
+  return useQuery({
+    queryKey: ["recipe", recipeId],
+    queryFn: async () => unwrap(await api.GET("/api/recipes/{recipe_id}", { params: { path: { recipe_id: recipeId! } } })),
+    enabled: recipeId !== undefined,
+    staleTime: Infinity,
+  });
+}
+
+/** Records what was actually used. Nothing is deducted until the user confirms here. */
+export function useConfirmCook(recordId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (lines: Schemas["ConsumptionLine"][]) =>
+      unwrap(
+        await api.POST("/api/cook/records/{record_id}/confirm", {
+          params: { path: { record_id: recordId }, header: idempotencyKey() },
+          body: { lines },
+        }),
+      ),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["inventory"] }),
   });
 }

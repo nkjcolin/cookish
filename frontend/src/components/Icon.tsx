@@ -3,6 +3,7 @@ import arrowUp from "../assets/icons/arrow-up.svg";
 import box from "../assets/icons/box.svg";
 import camera from "../assets/icons/camera.svg";
 import cartActive from "../assets/icons/cart-active.svg";
+import checkFreshSm from "../assets/icons/check-fresh-sm.svg";
 import checkGreen from "../assets/icons/check-green.svg";
 import checkWhite from "../assets/icons/check-white.svg";
 import chevronLeft from "../assets/icons/chevron-left.svg";
@@ -24,16 +25,21 @@ import plus from "../assets/icons/plus.svg";
 import gridActive from "../assets/icons/grid-active.svg";
 import pot from "../assets/icons/pot.svg";
 import potActive from "../assets/icons/pot-active.svg";
+import potHero from "../assets/icons/pot-hero.svg";
 import potInk from "../assets/icons/pot-ink.svg";
 import receipt from "../assets/icons/receipt.svg";
 import refresh from "../assets/icons/refresh.svg";
+import refreshSm from "../assets/icons/refresh-sm.svg";
 import search from "../assets/icons/search.svg";
 import sliders from "../assets/icons/sliders.svg";
 import slidersInk from "../assets/icons/sliders-ink.svg";
 import sparkleSm from "../assets/icons/sparkle-sm.svg";
 import star from "../assets/icons/star.svg";
+import starLg from "../assets/icons/star-lg.svg";
 import undo from "../assets/icons/undo.svg";
+import undoSm from "../assets/icons/undo-sm.svg";
 import users from "../assets/icons/users.svg";
+import usersSm from "../assets/icons/users-sm.svg";
 import x from "../assets/icons/x.svg";
 
 // Each entry places an exported SVG inside its icon box exactly as the design does:
@@ -69,6 +75,12 @@ const icons = {
   "sparkle-sm": { src: sparkleSm, size: 14, inset: "8.38%", bleed: "-8.58%" },
   leaf: { src: leaf, size: 20, inset: "8.33% 12.5% 12.5% 8.33%", bleed: "-6%" },
   box: { src: box, size: 20, inset: "8.34% 12.5% 8.33% 12.5%", bleed: "-5.7% -6.33%" },
+  "refresh-sm": { src: refreshSm, size: 13, inset: "12.5%", bleed: "-11.28%" },
+  "users-sm": { src: usersSm, size: 16, inset: "12.5% 8.33%", bleed: "-7.92% -7.12% -7.92% -7.13%" },
+  "check-fresh-sm": { src: checkFreshSm, size: 13, inset: "25% 16.67% 29.17% 16.67%", bleed: "-18.46% -12.69%" },
+  "pot-hero": { src: potHero, size: 84, inset: "8.33% 8.33% 12.5% 8.33%", bleed: "-0.98% -0.93%" },
+  "star-lg": { src: starLg, size: 20, inset: "11.67% 11.67% 15.42% 11.67%", bleed: "-6.51% -6.2%" },
+  "undo-sm": { src: undoSm, size: 14, inset: "29.17% 12.5%", bleed: "-18.86% -10.48%" },
   pencil: { src: pencil, size: 16, inset: "8.29% 8.2% 8.33% 8.33%", bleed: "-7.12% -7.11%" },
   pot: { src: pot, size: 22, inset: "8.33% 8.33% 12.5% 8.33%", bleed: "-5.17% -4.91%" },
   "pot-active": { src: potActive, size: 22, inset: "8.33% 8.33% 12.5% 8.33%", bleed: "-6.03% -5.73%" },
