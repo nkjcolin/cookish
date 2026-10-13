@@ -7,6 +7,7 @@ import { ConfirmPurchasePage } from "./pages/ConfirmPurchasePage";
 import { CookPage } from "./pages/CookPage";
 import { KitchenPage } from "./pages/KitchenPage";
 import { MorePage } from "./pages/MorePage";
+import { OnboardingPage } from "./pages/OnboardingPage";
 import { PlaceholderPage } from "./pages/PlaceholderPage";
 import { PreferencesPage } from "./pages/PreferencesPage";
 import { RecipePage } from "./pages/RecipePage";
@@ -30,7 +31,7 @@ export function App() {
         <Route path="/more/add/review" element={<ReviewDraftPage />} />
         <Route path="/more/preferences" element={<PreferencesPage />} />
       </Route>
-      <Route path="/onboarding" element={<PlaceholderPage title="Welcome" />} />
+      <Route path="/onboarding" element={<OnboardingPage />} />
     </Routes>
   );
 }

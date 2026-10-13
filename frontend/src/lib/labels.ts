@@ -13,6 +13,19 @@ export const ALLERGEN_LABELS: Record<Schemas["Allergen"], string> = {
   sesame: "Sesame allergy",
 };
 
+/** Short names for the allergy picker, where the heading already says "allergies". */
+export const ALLERGEN_NAMES: Record<Schemas["Allergen"], string> = {
+  peanut: "Peanuts",
+  tree_nut: "Tree nuts",
+  shellfish: "Shellfish",
+  milk: "Dairy",
+  gluten: "Gluten",
+  egg: "Eggs",
+  soy: "Soy",
+  fish: "Fish",
+  sesame: "Sesame",
+};
+
 export const DIET_LABELS: Record<Schemas["Diet"], string> = {
   vegetarian: "Vegetarian",
   vegan: "Vegan",

@@ -2,6 +2,7 @@ import cart from "../assets/icons/cart.svg";
 import arrowUp from "../assets/icons/arrow-up.svg";
 import box from "../assets/icons/box.svg";
 import camera from "../assets/icons/camera.svg";
+import cartInfo from "../assets/icons/cart-info.svg";
 import cartActive from "../assets/icons/cart-active.svg";
 import checkFreshSm from "../assets/icons/check-fresh-sm.svg";
 import checkGreen from "../assets/icons/check-green.svg";
@@ -19,19 +20,25 @@ import grid from "../assets/icons/grid.svg";
 import help from "../assets/icons/help.svg";
 import helpSm from "../assets/icons/help-sm.svg";
 import leaf from "../assets/icons/leaf.svg";
+import leafFresh from "../assets/icons/leaf-fresh.svg";
 import leafHero from "../assets/icons/leaf-hero.svg";
+import leafWhite from "../assets/icons/leaf-white.svg";
 import lock from "../assets/icons/lock.svg";
+import lockFresh from "../assets/icons/lock-fresh.svg";
 import lockSm from "../assets/icons/lock-sm.svg";
 import mic from "../assets/icons/mic.svg";
+import minus from "../assets/icons/minus.svg";
 import pencil from "../assets/icons/pencil.svg";
 import plus from "../assets/icons/plus.svg";
 import plusMuted from "../assets/icons/plus-muted.svg";
+import plusWhite from "../assets/icons/plus-white.svg";
 import gridActive from "../assets/icons/grid-active.svg";
 import pot from "../assets/icons/pot.svg";
 import potActive from "../assets/icons/pot-active.svg";
 import potHero from "../assets/icons/pot-hero.svg";
 import potInk from "../assets/icons/pot-ink.svg";
 import potWarn from "../assets/icons/pot-warn.svg";
+import potWhite from "../assets/icons/pot-white.svg";
 import receipt from "../assets/icons/receipt.svg";
 import receiptPrimary from "../assets/icons/receipt-primary.svg";
 import refresh from "../assets/icons/refresh.svg";
@@ -40,6 +47,8 @@ import search from "../assets/icons/search.svg";
 import searchLg from "../assets/icons/search-lg.svg";
 import sliders from "../assets/icons/sliders.svg";
 import slidersInk from "../assets/icons/sliders-ink.svg";
+import sparkle from "../assets/icons/sparkle.svg";
+import sparkleLg from "../assets/icons/sparkle-lg.svg";
 import sparkleSm from "../assets/icons/sparkle-sm.svg";
 import star from "../assets/icons/star.svg";
 import starLg from "../assets/icons/star-lg.svg";
@@ -99,6 +108,15 @@ const icons = {
   "receipt-primary": { src: receiptPrimary, size: 20, inset: "8.33% 16.67%", bleed: "-5.7% -7.12% -5.7% -7.13%" },
   "chevron-right-primary": { src: chevronRightPrimary, size: 18, inset: "25% 37.5%", bleed: "-10.56% -21.11%" },
   "plus-muted": { src: plusMuted, size: 16, inset: "20.83%", bleed: "-11.79%" },
+  "pot-white": { src: potWhite, size: 24, inset: "8.33% 8.33% 12.5% 8.33%", bleed: "-5.26% -5%" },
+  "leaf-white": { src: leafWhite, size: 30, inset: "8.33% 12.5% 12.5% 8.33%", bleed: "-3.37%" },
+  sparkle: { src: sparkle, size: 16, inset: "8.38%", bleed: "-7.51%" },
+  "sparkle-lg": { src: sparkleLg, size: 18, inset: "8.37% 8.38% 8.38% 8.37%", bleed: "-6.67%" },
+  "leaf-fresh": { src: leafFresh, size: 16, inset: "8.33% 12.5% 12.5% 8.33%", bleed: "-7.89%" },
+  "cart-info": { src: cartInfo, size: 16, inset: "8.54% 7.96% 8.33% 8.54%", bleed: "-7.52% -7.49%" },
+  minus: { src: minus, size: 20, inset: "50% 20.83%", bleed: "-0.95px -8.14%" },
+  "plus-white": { src: plusWhite, size: 20, inset: "20.83%", bleed: "-8.14%" },
+  "lock-fresh": { src: lockFresh, size: 18, inset: "12.5% 16.67%", bleed: "-7.41% -8.33%" },
   pencil: { src: pencil, size: 16, inset: "8.29% 8.2% 8.33% 8.33%", bleed: "-7.12% -7.11%" },
   pot: { src: pot, size: 22, inset: "8.33% 8.33% 12.5% 8.33%", bleed: "-5.17% -4.91%" },
   "pot-active": { src: potActive, size: 22, inset: "8.33% 8.33% 12.5% 8.33%", bleed: "-6.03% -5.73%" },
