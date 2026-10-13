@@ -55,3 +55,13 @@ export function useAddInventoryItems() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["inventory"] }),
   });
 }
+
+export function useSavePreferences() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (body: Schemas["PreferencesUpdate"]) =>
+      unwrap(await api.PUT("/api/household/preferences", { body })),
+    onSuccess: (preferences) =>
+      queryClient.setQueryData<Schemas["Me"]>(["me"], (me) => (me ? { ...me, preferences } : me)),
+  });
+}
