@@ -5,10 +5,10 @@ import { AddIngredientsPage } from "./pages/AddIngredientsPage";
 import { BuyPage } from "./pages/BuyPage";
 import { ConfirmPurchasePage } from "./pages/ConfirmPurchasePage";
 import { CookPage } from "./pages/CookPage";
+import { HistoryPage } from "./pages/HistoryPage";
 import { KitchenPage } from "./pages/KitchenPage";
 import { MorePage } from "./pages/MorePage";
 import { OnboardingPage } from "./pages/OnboardingPage";
-import { PlaceholderPage } from "./pages/PlaceholderPage";
 import { PreferencesPage } from "./pages/PreferencesPage";
 import { RecipePage } from "./pages/RecipePage";
 import { ReviewDraftPage } from "./pages/ReviewDraftPage";
@@ -23,7 +23,7 @@ export function App() {
         <Route path="/more" element={<MorePage />} />
         <Route path="/more/kitchen" element={<KitchenPage />} />
         <Route path="/more/add" element={<AddIngredientsPage />} />
-        <Route path="/more/history" element={<PlaceholderPage title="Kitchen history & undo" />} />
+        <Route path="/more/history" element={<HistoryPage />} />
       </Route>
       <Route element={<AppLayout tabBar={false} />}>
         <Route path="/buy/confirm" element={<ConfirmPurchasePage />} />

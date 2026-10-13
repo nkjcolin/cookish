@@ -41,6 +41,24 @@ const change = unwrap(
 - Requests that change inventory need `idempotencyKey()`. Create it once per user action and reuse it when retrying.
 - TypeScript is pinned to 5.9: the client generator and the linter do not support TypeScript 7 yet.
 
+## Screens
+
+Every screen comes from the Figma file "Cookish – User Flow Demo". Where the design and the
+API contract disagreed, the contract won; `docs/SPEC.md` A12 lists what that left out.
+
+| Route | Screen | Design frames |
+|---|---|---|
+| `/onboarding` | Welcome, hard rules, cooking habits | A1–A3 |
+| `/cook` | Suggestion, adjust, quick check, rating, nothing fits | B1–B4, B7, B8 |
+| `/cook/recipe` | Recipe and "what's left?" | B5, B6 |
+| `/buy` | Shopping list, meals, adjust basket | C1–C4 |
+| `/buy/confirm` | Confirm purchase | C5, C6 |
+| `/more` | More | D1 |
+| `/more/add`, `/more/add/review` | Add ingredients, review a receipt or photo | D2, D3 |
+| `/more/kitchen` | My Kitchen and the update sheet | D4, D5 |
+| `/more/preferences` | Preferences | D6 |
+| `/more/history` | Kitchen history and undo | no design |
+
 ## Layout
 
 | Path | Contents |
@@ -49,4 +67,5 @@ const change = unwrap(
 | `src/assets/icons/` | SVGs exported from the Figma file; use them through `components/Icon.tsx`, do not redraw them |
 | `src/index.css` | Design tokens (colours, radii, font) from the Figma file |
 | `src/components/` | Shared components and the app layout |
-| `src/pages/` | One file per screen |
+| `src/pages/` | One file per screen; `pages/<area>/` holds its sheets and the pure logic (`view.ts`) with tests |
+| `src/lib/` | Labels for the contract's vocabularies, image compression, speech, router hand-over state |
