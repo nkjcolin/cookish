@@ -5,6 +5,7 @@ import { AddIngredientsPage } from "./pages/AddIngredientsPage";
 import { KitchenPage } from "./pages/KitchenPage";
 import { MorePage } from "./pages/MorePage";
 import { PlaceholderPage } from "./pages/PlaceholderPage";
+import { ReviewDraftPage } from "./pages/ReviewDraftPage";
 
 export function App() {
   return (
@@ -18,6 +19,9 @@ export function App() {
         <Route path="/more/add" element={<AddIngredientsPage />} />
         <Route path="/more/preferences" element={<PlaceholderPage title="Preferences" />} />
         <Route path="/more/history" element={<PlaceholderPage title="Kitchen history & undo" />} />
+      </Route>
+      <Route element={<AppLayout tabBar={false} />}>
+        <Route path="/more/add/review" element={<ReviewDraftPage />} />
       </Route>
       <Route path="/onboarding" element={<PlaceholderPage title="Welcome" />} />
     </Routes>

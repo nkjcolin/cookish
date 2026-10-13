@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import type { Schemas } from "../api/client";
@@ -7,9 +7,10 @@ import { Button } from "../components/Button";
 import { Chip } from "../components/Chip";
 import { Icon, type IconName } from "../components/Icon";
 import { Level } from "../components/Level";
+import { StorageTag, Tag } from "../components/Tag";
 import { compressImage } from "../lib/image";
 import { listen, speechIsSupported } from "../lib/speech";
-import { draftLabel, toInventoryItems } from "./add/draft";
+import { draftLabel, toInventoryItems, type ReviewState } from "./add/draft";
 
 type DraftItem = Schemas["DraftItem"];
 type ItemSource = Schemas["ItemSource"];
@@ -31,7 +32,6 @@ export function AddIngredientsPage() {
   const [text, setText] = useState("");
   const [spoken, setSpoken] = useState(false);
   const [listening, setListening] = useState(false);
-  const [imageDraft, setImageDraft] = useState<{ items: DraftItem[]; source: ItemSource } | null>(null);
   const stopListening = useRef<() => void>(() => {});
   const receiptInput = useRef<HTMLInputElement>(null);
   const photoInput = useRef<HTMLInputElement>(null);
@@ -42,15 +42,14 @@ export function AddIngredientsPage() {
 
   useEffect(() => () => stopListening.current(), []);
 
-  const draft = imageDraft?.items ?? (text.trim().length > 1 ? parsed.data?.items : undefined) ?? [];
-  const source: ItemSource = imageDraft?.source ?? (spoken ? "voice" : "manual");
+  const draft: DraftItem[] = text.trim().length > 1 ? (parsed.data?.items ?? []) : [];
+  const source: ItemSource = spoken ? "voice" : "manual";
   const reading = parseImage.isPending || (text.trim().length > 1 && parsed.isFetching);
-  const failure = parseImage.error ?? (imageDraft ? null : parsed.error) ?? addItems.error;
+  const failure = parseImage.error ?? parsed.error ?? addItems.error;
 
   function type(value: string) {
     setText(value);
     setSpoken(false);
-    setImageDraft(null);
   }
 
   async function readImage(file: File | undefined, kind: Schemas["ImageKind"]) {
@@ -60,12 +59,12 @@ export function AddIngredientsPage() {
       media_type: "image/jpeg",
       image_base64: await compressImage(file),
     });
-    setImageDraft({ items: result.items, source: kind });
+    const review: ReviewState = { items: result.items, source: kind };
+    navigate("/more/add/review", { state: review });
   }
 
   function toggleListening() {
     if (listening) return stopListening.current();
-    setImageDraft(null);
     setSpoken(true);
     setListening(true);
     stopListening.current = listen({ onTranscript: setText, onEnd: () => setListening(false) });
@@ -165,7 +164,7 @@ export function AddIngredientsPage() {
                 <li key={`${item.display_name}-${index}`} className="flex items-center gap-[10px]">
                   <p className="min-w-px flex-1 text-[14px] font-semibold">{draftLabel(item)}</p>
                   {item.count === null && <Level state="enough" />}
-                  {item.storage && <Tag>{item.storage.charAt(0).toUpperCase() + item.storage.slice(1)}</Tag>}
+                  {item.storage && <StorageTag storage={item.storage} />}
                 </li>
               ))}
             </ul>
@@ -190,17 +189,6 @@ export function AddIngredientsPage() {
   );
 }
 
-function Tag({ tone = "muted", children }: { tone?: "muted" | "primary"; children: ReactNode }) {
-  return (
-    <span
-      className={`shrink-0 rounded-pill px-[9px] py-[4px] text-[11.5px] font-semibold whitespace-nowrap ${
-        tone === "primary" ? "bg-primary-soft text-primary" : "bg-surface-sunken text-ink-muted"
-      }`}
-    >
-      {children}
-    </span>
-  );
-}
 
 type MethodRowProps = {
   icon: IconName;

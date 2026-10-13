@@ -20,3 +20,13 @@ export function toInventoryItems(draft: DraftItem[]): Schemas["InventoryItemCrea
     storage: item.storage,
   }));
 }
+
+/** Handed from Add Ingredients to the review screen through router state. */
+export type ReviewState = { items: DraftItem[]; source: Schemas["ItemSource"] };
+
+/** Below this confidence the user is asked instead of trusted to notice. */
+const ASK_BELOW_CONFIDENCE = 0.6;
+
+export function isUncertain(item: DraftItem): boolean {
+  return item.confidence < ASK_BELOW_CONFIDENCE;
+}

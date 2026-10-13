@@ -1,11 +1,13 @@
 import cart from "../assets/icons/cart.svg";
 import camera from "../assets/icons/camera.svg";
 import cartActive from "../assets/icons/cart-active.svg";
+import checkWhite from "../assets/icons/check-white.svg";
 import chevronLeft from "../assets/icons/chevron-left.svg";
 import chevronRight from "../assets/icons/chevron-right.svg";
 import clock from "../assets/icons/clock.svg";
 import fridge from "../assets/icons/fridge.svg";
 import grid from "../assets/icons/grid.svg";
+import help from "../assets/icons/help.svg";
 import mic from "../assets/icons/mic.svg";
 import pencil from "../assets/icons/pencil.svg";
 import plus from "../assets/icons/plus.svg";
@@ -35,6 +37,8 @@ const icons = {
   receipt: { src: receipt, size: 22, inset: "8.33% 16.67%", bleed: "-5.18% -6.48%" },
   camera: { src: camera, size: 22, inset: "16.67% 8.33%", bleed: "-6.48% -5.18%" },
   mic: { src: mic, size: 22, inset: "8.33% 20.83%", bleed: "-5.18% -7.4%" },
+  help: { src: help, size: 16, inset: "12.5%", bleed: "-9.17%" },
+  "check-white": { src: checkWhite, size: 14, inset: "25% 16.67% 29.17% 16.67%", bleed: "-23.38% -16.07%" },
   pencil: { src: pencil, size: 16, inset: "8.29% 8.2% 8.33% 8.33%", bleed: "-7.12% -7.11%" },
   pot: { src: pot, size: 22, inset: "8.33% 8.33% 12.5% 8.33%", bleed: "-5.17% -4.91%" },
   "pot-active": { src: potActive, size: 22, inset: "8.33% 8.33% 12.5% 8.33%", bleed: "-6.03% -5.73%" },

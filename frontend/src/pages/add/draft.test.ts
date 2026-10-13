@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import type { Schemas } from "../../api/client";
-import { draftLabel, toInventoryItems } from "./draft";
+import { draftLabel, isUncertain, toInventoryItems } from "./draft";
 
 function draft(overrides: Partial<Schemas["DraftItem"]> = {}): Schemas["DraftItem"] {
   return {
@@ -45,5 +45,12 @@ describe("toInventoryItems", () => {
       remaining_state: "enough",
       storage: null,
     });
+  });
+});
+
+describe("isUncertain", () => {
+  it("flags only low-confidence readings", () => {
+    expect(isUncertain(draft({ confidence: 0.41 }))).toBe(true);
+    expect(isUncertain(draft({ confidence: 0.88 }))).toBe(false);
   });
 });
