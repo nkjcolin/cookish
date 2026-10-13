@@ -44,7 +44,7 @@ const change = unwrap(
 ## Screens
 
 Every screen comes from the Figma file "Cookish – User Flow Demo". Where the design and the
-API contract disagreed, the contract won; `docs/SPEC.md` A12 lists what that left out.
+API contract disagreed, the contract won, so some elements of the design are not built.
 
 | Route | Screen | Design frames |
 |---|---|---|
