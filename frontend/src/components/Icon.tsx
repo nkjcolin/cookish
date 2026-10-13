@@ -1,13 +1,18 @@
 import cart from "../assets/icons/cart.svg";
 import cartActive from "../assets/icons/cart-active.svg";
 import chevronLeft from "../assets/icons/chevron-left.svg";
+import chevronRight from "../assets/icons/chevron-right.svg";
 import clock from "../assets/icons/clock.svg";
+import fridge from "../assets/icons/fridge.svg";
 import grid from "../assets/icons/grid.svg";
+import plus from "../assets/icons/plus.svg";
 import gridActive from "../assets/icons/grid-active.svg";
 import pot from "../assets/icons/pot.svg";
 import potActive from "../assets/icons/pot-active.svg";
 import refresh from "../assets/icons/refresh.svg";
 import search from "../assets/icons/search.svg";
+import sliders from "../assets/icons/sliders.svg";
+import undo from "../assets/icons/undo.svg";
 import x from "../assets/icons/x.svg";
 
 // Each entry places an exported SVG inside its icon box exactly as the design does:
@@ -18,6 +23,11 @@ const icons = {
   refresh: { src: refresh, size: 20, inset: "12.5%", bleed: "-6.67%" },
   x: { src: x, size: 18, inset: "25%", bleed: "-10.56%" },
   clock: { src: clock, size: 16, inset: "12.5%", bleed: "-9.17%" },
+  plus: { src: plus, size: 24, inset: "20.83%", bleed: "-8.57%" },
+  fridge: { src: fridge, size: 24, inset: "8.33% 20.83%", bleed: "-4.75% -6.79%" },
+  sliders: { src: sliders, size: 18, inset: "8.33% 12.5%", bleed: "-6.33% -7.04%" },
+  "chevron-right": { src: chevronRight, size: 18, inset: "25% 37.5%", bleed: "-10.56% -21.11%" },
+  undo: { src: undo, size: 18, inset: "29.17% 12.5%", bleed: "-12.67% -7.04%" },
   pot: { src: pot, size: 22, inset: "8.33% 8.33% 12.5% 8.33%", bleed: "-5.17% -4.91%" },
   "pot-active": { src: potActive, size: 22, inset: "8.33% 8.33% 12.5% 8.33%", bleed: "-6.03% -5.73%" },
   cart: { src: cart, size: 22, inset: "8.54% 7.96% 8.33% 8.54%", bleed: "-4.92% -4.9%" },

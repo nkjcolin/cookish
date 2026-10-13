@@ -14,6 +14,9 @@ export function App() {
         <Route path="/buy" element={<PlaceholderPage title="Buy" />} />
         <Route path="/more" element={<MorePage />} />
         <Route path="/more/kitchen" element={<KitchenPage />} />
+        <Route path="/more/add" element={<PlaceholderPage title="Add Ingredients" />} />
+        <Route path="/more/preferences" element={<PlaceholderPage title="Preferences" />} />
+        <Route path="/more/history" element={<PlaceholderPage title="Kitchen history & undo" />} />
       </Route>
       <Route path="/onboarding" element={<PlaceholderPage title="Welcome" />} />
     </Routes>
