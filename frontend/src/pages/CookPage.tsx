@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { ApiError, type Schemas } from "../api/client";
 import {
+  mergeConstraints,
   useCookStep,
   useCookSuggestion,
   useInterpret,
@@ -27,7 +28,6 @@ import {
   difficultyLabel,
   ingredientLines,
   mealName,
-  mergeConstraints,
   type CookedState,
 } from "./cook/view";
 

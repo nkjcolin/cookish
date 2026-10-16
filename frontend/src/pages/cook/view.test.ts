@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 
 import type { Schemas } from "../../api/client";
-import { describeAdjust, difficultyLabel, ingredientLines, mealName, mergeConstraints } from "./view";
+import { mergeConstraints } from "../../api/cook";
+import { describeAdjust, difficultyLabel, ingredientLines, mealName } from "./view";
 
 function suggestion(statuses: [string, Schemas["IngredientStatus"]][]): Schemas["Suggestion"] {
   return {

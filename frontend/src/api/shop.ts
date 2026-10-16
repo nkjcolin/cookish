@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { api, idempotencyKey, unwrap, type Schemas } from "./client";
+import { api, idempotencyKey, isNotFound, unwrap, type Schemas } from "./client";
 
 type Basket = Schemas["Basket"];
 
@@ -21,13 +21,28 @@ export function useBasket() {
 export function useAdjustBasket(sessionId: string | undefined) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (body: Schemas["ShopAdjust"]): Promise<Basket> =>
-      unwrap(
-        await api.POST("/api/shop/sessions/{session_id}/adjust", {
-          params: { path: { session_id: sessionId! } },
-          body,
-        }),
-      ),
+    mutationFn: async (body: Schemas["ShopAdjust"]): Promise<Basket> => {
+      try {
+        return unwrap(
+          await api.POST("/api/shop/sessions/{session_id}/adjust", { params: { path: { session_id: sessionId! } }, body }),
+        );
+      } catch (error) {
+        // The session has expired: start a new one held to the same conditions.
+        const current = queryClient.getQueryData<Basket>(BASKET_KEY);
+        if (!isNotFound(error) || !current) throw error;
+        const people = body.people ?? current.people;
+        const meals = body.meals ?? current.meals;
+        const fresh = unwrap(await api.POST("/api/shop/sessions", { body: { people, meals } }));
+        const tags = [...new Set([...current.applied_tags, ...(body.tags ?? [])])];
+        if (tags.length === 0) return fresh;
+        return unwrap(
+          await api.POST("/api/shop/sessions/{session_id}/adjust", {
+            params: { path: { session_id: fresh.session_id } },
+            body: { tags },
+          }),
+        );
+      }
+    },
     onSuccess: (basket) => queryClient.setQueryData(BASKET_KEY, basket),
   });
 }

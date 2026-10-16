@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { api, idempotencyKey, unwrap, type Schemas } from "./client";
+import { api, idempotencyKey, isNotFound, unwrap, type Schemas } from "./client";
 
 type Suggestion = Schemas["Suggestion"];
 
@@ -29,11 +29,18 @@ export function useCookStep(sessionId: string | undefined) {
   return useMutation({
     mutationFn: async (step: Step): Promise<Suggestion> => {
       const params = { path: { session_id: sessionId! } };
-      if (step.kind === "adjust") {
-        return unwrap(await api.POST("/api/cook/sessions/{session_id}/adjust", { params, body: step.body }));
+      try {
+        if (step.kind === "adjust") {
+          return unwrap(await api.POST("/api/cook/sessions/{session_id}/adjust", { params, body: step.body }));
+        }
+        const path = step.kind === "next" ? "/api/cook/sessions/{session_id}/next" : "/api/cook/sessions/{session_id}/previous";
+        return unwrap(await api.POST(path, { params }));
+      } catch (error) {
+        // The session has expired: carry on in a new one held to the same conditions.
+        const current = queryClient.getQueryData<Suggestion>(SUGGESTION_KEY);
+        if (!isNotFound(error) || !current) throw error;
+        return startCookSession(mergeConstraints(current, step.kind === "adjust" ? step.body : null));
       }
-      const path = step.kind === "next" ? "/api/cook/sessions/{session_id}/next" : "/api/cook/sessions/{session_id}/previous";
-      return unwrap(await api.POST(path, { params }));
     },
     onSuccess: (suggestion) => queryClient.setQueryData(SUGGESTION_KEY, suggestion),
   });
@@ -57,8 +64,17 @@ export function useStarRecipe() {
 export function useSelectSuggestion(sessionId: string | undefined) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async () =>
-      unwrap(await api.POST("/api/cook/sessions/{session_id}/select", { params: { path: { session_id: sessionId! } } })),
+    mutationFn: async () => {
+      try {
+        return unwrap(await api.POST("/api/cook/sessions/{session_id}/select", { params: { path: { session_id: sessionId! } } }));
+      } catch (error) {
+        // The session has expired. Show a fresh suggestion rather than cook one nobody chose.
+        const current = queryClient.getQueryData<Suggestion>(SUGGESTION_KEY);
+        if (!isNotFound(error) || !current) throw error;
+        queryClient.setQueryData(SUGGESTION_KEY, await startCookSession(mergeConstraints(current, null)));
+        throw new Error("That suggestion had expired, so here is a fresh one.", { cause: error });
+      }
+    },
     onSuccess: (record) => queryClient.setQueryData(COOK_RECORD_KEY, record),
   });
 }
@@ -129,6 +145,30 @@ export function useFinishCooking() {
 
 export type CookConstraints = { people: number; tags: Schemas["CookTag"][]; maxMinutes: number | null };
 
+/** The conditions the session is held to, with an adjustment (if any) added on top. */
+export function mergeConstraints(suggestion: Suggestion, adjust: Schemas["CookAdjust"] | null): CookConstraints {
+  const applied = suggestion.applied_constraints;
+  return {
+    people: adjust?.people ?? suggestion.people,
+    tags: [...new Set([...applied.tags, ...(adjust?.tags ?? [])])],
+    maxMinutes: adjust?.max_minutes ?? applied.max_minutes,
+  };
+}
+
+/** Starts a new session held to exactly these conditions. */
+async function startCookSession(constraints: CookConstraints): Promise<Suggestion> {
+  const first = unwrap(await api.POST("/api/cook/sessions", { body: { people: constraints.people } }));
+  if (constraints.tags.length === 0 && constraints.maxMinutes === null) return first;
+  const body: Schemas["CookAdjust"] = { tags: constraints.tags };
+  if (constraints.maxMinutes !== null) body.max_minutes = constraints.maxMinutes;
+  return unwrap(
+    await api.POST("/api/cook/sessions/{session_id}/adjust", {
+      params: { path: { session_id: first.session_id } },
+      body,
+    }),
+  );
+}
+
 /**
  * Starts the session again with a reduced set of constraints. Adjustments only ever
  * accumulate on a session, so dropping one means beginning a new session with the rest.
@@ -136,18 +176,7 @@ export type CookConstraints = { people: number; tags: Schemas["CookTag"][]; maxM
 export function useRestartCook() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (constraints: CookConstraints): Promise<Suggestion> => {
-      const first = unwrap(await api.POST("/api/cook/sessions", { body: { people: constraints.people } }));
-      if (constraints.tags.length === 0 && constraints.maxMinutes === null) return first;
-      const body: Schemas["CookAdjust"] = { tags: constraints.tags };
-      if (constraints.maxMinutes !== null) body.max_minutes = constraints.maxMinutes;
-      return unwrap(
-        await api.POST("/api/cook/sessions/{session_id}/adjust", {
-          params: { path: { session_id: first.session_id } },
-          body,
-        }),
-      );
-    },
+    mutationFn: startCookSession,
     onSuccess: (suggestion) => queryClient.setQueryData(SUGGESTION_KEY, suggestion),
   });
 }

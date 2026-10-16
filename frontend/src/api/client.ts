@@ -29,6 +29,14 @@ export class ApiError extends Error {
   }
 }
 
+/**
+ * True when the server no longer knows the thing asked about. For a Cook or Shop session
+ * this means it has expired (after 12 hours) and a new one should be started.
+ */
+export function isNotFound(error: unknown): boolean {
+  return error instanceof ApiError && error.code === "NOT_FOUND";
+}
+
 /** Turns an openapi-fetch result into data, or throws the backend's error envelope. */
 export function unwrap<T>(result: { data?: T; error?: unknown }): T {
   if (result.data !== undefined) return result.data;
