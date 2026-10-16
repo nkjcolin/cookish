@@ -162,7 +162,12 @@ export function CookPage() {
 
       {suggestion && !noMatch && (
         <>
-          <Constraints suggestion={suggestion} onEdit={() => setSheet("adjust")} />
+          <Constraints
+            suggestion={suggestion}
+            busy={busy}
+            onEdit={() => setSheet("adjust")}
+            onReset={() => relax({ people: suggestion.people, tags: [], maxMinutes: null })}
+          />
           <SuggestionCard
             suggestion={suggestion}
             busy={busy}
@@ -245,9 +250,12 @@ function relaxableOf(error: unknown): string[] | null {
   return Array.isArray(error.details.relaxable) ? (error.details.relaxable as string[]) : [];
 }
 
+type ConstraintsProps = { suggestion: Suggestion; busy: boolean; onEdit: () => void; onReset: () => void };
+
 /** What this session is currently held to; tapping any of it opens the adjust sheet. */
-function Constraints({ suggestion, onEdit }: { suggestion: Suggestion; onEdit: () => void }) {
+function Constraints({ suggestion, busy, onEdit, onReset }: ConstraintsProps) {
   const { max_minutes: maxMinutes, tags } = suggestion.applied_constraints;
+  const adjusted = maxMinutes !== null || tags.length > 0;
   return (
     <div className="-mx-[20px] flex items-start gap-[8px] overflow-x-auto px-[20px] [scrollbar-width:none]">
       {maxMinutes !== null && (
@@ -263,6 +271,16 @@ function Constraints({ suggestion, onEdit }: { suggestion: Suggestion; onEdit: (
           {COOK_TAG_LABELS[tag]}
         </Chip>
       ))}
+      {adjusted && (
+        <button
+          type="button"
+          onClick={onReset}
+          disabled={busy}
+          className="shrink-0 self-center px-[4px] text-[13px] font-semibold whitespace-nowrap text-primary disabled:opacity-50"
+        >
+          Reset
+        </button>
+      )}
     </div>
   );
 }
