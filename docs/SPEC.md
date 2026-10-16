@@ -347,7 +347,7 @@ Role numbers follow the team's agreed split. Each brief lists what to build, sug
 
 **Done when:** all must-have screens work against the real backend on a phone-sized viewport, and the study data is collected.
 
-### B2. Role 2 — Database and inventory services
+### B2. Role 2 — Database and inventory services (SEEVON)
 
 **Build**
 
@@ -376,7 +376,7 @@ Role numbers follow the team's agreed split. Each brief lists what to build, sug
 
 **Done when:** the reliability test suite passes in CI against a real Postgres, and the seeded database on the deployed stack is usable by everyone.
 
-### B3. Role 3 — Cloud platform, delivery and cost
+### B3. Role 3 — Cloud platform, delivery and cost (NICOLE)
 
 **Build**
 
@@ -403,7 +403,7 @@ Role numbers follow the team's agreed split. Each brief lists what to build, sug
 
 **Done when:** a merge to `main` reaches the deployed stack without manual steps, the dashboard shows live traffic, and the cost model is filled with measured values.
 
-### B4. Role 4 — AI-assisted input
+### B4. Role 4 — AI-assisted input (COLIN)
 
 **Build**
 
@@ -447,7 +447,7 @@ Recommendation: build A, and if time allows evaluate two model sizes on the same
 
 **Done when:** a phone photo of a real receipt and a spoken description each become a reviewed inventory update on the deployed stack, and the accuracy table exists.
 
-### B5. Role 5 — Recommendation algorithms and recipe catalogue
+### B5. Role 5 — Recommendation algorithms and recipe catalogue (WENLONG)
 
 **Build**
 
