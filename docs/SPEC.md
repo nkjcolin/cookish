@@ -356,8 +356,9 @@ Role numbers follow the team's agreed split. Each brief lists what to build, sug
 3. **Seeding.** `seed.py` loads `seed/ingredients.csv` and `seed/recipes/*.yaml` idempotently. The same `ingredients.csv` is bundled into Role 4's `ai` Lambda, so keep its IDs stable (assign UUIDs in the CSV, do not generate them at load time). Role 5 writes the recipe content; you own the loader and the ingredient table's integrity.
 4. **Services.** `GET /me` bootstrap, preferences, ingredient search, inventory CRUD, `apply_stock_event`, undo, event listing — exactly as specified in A6.
 5. **A small internal API for other roles**, documented in `backend/app/db/README.md`:
-   - `get_inventory_snapshot(household_id)` → what Role 5's algorithms read.
-   - `apply_stock_event(household_id, user_id, type, lines, idempotency_key, ref)` → what Role 5 calls to change stock.
+   - `get_inventory_snapshot(s, household_id)` → what Role 5's algorithms read.
+   - `apply_stock_event(s, user, type, lines, idempotency_key, ref_type, ref_id)` → what Role 5 calls to change stock.
+   - The agreed signatures are in [backend/app/db/README.md](../backend/app/db/README.md).
 6. **Reliability tests.** Duplicate idempotency keys; two concurrent `PATCH`es on one item; undo after a later edit; cross-household access attempts on every route.
 
 **Approach and references**
@@ -456,9 +457,8 @@ Recommendation: build A, and if time allows evaluate two model sizes on the same
    - `score_recipe(recipe, inventory, prefs, session)` → score, with the per-term breakdown for tests and debugging
    - `suggest(…)`, `adjust(session, tag)` ("Previous one" needs no algorithm: the service replays an entry of `shown_recipe_ids`)
    - `build_basket(recipes, inventory, people, meals, prefs)`
-   - `estimate_use_first(item, ingredient, today)`
 3. **Service layer** `services/cook.py`, `services/shop.py` wiring those functions to sessions, feedback and Role 2's inventory snapshot.
-4. **Use-first list** for `GET /api/use-first` (optional). `estimate_use_first` itself is required, because the Cook score depends on it.
+4. **Use-first list** for `GET /api/use-first` (optional). The use-first date itself is computed by Role 2 when inventory is read (below, and [backend/app/db/README.md](../backend/app/db/README.md)); Role 5 turns it into urgency.
 
 **Cook algorithm**
 
@@ -510,7 +510,7 @@ A recipe whose essential ingredient is only available in `check` batches is stil
 5. There are no prices, no totals and no budget. The report states that Cookish does not offer budget management.
 6. Tags: `more_vegetables`, `longer_lasting` (prefer ingredients with long shelf life), `cover_more_meals`.
 
-**Use-first estimate**
+**Use-first estimate** (Role 2 computes `use_first` when inventory is read; Role 5 computes `days_left` and `urgency` from it when scoring)
 
 ```
 if label_date is set:            use_first = label_date

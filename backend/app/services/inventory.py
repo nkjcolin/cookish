@@ -2,11 +2,14 @@
 
 Every change must go through `stock_events.apply_stock_event`, so that it is atomic,
 idempotent and reversible (SPEC A6).
+
+`est_use_first_date` and `freshness_status` are computed here when items are read, from
+the label date, the purchase date and the ingredient's shelf life (app/db/README.md).
 """
 
 from uuid import UUID
 
-from app import mock
+from app import clock, mock
 from app.auth import CurrentUser
 from app.errors import ApiError, ErrorCode
 from app.schemas.inventory import (
@@ -50,7 +53,7 @@ def update_item(
         )
     changes = body.model_dump(exclude_unset=True, exclude={"revision", "freshness_confirmed"})
     if body.freshness_confirmed:
-        changes["freshness_confirmed_at"] = mock.now()
+        changes["freshness_confirmed_at"] = clock.now()
     updated = current.model_copy(update={**changes, "revision": current.revision + 1})
     return InventoryChange(
         event=mock.stock_event(StockEventType.ADJUST, [updated]), items=[updated]

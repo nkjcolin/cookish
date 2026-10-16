@@ -1,21 +1,64 @@
 """Stock events. STUB — Role 2 replaces the function bodies.
 
 `apply_stock_event` and `get_inventory_snapshot` are the internal API that Role 5's
-Cook and Shop services call. Their signatures are part of the agreement between roles.
+Cook and Shop services call. Their signatures and rules are agreed in app/db/README.md;
+change them only by agreement.
 """
 
+from dataclasses import dataclass
 from typing import Any
 from uuid import UUID
 
+from sqlalchemy.orm import Session
+
 from app import mock
 from app.auth import CurrentUser
+from app.schemas.common import ItemSource
+from app.schemas.inventory import InventoryItem, InventoryItemCreate
 from app.schemas.stock_events import (
-    StockEvent,
+    InventoryChange,
     StockEventList,
     StockEventType,
     StockRefType,
     UndoResult,
 )
+
+# The only fields a ChangeBatch may set.
+CHANGEABLE_FIELDS = frozenset(
+    {
+        "count",
+        "unit",
+        "remaining_state",
+        "storage",
+        "label_date",
+        "label_date_kind",
+        "display_name",
+        "freshness_confirmed_at",
+    }
+)
+
+
+@dataclass(frozen=True)
+class NewBatch:
+    """Add a new batch: a purchase, or an item added by hand."""
+
+    item: InventoryItemCreate
+    source: ItemSource
+
+
+@dataclass(frozen=True)
+class ChangeBatch:
+    """Change or remove an existing batch."""
+
+    item_id: UUID
+    # The revision the user last saw; a mismatch raises STALE_REVISION. None when the
+    # change comes from the system rather than from a user's edit.
+    revision: int | None
+    changes: dict[str, Any]  # keys from CHANGEABLE_FIELDS only; None means "unknown"
+    remove: bool = False
+
+
+StockLine = NewBatch | ChangeBatch
 
 
 def list_events(user: CurrentUser, limit: int) -> StockEventList:
@@ -34,22 +77,35 @@ def undo_event(user: CurrentUser, event_id: UUID, idempotency_key: UUID) -> Undo
 
 
 def apply_stock_event(
-    household_id: UUID,
-    user_id: UUID,
+    s: Session,
+    user: CurrentUser,
     event_type: StockEventType,
-    lines: list[dict[str, Any]],
+    lines: list[StockLine],
     idempotency_key: UUID,
     ref_type: StockRefType = StockRefType.MANUAL,
     ref_id: UUID | None = None,
-) -> StockEvent:
-    """Apply one inventory change in a single transaction.
+) -> InventoryChange:
+    """Apply one inventory change as one stock event, inside the caller's transaction.
 
-    A repeated `idempotency_key` returns the original event without changing anything.
-    The exact shape of `lines` is Role 2's to define.
+    Writes the event, a before and after snapshot per line, updates the items and bumps
+    their revision. A repeated `idempotency_key` returns the original change and changes
+    nothing. Every item must belong to `user.household_id`, or NOT_FOUND is raised.
     """
-    raise NotImplementedError("Role 2")
+    items = [mock.item("tomato")]
+    event = mock.stock_event(
+        event_type,
+        items,
+        ref_type=ref_type,
+        ref_id=ref_id,
+        created=any(isinstance(line, NewBatch) for line in lines),
+    )
+    return InventoryChange(event=event, items=items)
 
 
-def get_inventory_snapshot(household_id: UUID) -> Any:
-    """Everything the recommendation functions need to read, in one call."""
-    raise NotImplementedError("Role 2")
+def get_inventory_snapshot(s: Session, household_id: UUID) -> list[InventoryItem]:
+    """Every batch the household has, removed ones excluded.
+
+    Each batch already carries `est_use_first_date` and `freshness_status`, computed on
+    read (app/db/README.md), so the recommendation code only reads them.
+    """
+    return list(mock.inventory_items().values())
