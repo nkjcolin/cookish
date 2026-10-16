@@ -29,14 +29,15 @@ uv run python scripts/export_openapi.py
 |---|---|---|
 | `app/main.py` | Role 1 | App factory and router registration |
 | `app/errors.py` | Role 1 | The one error format every endpoint returns |
-| `app/auth.py` | Roles 2 and 3 | Who is calling; a fixed development user for now |
+| `app/auth.py` | Role 1 | Who is calling: Cognito claims on AWS, a fixed development user locally |
+| `app/clock.py` | Role 1 | Today's date in Singapore; use it instead of `date.today()` |
 | `app/mock.py` | Role 1 | Sample data returned by the stubs |
 | `app/lambda_handler.py` | Role 3 | Lambda entry point (`app.lambda_handler.handler`) |
 | `app/schemas/` | Role 1, reviewed by all | Pydantic models — the API contract |
 | `app/routers/` | Role 1 | Thin HTTP handlers; no business logic |
 | `app/services/` | Roles 2 and 5 | Business logic called by the routers |
 | `app/reco/` | Role 5 | Pure recommendation functions, no database imports |
-| `app/db/` | Role 2 | Models, session, repositories |
+| `app/db/` | Role 2 | `session.py` (`transaction()`), models, repositories |
 | `migrations/` | Role 2 | Alembic migrations |
 | `seed/` | Roles 2 and 5 | `ingredients.csv`, `recipes/*.yaml`, loader |
 | `tests/` | everyone | pytest |
@@ -59,8 +60,12 @@ add routes.
 in `/ai`; it shows the request and response shapes to implement.
 
 Requests that change inventory must carry an `Idempotency-Key` header (a UUID). The
-caller's identity comes from `app/auth.py`, which for now always returns one development
-user.
+caller's identity comes from `app/auth.py`; locally it is always one development user.
+
+The conventions every service follows (transactions, dates, who is calling) are in
+[docs/init.md](../docs/init.md). What each role owns, and the functions roles call across
+each other, are in the role READMEs: [app/db/README.md](app/db/README.md) for Role 2 and
+[app/reco/README.md](app/reco/README.md) for Role 5.
 
 ## Errors
 

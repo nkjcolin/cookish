@@ -1,10 +1,53 @@
-# frontend
+# Role 1 — Frontend and API contract
 
-React web app (Role 1): Vite, TypeScript, Tailwind CSS, TanStack Query and React Router.
+You own what the user sees and the contract every other role builds against: the web app, the API's request and response shapes, and the thin layer that connects HTTP to the services. Read [docs/init.md](../docs/init.md) first for the conventions everyone follows.
+
+The design is in [SPEC.md](../docs/SPEC.md): **A7** for the API, **B1** for your brief, **A10** for the user study.
+
+## What you own
+
+| Path | Contents |
+|---|---|
+| `frontend/` | The React web app: Vite, TypeScript, Tailwind CSS, TanStack Query, React Router |
+| `backend/app/schemas/` | The API contract, as Pydantic models |
+| `backend/app/routers/`, `backend/app/main.py` | Thin HTTP handlers, one service call each |
+| `backend/app/errors.py`, `auth.py`, `clock.py`, `deps.py` | Shared backend plumbing |
+| `backend/app/mock.py` | The sample data the stubs return |
+| `docs/openapi.json` | Generated from the schemas; never edited by hand |
+| `eval/user_study/` | Protocol, consent sheet, task script and results |
+
+## What already exists
+
+- **The contract**: 25 endpoints, with stubs that answer every one of them.
+- **Every screen** of the Figma design, plus kitchen history, working against the stubs (see Screens below).
+- **The behaviours agreed with Roles 2 and 5**, already built:
+  - *Quick check.* Each question carries the batch it is about (`StockCheck.item`, `FreshnessCheck.item`), and the answer updates that batch with `PATCH`.
+  - *"No, I don't have it"* records the batch as `out`, then asks for the next dish.
+  - *Removing a condition.* Adjustments only add, so the app starts a new session with the remaining conditions; **Reset** starts one with none.
+  - *Nothing fits.* `NO_RESULT` shows what can be relaxed; only `max_minutes` and `tags` are understood.
+  - *Expired sessions.* Sessions last 12 hours. On `NOT_FOUND`, the app starts a new session with the same conditions (`src/api/cook.ts`, `src/api/shop.ts`).
+- **`backend/app/auth.py`** reads the Cognito claims on AWS; locally it is a fixed development user.
+
+## What other roles expect from you
+
+- **A stable contract.** Others change it only through you; the procedure is in `docs/init.md`.
+- **Sign-in.** Role 3 provides a Cognito user pool. The app signs in with `aws-amplify` and sends the **ID token** as `Authorization: Bearer …` on every request, including `/ai/*`.
+- **The API address.** In production the app calls API Gateway directly at `VITE_API_URL`; `src/api/client.ts` already uses it when set. Role 3 sets it, with `VITE_COGNITO_USER_POOL_ID` and `VITE_COGNITO_CLIENT_ID`, in Amplify's build settings.
+
+## Tasks, in order
+
+1. Get the first CI run green once the pull request is opened.
+2. Test photo capture and voice input on a real phone; neither could be exercised in the development browser.
+3. Sign-in, once Role 3 has the user pool: a sign-in screen, and the ID token attached in `src/api/client.ts`.
+4. Keep the contract in step as other roles ask for changes.
+5. The user study: protocol, consent sheet, task script, and the comparison condition, a plain filterable recipe list, which is not built yet.
+6. Timing instrumentation before the study: time to "Cook this", number of taps.
+
+---
 
 ## Run it
 
-Requires Node 22 or newer and [pnpm](https://pnpm.io/). Start the backend first (see `../backend/README.md`); the dev server forwards `/api` and `/ai` to `http://localhost:8000`.
+Requires Node 22 or newer and [pnpm](https://pnpm.io/). Start the backend first (see `../backend/README.md`); the dev server forwards `/api` and `/ai` to `http://localhost:8000`. To send `/ai` to a separately running ai service instead, set `VITE_AI_PROXY_TARGET` (for example `http://localhost:8001`).
 
 ```bash
 pnpm install
