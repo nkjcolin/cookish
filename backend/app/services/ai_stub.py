@@ -1,7 +1,8 @@
 """Local stand-in for the `ai` Lambda. Role 4 builds the real one in /ai.
 
-On AWS, API Gateway sends /ai/* to that Lambda, so this module is never reached there.
-It exists so that one local server and one OpenAPI file cover the whole contract.
+On AWS, API Gateway sends /ai/* to that Lambda, and `docker compose up` sends it to the
+ai service, so this module only answers when the backend runs on its own. It exists so
+that one OpenAPI file covers the whole contract.
 """
 
 from app import mock

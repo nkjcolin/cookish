@@ -2,6 +2,7 @@
 #
 #   frontend  http://localhost:5173
 #   backend   http://localhost:8000/api/docs
+#   ai        http://localhost:8001/ai/docs   (fixed answers until Role 4 picks a model)
 #   db        postgres://cookish:cookish@localhost:5432/cookish
 #
 # Source folders are mounted, so edits reload without rebuilding. If you are working on
@@ -40,10 +41,22 @@ services:
       db:
         condition: service_healthy
 
+  ai:
+    build: ./ai
+    environment:
+      AI_PROVIDER: fake
+      INGREDIENTS_CSV: /seed/ingredients.csv
+    ports:
+      - "8001:8000"
+    volumes:
+      - ./ai:/app
+      - ./backend/seed:/seed:ro
+
   frontend:
     build: ./frontend
     environment:
       VITE_PROXY_TARGET: http://backend:8000
+      VITE_AI_PROXY_TARGET: http://ai:8000
     ports:
       - "5173:5173"
     volumes:
@@ -51,6 +64,7 @@ services:
       - /app/node_modules
     depends_on:
       - backend
+      - ai
 
 volumes:
   db-data:
