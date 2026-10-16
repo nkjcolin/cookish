@@ -2089,21 +2089,14 @@
         "type": "object"
       },
       "StockCheck": {
-        "description": "An essential ingredient whose stock is unknown: ask \"do you still have this?\".",
+        "description": "An essential ingredient whose stock is unknown: ask \"do you still have this?\".\n\n`item` is the batch to use first; the answer updates it through\nPATCH /inventory/items/{id}, setting `remaining_state`.",
         "properties": {
-          "ingredient_id": {
-            "format": "uuid",
-            "title": "Ingredient Id",
-            "type": "string"
-          },
-          "name": {
-            "title": "Name",
-            "type": "string"
+          "item": {
+            "$ref": "#/components/schemas/InventoryItem"
           }
         },
         "required": [
-          "ingredient_id",
-          "name"
+          "item"
         ],
         "title": "StockCheck",
         "type": "object"

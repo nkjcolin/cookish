@@ -240,7 +240,9 @@ Base path `/api` (served by `api` Lambda) and `/ai` (served by `ai` Lambda). All
     { "ingredient_id": "…", "name": "cabbage", "amount": "half", "essential": true,
       "status": "have" }          // have | low | missing | unknown | check | staple
   ],
-  "needs_check": ["eggs"],         // essential ingredients whose stock is unknown
+  "needs_check": [                 // essential ingredients whose stock is unknown
+    { "item": { "id": "…", "display_name": "rice", "revision": 3, … } }   // the batch to update
+  ],
   "freshness_check": [             // batches the user should inspect before cooking
     { "inventory_item_id": "…", "name": "chicken thigh", "reason": "past estimated use-first date" }
   ],

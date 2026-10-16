@@ -1184,15 +1184,12 @@ export interface components {
         /**
          * StockCheck
          * @description An essential ingredient whose stock is unknown: ask "do you still have this?".
+         *
+         *     `item` is the batch to use first; the answer updates it through
+         *     PATCH /inventory/items/{id}, setting `remaining_state`.
          */
         StockCheck: {
-            /**
-             * Ingredient Id
-             * Format: uuid
-             */
-            ingredient_id: string;
-            /** Name */
-            name: string;
+            item: components["schemas"]["InventoryItem"];
         };
         /** StockEvent */
         StockEvent: {

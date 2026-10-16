@@ -373,7 +373,7 @@ def suggestion(
         people=people,
         ingredients=lines,
         needs_check=[
-            StockCheck(ingredient_id=line.ingredient_id, name=line.name)
+            StockCheck(item=item("rice"))
             for line in lines
             if line.essential and line.status == IngredientStatus.UNKNOWN
         ],

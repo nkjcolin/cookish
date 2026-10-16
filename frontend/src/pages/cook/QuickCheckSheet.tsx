@@ -1,7 +1,7 @@
 import { useState, type ReactNode } from "react";
 
 import type { Schemas } from "../../api/client";
-import { useAddInventoryItems, useUpdateInventoryItem } from "../../api/queries";
+import { useUpdateInventoryItem } from "../../api/queries";
 import { Button } from "../../components/Button";
 import { Icon, type IconName } from "../../components/Icon";
 import { Segmented } from "../../components/Segmented";
@@ -40,22 +40,17 @@ export function QuickCheckSheet({ suggestion, onProceed, onUnavailable, onClose 
   const { needs_check: stockChecks, freshness_check: freshChecks } = suggestion;
   const [stock, setStock] = useState<Record<string, StockAnswer>>({});
   const [fresh, setFresh] = useState<Record<string, FreshAnswer>>({});
-  const addItems = useAddInventoryItems();
   const updateItem = useUpdateInventoryItem();
   const count = stockChecks.length + freshChecks.length;
-  const saving = addItems.isPending || updateItem.isPending;
-  const failure = addItems.error ?? updateItem.error;
+  const saving = updateItem.isPending;
+  const failure = updateItem.error;
 
+  // Each answer updates the batch the question was about.
   async function save() {
-    const answered = stockChecks.filter((check) => stock[check.ingredient_id]);
-    if (answered.length > 0) {
-      await addItems.mutateAsync({
-        source: "manual",
-        items: answered.map((check) => ({
-          ingredient_id: check.ingredient_id,
-          remaining_state: stock[check.ingredient_id]!,
-        })),
-      });
+    for (const { item } of stockChecks) {
+      const answer = stock[item.id];
+      if (!answer) continue;
+      await updateItem.mutateAsync({ itemId: item.id, body: { revision: item.revision, remaining_state: answer } });
     }
     for (const { item } of freshChecks) {
       const answer = fresh[item.id];
@@ -80,13 +75,13 @@ export function QuickCheckSheet({ suggestion, onProceed, onUnavailable, onClose 
         {suggestion.recipe.title} needs {count} {count === 1 ? "thing" : "things"} we’re not sure about.
       </p>
 
-      {stockChecks.map((check) => (
-        <CheckCard key={check.ingredient_id} icon="box" tint="bg-info-soft" name={check.name} detail="Not sure if you still have it">
+      {stockChecks.map(({ item }) => (
+        <CheckCard key={item.id} icon="box" tint="bg-info-soft" name={item.display_name} detail="Not sure if you still have it">
           <Segmented
-            label={`Do you have ${check.name}?`}
+            label={`Do you have ${item.display_name}?`}
             options={STOCK_OPTIONS}
-            value={stock[check.ingredient_id] ?? null}
-            onChange={(answer) => setStock({ ...stock, [check.ingredient_id]: answer })}
+            value={stock[item.id] ?? null}
+            onChange={(answer) => setStock({ ...stock, [item.id]: answer })}
           />
         </CheckCard>
       ))}

@@ -90,10 +90,13 @@ class SuggestionIngredient(ResponseModel):
 
 
 class StockCheck(ResponseModel):
-    """An essential ingredient whose stock is unknown: ask "do you still have this?"."""
+    """An essential ingredient whose stock is unknown: ask "do you still have this?".
 
-    ingredient_id: UUID
-    name: str
+    `item` is the batch to use first; the answer updates it through
+    PATCH /inventory/items/{id}, setting `remaining_state`.
+    """
+
+    item: InventoryItem
 
 
 class FreshnessCheck(ResponseModel):
