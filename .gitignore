@@ -1,0 +1,32 @@
+# Secrets and private notes — this repository is public
+.env
+.env.*
+!.env.example
+private/
+account.md
+*.pem
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Node
+node_modules/
+dist/
+.vite/
+*.tsbuildinfo
+
+# AWS SAM
+.aws-sam/
+samconfig.local.toml
+
+# OS and editors
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json

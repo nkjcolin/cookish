@@ -1,0 +1,110 @@
+# Role 5 — Recommendation and recipes
+
+You own what Cookish suggests: the recipe catalogue, the Cook and Shop algorithms, and the services that turn them into sessions, suggestions and baskets. Read [docs/init.md](../../../docs/init.md) first for the conventions everyone follows.
+
+The design is in [SPEC.md](../../../docs/SPEC.md), **B5**: the Cook algorithm (hard filter, availability, score, adjustments, learning from ratings), the freshness gate, the Shop algorithm and the use-first estimate. **A6** has the tables for sessions, ratings and baskets.
+
+## What you own
+
+| Path | Contents |
+|---|---|
+| `backend/app/reco/` | Pure recommendation functions, no database imports (empty) |
+| `backend/seed/recipes/*.yaml` | 40 to 60 recipes, one per file (empty) |
+| `backend/app/services/cook.py` | `start_session`, `adjust`, `next_suggestion`, `previous_suggestion`, `select`, `confirm`, `give_feedback`, `get_recipe`, `set_star`, `use_first` (optional) |
+| `backend/app/services/shop.py` | `start_session`, `adjust`, `confirm_basket` |
+| `eval/reco_scenarios/` | The 100 evaluation scenarios |
+
+You also own the taste-tag list in `app/schemas/common.py` (change it through the contract procedure), and the business case and pricing section of the final report.
+
+## What already exists
+
+- **Every service function above, as a stub** marked `STUB`, returning sample data from `app/mock.py`. The frontend is built against them.
+- **Role 2's functions you call**, with agreed signatures and stubs that return sample data, so you can wire your services before the database exists (see below).
+- **`app/db/session.py`**: `transaction()`, one per request.
+- **`app/clock.py`**: today's date in Singapore.
+- **The recipe file format**, agreed with Role 2, in [seed/README.md](../../seed/README.md).
+
+## What you may change, and what you must keep
+
+**Yours to decide:** everything in `reco/`; the bodies of the Cook and Shop services; scoring weights (keep them in one config file and report them); the recipes; the queries on your own tables.
+
+**Keep, because others depend on them:**
+
+- The name, parameters and return type of every service function. The routers and the frontend call them.
+- The recipe file format: Role 2's loader reads it.
+- The table structure: Role 2 writes every migration, including for your tables. Ask for changes.
+
+## What the frontend expects from you
+
+The frontend is finished, so these behaviours are fixed.
+
+- **Adjustments only add conditions.** `POST /cook/sessions/{id}/adjust` adds to what the session already holds; there is no way to remove one. To remove a condition, the frontend starts a new session and sends the rest again, and its **Reset** button starts a session with none.
+- **Quick checks.** `Suggestion.needs_check` lists, for each essential ingredient of unknown stock, the batch to use first (`StockCheck.item`). `freshness_check` lists the batches whose `freshness_status` is `check`, with a reason. The frontend asks about exactly these before cooking and saves each answer on that batch with `PATCH /api/inventory/items/{id}`.
+- **"No, I don't have it".** The frontend records that batch as `out`, then calls `POST /cook/sessions/{id}/next`. The next suggestion must reflect the new stock. The `skipped` signal that `next` records must not change taste weights.
+- **Nothing fits.** Raise `ApiError(ErrorCode.NO_RESULT, …, {"relaxable": [...]})`. `relaxable` may contain only `"max_minutes"` and `"tags"`, and never a hard constraint. Shop avoids `NO_RESULT`: when it cannot fill every meal, it returns a basket for fewer. Only when no recipe at all passes the hard constraints does it return `NO_RESULT` with an empty `relaxable`.
+- **Expiry.** A session expires 12 hours after it starts. Any request on an expired or unknown session returns `NOT_FOUND`; the frontend then starts a new one with the same conditions.
+- **People.** `people` defaults to the household's last choice and is written back when a session starts or changes; amounts in a suggestion are already scaled to it.
+
+## Role 2's functions you call
+
+Open one transaction per request and pass `s` on:
+
+```python
+from app.db.session import transaction
+from app.services.identity import get_preferences
+from app.services.stock_events import (
+    ChangeBatch,
+    NewBatch,
+    apply_stock_event,
+    get_inventory_snapshot,
+)
+
+
+def confirm(user, record_id, body, idempotency_key):
+    with transaction() as s:
+        ...  # load and update the cook record
+        change = apply_stock_event(
+            s,
+            user,
+            StockEventType.CONSUME,
+            [
+                ChangeBatch(item_id=line.inventory_item_id, revision=line.revision, changes={...})
+                for line in body.lines
+            ],
+            idempotency_key,
+            StockRefType.COOK_SESSION,
+            record_id,
+        )
+```
+
+| Function | Gives you |
+|---|---|
+| `get_inventory_snapshot(s, household_id)` | Every batch not removed, as `InventoryItem`, each with `est_use_first_date` and `freshness_status` already computed |
+| `get_preferences(s, household_id)` | The household's preferences, including `last_cook_people`, `last_shop_people`, `last_shop_meals` |
+| `apply_stock_event(s, user, type, lines, idempotency_key, ref_type, ref_id)` | The only way to change stock. Cook confirm: one `ChangeBatch` per confirmed line. Shop confirm: one `NewBatch` per item bought. Returns the `InventoryChange` your endpoint returns |
+
+The full rules of `apply_stock_event` (idempotency, revision check, what `changes` may hold) are in [Role 2's README](../db/README.md#role-5-changing-stock).
+
+**Freshness is computed by Role 2, not by you.** Read `freshness_status` and apply the gate: `expired` is not stock, `check` is asked about and never promoted. Turn `est_use_first_date` into urgency when scoring, with `clock.today()`.
+
+## Recipes
+
+One file per recipe in `backend/seed/recipes/`, in the format in [seed/README.md](../../seed/README.md). In short:
+
+- A fixed UUID in each file; never change it, because ratings and stars refer to it.
+- Ingredients are named by `canonical_name`, exactly as in Role 2's `ingredients.csv`.
+- No `diet_flags` or allergens in the file. The loader computes them from the ingredients: a recipe suits a diet only if every ingredient does, and its allergens are the union of its ingredients'.
+- `cuisine`, `equipment` and `taste_tags` take only the values in `app/schemas/common.py`.
+
+Role 2 builds the ingredient catalogue from your recipes, so **send them your ingredient list early**.
+
+## Tasks, in order
+
+1. **Recipes first**, because Role 2's catalogue comes from them. Lean towards everyday Singapore home cooking. Use only original or properly licensed content: the repository is public.
+2. `reco/` as pure functions, tested with fixture data: filter, score, suggest, adjust, build a basket. None of this needs the database.
+3. Wire the Cook and Shop services to sessions and to Role 2's functions. Their stubs return sample data, so this can start now.
+4. Fill `needs_check` and `freshness_check`, and return `NO_RESULT` as described above.
+5. Ratings: Like and Dislike adjust `taste_weights` as in SPEC B5; Maybe and "Not tonight" do not.
+6. 100 scenarios in `eval/reco_scenarios/`, keeping 30 unseen during development, plus property-based tests that an allergen never appears in any output.
+
+**Done when** all 100 scenarios pass, and Cook and Shop work on the deployed stack against real inventory.

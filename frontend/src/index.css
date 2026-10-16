@@ -1,0 +1,37 @@
+@import "@fontsource-variable/plus-jakarta-sans";
+@import "@fontsource-variable/fraunces/full.css";
+@import "tailwindcss";
+
+/* Design tokens from the Figma file "Cookish – User Flow Demo". */
+@theme {
+  --font-sans: "Plus Jakarta Sans Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Fraunces Variable", ui-serif, Georgia, serif;
+
+  --color-bg: #faf6ef;
+  --color-surface: #ffffff;
+  --color-surface-sunken: #f3ece1;
+  --color-dark: #231d17;
+  --color-ink: #231d17;
+  --color-ink-muted: #7b7064;
+  --color-ink-subtle: #a89d90;
+  --color-border: #eae1d4;
+  --color-primary: #e2612f;
+  --color-primary-soft: #fce7dc;
+  --color-info: #3c6fb0;
+  --color-info-soft: #e1ebf7;
+  --color-fresh: #3e7d56;
+  --color-fresh-soft: #e2f0e6;
+  --color-warn: #c98a12;
+  --color-warn-soft: #fbf0d4;
+  --color-danger: #c8433a;
+
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  line-height: 1.4;
+}
