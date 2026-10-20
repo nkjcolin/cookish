@@ -1,0 +1,59 @@
+id: 1d920435-f931-4d7b-91d2-86d184e31e3b
+title: Ginger chicken rice porridge
+variant_of: null
+cuisine: chinese
+total_minutes: 60
+active_minutes: 20
+difficulty: 1
+servings: 2
+equipment:
+- stove
+taste_tags:
+- light
+- soupy
+- low_oil
+ingredients:
+- canonical_name: uncooked rice
+  quantity: 140
+  unit: g
+  essential: true
+  prep_note: dry white rice; rinsed and drained
+- canonical_name: chicken thigh
+  quantity: 260
+  unit: g
+  essential: true
+  prep_note: raw boneless skinless meat cut into 1 cm strips
+- canonical_name: ginger
+  quantity: 15
+  unit: g
+  essential: true
+  prep_note: peeled and cut into fine strips
+- canonical_name: spring onion
+  quantity: 15
+  unit: g
+  essential: false
+  prep_note: washed and finely sliced
+- canonical_name: salt
+  quantity: 2
+  unit: g
+  essential: true
+- canonical_name: water
+  essential: true
+  quantity: 1400
+  unit: ml
+  prep_note: measured cooking water; additional water for rinsing or preparing the noodles/rice as instructed,
+    plus small top-ups if needed
+steps:
+- Rinse and drain the rice. Put it in a large saucepan with the ginger and the cooking water, using a
+  little more than a litre of water per 100 g dry rice as a starting point, then bring to a boil.
+- Reduce to a gentle simmer with the lid partly open. Cook for 35-40 minutes, stirring along the base
+  regularly, until the grains are very soft and the mixture is porridge-like. Add water if it becomes
+  too thick.
+- While it simmers, prepare the chicken on a separate board. Wash hands and utensils, then prepare the
+  spring onion if using.
+- Stir the chicken strips into the simmering porridge so they separate. Cook for about 8-10 minutes, stirring
+  often. Verify the thickest chicken reaches 75 C for 2 minutes.
+- Add the salt and spring onion if using. Simmer for another minute, then serve promptly; this recipe
+  starts from dry rice and needs no advance rice cooking.
+source: 'original AI-assisted draft; concept/technique reference: https://www.madewithlau.com/recipes/chicken-congee'
+reviewed: false

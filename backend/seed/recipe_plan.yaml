@@ -1,245 +1,627 @@
-# Role 5 planning input for Role 2, not a file consumed by seed.py.
-# "draft" means a YAML file exists; all starter recipes still need human review.
-# "planned" means an outline only, not an implemented or reviewed recipe.
-# variant_of uses a slug here; actual recipe files use the base recipe's fixed UUID.
+# Role 5 catalogue manifest for Role 2; not consumed by seed.py.
+# All 48 files are complete drafts, not human-reviewed recipes.
+# Parent links use slugs here and fixed UUIDs in the recipe files.
 recipes:
-  - slug: tomato-egg-stir-fry
-    title: Tomato and egg stir-fry
-    status: draft
-    variant_of: null
-    ingredients: [tomato, egg, spring onion, canola oil, salt, water]
-  - slug: tomato-egg-stir-fry-less-oil
-    title: Tomato and egg stir-fry with less oil
-    status: draft
-    variant_of: tomato-egg-stir-fry
-    ingredients: [tomato, egg, spring onion, canola oil, salt, water]
-  - slug: cabbage-tofu-stir-fry
-    title: Cabbage and tofu stir-fry
-    status: draft
-    variant_of: null
-    ingredients: [cabbage, firm tofu, garlic, soy sauce, canola oil, water]
-  - slug: cabbage-tofu-stir-fry-less-oil
-    title: Cabbage and tofu stir-fry with less oil
-    status: draft
-    variant_of: cabbage-tofu-stir-fry
-    ingredients: [cabbage, firm tofu, garlic, soy sauce, canola oil, water]
-  - slug: garlic-water-spinach
-    title: Garlic water spinach
-    status: draft
-    variant_of: null
-    ingredients: [water spinach, garlic, canola oil, soy sauce, water]
-  - slug: ginger-chicken-rice
-    title: One-pot ginger chicken rice
-    status: draft
-    variant_of: null
-    ingredients: [chicken thigh, uncooked rice, ginger, garlic, spring onion, canola oil, soy sauce, water]
-  - slug: tofu-mushroom-soup
-    title: Tofu and mushroom soup
-    status: draft
-    variant_of: null
-    ingredients: [firm tofu, fresh shiitake mushroom, cabbage, ginger, spring onion, soy sauce, water]
-  - slug: red-lentil-dhal
-    title: Tomato and red lentil dhal
-    status: draft
-    variant_of: null
-    ingredients: [red lentil, onion, tomato, garlic, turmeric powder, cumin powder, canola oil, salt, water]
-  - slug: egg-fried-rice
-    title: Egg fried rice with vegetables
-    status: draft
-    variant_of: null
-    ingredients: [cooked rice, egg, carrot, frozen pea, garlic, spring onion, soy sauce, canola oil]
-  - slug: steamed-ginger-fish
-    title: Steamed ginger fish
-    status: draft
-    variant_of: null
-    ingredients: [cod fillet, ginger, spring onion, soy sauce, black pepper, water]
-  - slug: ginger-chicken-rice-less-oil
-    title: Ginger chicken rice with less oil
-    status: planned
-    variant_of: ginger-chicken-rice
-    ingredients: [chicken thigh, uncooked rice, ginger, garlic, spring onion, soy sauce, water]
-  - slug: tofu-mushroom-rice
-    title: Tofu and mushroom rice
-    status: planned
-    variant_of: ginger-chicken-rice
-    ingredients: [firm tofu, fresh shiitake mushroom, uncooked rice, ginger, garlic, spring onion, canola oil, soy sauce, water]
-  - slug: tomato-egg-rice
-    title: Tomato and egg rice
-    status: planned
-    variant_of: null
-    ingredients: [tomato, egg, uncooked rice, spring onion, canola oil, salt, water]
-  - slug: cabbage-carrot-egg-fried-rice
-    title: Cabbage and carrot egg fried rice
-    status: planned
-    variant_of: egg-fried-rice
-    ingredients: [cooked rice, egg, cabbage, carrot, spring onion, soy sauce, canola oil]
-  - slug: tofu-vegetable-fried-rice
-    title: Tofu and vegetable fried rice
-    status: planned
-    variant_of: egg-fried-rice
-    ingredients: [cooked rice, firm tofu, carrot, frozen pea, spring onion, soy sauce, canola oil]
-  - slug: chicken-vegetable-fried-rice
-    title: Chicken and vegetable fried rice
-    status: planned
-    variant_of: egg-fried-rice
-    ingredients: [cooked rice, chicken thigh, carrot, frozen pea, spring onion, soy sauce, canola oil]
-  - slug: rice-vermicelli-tofu-soup
-    title: Rice vermicelli and tofu soup
-    status: planned
-    variant_of: null
-    ingredients: [rice vermicelli, firm tofu, bok choy, ginger, soy sauce, water]
-  - slug: rice-vermicelli-chicken-soup
-    title: Rice vermicelli and chicken soup
-    status: planned
-    variant_of: rice-vermicelli-tofu-soup
-    ingredients: [rice vermicelli, chicken thigh, bok choy, ginger, soy sauce, water]
-  - slug: bee-hoon-cabbage
-    title: Cabbage bee hoon
-    status: planned
-    variant_of: null
-    ingredients: [rice vermicelli, cabbage, carrot, garlic, soy sauce, canola oil, water]
-  - slug: bee-hoon-egg
-    title: Egg and cabbage bee hoon
-    status: planned
-    variant_of: bee-hoon-cabbage
-    ingredients: [rice vermicelli, cabbage, carrot, egg, garlic, soy sauce, canola oil, water]
-  - slug: garlic-broccoli
-    title: Garlic broccoli
-    status: planned
-    variant_of: null
-    ingredients: [broccoli, garlic, canola oil, salt, water]
-  - slug: garlic-bok-choy
-    title: Garlic bok choy
-    status: planned
-    variant_of: null
-    ingredients: [bok choy, garlic, canola oil, salt, water]
-  - slug: garlic-chye-sim
-    title: Garlic chye sim
-    status: planned
-    variant_of: null
-    ingredients: [chye sim, garlic, canola oil, salt, water]
-  - slug: tofu-broccoli-stir-fry
-    title: Tofu and broccoli stir-fry
-    status: planned
-    variant_of: null
-    ingredients: [firm tofu, broccoli, garlic, ginger, soy sauce, canola oil, water]
-  - slug: chicken-broccoli-stir-fry
-    title: Chicken and broccoli stir-fry
-    status: planned
-    variant_of: tofu-broccoli-stir-fry
-    ingredients: [chicken thigh, broccoli, garlic, ginger, soy sauce, canola oil, water]
-  - slug: mushroom-omelette
-    title: Mushroom omelette
-    status: planned
-    variant_of: null
-    ingredients: [egg, fresh shiitake mushroom, spring onion, canola oil, salt]
-  - slug: tomato-onion-omelette
-    title: Tomato and onion omelette
-    status: planned
-    variant_of: mushroom-omelette
-    ingredients: [egg, tomato, onion, canola oil, salt]
-  - slug: steamed-egg
-    title: Steamed egg
-    status: planned
-    variant_of: null
-    ingredients: [egg, water, soy sauce, spring onion]
-  - slug: steamed-egg-tofu
-    title: Steamed egg with tofu
-    status: planned
-    variant_of: steamed-egg
-    ingredients: [egg, firm tofu, water, soy sauce, spring onion]
-  - slug: ginger-chicken-soup
-    title: Ginger chicken soup
-    status: planned
-    variant_of: null
-    ingredients: [chicken thigh, ginger, carrot, spring onion, salt, water]
-  - slug: fish-tomato-soup
-    title: Fish and tomato soup
-    status: planned
-    variant_of: null
-    ingredients: [cod fillet, tomato, ginger, spring onion, salt, water]
-  - slug: lentil-spinach-dhal
-    title: Red lentil and spinach dhal
-    status: planned
-    variant_of: red-lentil-dhal
-    ingredients: [red lentil, spinach, onion, tomato, garlic, turmeric powder, cumin powder, canola oil, salt, water]
-  - slug: potato-cauliflower-curry
-    title: Potato and cauliflower curry
-    status: planned
-    variant_of: null
-    ingredients: [potato, cauliflower, onion, tomato, garlic, turmeric powder, cumin powder, canola oil, salt, water]
-  - slug: chickpea-tomato-curry
-    title: Chickpea and tomato curry
-    status: planned
-    variant_of: null
-    ingredients: [canned chickpea, tomato, onion, garlic, turmeric powder, cumin powder, canola oil, salt, water]
-  - slug: coconut-tofu-curry
-    title: Coconut tofu curry
-    status: planned
-    variant_of: null
-    ingredients: [firm tofu, coconut milk, carrot, long bean, onion, garlic, ginger, turmeric powder, chilli paste, canola oil, salt, water]
-  - slug: coconut-chicken-curry
-    title: Coconut chicken curry
-    status: planned
-    variant_of: coconut-tofu-curry
-    ingredients: [chicken thigh, coconut milk, carrot, long bean, onion, garlic, ginger, turmeric powder, chilli paste, canola oil, salt, water]
-  - slug: tempeh-long-bean-stir-fry
-    title: Tempeh and long bean stir-fry
-    status: planned
-    variant_of: null
-    ingredients: [tempeh, long bean, garlic, soy sauce, canola oil, water]
-  - slug: tempeh-cabbage-stir-fry
-    title: Tempeh and cabbage stir-fry
-    status: planned
-    variant_of: tempeh-long-bean-stir-fry
-    ingredients: [tempeh, cabbage, garlic, soy sauce, canola oil, water]
-  - slug: sambal-tofu
-    title: Chilli tofu
-    status: planned
-    variant_of: null
-    ingredients: [firm tofu, chilli paste, onion, garlic, tomato, canola oil, salt, water]
-  - slug: sambal-prawn
-    title: Chilli prawns
-    status: planned
-    variant_of: sambal-tofu
-    ingredients: [prawn, chilli paste, onion, garlic, tomato, canola oil, salt, water]
-  - slug: lemon-pepper-fish
-    title: Lemon pepper fish
-    status: planned
-    variant_of: null
-    ingredients: [cod fillet, lemon, black pepper, canola oil, salt]
-  - slug: lemon-pepper-chicken
-    title: Lemon pepper chicken
-    status: planned
-    variant_of: lemon-pepper-fish
-    ingredients: [chicken thigh, lemon, black pepper, canola oil, salt]
-  - slug: pumpkin-lentil-soup
-    title: Pumpkin and lentil soup
-    status: planned
-    variant_of: null
-    ingredients: [pumpkin, red lentil, onion, garlic, cumin powder, canola oil, salt, water]
-  - slug: chicken-rice-porridge
-    title: Chicken rice porridge
-    status: planned
-    variant_of: null
-    ingredients: [uncooked rice, chicken thigh, ginger, spring onion, salt, water]
-  - slug: mushroom-rice-porridge
-    title: Mushroom rice porridge
-    status: planned
-    variant_of: chicken-rice-porridge
-    ingredients: [uncooked rice, fresh shiitake mushroom, firm tofu, ginger, spring onion, soy sauce, water]
-  - slug: cucumber-tomato-chickpea-salad
-    title: Cucumber, tomato and chickpea salad
-    status: planned
-    variant_of: null
-    ingredients: [cucumber, tomato, canned chickpea, lemon, canola oil, salt, black pepper]
-  - slug: sesame-soba-tofu
-    title: Sesame soba with tofu
-    status: planned
-    variant_of: null
-    ingredients: [soba noodle, firm tofu, cucumber, carrot, sesame oil, soy sauce, water]
-  - slug: sesame-soba-egg
-    title: Sesame soba with egg
-    status: planned
-    variant_of: sesame-soba-tofu
-    ingredients: [soba noodle, egg, cucumber, carrot, sesame oil, soy sauce, water]
+- slug: tomato-egg-stir-fry
+  title: Tomato and egg rice bowls
+  status: draft
+  variant_of: null
+  ingredients:
+  - uncooked rice
+  - tomato
+  - egg
+  - canola oil
+  - salt
+  - water
+  - spring onion
+- slug: tomato-egg-stir-fry-less-oil
+  title: Tomato and egg rice bowls with less oil
+  status: draft
+  variant_of: tomato-egg-stir-fry
+  ingredients:
+  - uncooked rice
+  - tomato
+  - egg
+  - canola oil
+  - salt
+  - water
+  - spring onion
+- slug: cabbage-tofu-stir-fry
+  title: Cabbage and tofu rice bowls
+  status: draft
+  variant_of: null
+  ingredients:
+  - uncooked rice
+  - cabbage
+  - firm tofu
+  - garlic
+  - canola oil
+  - soy sauce
+  - water
+- slug: cabbage-tofu-stir-fry-less-oil
+  title: Cabbage and tofu rice bowls with less oil
+  status: draft
+  variant_of: cabbage-tofu-stir-fry
+  ingredients:
+  - uncooked rice
+  - cabbage
+  - firm tofu
+  - garlic
+  - canola oil
+  - soy sauce
+  - water
+- slug: garlic-water-spinach
+  title: Garlic water spinach and tofu rice bowls
+  status: draft
+  variant_of: null
+  ingredients:
+  - uncooked rice
+  - water spinach
+  - firm tofu
+  - garlic
+  - canola oil
+  - soy sauce
+  - water
+- slug: ginger-chicken-rice
+  title: One-pot ginger chicken and bok choy rice
+  status: draft
+  variant_of: null
+  ingredients:
+  - chicken thigh
+  - uncooked rice
+  - bok choy
+  - ginger
+  - garlic
+  - spring onion
+  - canola oil
+  - soy sauce
+  - water
+- slug: tofu-mushroom-soup
+  title: Tofu, mushroom and cabbage noodle soup
+  status: draft
+  variant_of: null
+  ingredients:
+  - rice vermicelli
+  - firm tofu
+  - fresh shiitake mushroom
+  - cabbage
+  - ginger
+  - spring onion
+  - soy sauce
+  - water
+- slug: red-lentil-dhal
+  title: Tomato and red lentil dhal with rice
+  status: draft
+  variant_of: null
+  ingredients:
+  - uncooked rice
+  - red lentil
+  - onion
+  - tomato
+  - garlic
+  - turmeric powder
+  - cumin powder
+  - canola oil
+  - salt
+  - water
+- slug: egg-fried-rice
+  title: Egg fried rice with vegetables
+  status: draft
+  variant_of: null
+  ingredients:
+  - cooked rice
+  - egg
+  - carrot
+  - frozen pea
+  - garlic
+  - canola oil
+  - soy sauce
+  - spring onion
+- slug: steamed-ginger-fish
+  title: Steamed ginger cod with broccoli and rice
+  status: draft
+  variant_of: null
+  ingredients:
+  - uncooked rice
+  - cod fillet
+  - broccoli
+  - ginger
+  - soy sauce
+  - spring onion
+  - black pepper
+  - water
+- slug: ginger-chicken-rice-less-oil
+  title: Ginger chicken and bok choy rice with less oil
+  status: draft
+  variant_of: ginger-chicken-rice
+  ingredients:
+  - uncooked rice
+  - chicken thigh
+  - bok choy
+  - ginger
+  - garlic
+  - soy sauce
+  - spring onion
+  - water
+- slug: tofu-mushroom-rice
+  title: One-pot tofu and mushroom rice
+  status: draft
+  variant_of: ginger-chicken-rice
+  ingredients:
+  - uncooked rice
+  - firm tofu
+  - fresh shiitake mushroom
+  - ginger
+  - garlic
+  - spring onion
+  - soy sauce
+  - canola oil
+  - water
+- slug: quicker-tomato-egg-rice
+  title: Quick tomato and egg rice
+  status: draft
+  variant_of: tomato-egg-stir-fry
+  ingredients:
+  - cooked rice
+  - tomato
+  - egg
+  - canola oil
+  - salt
+  - spring onion
+  - water
+- slug: cabbage-carrot-egg-fried-rice
+  title: Egg fried rice with extra cabbage and carrot
+  status: draft
+  variant_of: egg-fried-rice
+  ingredients:
+  - cooked rice
+  - egg
+  - cabbage
+  - carrot
+  - frozen pea
+  - garlic
+  - spring onion
+  - soy sauce
+  - canola oil
+- slug: tofu-vegetable-fried-rice
+  title: Tofu and vegetable fried rice
+  status: draft
+  variant_of: egg-fried-rice
+  ingredients:
+  - cooked rice
+  - firm tofu
+  - carrot
+  - frozen pea
+  - garlic
+  - spring onion
+  - soy sauce
+  - canola oil
+- slug: chicken-vegetable-fried-rice
+  title: Chicken, egg and vegetable fried rice
+  status: draft
+  variant_of: egg-fried-rice
+  ingredients:
+  - cooked rice
+  - chicken thigh
+  - egg
+  - carrot
+  - frozen pea
+  - garlic
+  - spring onion
+  - soy sauce
+  - canola oil
+- slug: rice-vermicelli-tofu-soup
+  title: Bok choy and tofu bee hoon soup
+  status: draft
+  variant_of: null
+  ingredients:
+  - rice vermicelli
+  - firm tofu
+  - bok choy
+  - ginger
+  - soy sauce
+  - water
+- slug: rice-vermicelli-chicken-soup
+  title: Bok choy and chicken bee hoon soup
+  status: draft
+  variant_of: rice-vermicelli-tofu-soup
+  ingredients:
+  - rice vermicelli
+  - chicken thigh
+  - bok choy
+  - ginger
+  - soy sauce
+  - water
+- slug: bee-hoon-cabbage
+  title: Cabbage and carrot bee hoon
+  status: draft
+  variant_of: null
+  ingredients:
+  - rice vermicelli
+  - cabbage
+  - carrot
+  - garlic
+  - soy sauce
+  - canola oil
+  - water
+- slug: bee-hoon-egg
+  title: Egg, cabbage and carrot bee hoon
+  status: draft
+  variant_of: bee-hoon-cabbage
+  ingredients:
+  - rice vermicelli
+  - cabbage
+  - carrot
+  - egg
+  - garlic
+  - soy sauce
+  - canola oil
+  - water
+- slug: microwave-broccoli-chickpea-rice
+  title: Microwave broccoli and chickpea rice
+  status: draft
+  variant_of: null
+  ingredients:
+  - cooked rice
+  - canned chickpea
+  - broccoli
+  - garlic
+  - canola oil
+  - salt
+  - lemon
+  - water
+- slug: rice-cooker-bok-choy-tofu-rice
+  title: Rice-cooker bok choy and tofu rice
+  status: draft
+  variant_of: null
+  ingredients:
+  - uncooked rice
+  - firm tofu
+  - bok choy
+  - ginger
+  - garlic
+  - soy sauce
+  - water
+- slug: chye-sim-egg-bee-hoon
+  title: Chye sim and egg bee hoon soup
+  status: draft
+  variant_of: null
+  ingredients:
+  - rice vermicelli
+  - chye sim
+  - egg
+  - ginger
+  - garlic
+  - salt
+  - black pepper
+  - water
+- slug: tofu-broccoli-stir-fry
+  title: Tofu and broccoli stir-fry with rice
+  status: draft
+  variant_of: null
+  ingredients:
+  - firm tofu
+  - broccoli
+  - garlic
+  - ginger
+  - soy sauce
+  - canola oil
+  - uncooked rice
+  - water
+- slug: chicken-broccoli-stir-fry
+  title: Chicken and broccoli stir-fry with rice
+  status: draft
+  variant_of: tofu-broccoli-stir-fry
+  ingredients:
+  - chicken thigh
+  - broccoli
+  - garlic
+  - ginger
+  - soy sauce
+  - canola oil
+  - uncooked rice
+  - water
+- slug: mushroom-omelette
+  title: Mushroom omelette with rice
+  status: draft
+  variant_of: null
+  ingredients:
+  - egg
+  - fresh shiitake mushroom
+  - spring onion
+  - canola oil
+  - salt
+  - uncooked rice
+  - water
+- slug: tomato-onion-omelette
+  title: Tomato and onion omelette with rice
+  status: draft
+  variant_of: mushroom-omelette
+  ingredients:
+  - egg
+  - tomato
+  - onion
+  - canola oil
+  - salt
+  - uncooked rice
+  - water
+- slug: steamed-egg
+  title: Steamed egg with rice
+  status: draft
+  variant_of: null
+  ingredients:
+  - egg
+  - soy sauce
+  - spring onion
+  - uncooked rice
+  - water
+- slug: steamed-egg-tofu
+  title: Steamed egg and tofu with rice
+  status: draft
+  variant_of: steamed-egg
+  ingredients:
+  - egg
+  - firm tofu
+  - soy sauce
+  - spring onion
+  - uncooked rice
+  - water
+- slug: ginger-chicken-soup
+  title: Ginger chicken and potato soup
+  status: draft
+  variant_of: null
+  ingredients:
+  - chicken thigh
+  - potato
+  - carrot
+  - ginger
+  - spring onion
+  - salt
+  - water
+- slug: fish-tomato-soup
+  title: Fish and tomato vermicelli soup
+  status: draft
+  variant_of: null
+  ingredients:
+  - cod fillet
+  - tomato
+  - ginger
+  - spring onion
+  - salt
+  - rice vermicelli
+  - water
+- slug: lentil-spinach-dhal
+  title: Red lentil and spinach dhal with rice
+  status: draft
+  variant_of: red-lentil-dhal
+  ingredients:
+  - red lentil
+  - tomato
+  - onion
+  - garlic
+  - turmeric powder
+  - cumin powder
+  - canola oil
+  - salt
+  - spinach
+  - uncooked rice
+  - water
+- slug: potato-cauliflower-curry
+  title: Potato and cauliflower curry with rice
+  status: draft
+  variant_of: null
+  ingredients:
+  - potato
+  - cauliflower
+  - onion
+  - tomato
+  - garlic
+  - turmeric powder
+  - cumin powder
+  - canola oil
+  - salt
+  - uncooked rice
+  - water
+- slug: chickpea-tomato-curry
+  title: Chickpea and tomato curry with rice
+  status: draft
+  variant_of: null
+  ingredients:
+  - canned chickpea
+  - tomato
+  - onion
+  - garlic
+  - turmeric powder
+  - cumin powder
+  - canola oil
+  - salt
+  - uncooked rice
+  - water
+- slug: coconut-tofu-curry
+  title: Coconut tofu and vegetable curry with rice
+  status: draft
+  variant_of: null
+  ingredients:
+  - firm tofu
+  - coconut milk
+  - carrot
+  - long bean
+  - onion
+  - garlic
+  - ginger
+  - turmeric powder
+  - chilli paste
+  - canola oil
+  - salt
+  - uncooked rice
+  - water
+- slug: coconut-chicken-curry
+  title: Coconut chicken and vegetable curry with rice
+  status: draft
+  variant_of: coconut-tofu-curry
+  ingredients:
+  - chicken thigh
+  - coconut milk
+  - carrot
+  - long bean
+  - onion
+  - garlic
+  - ginger
+  - turmeric powder
+  - chilli paste
+  - canola oil
+  - salt
+  - uncooked rice
+  - water
+- slug: tempeh-long-bean-stir-fry
+  title: Tempeh and long bean stir-fry with rice
+  status: draft
+  variant_of: null
+  ingredients:
+  - tempeh
+  - long bean
+  - garlic
+  - soy sauce
+  - canola oil
+  - uncooked rice
+  - water
+- slug: tempeh-cabbage-stir-fry
+  title: Tempeh and cabbage stir-fry with rice
+  status: draft
+  variant_of: tempeh-long-bean-stir-fry
+  ingredients:
+  - tempeh
+  - cabbage
+  - garlic
+  - soy sauce
+  - canola oil
+  - uncooked rice
+  - water
+- slug: sambal-tofu
+  title: Chilli tofu with rice
+  status: draft
+  variant_of: null
+  ingredients:
+  - firm tofu
+  - chilli paste
+  - onion
+  - garlic
+  - tomato
+  - canola oil
+  - salt
+  - uncooked rice
+  - water
+- slug: sambal-prawn
+  title: Chilli prawns with rice
+  status: draft
+  variant_of: sambal-tofu
+  ingredients:
+  - prawn
+  - chilli paste
+  - onion
+  - garlic
+  - tomato
+  - canola oil
+  - salt
+  - uncooked rice
+  - water
+- slug: lemon-pepper-fish
+  title: Lemon pepper fish with potatoes and carrots
+  status: draft
+  variant_of: null
+  ingredients:
+  - cod fillet
+  - potato
+  - carrot
+  - lemon
+  - black pepper
+  - canola oil
+  - salt
+  - water
+- slug: lemon-pepper-chicken
+  title: Lemon pepper chicken with potatoes and carrots
+  status: draft
+  variant_of: lemon-pepper-fish
+  ingredients:
+  - chicken thigh
+  - potato
+  - carrot
+  - lemon
+  - black pepper
+  - canola oil
+  - salt
+  - water
+- slug: pumpkin-lentil-soup
+  title: Pumpkin, potato and red lentil soup
+  status: draft
+  variant_of: null
+  ingredients:
+  - pumpkin
+  - potato
+  - red lentil
+  - onion
+  - garlic
+  - cumin powder
+  - canola oil
+  - salt
+  - water
+- slug: chicken-rice-porridge
+  title: Ginger chicken rice porridge
+  status: draft
+  variant_of: null
+  ingredients:
+  - uncooked rice
+  - chicken thigh
+  - ginger
+  - spring onion
+  - salt
+  - water
+- slug: mushroom-rice-porridge
+  title: Mushroom and tofu rice porridge
+  status: draft
+  variant_of: chicken-rice-porridge
+  ingredients:
+  - uncooked rice
+  - fresh shiitake mushroom
+  - firm tofu
+  - ginger
+  - spring onion
+  - soy sauce
+  - water
+- slug: cucumber-tomato-chickpea-salad
+  title: Cucumber, tomato and chickpea rice salad
+  status: draft
+  variant_of: null
+  ingredients:
+  - cucumber
+  - tomato
+  - canned chickpea
+  - cooked rice
+  - lemon
+  - canola oil
+  - salt
+  - black pepper
+- slug: sesame-soba-tofu
+  title: Sesame soba with tofu and vegetables
+  status: draft
+  variant_of: null
+  ingredients:
+  - soba noodle
+  - firm tofu
+  - cucumber
+  - carrot
+  - sesame oil
+  - soy sauce
+  - water
+- slug: sesame-soba-egg
+  title: Sesame soba with egg and vegetables
+  status: draft
+  variant_of: sesame-soba-tofu
+  ingredients:
+  - soba noodle
+  - egg
+  - cucumber
+  - carrot
+  - sesame oil
+  - soy sauce
+  - water

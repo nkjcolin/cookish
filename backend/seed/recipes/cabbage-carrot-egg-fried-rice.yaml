@@ -1,0 +1,70 @@
+id: 84caffd7-90b8-4d20-878c-c266f7fa6a87
+title: Egg fried rice with extra cabbage and carrot
+variant_of: 82837c0b-d649-4fe6-aa5b-196c64459b28
+variant_label: More vegetables
+cuisine: chinese
+total_minutes: 25
+active_minutes: 25
+difficulty: 1
+servings: 2
+equipment:
+- stove
+taste_tags:
+- light
+- vegetable_rich
+ingredients:
+- canonical_name: cooked rice
+  quantity: 400
+  unit: g
+  essential: true
+  prep_note: already cooked rice, cooled promptly and refrigerated below 4 C if not freshly cooked; do
+    not use rice left unrefrigerated or with uncertain storage
+- canonical_name: egg
+  quantity: 2
+  unit: pcs
+  essential: true
+  prep_note: beaten
+- canonical_name: cabbage
+  quantity: 200
+  unit: g
+  essential: true
+  prep_note: thinly shredded
+- canonical_name: carrot
+  quantity: 150
+  unit: g
+  essential: true
+  prep_note: cut into small dice
+- canonical_name: frozen pea
+  quantity: 80
+  unit: g
+  essential: true
+- canonical_name: garlic
+  quantity: 8
+  unit: g
+  essential: false
+  prep_note: finely chopped
+- canonical_name: spring onion
+  quantity: 10
+  unit: g
+  essential: false
+  prep_note: thinly sliced
+- canonical_name: soy sauce
+  quantity: 15
+  unit: ml
+  essential: false
+- canonical_name: canola oil
+  quantity: 15
+  unit: ml
+  essential: true
+steps:
+- Break the rice into loose grains. Heat one third of the oil in a large nonstick pan and scramble the
+  eggs until fully set. Transfer the eggs to a clean plate.
+- Add the remaining oil, garlic if using, carrot and cabbage. Stir-fry for about 5 minutes, then add the
+  peas and cook until the vegetables are tender and the peas are hot.
+- Add the rice and keep turning it through the vegetables for about 5 minutes. Work in batches if needed
+  so the rice heats evenly.
+- Return the egg, add soy sauce and spring onion if using, and toss together. Stir and check several parts
+  with a clean food thermometer; keep the rice at 75 C or hotter for at least 2 minutes. Continue heating
+  if necessary and serve immediately. Reheating cannot make poorly stored rice safe.
+source: 'original AI-assisted draft; concept/technique reference: https://thewoksoflife.com/vegetable-fried-rice/'
+reviewed: false

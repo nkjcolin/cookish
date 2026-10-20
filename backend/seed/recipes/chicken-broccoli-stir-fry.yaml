@@ -1,0 +1,63 @@
+id: 5380fd71-a373-4bed-8474-7f0d8e46cb43
+title: Chicken and broccoli stir-fry with rice
+variant_of: 66ee604f-e55c-46a3-8d5f-a64e5e58085d
+variant_label: chicken
+cuisine: chinese
+total_minutes: 35
+active_minutes: 20
+difficulty: 1
+servings: 2
+equipment:
+- stove
+taste_tags:
+- light
+- vegetable_rich
+ingredients:
+- canonical_name: chicken thigh
+  quantity: 300
+  unit: g
+  essential: true
+  prep_note: raw boneless skinless meat, cut into 2 cm pieces
+- canonical_name: broccoli
+  quantity: 300
+  unit: g
+  essential: true
+  prep_note: trimmed into small florets; tender stems thinly sliced
+- canonical_name: garlic
+  quantity: 8
+  unit: g
+  essential: true
+  prep_note: finely chopped
+- canonical_name: ginger
+  quantity: 8
+  unit: g
+  essential: true
+  prep_note: finely chopped
+- canonical_name: soy sauce
+  quantity: 20
+  unit: ml
+  essential: true
+- canonical_name: canola oil
+  quantity: 10
+  unit: ml
+  essential: true
+- canonical_name: uncooked rice
+  quantity: 150
+  unit: g
+  essential: true
+  prep_note: dry white rice
+- canonical_name: water
+  coarse_amount: for rinsing and cooking the rice according to its packet; a little extra for steaming
+    the broccoli
+  essential: true
+steps:
+- 'Start the rice first: rinse the uncooked rice, then cook it in water in a covered saucepan following
+  its packet instructions. Prepare the rest of the meal while it cooks; keep the rice covered until serving.'
+- Heat the canola oil in a non-stick pan over medium-high heat. Add the chicken thigh pieces in one layer;
+  turn and cook for about 6 minutes. Lower the heat and stir in the garlic and ginger for 30 seconds.
+- Add the broccoli, soy sauce and enough water to cover the base of the pan. Cover and simmer for 5 to
+  8 minutes, stirring occasionally, until the broccoli is tender and the chicken is cooked.
+- 'Check the thickest chicken pieces with a food thermometer: they must reach at least 75 C and stay at
+  that temperature for 2 minutes. Continue cooking if needed. Serve with the rice.'
+source: 'original AI-assisted draft; concept/technique reference: https://thewoksoflife.com/chinese-chicken-broccoli-brown-sauce/'
+reviewed: false

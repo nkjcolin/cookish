@@ -1,0 +1,68 @@
+id: 109d8db0-0c6c-4229-b0fc-bf295cfb6eb7
+title: One-pot tofu and mushroom rice
+variant_of: 85d5ed52-10d6-4769-8bc5-435decbd08d8
+variant_label: Tofu and mushroom alternative
+cuisine: chinese
+total_minutes: 40
+active_minutes: 15
+difficulty: 1
+servings: 2
+equipment:
+- stove
+taste_tags:
+- light
+- low_oil
+ingredients:
+- canonical_name: uncooked rice
+  quantity: 200
+  unit: g
+  essential: true
+  prep_note: white rice, rinsed and drained
+- canonical_name: firm tofu
+  quantity: 300
+  unit: g
+  essential: true
+  prep_note: plain tofu, drained and cut into cubes
+- canonical_name: fresh shiitake mushroom
+  quantity: 180
+  unit: g
+  essential: true
+  prep_note: tough stems removed and caps sliced
+- canonical_name: ginger
+  quantity: 15
+  unit: g
+  essential: true
+  prep_note: peeled and finely sliced
+- canonical_name: garlic
+  quantity: 8
+  unit: g
+  essential: false
+  prep_note: finely chopped
+- canonical_name: spring onion
+  quantity: 10
+  unit: g
+  essential: false
+  prep_note: thinly sliced
+- canonical_name: soy sauce
+  quantity: 15
+  unit: ml
+  essential: true
+- canonical_name: canola oil
+  quantity: 5
+  unit: ml
+  essential: true
+- canonical_name: water
+  quantity: 350
+  unit: ml
+  essential: true
+steps:
+- Warm the oil in a heavy saucepan. Cook the ginger and garlic if using for about 1 minute, then add the
+  mushrooms and stir for 2 minutes.
+- Stir in the rice, water and soy sauce. Place the tofu evenly over the top and bring the liquid to a
+  steady simmer.
+- Cover and cook over low heat for about 20 minutes until the rice is tender and the tofu is hot throughout.
+  If the pan becomes dry while the rice is still firm, add a little drinking water and continue cooking.
+- Take the pan off the heat and leave covered for 5 minutes. Fold the tofu and mushrooms gently through
+  the rice and scatter over the spring onion if using.
+source: 'original AI-assisted draft; concept/technique reference: https://thefoodietakesflight.com/one-pot-mushroom-rice/'
+reviewed: false

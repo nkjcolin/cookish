@@ -1,0 +1,56 @@
+id: 202bfb57-26ca-4201-b935-7a7ea4db9785
+title: Bok choy and tofu bee hoon soup
+variant_of: null
+cuisine: chinese
+total_minutes: 25
+active_minutes: 15
+difficulty: 1
+servings: 2
+equipment:
+- stove
+taste_tags:
+- light
+- soupy
+- low_oil
+ingredients:
+- canonical_name: rice vermicelli
+  quantity: 160
+  unit: g
+  essential: true
+  prep_note: dry thin rice noodles
+- canonical_name: firm tofu
+  quantity: 300
+  unit: g
+  essential: true
+  prep_note: plain tofu, drained and cut into small cubes
+- canonical_name: bok choy
+  quantity: 250
+  unit: g
+  essential: true
+  prep_note: washed, stems and leaves separated and sliced
+- canonical_name: ginger
+  quantity: 15
+  unit: g
+  essential: true
+  prep_note: peeled and finely sliced
+- canonical_name: soy sauce
+  quantity: 20
+  unit: ml
+  essential: true
+- canonical_name: water
+  essential: true
+  quantity: 900
+  unit: ml
+  prep_note: measured cooking water; additional water for rinsing or preparing the noodles/rice as instructed,
+    plus small top-ups if needed
+steps:
+- Soak or cook the rice vermicelli according to the packet instructions, then drain. Prepare the vegetables
+  while the noodles soften.
+- Bring the measured soup water, ginger and soy sauce to a boil in a saucepan. Add the bok choy stems
+  and simmer for 3 minutes.
+- Add the tofu and bok choy leaves. Simmer gently for another 4 to 5 minutes, until the tofu is hot throughout
+  and the stems are tender.
+- Add the prepared noodles and heat the soup back to a simmer. Divide the noodles, tofu, vegetables and
+  broth evenly between bowls and serve hot.
+source: 'original AI-assisted draft; concept/technique reference: https://thewoksoflife.com/tofu-soup/'
+reviewed: false

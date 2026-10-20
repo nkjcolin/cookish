@@ -1,0 +1,75 @@
+id: cd823518-b570-4185-ba71-b1d0cdde2adf
+title: Potato and cauliflower curry with rice
+variant_of: null
+cuisine: indian
+total_minutes: 45
+active_minutes: 20
+difficulty: 1
+servings: 2
+equipment:
+- stove
+taste_tags:
+- vegetable_rich
+ingredients:
+- canonical_name: potato
+  quantity: 250
+  unit: g
+  essential: true
+  prep_note: peeled and cut into 1.5 cm cubes
+- canonical_name: cauliflower
+  quantity: 300
+  unit: g
+  essential: true
+  prep_note: trimmed into small florets
+- canonical_name: onion
+  quantity: 100
+  unit: g
+  essential: true
+  prep_note: finely chopped
+- canonical_name: tomato
+  quantity: 200
+  unit: g
+  essential: true
+  prep_note: chopped
+- canonical_name: garlic
+  quantity: 8
+  unit: g
+  essential: true
+  prep_note: finely chopped
+- canonical_name: turmeric powder
+  quantity: 1
+  unit: g
+  essential: true
+- canonical_name: cumin powder
+  quantity: 2
+  unit: g
+  essential: true
+- canonical_name: canola oil
+  quantity: 10
+  unit: ml
+  essential: true
+- canonical_name: salt
+  quantity: 2
+  unit: g
+  essential: true
+- canonical_name: uncooked rice
+  quantity: 120
+  unit: g
+  essential: true
+  prep_note: dry white rice
+- canonical_name: water
+  coarse_amount: for rinsing and cooking the rice according to its packet; enough extra water to simmer
+    the vegetables
+  essential: true
+steps:
+- 'Start the rice first: rinse the uncooked rice, then cook it in water in a covered saucepan following
+  its packet instructions. Prepare the rest of the meal while it cooks; keep the rice covered until serving.'
+- Heat the canola oil in a wide saucepan. Cook the onion for 5 minutes, then stir in the garlic, turmeric
+  and cumin. Add the tomato and cook for 4 minutes until softened.
+- Add the potato, salt and enough water to reach halfway up the potato pieces. Cover and simmer for 8
+  minutes, stirring once.
+- Add the cauliflower, cover again and simmer for 10 to 15 minutes until the potato yields easily to a
+  fork and cauliflower is tender. Add a little water if it dries out; uncover briefly if too wet. Serve
+  with the rice.
+source: 'original AI-assisted draft; concept/technique reference: https://www.indianhealthyrecipes.com/aloo-gobi-recipe/'
+reviewed: false

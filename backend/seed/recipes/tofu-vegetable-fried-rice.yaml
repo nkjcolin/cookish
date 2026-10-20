@@ -1,0 +1,64 @@
+id: 23c3cd8d-ad33-4891-b2ec-6c10a93a43cb
+title: Tofu and vegetable fried rice
+variant_of: 82837c0b-d649-4fe6-aa5b-196c64459b28
+variant_label: Tofu instead of egg
+cuisine: chinese
+total_minutes: 25
+active_minutes: 25
+difficulty: 1
+servings: 2
+equipment:
+- stove
+taste_tags:
+- light
+ingredients:
+- canonical_name: cooked rice
+  quantity: 400
+  unit: g
+  essential: true
+  prep_note: already cooked rice, cooled promptly and refrigerated below 4 C if not freshly cooked; do
+    not use rice left unrefrigerated or with uncertain storage
+- canonical_name: firm tofu
+  quantity: 300
+  unit: g
+  essential: true
+  prep_note: plain tofu, drained well and cut into small cubes
+- canonical_name: carrot
+  quantity: 100
+  unit: g
+  essential: true
+  prep_note: cut into small dice
+- canonical_name: frozen pea
+  quantity: 80
+  unit: g
+  essential: true
+- canonical_name: garlic
+  quantity: 8
+  unit: g
+  essential: false
+  prep_note: finely chopped
+- canonical_name: spring onion
+  quantity: 10
+  unit: g
+  essential: false
+  prep_note: thinly sliced
+- canonical_name: soy sauce
+  quantity: 15
+  unit: ml
+  essential: false
+- canonical_name: canola oil
+  quantity: 15
+  unit: ml
+  essential: true
+steps:
+- Break up the rice clumps. Heat two thirds of the oil in a nonstick pan and cook the tofu for 5 to 6
+  minutes, turning it gently, until some surfaces are lightly golden.
+- Move the tofu to a clean plate. Add the rest of the oil, carrot and garlic if using, then stir-fry for
+  about 3 minutes. Add the peas and cook until the vegetables are tender.
+- Add the rice and stir-fry for about 5 minutes. Return the tofu and add soy sauce and spring onion if
+  using, folding carefully so the tofu holds its shape.
+- Stir and check several parts with a clean food thermometer; keep the rice at 75 C or hotter for at least
+  2 minutes. Continue heating if necessary and serve immediately. Reheating cannot make poorly stored
+  rice safe.
+source: 'original AI-assisted draft; concept/technique reference: https://thewoksoflife.com/vegetable-fried-rice/'
+reviewed: false

@@ -1,0 +1,55 @@
+id: aef915ed-711e-41c8-9d1a-8c31f0cd51f8
+title: Tomato and onion omelette with rice
+variant_of: aa138433-2918-4a6f-b361-c1fe5eedeaaf
+variant_label: tomato and onion
+cuisine: other
+total_minutes: 35
+active_minutes: 20
+difficulty: 1
+servings: 2
+equipment:
+- stove
+taste_tags:
+- light
+ingredients:
+- canonical_name: egg
+  quantity: 4
+  unit: pcs
+  essential: true
+- canonical_name: tomato
+  quantity: 200
+  unit: g
+  essential: true
+  prep_note: diced
+- canonical_name: onion
+  quantity: 80
+  unit: g
+  essential: true
+  prep_note: finely diced
+- canonical_name: canola oil
+  quantity: 10
+  unit: ml
+  essential: true
+- canonical_name: salt
+  quantity: 1
+  unit: g
+  essential: true
+- canonical_name: uncooked rice
+  quantity: 150
+  unit: g
+  essential: true
+  prep_note: dry white rice
+- canonical_name: water
+  coarse_amount: for rinsing and cooking the rice according to its packet
+  essential: true
+steps:
+- 'Start the rice first: rinse the uncooked rice, then cook it in water in a covered saucepan following
+  its packet instructions. Prepare the rest of the meal while it cooks; keep the rice covered until serving.'
+- Heat half the canola oil in a non-stick pan. Cook the onion over medium heat for 4 minutes, add the
+  tomato and cook for a further 5 minutes until the mixture is soft and excess liquid has evaporated.
+- Beat the eggs with the salt. Spread the vegetables evenly, add the remaining oil and pour in the eggs.
+  Cook over medium-low heat, lifting the set edges to let uncooked egg reach the pan.
+- Cover for about 4 to 6 minutes until the centre has set fully without any runny egg. Divide and serve
+  with the rice.
+source: 'original AI-assisted draft; concept/technique reference: https://www.recipetineats.com/omelette/'
+reviewed: false

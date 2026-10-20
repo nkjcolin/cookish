@@ -1,0 +1,87 @@
+id: 5bd66173-7561-4c71-965d-ee17a8c8ebed
+title: Coconut tofu and vegetable curry with rice
+variant_of: null
+cuisine: malay
+total_minutes: 40
+active_minutes: 20
+difficulty: 1
+servings: 2
+equipment:
+- stove
+taste_tags:
+- rich
+- spicy
+- vegetable_rich
+ingredients:
+- canonical_name: firm tofu
+  quantity: 300
+  unit: g
+  essential: true
+  prep_note: drained and cut into 2 cm cubes
+- canonical_name: coconut milk
+  quantity: 200
+  unit: ml
+  essential: true
+  prep_note: unsweetened cooking coconut milk
+- canonical_name: carrot
+  quantity: 150
+  unit: g
+  essential: true
+  prep_note: thinly sliced
+- canonical_name: long bean
+  quantity: 180
+  unit: g
+  essential: true
+  prep_note: trimmed and cut into short lengths
+- canonical_name: onion
+  quantity: 80
+  unit: g
+  essential: true
+  prep_note: finely chopped
+- canonical_name: garlic
+  quantity: 8
+  unit: g
+  essential: true
+  prep_note: finely chopped
+- canonical_name: ginger
+  quantity: 8
+  unit: g
+  essential: true
+  prep_note: finely chopped
+- canonical_name: turmeric powder
+  quantity: 1
+  unit: g
+  essential: true
+- canonical_name: chilli paste
+  quantity: 10
+  unit: g
+  essential: true
+  prep_note: plain chilli paste; not sambal or curry paste
+- canonical_name: canola oil
+  quantity: 10
+  unit: ml
+  essential: true
+- canonical_name: salt
+  quantity: 1
+  unit: g
+  essential: true
+- canonical_name: uncooked rice
+  quantity: 150
+  unit: g
+  essential: true
+  prep_note: dry white rice
+- canonical_name: water
+  coarse_amount: for rinsing and cooking the rice according to its packet; extra water for a loose curry
+    sauce
+  essential: true
+steps:
+- 'Start the rice first: rinse the uncooked rice, then cook it in water in a covered saucepan following
+  its packet instructions. Prepare the rest of the meal while it cooks; keep the rice covered until serving.'
+- Heat the canola oil in a saucepan and cook the onion for 4 minutes. Stir in the garlic, ginger, turmeric
+  and chilli paste and cook for a further minute.
+- Add the carrot and long bean, plus enough water to cover the base of the pan. Cover and simmer for 6
+  to 8 minutes, until the vegetables are nearly tender.
+- Stir in the coconut milk, firm tofu and salt. Add water if needed to make a loose sauce and simmer gently
+  for 6 to 8 minutes until the tofu is hot throughout and the vegetables are tender. Serve with the rice.
+source: 'original AI-assisted draft; concept/technique reference: https://www.nyonyacooking.com/recipes/the-best-sayur-lodeh-vegetables-in-coconut-milk~SMijNnrFRE'
+reviewed: false

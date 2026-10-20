@@ -1,4 +1,4 @@
-# Role 5: first recipe and ingredient handoff
+# Role 5: recipe catalogue and ingredient handoff
 
 Role 2 can use these files to start the ingredient catalogue and recipe loader.
 Role 4 can then use Role 2's `ingredients.csv` for receipt and photo matching.
@@ -9,20 +9,33 @@ database seeding, or AI matching.
 
 | File | Status and purpose |
 |---|---|
-| [`backend/seed/recipes/`](../backend/seed/recipes/) | 10 original AI-assisted recipe drafts: eight base recipes and two less-oil variants. All have fixed UUIDs and `reviewed: false`. |
-| [`recipe_plan.yaml`](../backend/seed/recipe_plan.yaml) | 48 proposed catalogue entries, including the 10 drafts and 38 outlines. Each lists its intended ingredients and base/variant relationship. Outlines are not completed recipes. |
-| [`ingredient_requests.yaml`](../backend/seed/ingredient_requests.yaml) | 42 proposed canonical names, with suggested aliases, recipe units and mapping notes. The starter recipes use 24 of these names. |
+| [`backend/seed/recipes/`](../backend/seed/recipes/) | 48 complete original AI-assisted recipe drafts: 28 base recipes and 20 variants. All have fixed UUIDs and `reviewed: false`. |
+| [`recipe_plan.yaml`](../backend/seed/recipe_plan.yaml) | Index of all 48 draft files, their ingredients and base/variant relationships. No outlines remain. |
+| [`ingredient_requests.yaml`](../backend/seed/ingredient_requests.yaml) | The same 42 proposed canonical names, with suggested aliases, recipe units and mapping notes. All 42 are used by the completed drafts. |
+| [`recipe-review.md`](recipe-review.md) | Human review guide with all 48 recipe cards, selection rationale, external references and review checks. |
+| [`recipe_review.yaml`](../backend/seed/recipe_review.yaml) | Review coordination metadata, separate from the runtime recipe format. |
 | [`validate_recipe_handoff.py`](../backend/scripts/validate_recipe_handoff.py) | Checks the files together, including enum values, UUIDs, variants, ingredient coverage, amounts and review status. |
 
-The two planning manifests are inputs for coordination, not new runtime seed
+The manifests are inputs for coordination and review, not new runtime seed
 formats. The agreed recipe YAML and `ingredients.csv` formats remain those in
 [`backend/seed/README.md`](../backend/seed/README.md).
+
+Every draft describes a full meal portion, including any rice, noodles or
+potatoes served with the dish. This prevents a suggestion or shopping basket
+from silently leaving out the staple. Timings include these components, with
+parallel cooking specified where assumed. The quantities, estimated times,
+flavour balance and portion suitability still need review.
+Recipes listing `cooked rice` start from safely stored, prepared rice; their
+timings exclude its original cooking and cooling.
+
+The earlier recipe UUIDs remain unchanged; the new drafts also have fixed UUIDs.
+Keep those identities when correcting quantities, wording or titles.
 
 ## Role 2: first integration steps
 
 1. Review the proposed canonical names and aliases in `ingredient_requests.yaml`.
-   `recipe_plan.yaml` shows where each name will be used, including upcoming
-   recipes. Agree any renaming with Role 5 and update both manifests and recipes
+   `recipe_plan.yaml` shows where each name is used across the 48 drafts. Agree
+   any renaming with Role 5 and update the manifests, review material and recipes
    together.
 2. Create the authoritative `ingredients.csv` with your fixed ingredient UUIDs,
    tracking modes, purchase units, source-backed shelf-life estimates, allergen
@@ -37,8 +50,8 @@ formats. The agreed recipe YAML and `ingredients.csv` formats remain those in
 5. Once the CSV exists, run the optional CSV validation below. Give the same CSV
    to Role 4 for bundling with the AI service.
 
-The initial batch can exercise loading and development fixtures while humans
-review the recipes. It is not a reviewed catalogue for the user study. A proposed
+The full draft catalogue can exercise loading and development fixtures while
+humans review the recipes. It is not a reviewed catalogue for the user study. A proposed
 loader policy is to allow drafts only through an explicit development option and
 to exclude them from the catalogue offered to study participants.
 
@@ -56,7 +69,7 @@ to exclude them from the catalogue offered to study participants.
 - **Food forms:** `cooked rice` and `uncooked rice` are separate entries; fresh
   mushrooms, canned chickpeas and dry lentils are named explicitly. Avoid
   aliases that erase preparation state.
-- **Specific products:** starter recipes use `canola oil` and `cod fillet`.
+- **Specific products:** recipes use `canola oil` and `cod fillet`.
   Do not map every oil or fish to those names. The manifest flags product
   composition questions for sauces, noodles and other processed ingredients.
 - **Aliases:** these are proposed search/matching inputs, not verified coverage
@@ -71,7 +84,7 @@ unchanged by this handoff.
 
 | Topic | Proposed next step |
 |---|---|
-| Taste tags | Use the existing `TasteTag` values. No new tags are needed for this starter batch. `low_oil` is a qualitative cooking tag, not a measured nutrition claim. |
+| Taste tags | Use the existing `TasteTag` values. `low_oil` means at most 5 ml total added cooking oil, including seasoning oils, per two servings. Reserve `high_protein` for explicit protein additions to a base recipe. `vegetable_rich` requires at least 300 g of the defined vegetable set per two servings. The [review guide](recipe-review.md) details these transparent authoring heuristics; they are culinary ranking features, and nutrition metrics or user-facing nutrition claims require separate work. |
 | Internal feedback state | Keep learned weights per household, as SPEC A6 requires. `get_preferences()` currently returns `Preferences`, which omits `taste_weights`. Agree internal database/repository access with Role 2; the public preferences response does not need to expose learned weights. |
 | Weight representation | Propose an empty map initially, treating an absent feature as zero; namespace features such as `tag:low_oil` and `cuisine:chinese`. Agree how to derive main-protein features from ingredient metadata before adding them. |
 | Learning updates | SPEC B5 says Like adds a step, Dislike subtracts one, and Maybe/skip leave weights unchanged. Choose and document the step size and bounds in Role 5's future scoring configuration. Agree how the small “cooked without rating” reward interacts with a later rating, repeated requests and changed ratings, so an HTTP retry cannot train the profile twice. |
@@ -85,23 +98,34 @@ Changes to shared contracts follow the procedure in
 
 ## Recipe provenance and human review
 
-The initial recipe prose was drafted specifically for this project with AI
-assistance. No third-party recipe text, photos or research dataset records were
-copied into this batch. Each file records `source: 'original; AI-assisted draft'`
-and remains `reviewed: false`. This is a provenance statement, not a claim of
-human approval, cooking trials or nutrition analysis.
+The recipe prose and constrained ingredient combinations were drafted
+specifically for this project with AI assistance. Named external recipe authors
+provide concept or technique references; each recipe's `source` records its
+original AI-assisted status and an exact reference URL. The
+[review guide](recipe-review.md) identifies each reference and explains which
+ideas informed the draft and what changed.
 
-For each recipe, a human reviewer should check the ingredient names and amounts,
-servings, equipment, timing, complete instructions, optional ingredients and
-variant behaviour. Cooking instructions and handling of meat, fish, eggs and
-cooked rice need review before use with participants. Record the reviewer,
-date and any cooking-trial evidence in the eventual review PR, then change
-`reviewed` to true for the specific recipes actually reviewed.
+These are original project prototypes, not copies of the external authors'
+complete recipes. No third-party photos or recipe prose are included. An
+external reference does not validate our adaptations, timings, dietary
+suitability or nutrition. No recipe has yet been marked as human-reviewed, and
+the catalogue is not a third-party recipe API or a tested research dataset.
+The 48 drafts have not been cooking-tested.
 
-Keep the AI drafting, validation assistance and human corrections in the final
-report's AI-use declaration. Record external sources and licences if future
-recipes use external material; do not imply this original batch came from a
-third-party recipe API.
+Use the guide's review checks to assess ingredient names and amounts, full meal
+portions, equipment, timing, complete instructions, optional ingredients and
+variant behaviour. Check meat, fish, egg and cooked-rice handling before use
+with participants. All equipment entries are required together; reviewers
+should check the parallel-cooking and appliance assumptions as well as the
+ingredient list.
+
+Record the reviewer, review date, corrections and any cooking-trial evidence in
+the review PR. The generated guide's checkboxes are a checklist, not a persistent
+evidence record. Change `reviewed` to true only for the
+specific recipes actually reviewed; a structural validator cannot grant
+culinary approval. Keep AI drafting, research/validation assistance and human
+corrections in the final report's AI-use declaration, and cite the named
+external sources for the limited role they played.
 
 ## Validation
 
@@ -132,5 +156,5 @@ Before treating the delivered recipe files as reviewed:
 uv run python scripts/validate_recipe_handoff.py --require-reviewed
 ```
 
-That last command is expected to fail for this initial draft batch. It checks
+That last command is expected to fail for all 48 current drafts. It checks
 the review flags; it cannot verify that a human actually performed the review.

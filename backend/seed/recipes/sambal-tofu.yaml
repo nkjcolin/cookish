@@ -1,0 +1,68 @@
+id: c3729c50-e498-4026-94d0-a35154738ed9
+title: Chilli tofu with rice
+variant_of: null
+cuisine: other
+total_minutes: 40
+active_minutes: 25
+difficulty: 1
+servings: 2
+equipment:
+- stove
+taste_tags:
+- spicy
+- vegetable_rich
+ingredients:
+- canonical_name: firm tofu
+  quantity: 350
+  unit: g
+  essential: true
+  prep_note: drained and cut into 2 cm cubes
+- canonical_name: chilli paste
+  quantity: 15
+  unit: g
+  essential: true
+  prep_note: plain chilli paste without shrimp paste; heat varies by brand
+- canonical_name: onion
+  quantity: 100
+  unit: g
+  essential: true
+  prep_note: peeled and diced
+- canonical_name: garlic
+  quantity: 8
+  unit: g
+  essential: true
+  prep_note: peeled and minced
+- canonical_name: tomato
+  quantity: 300
+  unit: g
+  essential: true
+  prep_note: washed and diced
+- canonical_name: canola oil
+  quantity: 15
+  unit: ml
+  essential: true
+- canonical_name: salt
+  quantity: 1
+  unit: g
+  essential: true
+- canonical_name: uncooked rice
+  quantity: 180
+  unit: g
+  essential: true
+  prep_note: dry white rice
+- canonical_name: water
+  coarse_amount: enough to rinse and cook the rice plus a few splashes for the sauce
+  essential: true
+steps:
+- Rinse the rice and cook in a covered saucepan using the water amount and time on its packet. Rest covered
+  off the heat when cooked.
+- Meanwhile, drain and cube the tofu and prepare the vegetables. Warm half the oil in a non-stick frying
+  pan over medium heat and cook the tofu for 6-8 minutes, turning gently. Transfer to a clean plate.
+- Add the remaining oil and the onion to the same pan. Stir for 4 minutes, then add the garlic and chilli
+  paste and stir for 1 minute.
+- Add the tomato, salt and a splash of water. Simmer for 6-8 minutes, stirring occasionally, until the
+  tomato breaks down into a sauce.
+- Return the tofu and gently coat it in the sauce. Simmer for 3-4 minutes until hot throughout, adding
+  a little more water if needed. Fluff the rice and serve with the tofu immediately.
+source: 'original AI-assisted draft; concept/technique reference: https://rasamalaysia.com/sambal-udang-prawn-sambal/'
+reviewed: false

@@ -1,0 +1,58 @@
+id: c67a5a88-4c59-4498-a8c6-b76b4e30257e
+title: Ginger chicken and potato soup
+variant_of: null
+cuisine: chinese
+total_minutes: 40
+active_minutes: 15
+difficulty: 1
+servings: 2
+equipment:
+- stove
+taste_tags:
+- light
+- soupy
+- low_oil
+ingredients:
+- canonical_name: chicken thigh
+  quantity: 300
+  unit: g
+  essential: true
+  prep_note: raw boneless skinless meat, cut into 2 cm pieces
+- canonical_name: potato
+  quantity: 400
+  unit: g
+  essential: true
+  prep_note: peeled and cut into 1.5 cm cubes
+- canonical_name: carrot
+  quantity: 180
+  unit: g
+  essential: true
+  prep_note: thinly sliced
+- canonical_name: ginger
+  quantity: 15
+  unit: g
+  essential: true
+  prep_note: peeled and thinly sliced
+- canonical_name: spring onion
+  quantity: 15
+  unit: g
+  essential: true
+  prep_note: washed and sliced; keep white and green parts separate
+- canonical_name: salt
+  quantity: 2
+  unit: g
+  essential: true
+- canonical_name: water
+  quantity: 900
+  unit: ml
+  essential: true
+steps:
+- Put the water, ginger, potato, carrot and white parts of the spring onion into a saucepan. Bring to
+  a boil, then cover and simmer for 8 minutes.
+- Add the chicken thigh pieces, stir and return to a simmer. Cover and cook for about 15 to 20 minutes
+  until the potato and carrot are tender.
+- 'Check the thickest chicken pieces with a thermometer: they must reach at least 75 C and remain there
+  for 2 minutes. Keep simmering if needed. Stir in the salt and spring onion greens, then divide the soup
+  and solids between bowls.'
+source: 'original AI-assisted draft; concept/technique reference: https://becs-table.com.au/ginger-chicken-soup/'
+reviewed: false

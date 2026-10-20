@@ -1,0 +1,59 @@
+id: 61456d3b-fc96-4bef-91b5-f54dce95fed7
+title: Fish and tomato vermicelli soup
+variant_of: null
+cuisine: chinese
+total_minutes: 30
+active_minutes: 15
+difficulty: 1
+servings: 2
+equipment:
+- stove
+taste_tags:
+- light
+- soupy
+- low_oil
+- vegetable_rich
+ingredients:
+- canonical_name: cod fillet
+  quantity: 300
+  unit: g
+  essential: true
+  prep_note: raw boneless fillet, thawed if frozen and cut into 2 cm pieces; check for bones
+- canonical_name: tomato
+  quantity: 300
+  unit: g
+  essential: true
+  prep_note: cut into small wedges
+- canonical_name: ginger
+  quantity: 10
+  unit: g
+  essential: true
+  prep_note: peeled and thinly sliced
+- canonical_name: spring onion
+  quantity: 15
+  unit: g
+  essential: true
+  prep_note: washed and sliced
+- canonical_name: salt
+  quantity: 2
+  unit: g
+  essential: true
+- canonical_name: rice vermicelli
+  quantity: 140
+  unit: g
+  essential: true
+  prep_note: dry thin rice noodles
+- canonical_name: water
+  coarse_amount: enough for noodle preparation according to its packet and a soup broth to cover the fish
+    and tomatoes
+  essential: true
+steps:
+- Prepare the rice vermicelli in water according to its packet, then drain and divide between serving
+  bowls.
+- Put the tomato and ginger in a saucepan with enough water for a soup broth. Bring to a boil and simmer
+  for 8 to 10 minutes until the tomato softens.
+- Add the cod and simmer gently for about 6 to 10 minutes. Check the thickest pieces with a food thermometer;
+  continue cooking until at least 75 C is maintained for 2 minutes and the fish is opaque throughout.
+- Stir in the salt and spring onion. Divide the fish and hot soup over the vermicelli and serve immediately.
+source: 'original AI-assisted draft; concept/technique reference: https://thechinesesouplady.com/how-to-make-a-delicious-cantonese-styled-tomato-fish-soup-with-vegetables/'
+reviewed: false

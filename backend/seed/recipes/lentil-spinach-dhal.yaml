@@ -1,0 +1,75 @@
+id: 445528bb-43c7-432d-a06f-859645a43ab0
+title: Red lentil and spinach dhal with rice
+variant_of: 97f2ee52-db16-4544-80ba-11b117dcd4b0
+variant_label: add spinach
+cuisine: indian
+total_minutes: 45
+active_minutes: 20
+difficulty: 1
+servings: 2
+equipment:
+- stove
+taste_tags:
+- soupy
+- vegetable_rich
+ingredients:
+- canonical_name: red lentil
+  quantity: 160
+  unit: g
+  essential: true
+  prep_note: dry split lentils, picked over and rinsed
+- canonical_name: tomato
+  quantity: 200
+  unit: g
+  essential: true
+  prep_note: chopped
+- canonical_name: onion
+  quantity: 100
+  unit: g
+  essential: true
+  prep_note: finely chopped
+- canonical_name: garlic
+  quantity: 8
+  unit: g
+  essential: false
+  prep_note: finely chopped
+- canonical_name: turmeric powder
+  quantity: 2
+  unit: g
+  essential: true
+- canonical_name: cumin powder
+  quantity: 2
+  unit: g
+  essential: true
+- canonical_name: canola oil
+  quantity: 10
+  unit: ml
+  essential: true
+- canonical_name: salt
+  quantity: 1
+  unit: g
+  essential: false
+- canonical_name: spinach
+  quantity: 200
+  unit: g
+  essential: true
+  prep_note: washed and roughly chopped
+- canonical_name: uncooked rice
+  quantity: 150
+  unit: g
+  essential: true
+  prep_note: dry white rice
+- canonical_name: water
+  coarse_amount: for the rice according to its packet and enough to simmer the lentils
+  essential: true
+steps:
+- 'Start the rice first: rinse the uncooked rice, then cook it in water in a covered saucepan following
+  its packet instructions. Prepare the rest of the meal while it cooks; keep the rice covered until serving.'
+- Heat the canola oil in another saucepan. Cook the onion over medium-low heat for 5 minutes. Stir in
+  the garlic if using, turmeric and cumin, then add the tomato and cook for 3 minutes.
+- Add the red lentils and enough water to cover them generously. Simmer partly covered for 20 to 25 minutes,
+  stirring and adding water as needed, until the lentils are soft and no hard centres remain.
+- Stir in the spinach and simmer for another 3 to 5 minutes until wilted and tender. Stir in the salt
+  if using, then serve the dhal with the rice.
+source: 'original AI-assisted draft; concept/technique reference: https://www.indianhealthyrecipes.com/red-lentil-curry/'
+reviewed: false

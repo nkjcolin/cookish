@@ -1,0 +1,55 @@
+id: d3f3cc29-e09a-4f90-938f-21526f114c44
+title: Steamed egg and tofu with rice
+variant_of: 9d5276e3-b3c1-4fb0-8825-7334f1b5dba8
+variant_label: add tofu
+cuisine: chinese
+total_minutes: 40
+active_minutes: 15
+difficulty: 1
+servings: 2
+equipment:
+- stove
+- steamer
+taste_tags:
+- light
+- high_protein
+- low_oil
+ingredients:
+- canonical_name: egg
+  quantity: 4
+  unit: pcs
+  essential: true
+- canonical_name: firm tofu
+  quantity: 200
+  unit: g
+  essential: true
+  prep_note: drained and cut into small cubes
+- canonical_name: soy sauce
+  quantity: 10
+  unit: ml
+  essential: true
+- canonical_name: spring onion
+  quantity: 15
+  unit: g
+  essential: true
+  prep_note: washed and finely sliced
+- canonical_name: uncooked rice
+  quantity: 150
+  unit: g
+  essential: true
+  prep_note: dry white rice
+- canonical_name: water
+  coarse_amount: for the rice according to its packet; for the custard use one and a half times the beaten
+    egg volume; additional water for steaming
+  essential: true
+steps:
+- 'Start the rice first: rinse the uncooked rice, then cook it in water in a covered saucepan following
+  its packet instructions. Prepare the rest of the meal while it cooks; keep the rice covered until serving.'
+- Spread the firm tofu in a shallow heatproof dish. Beat the eggs, measure their volume, and mix in one
+  and a half times that volume of room-temperature water. Pour over the tofu, leaving room at the top.
+- Bring the steamer water to a simmer below the rack. Cover the dish loosely with a heatproof plate and
+  steam with the lid on for about 20 to 25 minutes. Keep water in the steamer throughout.
+- Continue steaming until the egg is fully set at the centre and the tofu is hot throughout. Lift out
+  carefully, spoon the soy sauce over, scatter the spring onion and serve with the rice.
+source: 'original AI-assisted draft; concept/technique reference: https://thewoksoflife.com/steamed-egg/'
+reviewed: false

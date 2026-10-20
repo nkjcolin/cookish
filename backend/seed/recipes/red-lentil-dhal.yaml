@@ -1,27 +1,68 @@
 id: 97f2ee52-db16-4544-80ba-11b117dcd4b0
-title: Tomato and red lentil dhal
+title: Tomato and red lentil dhal with rice
 variant_of: null
 cuisine: indian
 total_minutes: 40
 active_minutes: 15
 difficulty: 1
 servings: 2
-equipment: [stove]
-taste_tags: [soupy]
+equipment:
+- stove
+taste_tags:
+- soupy
 ingredients:
-  - {canonical_name: red lentil, quantity: 160, unit: g, essential: true, prep_note: picked over}
-  - {canonical_name: tomato, quantity: 200, unit: g, essential: true, prep_note: chopped}
-  - {canonical_name: onion, quantity: 100, unit: g, essential: true, prep_note: finely chopped}
-  - {canonical_name: garlic, quantity: 8, unit: g, essential: false, prep_note: finely chopped}
-  - {canonical_name: turmeric powder, quantity: 2, unit: g, essential: true}
-  - {canonical_name: cumin powder, quantity: 2, unit: g, essential: true}
-  - {canonical_name: canola oil, quantity: 10, unit: ml, essential: true}
-  - {canonical_name: salt, quantity: 1, unit: g, essential: false}
-  - {canonical_name: water, quantity: 800, unit: ml, essential: true}
+- canonical_name: uncooked rice
+  quantity: 150
+  unit: g
+  essential: true
+- canonical_name: red lentil
+  quantity: 160
+  unit: g
+  essential: true
+  prep_note: dry split lentils, rinsed and drained
+- canonical_name: onion
+  quantity: 100
+  unit: g
+  essential: true
+  prep_note: finely chopped
+- canonical_name: tomato
+  quantity: 200
+  unit: g
+  essential: true
+  prep_note: chopped
+- canonical_name: garlic
+  quantity: 8
+  unit: g
+  essential: false
+  prep_note: finely chopped
+- canonical_name: turmeric powder
+  quantity: 2
+  unit: g
+  essential: true
+- canonical_name: cumin powder
+  quantity: 2
+  unit: g
+  essential: true
+- canonical_name: canola oil
+  quantity: 10
+  unit: ml
+  essential: true
+- canonical_name: salt
+  quantity: 1
+  unit: g
+  essential: false
+- canonical_name: water
+  coarse_amount: for the rice according to its packet and enough to simmer the lentils
+  essential: true
 steps:
-  - Heat the oil in a saucepan over medium-low heat. Add the onion and cook for 5 minutes until softened.
-  - Add the garlic if using, turmeric, and cumin. Stir for 30 seconds, then add the tomato and cook for 2 minutes.
-  - Add the lentils and water. Bring to a boil, reduce the heat, and simmer partly covered for 20 to 25 minutes, stirring occasionally, until the lentils are very soft.
-  - Stir firmly to thicken the dhal and add the salt if using. Serve hot.
-source: 'original; AI-assisted draft'
+- Start the uncooked rice in a covered saucepan using water and cooking time from the rice packet. Prepare
+  the topping while it cooks; keep the finished rice hot and serve both components together.
+- Warm the oil in another saucepan and soften the onion. Stir in garlic if using, then turmeric and cumin
+  briefly without burning them.
+- Add the tomatoes and stir until they begin to break down. Add the lentils and enough water to cover
+  them generously.
+- Bring to a boil and simmer, stirring occasionally, until the lentils are fully soft. Add water as they
+  absorb it to maintain a spoonable consistency; allow about 20 to 25 minutes.
+- Add salt if using and serve the dhal with the freshly cooked rice.
+source: 'original AI-assisted draft; concept/technique reference: https://www.indianhealthyrecipes.com/red-lentil-curry/'
 reviewed: false

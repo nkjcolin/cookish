@@ -5,26 +5,51 @@ The catalogue that every database starts with: ingredients (Role 2) and recipes 
 | Path | Owner | Contents |
 |---|---|---|
 | `ingredients.csv` | Role 2 | One row per ingredient. Also bundled into the `ai` Lambda |
-| `recipes/<slug>.yaml` | Role 5 | One recipe per file |
-| `seed.py` | Role 2 | Loads both; safe to run again |
+| `recipes/<slug>.yaml` | Role 5 | 48 complete recipe drafts, one per file; human review pending |
+| `seed.py` | Role 2 | Planned loader for ingredients and recipes; must be safe to run again |
+| `recipe_plan.yaml` | Role 5 | Index of the 48 draft files and their ingredient/variant relationships |
+| `ingredient_requests.yaml` | Role 5 / Role 2 review | 42 proposed canonical names and aliases |
+| `recipe_review.yaml` | Role 5 / human reviewer | Review coordination metadata; not a runtime seed format |
 
-## First Role 5 handoff
+## Role 5 catalogue handoff
 
-The [handoff notes](../../docs/role5-handoff.md) explain the starter recipe drafts,
-human review status, and the next integration steps for Roles 2 and 4.
-`recipe_plan.yaml` lists the proposed 48-recipe scope; `ingredient_requests.yaml`
-lists the canonical names and aliases proposed for Role 2's catalogue.
-These two manifests are planning inputs, not files consumed by `seed.py`.
+The [handoff notes](../../docs/role5-handoff.md) explain the next integration
+steps for Roles 2 and 4. All 48 catalogue entries now have complete recipe files:
+28 base recipes and 20 variants, using the same 42 proposed canonical ingredients.
+There are no remaining outlines. Every recipe is still `reviewed: false`.
+
+Start human review with the [recipe review guide](../../docs/recipe-review.md),
+which provides all 48 recipe cards, selection rationale, sources and checks.
+The recipes are original AI-assisted project drafts with named external
+concept/technique references. These references do not establish approval of the
+adapted recipe, its nutrition, timing or safety.
+
+Recipes include their meal portions and any rice, noodles or potatoes used to
+serve them. Total-time estimates include preparing those components; some rice
+meals assume parallel cooking on the stove. Amounts and timing still need human
+review and practical trials: these drafts have not been cooking-tested.
+Existing recipe UUIDs are preserved.
+Where `cooked rice` is listed, the timing starts with already-prepared, safely
+stored rice and excludes its original cooking and cooling.
+
+`recipe_plan.yaml`, `ingredient_requests.yaml` and `recipe_review.yaml` support
+coordination and review. They do not add runtime fields to the agreed recipe
+format. The recipe files do not themselves implement database loading or change
+the Cook/Shop service stubs.
 
 From `backend/`, validate the handoff with:
 
 ```bash
 uv run python scripts/validate_recipe_handoff.py
+uv run python scripts/render_recipe_review.py --check
 ```
 
+After editing recipe content or `recipe_review.yaml`, refresh the review guide
+with `uv run python scripts/render_recipe_review.py`.
+
 Add `--ingredients-csv seed/ingredients.csv` when Role 2's CSV is available.
-Add `--require-reviewed` to reject recipe drafts before release; the starter
-recipes currently need human review and correctly fail that stricter check.
+Add `--require-reviewed` to reject recipe drafts before release; all 48 recipes
+currently need human review and correctly fail that stricter check.
 
 ## Agreed seed formats
 
@@ -47,26 +72,32 @@ id,canonical_name,aliases,category,countable,default_unit,allergen_tags,diet_fla
 ## recipes/*.yaml
 
 ```yaml
-id: 6a1f3c2e-0d4b-4f7e-9a51-2c8e7b0d1f34
-title: Tomato and egg stir-fry
+id: 645a8d38-bfae-47f2-b00e-3ca6828a964e
+title: Tomato and egg rice bowls
 variant_of: null
 cuisine: chinese
-total_minutes: 15
-active_minutes: 10
+total_minutes: 35
+active_minutes: 20
 difficulty: 1
 servings: 2
 equipment: [stove]
 taste_tags: [light]
 ingredients:
-  - {canonical_name: tomato, quantity: 2, unit: pcs, essential: true, prep_note: cut into wedges}
+  - {canonical_name: uncooked rice, quantity: 200, unit: g, essential: true}
+  - {canonical_name: tomato, quantity: 300, unit: g, essential: true, prep_note: cut into wedges}
   - {canonical_name: egg, quantity: 3, unit: pcs, essential: true}
-  - {canonical_name: spring onion, coarse_amount: a little, essential: false}
+  - {canonical_name: canola oil, quantity: 15, unit: ml, essential: true}
+  - {canonical_name: salt, quantity: 1, unit: g, essential: false}
+  - {canonical_name: water, coarse_amount: for the rice according to its packet and a splash for the tomatoes, essential: true}
+  - {canonical_name: spring onion, quantity: 10, unit: g, essential: false, prep_note: thinly sliced}
 steps:
-  - Beat the eggs with a pinch of salt.
-  - Scramble the eggs until just set, then set aside.
-  - Fry the tomato until soft, return the eggs, and season.
-source: original
-reviewed: true
+  - Cook the rice in a covered saucepan with water according to its packet; prepare the topping while it cooks.
+  - Beat the eggs. Warm two thirds of the oil in a nonstick pan, cook the eggs until set and transfer to a clean bowl.
+  - Soften the tomatoes in the remaining oil, add a splash of water and cover until they release a sauce.
+  - Return the eggs, add salt if using and heat until the eggs are completely cooked and everything is hot.
+  - Serve the topping over the rice with spring onion if using.
+source: 'original AI-assisted draft; concept/technique reference: https://thewoksoflife.com/stir-fried-tomato-and-egg/'
+reviewed: false
 ```
 
 - `canonical_name` must match a row of `ingredients.csv` exactly.
@@ -74,3 +105,18 @@ reviewed: true
 - A variant ("less oil", "vegetarian") sets `variant_of` to its base recipe's `id` and adds `variant_label`.
 - Do not write `diet_flags` or allergens; the loader works them out from the ingredients.
 - `cuisine`, `equipment` and `taste_tags` take only the values in `backend/app/schemas/common.py`.
+- All listed equipment is required; the list means AND, not a choice between appliances.
+- `low_oil` means no more than 5 ml of total added cooking oil per two servings
+  in this catalogue, including seasoning oils. It describes the method, not
+  total fat or a regulated nutrition claim.
+- `high_protein` is reserved for an explicit protein addition to a base recipe.
+  It is a qualitative ranking tag pending nutrition metrics, not a measured
+  nutrition claim or an automatic label for every meat, egg or legume meal.
+- `vegetable_rich` uses an authoring threshold of at least 300 g of the defined
+  vegetable set per two servings. The [review guide](../../docs/recipe-review.md)
+  specifies the counted ingredients and other transparent tag heuristics;
+  these are culinary ranking features, not nutrition claims.
+
+Role 2 still needs to resolve water's proposed assumed-available/no-purchase
+treatment and conversions between recipe amounts, inventory counts and pack
+sizes. See the [ingredient handoff details](../../docs/role5-handoff.md#ingredient-details-to-settle-during-catalogue-review).

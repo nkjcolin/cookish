@@ -1,0 +1,58 @@
+id: c3954096-77f8-49a4-a0c3-519390c4477d
+title: Bok choy and chicken bee hoon soup
+variant_of: 202bfb57-26ca-4201-b935-7a7ea4db9785
+variant_label: Chicken alternative
+cuisine: chinese
+total_minutes: 30
+active_minutes: 20
+difficulty: 1
+servings: 2
+equipment:
+- stove
+taste_tags:
+- light
+- soupy
+- low_oil
+ingredients:
+- canonical_name: rice vermicelli
+  quantity: 160
+  unit: g
+  essential: true
+  prep_note: dry thin rice noodles
+- canonical_name: chicken thigh
+  quantity: 300
+  unit: g
+  essential: true
+  prep_note: boneless skinless meat, cut into thin bite-size slices
+- canonical_name: bok choy
+  quantity: 250
+  unit: g
+  essential: true
+  prep_note: washed, stems and leaves separated and sliced
+- canonical_name: ginger
+  quantity: 15
+  unit: g
+  essential: true
+  prep_note: peeled and finely sliced
+- canonical_name: soy sauce
+  quantity: 20
+  unit: ml
+  essential: true
+- canonical_name: water
+  essential: true
+  quantity: 900
+  unit: ml
+  prep_note: measured cooking water; additional water for rinsing or preparing the noodles/rice as instructed,
+    plus small top-ups if needed
+steps:
+- Prepare the rice vermicelli according to its packet and drain. Keep the noodle utensils separate from
+  those used for the raw chicken.
+- Bring the measured soup water, ginger and soy sauce to a boil. Add the chicken, return to a simmer and
+  cook for about 8 to 10 minutes.
+- Use a clean thermometer to check several thick chicken pieces reach at least 75 C for 2 minutes; continue
+  simmering as needed. Add the bok choy stems and cook for 3 minutes, followed by the leaves for another
+  2 minutes.
+- Add the drained noodles, bring the soup back to a simmer and check that everything is hot. Share the
+  chicken, noodles, vegetables and broth evenly between bowls.
+source: 'original AI-assisted draft; concept/technique reference: https://foongfamilyflat.com/recipes/better-for-you-than-instant-noodles-chicken-beehoon-soup'
+reviewed: false

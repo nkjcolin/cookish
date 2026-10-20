@@ -1,0 +1,70 @@
+id: 785f4606-ac45-4a26-b915-a47a0eab08ae
+title: Chickpea and tomato curry with rice
+variant_of: null
+cuisine: indian
+total_minutes: 40
+active_minutes: 20
+difficulty: 1
+servings: 2
+equipment:
+- stove
+taste_tags:
+- soupy
+- vegetable_rich
+ingredients:
+- canonical_name: canned chickpea
+  quantity: 360
+  unit: g
+  essential: true
+  prep_note: drained and rinsed cooked chickpeas; weight after draining
+- canonical_name: tomato
+  quantity: 300
+  unit: g
+  essential: true
+  prep_note: finely chopped
+- canonical_name: onion
+  quantity: 100
+  unit: g
+  essential: true
+  prep_note: finely chopped
+- canonical_name: garlic
+  quantity: 8
+  unit: g
+  essential: true
+  prep_note: finely chopped
+- canonical_name: turmeric powder
+  quantity: 1
+  unit: g
+  essential: true
+- canonical_name: cumin powder
+  quantity: 2
+  unit: g
+  essential: true
+- canonical_name: canola oil
+  quantity: 10
+  unit: ml
+  essential: true
+- canonical_name: salt
+  quantity: 1
+  unit: g
+  essential: true
+- canonical_name: uncooked rice
+  quantity: 150
+  unit: g
+  essential: true
+  prep_note: dry white rice
+- canonical_name: water
+  coarse_amount: for rinsing and cooking the rice according to its packet; enough extra water for a loose
+    curry sauce
+  essential: true
+steps:
+- 'Start the rice first: rinse the uncooked rice, then cook it in water in a covered saucepan following
+  its packet instructions. Prepare the rest of the meal while it cooks; keep the rice covered until serving.'
+- Heat the canola oil in a saucepan. Cook the onion over medium heat for 5 minutes, then add the garlic,
+  turmeric and cumin and stir for 30 seconds.
+- Add the tomato and salt. Cook for 6 to 8 minutes, stirring, until the tomatoes break down. Add the canned
+  chickpeas and enough water to make a loose sauce.
+- Simmer for 10 to 12 minutes until the chickpeas are hot and soft, stirring occasionally. Crush a few
+  chickpeas with the spoon to thicken the sauce and serve with the rice.
+source: 'original AI-assisted draft; concept/technique reference: https://www.indianhealthyrecipes.com/chickpea-curry/'
+reviewed: false

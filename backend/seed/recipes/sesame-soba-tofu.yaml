@@ -1,0 +1,57 @@
+id: 4a8e2e32-267d-4c29-a05c-179aa9f0ce24
+title: Sesame soba with tofu and vegetables
+variant_of: null
+cuisine: japanese
+total_minutes: 25
+active_minutes: 20
+difficulty: 1
+servings: 2
+equipment:
+- stove
+taste_tags:
+- light
+- vegetable_rich
+ingredients:
+- canonical_name: soba noodle
+  quantity: 180
+  unit: g
+  essential: true
+  prep_note: dry soba; check packet cooking time and product composition
+- canonical_name: firm tofu
+  quantity: 300
+  unit: g
+  essential: true
+  prep_note: drained and cut into 1.5 cm cubes
+- canonical_name: cucumber
+  quantity: 200
+  unit: g
+  essential: true
+  prep_note: washed and cut into thin strips
+- canonical_name: carrot
+  quantity: 150
+  unit: g
+  essential: true
+  prep_note: washed and coarsely grated
+- canonical_name: sesame oil
+  quantity: 10
+  unit: ml
+  essential: true
+- canonical_name: soy sauce
+  quantity: 20
+  unit: ml
+  essential: true
+- canonical_name: water
+  coarse_amount: enough to simmer the tofu and boil and rinse the noodles
+  essential: true
+steps:
+- Bring a large saucepan of water to a boil. Meanwhile, prepare the cucumber, carrot and tofu, and mix
+  the sesame oil and soy sauce in a large serving bowl.
+- Gently simmer the tofu cubes in the water for 5 minutes or until heated through according to the packet,
+  then lift them into a colander with a slotted spoon.
+- Return the water to a boil and add the soba. Cook for the time on the noodle packet, stirring gently
+  to separate the strands.
+- Drain the noodles, rinse under cold running water to remove surface starch, and drain well.
+- Toss the noodles, cucumber and carrot in the dressing, fold in the warm drained tofu, and serve immediately.
+  Refrigerate any portion being kept for later promptly.
+source: 'original AI-assisted draft; concept/technique reference: https://www.justonecookbook.com/soba-salad/'
+reviewed: false

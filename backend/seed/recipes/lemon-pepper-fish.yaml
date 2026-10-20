@@ -1,0 +1,60 @@
+id: 6c1f5f1d-bf31-48d5-8ea1-ce2572a89897
+title: Lemon pepper fish with potatoes and carrots
+variant_of: null
+cuisine: western
+total_minutes: 35
+active_minutes: 20
+difficulty: 2
+servings: 2
+equipment:
+- stove
+taste_tags:
+- light
+ingredients:
+- canonical_name: cod fillet
+  quantity: 320
+  unit: g
+  essential: true
+  prep_note: boneless raw fillets about 2 cm thick; thawed in the fridge if frozen
+- canonical_name: potato
+  quantity: 450
+  unit: g
+  essential: true
+  prep_note: scrubbed and cut into 2 cm cubes
+- canonical_name: carrot
+  quantity: 250
+  unit: g
+  essential: true
+  prep_note: washed and sliced into 5 mm rounds
+- canonical_name: lemon
+  quantity: 0.5
+  unit: pcs
+  essential: true
+  prep_note: washed; finely grate the yellow zest and reserve the juice
+- canonical_name: black pepper
+  quantity: 0.5
+  unit: g
+  essential: true
+- canonical_name: canola oil
+  quantity: 15
+  unit: ml
+  essential: true
+- canonical_name: salt
+  quantity: 1.5
+  unit: g
+  essential: true
+- canonical_name: water
+  coarse_amount: enough to cover and boil the potatoes and carrots
+  essential: true
+steps:
+- Prepare the potatoes and carrots. Place them in a saucepan, cover with water, bring to a boil, and simmer
+  for 12-15 minutes until a fork enters the potato easily. Drain and keep covered.
+- While the vegetables cook, zest and juice the lemon. Pat the cod dry, check for bones, and season with
+  half the salt and half the black pepper.
+- Heat two-thirds of the oil in a non-stick frying pan over medium heat. Place the fillets in the pan
+  and cook for about 4-5 minutes per side, turning carefully. Verify the centre reaches 75 C for 2 minutes;
+  allow longer for thicker pieces.
+- Toss the drained vegetables with the remaining oil, salt and pepper, then add the lemon zest. Divide
+  between plates with the fish and spoon the lemon juice over just before serving.
+source: 'original AI-assisted draft; concept/technique reference: https://www.recipetineats.com/crispy-pan-fried-fish/'
+reviewed: false

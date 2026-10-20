@@ -1,0 +1,66 @@
+id: 88e3e915-9e9a-4d66-8520-90c4efb34f8a
+title: Egg, cabbage and carrot bee hoon
+variant_of: 48daffdb-9a7e-4645-b7bd-dc3b575080b2
+variant_label: More protein with egg
+cuisine: chinese
+total_minutes: 30
+active_minutes: 25
+difficulty: 1
+servings: 2
+equipment:
+- stove
+taste_tags:
+- light
+- high_protein
+- vegetable_rich
+ingredients:
+- canonical_name: rice vermicelli
+  quantity: 180
+  unit: g
+  essential: true
+  prep_note: dry thin rice noodles
+- canonical_name: cabbage
+  quantity: 250
+  unit: g
+  essential: true
+  prep_note: thinly shredded
+- canonical_name: carrot
+  quantity: 150
+  unit: g
+  essential: true
+  prep_note: cut into thin matchsticks
+- canonical_name: egg
+  quantity: 4
+  unit: pcs
+  essential: true
+  prep_note: beaten
+- canonical_name: garlic
+  quantity: 10
+  unit: g
+  essential: true
+  prep_note: finely chopped
+- canonical_name: soy sauce
+  quantity: 20
+  unit: ml
+  essential: true
+- canonical_name: canola oil
+  quantity: 15
+  unit: ml
+  essential: true
+- canonical_name: water
+  essential: true
+  quantity: 150
+  unit: ml
+  prep_note: measured cooking water; additional water for rinsing or preparing the noodles/rice as instructed,
+    plus small top-ups if needed
+steps:
+- Prepare and drain the rice vermicelli according to the packet. Warm one third of the oil in a large
+  nonstick pan, scramble the eggs until fully set, and transfer them to a clean plate.
+- Add the remaining oil and garlic, then stir in the cabbage and carrot. Cook for 3 to 4 minutes until
+  starting to soften.
+- Pour in the measured braising water and soy sauce. Add the noodles and turn them through the vegetables,
+  simmering for about 4 to 6 minutes until tender and the liquid is mostly absorbed.
+- Fold the scrambled eggs through the noodles and heat everything until hot throughout. If the noodles
+  need more cooking, add a little drinking water and continue before serving.
+source: 'original AI-assisted draft; concept/technique reference: https://noobcook.com/economical-fried-bee-hoon/2/'
+reviewed: false

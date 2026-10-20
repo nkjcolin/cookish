@@ -1,0 +1,61 @@
+id: a8fadb00-3dba-48b3-b7a8-5f9dc87f4a7e
+title: Rice-cooker bok choy and tofu rice
+variant_of: null
+cuisine: chinese
+total_minutes: 55
+active_minutes: 10
+difficulty: 1
+servings: 2
+equipment:
+- rice_cooker
+taste_tags:
+- light
+- low_oil
+- vegetable_rich
+ingredients:
+- canonical_name: uncooked rice
+  quantity: 200
+  unit: g
+  essential: true
+  prep_note: white rice, rinsed and drained
+- canonical_name: firm tofu
+  quantity: 300
+  unit: g
+  essential: true
+  prep_note: plain tofu, drained and cut into small cubes
+- canonical_name: bok choy
+  quantity: 300
+  unit: g
+  essential: true
+  prep_note: washed and cut into small pieces, with thick stems thinly sliced
+- canonical_name: ginger
+  quantity: 15
+  unit: g
+  essential: true
+  prep_note: peeled and finely sliced
+- canonical_name: garlic
+  quantity: 8
+  unit: g
+  essential: false
+  prep_note: finely chopped
+- canonical_name: soy sauce
+  quantity: 15
+  unit: ml
+  essential: true
+- canonical_name: water
+  coarse_amount: the amount required by the rice cooker instructions for this quantity of white rice and
+    a mixed-rice recipe, counting soy sauce as part of the cooking liquid
+  essential: true
+steps:
+- Use a rice cooker whose instructions allow mixed rice with vegetables and tofu. Put the rinsed rice
+  in the inner pot and add the water and soy sauce as the cooking liquid; keep within the mixed-rice capacity
+  stated by the manufacturer.
+- Distribute the ginger, garlic if using, tofu and bok choy over the rice. Keep the rice level below and
+  do not pack the vegetables tightly against the lid or steam vent.
+- Start the appropriate white-rice or mixed-rice cycle and let it finish. The cycle is commonly around
+  30 to 40 minutes, but use your cooker instructions and allow longer when needed.
+- Open carefully after the cycle ends. Check that the rice is tender, the stems are cooked and the tofu
+  is hot throughout; if not, continue with the manufacturer-approved cooking mode. Rest covered for 5
+  minutes, then gently mix and serve.
+source: 'original AI-assisted draft; concept/technique reference: https://thefoodietakesflight.com/one-pot-mushroom-rice/'
+reviewed: false

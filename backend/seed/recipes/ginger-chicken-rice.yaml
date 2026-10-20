@@ -1,27 +1,66 @@
 id: 85d5ed52-10d6-4769-8bc5-435decbd08d8
-title: One-pot ginger chicken rice
+title: One-pot ginger chicken and bok choy rice
 variant_of: null
 cuisine: chinese
 total_minutes: 45
 active_minutes: 20
 difficulty: 2
 servings: 2
-equipment: [stove]
-taste_tags: [light]
+equipment:
+- stove
+taste_tags:
+- light
 ingredients:
-  - {canonical_name: chicken thigh, quantity: 300, unit: g, essential: true, prep_note: boneless and cut into small bite-size pieces}
-  - {canonical_name: uncooked rice, quantity: 200, unit: g, essential: true}
-  - {canonical_name: ginger, quantity: 20, unit: g, essential: true, prep_note: peeled and finely sliced}
-  - {canonical_name: garlic, quantity: 8, unit: g, essential: false, prep_note: finely chopped}
-  - {canonical_name: canola oil, quantity: 10, unit: ml, essential: true}
-  - {canonical_name: soy sauce, quantity: 15, unit: ml, essential: false}
-  - {canonical_name: water, quantity: 400, unit: ml, essential: true}
-  - {canonical_name: spring onion, quantity: 10, unit: g, essential: false, prep_note: thinly sliced}
+- canonical_name: chicken thigh
+  quantity: 300
+  unit: g
+  essential: true
+  prep_note: skinless, boneless and cut into small even pieces
+- canonical_name: uncooked rice
+  quantity: 200
+  unit: g
+  essential: true
+- canonical_name: bok choy
+  quantity: 200
+  unit: g
+  essential: true
+  prep_note: washed; stems sliced and leaves chopped separately
+- canonical_name: ginger
+  quantity: 20
+  unit: g
+  essential: true
+  prep_note: peeled and sliced
+- canonical_name: garlic
+  quantity: 8
+  unit: g
+  essential: false
+  prep_note: finely chopped
+- canonical_name: spring onion
+  quantity: 10
+  unit: g
+  essential: false
+  prep_note: thinly sliced
+- canonical_name: canola oil
+  quantity: 10
+  unit: ml
+  essential: true
+- canonical_name: soy sauce
+  quantity: 15
+  unit: ml
+  essential: false
+- canonical_name: water
+  quantity: 400
+  unit: ml
+  essential: true
 steps:
-  - Heat the oil in a heavy saucepan over medium heat. Add the ginger and garlic if using, and stir for 1 minute.
-  - Add the chicken and stir for 5 minutes, turning the pieces to cook the surfaces evenly.
-  - Stir in the uncooked rice, water, and soy sauce if using. Bring to a gentle boil.
-  - Cover, turn the heat to low, and simmer for about 20 minutes until the rice is tender and the chicken is fully cooked throughout. Continue cooking if needed; do not serve partially cooked chicken.
-  - Turn off the heat and leave covered for 5 minutes. Fluff the rice gently and add the spring onion if using.
-source: 'original; AI-assisted draft'
+- Rinse and drain the rice. Prepare vegetables on a clean board; use separate utensils and a board for
+  the raw chicken.
+- Warm the oil in a lidded saucepan. Stir in ginger and garlic if using, then add chicken and turn it
+  until the surfaces change colour.
+- Add the rice, measured water, bok choy stems and soy sauce if using. Bring to a boil, cover and cook
+  gently for about 20 minutes; check the rice packet and add a little water if necessary.
+- Place the bok choy leaves on top and cover again until wilted and the rice is tender. Confirm the thickest
+  chicken pieces reach at least 75 C for 2 minutes with a food thermometer; continue cooking if needed.
+- Leave covered off the heat for 5 minutes, then gently mix. Add spring onion if using and serve immediately.
+source: 'original AI-assisted draft; concept/technique reference: https://www.recipetineats.com/one-pot-chinese-chicken-and-rice/'
 reviewed: false

@@ -1,0 +1,49 @@
+id: 9d5276e3-b3c1-4fb0-8825-7334f1b5dba8
+title: Steamed egg with rice
+variant_of: null
+cuisine: chinese
+total_minutes: 35
+active_minutes: 15
+difficulty: 1
+servings: 2
+equipment:
+- stove
+- steamer
+taste_tags:
+- light
+- low_oil
+ingredients:
+- canonical_name: egg
+  quantity: 4
+  unit: pcs
+  essential: true
+- canonical_name: soy sauce
+  quantity: 10
+  unit: ml
+  essential: true
+- canonical_name: spring onion
+  quantity: 15
+  unit: g
+  essential: true
+  prep_note: washed and finely sliced
+- canonical_name: uncooked rice
+  quantity: 150
+  unit: g
+  essential: true
+  prep_note: dry white rice
+- canonical_name: water
+  coarse_amount: for the rice according to its packet; for the custard use one and a half times the beaten
+    egg volume; additional water for steaming
+  essential: true
+steps:
+- 'Start the rice first: rinse the uncooked rice, then cook it in water in a covered saucepan following
+  its packet instructions. Prepare the rest of the meal while it cooks; keep the rice covered until serving.'
+- Beat the eggs in a measuring jug and note their volume. Gently mix in one and a half times that volume
+  of room-temperature water. Pour into a shallow heatproof dish, leaving room at the top.
+- Add water to the steamer below its rack and bring to a simmer. Cover the egg dish loosely with a heatproof
+  plate, place it on the rack and steam with the lid on for about 15 to 20 minutes.
+- Check that the custard is set through the centre with no liquid egg; continue steaming if necessary,
+  topping up the steamer with hot water before it runs dry. Lift out carefully, add soy sauce and spring
+  onion, and serve with the rice.
+source: 'original AI-assisted draft; concept/technique reference: https://thewoksoflife.com/steamed-egg/'
+reviewed: false

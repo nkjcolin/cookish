@@ -1,0 +1,62 @@
+id: f81dd997-b06c-48ce-87ec-43727f62e023
+title: Lemon pepper chicken with potatoes and carrots
+variant_of: 6c1f5f1d-bf31-48d5-8ea1-ce2572a89897
+variant_label: chicken variation
+cuisine: western
+total_minutes: 40
+active_minutes: 25
+difficulty: 2
+servings: 2
+equipment:
+- stove
+taste_tags:
+- light
+ingredients:
+- canonical_name: chicken thigh
+  quantity: 320
+  unit: g
+  essential: true
+  prep_note: raw boneless skinless meat; unfold and cut into strips about 2 cm thick
+- canonical_name: potato
+  quantity: 450
+  unit: g
+  essential: true
+  prep_note: scrubbed and cut into 2 cm cubes
+- canonical_name: carrot
+  quantity: 250
+  unit: g
+  essential: true
+  prep_note: washed and sliced into 5 mm rounds
+- canonical_name: lemon
+  quantity: 0.5
+  unit: pcs
+  essential: true
+  prep_note: washed; finely grate the yellow zest and reserve the juice
+- canonical_name: black pepper
+  quantity: 0.5
+  unit: g
+  essential: true
+- canonical_name: canola oil
+  quantity: 15
+  unit: ml
+  essential: true
+- canonical_name: salt
+  quantity: 1.5
+  unit: g
+  essential: true
+- canonical_name: water
+  coarse_amount: enough to cover and boil the vegetables plus a splash for the chicken pan
+  essential: true
+steps:
+- Cut the potatoes and carrots, cover them with water in a saucepan, and bring to a boil. Simmer for 12-15
+  minutes until the potato is tender, then drain and keep covered.
+- Meanwhile, prepare the lemon. Cut the chicken on a separate board; wash hands and utensils afterwards.
+  Season the chicken with half the salt and half the pepper.
+- Heat two-thirds of the oil in a lidded non-stick frying pan over medium heat. Cook the chicken for 4
+  minutes, turn, and cook for 4 minutes more.
+- Add a splash of water and cover. Continue cooking for about 4-6 minutes, turning if needed. Verify the
+  thickest chicken reaches 75 C for 2 minutes; extend cooking as necessary.
+- Toss the drained potatoes and carrots with the remaining oil, salt and pepper. Stir the lemon zest and
+  juice into the cooked chicken pan, then serve the chicken and pan juices beside the vegetables immediately.
+source: 'original AI-assisted draft; concept/technique reference: https://www.recipetineats.com/homemade-lemon-pepper-chicken/'
+reviewed: false

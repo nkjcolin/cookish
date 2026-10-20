@@ -1,23 +1,55 @@
 id: c3f44203-7245-430e-ad1b-52428f6cfed3
-title: Garlic water spinach
+title: Garlic water spinach and tofu rice bowls
 variant_of: null
 cuisine: chinese
-total_minutes: 15
-active_minutes: 15
+total_minutes: 35
+active_minutes: 20
 difficulty: 1
 servings: 2
-equipment: [stove]
-taste_tags: [light, vegetable_rich]
+equipment:
+- stove
+taste_tags:
+- light
+- vegetable_rich
 ingredients:
-  - {canonical_name: water spinach, quantity: 300, unit: g, essential: true, prep_note: washed and cut into short lengths with stems and leaves separated}
-  - {canonical_name: garlic, quantity: 12, unit: g, essential: true, prep_note: finely chopped}
-  - {canonical_name: canola oil, quantity: 10, unit: ml, essential: true}
-  - {canonical_name: soy sauce, quantity: 10, unit: ml, essential: false}
-  - {canonical_name: water, quantity: 30, unit: ml, essential: true}
+- canonical_name: uncooked rice
+  quantity: 160
+  unit: g
+  essential: true
+- canonical_name: water spinach
+  quantity: 300
+  unit: g
+  essential: true
+  prep_note: washed thoroughly; separate chopped stems from leaves
+- canonical_name: firm tofu
+  quantity: 300
+  unit: g
+  essential: true
+  prep_note: drained and cubed
+- canonical_name: garlic
+  quantity: 12
+  unit: g
+  essential: true
+  prep_note: finely chopped
+- canonical_name: canola oil
+  quantity: 10
+  unit: ml
+  essential: true
+- canonical_name: soy sauce
+  quantity: 10
+  unit: ml
+  essential: false
+- canonical_name: water
+  coarse_amount: for the rice according to its packet and a splash for the greens
+  essential: true
 steps:
-  - Heat the oil in a frying pan over medium heat. Add the garlic and stir for 30 seconds without letting it burn.
-  - Add the water spinach stems and stir-fry for 2 minutes.
-  - Add the leaves and water. Cover for 1 minute, then uncover and stir until the stems are tender and the leaves are wilted.
-  - Add the soy sauce if using, toss briefly, and serve while hot.
-source: 'original; AI-assisted draft'
+- Start the uncooked rice in a covered saucepan using water and cooking time from the rice packet. Prepare
+  the topping while it cooks; keep the finished rice hot and serve both components together.
+- Heat half the oil in a pan and turn the tofu until lightly coloured and hot throughout. Set it aside
+  in a clean bowl.
+- Add the remaining oil, garlic and water-spinach stems. Stir briefly, then add the leaves and a splash
+  of water.
+- Cover for a few minutes, then stir until the stems are tender and the leaves are fully cooked.
+- Return the tofu, add soy sauce if using and heat everything together. Serve over the cooked rice.
+source: 'original AI-assisted draft; concept/technique reference: https://www.nyonyacooking.com/recipes/kangkung-belacan~sL-aXO7Xn'
 reviewed: false

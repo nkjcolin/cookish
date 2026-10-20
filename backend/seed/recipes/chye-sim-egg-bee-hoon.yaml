@@ -1,0 +1,66 @@
+id: ecbccf1f-44c2-448b-a25f-2695250fe976
+title: Chye sim and egg bee hoon soup
+variant_of: null
+cuisine: chinese
+total_minutes: 25
+active_minutes: 15
+difficulty: 1
+servings: 2
+equipment:
+- stove
+taste_tags:
+- light
+- soupy
+- low_oil
+- vegetable_rich
+ingredients:
+- canonical_name: rice vermicelli
+  quantity: 160
+  unit: g
+  essential: true
+  prep_note: dry thin rice noodles
+- canonical_name: chye sim
+  quantity: 300
+  unit: g
+  essential: true
+  prep_note: washed, tough ends removed, stems and leaves cut separately
+- canonical_name: egg
+  quantity: 3
+  unit: pcs
+  essential: true
+  prep_note: beaten
+- canonical_name: ginger
+  quantity: 10
+  unit: g
+  essential: false
+  prep_note: peeled and finely sliced
+- canonical_name: garlic
+  quantity: 6
+  unit: g
+  essential: false
+  prep_note: finely chopped
+- canonical_name: salt
+  quantity: 2
+  unit: g
+  essential: true
+- canonical_name: black pepper
+  quantity: 0.5
+  unit: g
+  essential: false
+- canonical_name: water
+  essential: true
+  quantity: 900
+  unit: ml
+  prep_note: measured cooking water; additional water for rinsing or preparing the noodles/rice as instructed,
+    plus small top-ups if needed
+steps:
+- Start heating the broth water in a saucepan while preparing the rice vermicelli according to its packet
+  in a separate bowl or pan. Drain the noodles when ready.
+- Bring the broth water to a boil. Add the chye sim stems and simmer for about 3 minutes. Add the leaves,
+  salt and pepper if using and cook for another 2 minutes until the stems are tender.
+- Keep the soup at a gentle simmer and pour in the egg in a thin stream, stirring slowly to form ribbons.
+  Continue simmering until all the egg is fully set.
+- Add the prepared noodles, bring back to a simmer and serve the noodles, greens, egg and broth together
+  while hot.
+source: 'original AI-assisted draft; concept/technique reference: https://meanderingrivr.blogspot.com/2014/12/vegetarianism-chye-sim-egg-soup.html'
+reviewed: false

@@ -1,0 +1,59 @@
+id: 48daffdb-9a7e-4645-b7bd-dc3b575080b2
+title: Cabbage and carrot bee hoon
+variant_of: null
+cuisine: chinese
+total_minutes: 25
+active_minutes: 20
+difficulty: 1
+servings: 2
+equipment:
+- stove
+taste_tags:
+- light
+- vegetable_rich
+ingredients:
+- canonical_name: rice vermicelli
+  quantity: 180
+  unit: g
+  essential: true
+  prep_note: dry thin rice noodles
+- canonical_name: cabbage
+  quantity: 250
+  unit: g
+  essential: true
+  prep_note: thinly shredded
+- canonical_name: carrot
+  quantity: 150
+  unit: g
+  essential: true
+  prep_note: cut into thin matchsticks
+- canonical_name: garlic
+  quantity: 10
+  unit: g
+  essential: true
+  prep_note: finely chopped
+- canonical_name: soy sauce
+  quantity: 20
+  unit: ml
+  essential: true
+- canonical_name: canola oil
+  quantity: 15
+  unit: ml
+  essential: true
+- canonical_name: water
+  essential: true
+  quantity: 150
+  unit: ml
+  prep_note: measured cooking water; additional water for rinsing or preparing the noodles/rice as instructed,
+    plus small top-ups if needed
+steps:
+- Prepare the rice vermicelli according to the packet until pliable, then drain well. Keep the measured
+  braising water separate.
+- Warm the oil in a large frying pan and cook the garlic briefly without browning it. Add the cabbage
+  and carrot and stir for 3 to 4 minutes.
+- Pour in the braising water and soy sauce and bring to a simmer. Add the noodles and lift and turn them
+  through the vegetables with tongs.
+- Continue cooking for about 4 to 6 minutes, until the noodles are tender and the liquid has mostly been
+  absorbed. Add a small splash of drinking water if the noodles are still firm; serve while hot.
+source: 'original AI-assisted draft; concept/technique reference: https://noobcook.com/economical-fried-bee-hoon/2/'
+reviewed: false

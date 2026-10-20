@@ -1,25 +1,58 @@
 id: 79093e58-6ac3-46ab-adee-c948efc5b880
-title: Cabbage and tofu stir-fry with less oil
+title: Cabbage and tofu rice bowls with less oil
 variant_of: 2173bce1-8bbd-40ee-be78-e80627d8ba07
 variant_label: less oil
 cuisine: chinese
-total_minutes: 25
-active_minutes: 15
+total_minutes: 35
+active_minutes: 20
 difficulty: 1
 servings: 2
-equipment: [stove]
-taste_tags: [light, low_oil, vegetable_rich]
+equipment:
+- stove
+taste_tags:
+- light
+- low_oil
+- vegetable_rich
 ingredients:
-  - {canonical_name: cabbage, quantity: 300, unit: g, essential: true, prep_note: thinly sliced}
-  - {canonical_name: firm tofu, quantity: 300, unit: g, essential: true, prep_note: drained and cut into cubes}
-  - {canonical_name: garlic, quantity: 8, unit: g, essential: false, prep_note: finely chopped}
-  - {canonical_name: canola oil, quantity: 5, unit: ml, essential: true}
-  - {canonical_name: soy sauce, quantity: 10, unit: ml, essential: false}
-  - {canonical_name: water, quantity: 80, unit: ml, essential: true}
+- canonical_name: uncooked rice
+  quantity: 160
+  unit: g
+  essential: true
+- canonical_name: cabbage
+  quantity: 300
+  unit: g
+  essential: true
+  prep_note: thinly sliced
+- canonical_name: firm tofu
+  quantity: 300
+  unit: g
+  essential: true
+  prep_note: drained and cubed
+- canonical_name: garlic
+  quantity: 8
+  unit: g
+  essential: false
+  prep_note: finely chopped
+- canonical_name: canola oil
+  quantity: 5
+  unit: ml
+  essential: true
+- canonical_name: soy sauce
+  quantity: 10
+  unit: ml
+  essential: false
+- canonical_name: water
+  coarse_amount: for the rice according to its packet and splashes for the cabbage
+  essential: true
 steps:
-  - Heat the oil in a nonstick frying pan over medium-low heat. Add the garlic if using and stir for 30 seconds.
-  - Add the cabbage and water. Cover and simmer for 3 minutes.
-  - Add the tofu and gently fold it through the cabbage. Cover and cook for 5 to 7 minutes until the cabbage is tender and the tofu is hot throughout.
-  - Uncover, add the soy sauce if using, and stir gently for 1 to 2 minutes to reduce excess liquid.
-source: 'original; AI-assisted draft'
+- Start the uncooked rice in a covered saucepan using water and cooking time from the rice packet. Prepare
+  the topping while it cooks; keep the finished rice hot and serve both components together.
+- Warm the oil in a nonstick pan and briefly stir the garlic if using. Add the cabbage and a splash of
+  water.
+- Cover until the cabbage starts to soften. Add the tofu and turn gently, adding a little more water only
+  if necessary.
+- Cover until the tofu is hot throughout and the cabbage is tender. Add soy sauce if using, then uncover
+  briefly to reduce excess liquid.
+- Serve the topping over the cooked rice immediately.
+source: 'original AI-assisted draft; concept/technique reference: https://thewoksoflife.com/chinese-cabbage-stir-fry/'
 reviewed: false
