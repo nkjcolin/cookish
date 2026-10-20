@@ -34,8 +34,10 @@ and classifies stock. `models.py` defines internal inputs and results;
 database access, live clock reads or session persistence.
 
 The **public Cook/Shop services still return mocks**. The pure basket and learning
-algorithms are implemented; database sessions, feedback persistence, deployed
-recommendation flows and evaluation scenarios remain to implement.
+algorithms and a transaction-scoped service workflow are implemented. The
+[integration handoff](../../../docs/role5-integration.md) describes its repository
+port, tests and proposed snapshot storage. The database adapter, real feedback
+persistence, deployed recommendation flows and evaluation scenarios remain to implement.
 
 ### Inputs and integration
 
@@ -105,7 +107,8 @@ For stock assessment:
   states regardless of the requested portions; no grams are invented.
 - Compare count units exactly. Packs, grams and pieces are not interchangeable
   without an agreed conversion. Incompatible/missing units or counts produce
-  `unknown`; a coarse amount cannot be compared to a numeric count.
+  `unknown`; a coarse amount cannot be compared to a numeric count. An explicit
+  `unknown` state overrides any retained old numeric count.
 - A perishable last confirmed over 14 days ago becomes `unknown`. No
   confirmation check is imposed on non-perishables by this rule.
 - Trust the snapshot's freshness gate: `expired` contributes no stock; `check`
@@ -314,8 +317,9 @@ still-pending authoritative catalogue.
 
 These are development tests, **not the 100 report scenarios**. The 30 held-out
 scenarios have not been authored or used for tuning here. Still to implement:
-database-backed Cook/Shop sessions, stock confirmation and retry-safe feedback
-persistence; the scenario suite; and deployed evaluation. No synthetic metadata
+the database repository adapter for the implemented Cook/Shop workflow, real
+stock confirmation and retry-safe feedback persistence; the scenario suite;
+and deployed evaluation. No synthetic metadata
 from tests should be seeded as the authoritative ingredient catalogue.
 
 ## What you may change, and what you must keep

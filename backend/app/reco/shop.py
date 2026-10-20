@@ -13,7 +13,7 @@ from app.reco.cook import filter_recipes, score_recipe
 from app.reco.inventory import assess_ingredients, display_amount
 from app.reco.models import Candidate, CatalogIngredient, CookSession, HardConstraints
 from app.reco.shop_models import Purchase, PurchaseSpec, ShoppingList, ShopPlan, ShopSession
-from app.schemas.common import RemainingState, TasteTag
+from app.schemas.common import TasteTag
 from app.schemas.cook import IngredientStatus
 from app.schemas.identity import Preferences
 from app.schemas.inventory import InventoryItem
@@ -101,13 +101,6 @@ def shopping_list(
     shop_catalogue = {
         key: meta.model_copy(update={"perishable": True}) for key, meta in catalogue.items()
     }
-    # A retained old count must not override an explicit "unknown" stock answer.
-    inventory = tuple(
-        item.model_copy(update={"count": None})
-        if item.countable and item.remaining_state == RemainingState.UNKNOWN
-        else item
-        for item in inventory
-    )
     assessments = assess_ingredients(
         aggregate, inventory, shop_catalogue, people, as_of=as_of, config=config
     )

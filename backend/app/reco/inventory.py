@@ -84,7 +84,8 @@ def assess_ingredients(
                 continue
             if meta.countable:
                 if (
-                    item.count is None
+                    item.remaining_state == RemainingState.UNKNOWN
+                    or item.count is None
                     or not math.isfinite(item.count)
                     or item.count < 0
                     or need is None

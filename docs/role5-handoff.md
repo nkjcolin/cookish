@@ -81,6 +81,11 @@ until their review is recorded.
 
 ## Shared data decisions before service integration
 
+The [service integration handoff](role5-integration.md) now contains the implemented
+workflow and repository port, the exact Role 2 adapter responsibilities, proposed
+snapshot storage and remaining Postgres tests. Public endpoints still return
+mocks until that adapter is ready.
+
 These are proposals for Roles 1 and 2 to review, not implemented contract changes.
 The existing service signatures, API schemas, enum values and migrations are
 unchanged by this handoff.
