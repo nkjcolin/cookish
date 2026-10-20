@@ -8,7 +8,7 @@ The design is in [SPEC.md](../../../docs/SPEC.md), **B5**: the Cook algorithm (h
 
 | Path | Contents |
 |---|---|
-| `backend/app/reco/` | Pure recommendation functions, no database imports (empty) |
+| `backend/app/reco/` | Pure Cook filtering, stock assessment, scoring, suggestions and adjustments; Shop remains to implement |
 | `backend/seed/recipes/*.yaml` | Target: 40 to 60 reviewed recipes; 48 AI-assisted recipes have human content approval; no cooking trials |
 | `backend/app/services/cook.py` | `start_session`, `adjust`, `next_suggestion`, `previous_suggestion`, `select`, `confirm`, `give_feedback`, `get_recipe`, `set_star`, `use_first` (optional) |
 | `backend/app/services/shop.py` | `start_session`, `adjust`, `confirm_basket` |
@@ -23,6 +23,173 @@ You also own the taste-tag list in `app/schemas/common.py` (change it through th
 - **`app/db/session.py`**: `transaction()`, one per request.
 - **`app/clock.py`**: today's date in Singapore.
 - **The recipe file format**, agreed with Role 2, in [seed/README.md](../../seed/README.md).
+- **The pure Cook engine**, described below, tested independently of those service stubs.
+
+## Cook engine: implemented milestone
+
+`cook.py` implements `filter_recipes`, `score_recipe`, `suggest`, `adjust`,
+`skip_current`, `new_session` and `to_suggestion`. `inventory.py` scales amounts
+and classifies stock. `models.py` defines internal inputs and results;
+`config.py` contains all initial scoring weights. These modules perform no I/O,
+database access, live clock reads or session persistence.
+
+The **public Cook/Shop services still return mocks**. This milestone does not
+claim a working deployed recommendation flow, feedback persistence, a basket
+algorithm or completed evaluation scenarios.
+
+### Inputs and integration
+
+The future service adapter supplies:
+
+| Input | Required meaning |
+|---|---|
+| `Candidate` | Existing resolved recipe shape plus the stored `reviewed` flag. Ingredient UUIDs must be resolved from Role 2's catalogue. Unreviewed recipes are excluded. |
+| `dict[UUID, CatalogIngredient]` | Authoritative ingredient identity, allergens, diet flags, tracking mode, staple flag and a perishable classification. All fields are required. Missing metadata excludes the entire recipe, including optional ingredients. These internal fields do not change the public ingredient response. |
+| `list[InventoryItem]` | Household-scoped snapshot from `get_inventory_snapshot`; removed items excluded and freshness already computed by Role 2. Free-text/unmapped batches cannot satisfy a canonical ingredient. |
+| `Preferences` | Current household preferences; all requested diets and all required equipment must be satisfied. |
+| `CookSession` | People, accumulated constraints, shown/skipped/history IDs, and an optional explicitly strict time cap. New sessions use the remembered people count. |
+| `as_of` | A timezone-aware instant from `app.clock.now()`, passed once by the service. Scoring uses its Singapore date. |
+| `taste_weights` | Optional household feature map. An omitted map means zero learned preference. No history is invented. |
+
+Internal `CatalogIngredient.perishable` needs an agreed mapping from Role 2's
+catalogue data; it is not inferred from recipe names. Main-protein learning
+features remain pending a similarly authoritative mapping. The initial engine
+reads `tag:<tag>` and `cuisine:<cuisine>` weights; it does not update them.
+
+Typical service flow, once its repository adapter exists:
+
+```python
+from app import clock
+from app.reco import adjust, new_session, suggest, to_suggestion
+
+session = new_session(preferences, people=requested_people)
+result = suggest(
+    candidates,
+    inventory,
+    preferences,
+    session,
+    ingredient_metadata,
+    as_of=clock.now(),
+    taste_weights=household_weights,
+)
+# If result.selected is None: map to ApiError(NO_RESULT, ..., {
+#     "relaxable": list(result.relaxable)
+# }).
+# Otherwise persist result.session, then return:
+response = to_suggestion(result, session_id)
+
+# For an adjustment, load the exact current Candidate and persisted session:
+updated_session = adjust(result.session, adjustment_body, result.selected.recipe)
+```
+
+`suggest` returns a new session with the selected ID appended to its shown
+history. `skip_current` adds only the current ID to the excluded set; it does
+not train preferences. The service must persist and replay these states and
+implement expiry, transactions, concurrency and request retry handling.
+`previous` should replay the saved entry rather than call the engine again.
+
+### Eligibility, stock and cold start
+
+Allergen/diet/equipment filters run before availability and ranking and are
+never relaxed. Recipe diet suitability is checked against every ingredient,
+including optional seasonings. The public preference time limit is initially
+applied but can be reported as relaxable; an explicit internal
+`strict_max_minutes` is never relaxable. The current API has no field for setting
+that strict cap; the engine does not add one to the API.
+
+For stock assessment:
+
+- Multiply numeric needs by `people / servings`. Sum compatible counted batches
+  and mark a short count `low`. State-tracked `enough` and `low` remain those
+  states regardless of the requested portions; no grams are invented.
+- Compare count units exactly. Packs, grams and pieces are not interchangeable
+  without an agreed conversion. Incompatible/missing units or counts produce
+  `unknown`; a coarse amount cannot be compared to a numeric count.
+- A perishable last confirmed over 14 days ago becomes `unknown`. No
+  confirmation check is imposed on non-perishables by this rule.
+- Trust the snapshot's freshness gate: `expired` contributes no stock; `check`
+  contributes no confirmed stock and is returned for inspection. Both retain
+  real batch IDs. Even a recently confirmed usable batch earns no urgency bonus
+  for a date already past.
+- An untracked staple is assumed available. Explicit tracked `out`, expired or
+  uncertain stock overrides that assumption. Role 2 must agree which ingredients
+  receive the staple flag, especially water.
+- A missing essential excludes the recipe while any eligible recipe without a
+  missing essential remains. If every eligible recipe is missing something,
+  return the best fallback with its ingredients visibly marked `missing`.
+  `low` and `unknown` are not promises that a full portion is available.
+- Unknown essentials expose the earliest existing uncertain batch in
+  `needs_check`. An absent ingredient has no invented batch. The frontend route
+  from a missing-essential suggestion to shopping/adding stock still needs
+  agreement with Role 1.
+
+New users get deterministic ranking from inventory, cuisine choices, stars and
+fixed effort defaults, with zero learned weights and no repetition penalty.
+An empty kitchen gets an explicitly marked missing-stock fallback, provided a
+recipe passes the hard and session constraints. If none does, return no result.
+
+### Scores and adjustments
+
+Initial coefficients in `config.py` are hand-set, not tuned evaluation results:
+
+| Feature | Weight / definition |
+|---|---|
+| Coverage | +3; mean over non-staples: have=1, low=0.5, otherwise=0 |
+| Expiry urgency | +1; mean of each non-staple's highest usable-batch urgency, `max(0, 1-days/4)` for nonnegative days only |
+| Preference | +1; learned feature sum, +0.5 matching cuisine, +1 star, −1 per disliked ingredient, +2 per boosted tag |
+| Effort | −0.5; average of time/preferred-time and difficulty/preferred-difficulty; defaults 60 minutes and difficulty 3 |
+| Repetition | −1 per membership in shown history and recent cooked history |
+| Uncertain essentials | −1 each for unknown or check |
+| Similarity after adjustment | +0.5 times ingredient/tag Jaccard similarity to the prior recipe |
+
+`ScoreBreakdown` exposes raw features and signed weighted terms for testing and
+reporting. The UI receives the existing `Suggestion` shape with no explanation
+text. Equal scores are resolved by fixed recipe UUID, independent of input order.
+
+Adjustments accumulate:
+
+- Quicker tightens time to current recipe time minus 10 minutes.
+- Easier tightens difficulty by one.
+- Less oil requires `low_oil`; More vegetables requires `vegetable_rich`.
+- More protein boosts `high_protein` without excluding all other recipes.
+- Explicit time/difficulty patches can only tighten existing limits. People
+  can change in either direction. A people-only patch does not request a variant.
+- A qualifying different recipe in the same base family is preferred over
+  unrelated candidates after the stock-availability tier is selected. It must
+  satisfy all accumulated restrictions and boosted tags. Similarity otherwise
+  contributes to scoring.
+
+At the minimum time/difficulty, Quicker/Easier can legitimately yield no result;
+the engine never loosens a restriction to fabricate an answer. Only
+`max_minutes` and `tags` can be returned in `relaxable`, and only when removing
+those soft filters actually restores a candidate after the hard gate. Difficulty
+caps and skipped IDs are not silently removed.
+
+### Validation and remaining work
+
+Run from `backend/`:
+
+```bash
+uv sync --frozen
+uv run pytest tests/test_reco.py
+uv run pytest
+uv run ruff check .
+uv run ruff format --check .
+```
+
+Development tests cover real catalogue recipes, serving scaling, all stock
+states, incompatible units, freshness, cold start, accumulating adjustments,
+variant preference, no-result diagnostics and the unchanged response schema.
+Hypothesis generates 150 combinations of allergens, inventory states, counts,
+freshness, people and up to three adjustments and checks that prohibited
+ingredients never appear in a selected recipe.
+
+These are development tests, **not the 100 report scenarios**. The 30 held-out
+scenarios have not been authored or used for tuning here. Still to implement:
+Shop basket search; bounded feedback updates and retry-safe persistence;
+database-backed Cook/Shop sessions and stock confirmation; the scenario suite;
+and deployed evaluation. No synthetic metadata from tests should be seeded as
+the authoritative ingredient catalogue.
 
 ## What you may change, and what you must keep
 
