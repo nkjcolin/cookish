@@ -2,8 +2,10 @@
 
 Role 2 can use these files to start the ingredient catalogue and recipe loader.
 Role 4 can then use Role 2's `ingredients.csv` for receipt and photo matching.
-This handoff provides catalogue inputs; it does not implement recommendations,
-database seeding, or AI matching.
+This handoff provides catalogue inputs. The [pure Cook engine](../backend/app/reco/README.md#cook-engine-implemented-milestone)
+now implements filtering, stock assessment, scoring, suggestions and adjustments
+with fixture-based tests. Database seeding, persistent service wiring and AI
+matching remain separate integration work.
 
 ## What is available
 
@@ -77,7 +79,12 @@ until their review is recorded.
   of every receipt label. Role 2 owns final mappings; Role 4 can add observed
   misses through that same catalogue.
 
-## Shared data decisions before algorithm integration
+## Shared data decisions before service integration
+
+The [service integration handoff](role5-integration.md) now contains the implemented
+workflow and repository port, the exact Role 2 adapter responsibilities, proposed
+snapshot storage and remaining Postgres tests. Public endpoints still return
+mocks until that adapter is ready.
 
 These are proposals for Roles 1 and 2 to review, not implemented contract changes.
 The existing service signatures, API schemas, enum values and migrations are
@@ -87,9 +94,11 @@ unchanged by this handoff.
 |---|---|
 | Taste tags | Use the existing `TasteTag` values. `low_oil` means at most 5 ml total added cooking oil, including seasoning oils, per two servings. Reserve `high_protein` for explicit protein additions to a base recipe. `vegetable_rich` requires at least 300 g of the defined vegetable set per two servings. The [review guide](recipe-review.md) details these transparent authoring heuristics; they are culinary ranking features, and nutrition metrics or user-facing nutrition claims require separate work. |
 | Internal feedback state | Keep learned weights per household, as SPEC A6 requires. `get_preferences()` currently returns `Preferences`, which omits `taste_weights`. Agree internal database/repository access with Role 2; the public preferences response does not need to expose learned weights. |
-| Weight representation | Propose an empty map initially, treating an absent feature as zero; namespace features such as `tag:low_oil` and `cuisine:chinese`. Agree how to derive main-protein features from ingredient metadata before adding them. |
-| Learning updates | SPEC B5 says Like adds a step, Dislike subtracts one, and Maybe/skip leave weights unchanged. Choose and document the step size and bounds in Role 5's future scoring configuration. Agree how the small “cooked without rating” reward interacts with a later rating, repeated requests and changed ratings, so an HTTP retry cannot train the profile twice. |
-| First use, no ratings | After onboarding, use the hard constraints, inventory and fixed scoring defaults with zero learned weights and no history penalty. A new household must not receive invented rating history. |
+| Weight representation | Pure Cook/Shop default to an empty map and treat absent features as zero, using `tag:low_oil` and `cuisine:chinese` namespaces. Pure learning now produces this map. Agree how to derive main-protein features from ingredient metadata before adding them. |
+| Learning updates | Implemented policy: step 0.25, bounds −2 to +2; confirmed cooking gives provisional +0.0625. Like/Maybe/Dislike replace that meal's contribution with +0.25/0/−0.25. Retries are no-ops. Replay one evidence entry per cook record in first-confirmation order to handle changed ratings after clipping. Agree persistence of feature snapshots, order and current ratings; the clipped map alone cannot support exact replacement. See the [learning handoff](../backend/app/reco/README.md#feedback-learning-implemented-milestone). |
+| Shop purchase metadata | Pure Shop requires explicit category, buyable flag, pack unit/size/measure and default-storage shelf-life estimate. Missing ingredient metadata is an integration error. Null/incompatible pack conversion retains a check item rather than inventing packs. Agree how the existing nullable `suggested_packs` UI and confirmation flow resolve counted ingredients requiring a quantity check. Do not default these cases to one verified pack. |
+| Basket revisions | Persist `to_basket` item IDs, derived from basket UUID plus ingredient UUID. A revised basket needs a fresh saved UUID. Confirm only its saved lines and actual purchases through Role 2's stock-event service. The pure planner does not mutate stock. |
+| First use, no ratings | Implemented in the pure Cook engine: hard constraints, inventory and fixed scoring defaults with zero learned weights and no history penalty. The service still needs to supply actual preferences and inventory. |
 | First use, no inventory | Do not mark missing stock as available or fabricate an inventory batch for `StockCheck.item`. SPEC B5 permits missing-essential fallback suggestions; agree with Role 1 how their missing ingredients lead to adding stock or shopping before cooking. |
 
 Role 2 still owns every database migration and ingredient row. Role 5 owns
