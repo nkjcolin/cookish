@@ -1,0 +1,26 @@
+id: 82837c0b-d649-4fe6-aa5b-196c64459b28
+title: Egg fried rice with vegetables
+variant_of: null
+cuisine: chinese
+total_minutes: 20
+active_minutes: 20
+difficulty: 1
+servings: 2
+equipment: [stove]
+taste_tags: [light]
+ingredients:
+  - {canonical_name: cooked rice, quantity: 400, unit: g, essential: true, prep_note: break up any clumps}
+  - {canonical_name: egg, quantity: 2, unit: pcs, essential: true, prep_note: beaten}
+  - {canonical_name: carrot, quantity: 100, unit: g, essential: false, prep_note: cut into small dice}
+  - {canonical_name: frozen pea, quantity: 80, unit: g, essential: false}
+  - {canonical_name: garlic, quantity: 8, unit: g, essential: false, prep_note: finely chopped}
+  - {canonical_name: canola oil, quantity: 15, unit: ml, essential: true}
+  - {canonical_name: soy sauce, quantity: 15, unit: ml, essential: false}
+  - {canonical_name: spring onion, quantity: 10, unit: g, essential: false, prep_note: thinly sliced}
+steps:
+  - Heat one third of the oil in a large nonstick frying pan over medium heat. Add the eggs and stir until fully set, then transfer to a plate.
+  - Add the remaining oil. Add the garlic, carrot, and peas if using, and stir-fry for 4 to 5 minutes until the vegetables are tender and hot throughout.
+  - Add the cooked rice and stir-fry for 4 to 5 minutes, breaking up clumps, until the rice is steaming hot throughout.
+  - Return the eggs to the pan and add the soy sauce if using. Toss until evenly combined and hot, then add the spring onion if using and serve immediately.
+source: 'original; AI-assisted draft'
+reviewed: false

@@ -1,0 +1,25 @@
+id: cec3641a-2ff2-44ae-b64c-8e59d69bea59
+title: Tofu and mushroom soup
+variant_of: null
+cuisine: chinese
+total_minutes: 30
+active_minutes: 10
+difficulty: 1
+servings: 2
+equipment: [stove]
+taste_tags: [light, soupy, low_oil]
+ingredients:
+  - {canonical_name: firm tofu, quantity: 300, unit: g, essential: true, prep_note: drained and cut into cubes}
+  - {canonical_name: fresh shiitake mushroom, quantity: 150, unit: g, essential: true, prep_note: tough stems removed and caps sliced}
+  - {canonical_name: cabbage, quantity: 150, unit: g, essential: false, prep_note: thinly sliced}
+  - {canonical_name: ginger, quantity: 10, unit: g, essential: false, prep_note: peeled and finely sliced}
+  - {canonical_name: soy sauce, quantity: 15, unit: ml, essential: false}
+  - {canonical_name: water, quantity: 700, unit: ml, essential: true}
+  - {canonical_name: spring onion, quantity: 10, unit: g, essential: false, prep_note: thinly sliced}
+steps:
+  - Bring the water to a boil in a saucepan with the ginger if using.
+  - Add the mushrooms and cabbage if using. Reduce to a simmer and cook for 8 minutes until tender.
+  - Add the tofu and soy sauce if using. Simmer gently for another 5 minutes until the tofu is hot throughout.
+  - Ladle into bowls and add the spring onion if using.
+source: 'original; AI-assisted draft'
+reviewed: false

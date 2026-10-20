@@ -9,7 +9,7 @@ The design is in [SPEC.md](../../../docs/SPEC.md), **B5**: the Cook algorithm (h
 | Path | Contents |
 |---|---|
 | `backend/app/reco/` | Pure recommendation functions, no database imports (empty) |
-| `backend/seed/recipes/*.yaml` | 40 to 60 recipes, one per file (empty) |
+| `backend/seed/recipes/*.yaml` | Target: 40 to 60 reviewed recipes; first handoff has 10 AI-assisted drafts pending human review |
 | `backend/app/services/cook.py` | `start_session`, `adjust`, `next_suggestion`, `previous_suggestion`, `select`, `confirm`, `give_feedback`, `get_recipe`, `set_star`, `use_first` (optional) |
 | `backend/app/services/shop.py` | `start_session`, `adjust`, `confirm_basket` |
 | `eval/reco_scenarios/` | The 100 evaluation scenarios |
@@ -97,6 +97,10 @@ One file per recipe in `backend/seed/recipes/`, in the format in [seed/README.md
 - `cuisine`, `equipment` and `taste_tags` take only the values in `app/schemas/common.py`.
 
 Role 2 builds the ingredient catalogue from your recipes, so **send them your ingredient list early**.
+
+The [first handoff](../../../docs/role5-handoff.md) includes the 48-entry recipe
+plan, the deduplicated ingredient request list, and a validator. Read it before
+extending the starter recipes or creating catalogue mappings.
 
 ## Tasks, in order
 

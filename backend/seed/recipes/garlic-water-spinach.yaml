@@ -1,0 +1,23 @@
+id: c3f44203-7245-430e-ad1b-52428f6cfed3
+title: Garlic water spinach
+variant_of: null
+cuisine: chinese
+total_minutes: 15
+active_minutes: 15
+difficulty: 1
+servings: 2
+equipment: [stove]
+taste_tags: [light, vegetable_rich]
+ingredients:
+  - {canonical_name: water spinach, quantity: 300, unit: g, essential: true, prep_note: washed and cut into short lengths with stems and leaves separated}
+  - {canonical_name: garlic, quantity: 12, unit: g, essential: true, prep_note: finely chopped}
+  - {canonical_name: canola oil, quantity: 10, unit: ml, essential: true}
+  - {canonical_name: soy sauce, quantity: 10, unit: ml, essential: false}
+  - {canonical_name: water, quantity: 30, unit: ml, essential: true}
+steps:
+  - Heat the oil in a frying pan over medium heat. Add the garlic and stir for 30 seconds without letting it burn.
+  - Add the water spinach stems and stir-fry for 2 minutes.
+  - Add the leaves and water. Cover for 1 minute, then uncover and stir until the stems are tender and the leaves are wilted.
+  - Add the soy sauce if using, toss briefly, and serve while hot.
+source: 'original; AI-assisted draft'
+reviewed: false

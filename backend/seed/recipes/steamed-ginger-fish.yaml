@@ -1,0 +1,24 @@
+id: ab302fa5-3663-4431-b28c-f380b5b9b1f7
+title: Steamed ginger fish
+variant_of: null
+cuisine: chinese
+total_minutes: 25
+active_minutes: 10
+difficulty: 1
+servings: 2
+equipment: [stove, steamer]
+taste_tags: [light, low_oil]
+ingredients:
+  - {canonical_name: cod fillet, quantity: 350, unit: g, essential: true, prep_note: thawed if frozen and checked for bones}
+  - {canonical_name: ginger, quantity: 20, unit: g, essential: true, prep_note: peeled and cut into fine strips}
+  - {canonical_name: soy sauce, quantity: 15, unit: ml, essential: false}
+  - {canonical_name: spring onion, quantity: 15, unit: g, essential: false, prep_note: thinly sliced}
+  - {canonical_name: black pepper, quantity: 1, unit: g, essential: false}
+  - {canonical_name: water, coarse_amount: enough to operate the steamer according to its instructions, essential: true}
+steps:
+  - Add the water to the steamer according to its instructions and bring it to a steady steam.
+  - Place the fish on a heatproof plate that fits inside the steamer. Scatter over the ginger and add the soy sauce and black pepper if using.
+  - Set the plate in the steamer and cover. Steam for about 10 to 15 minutes, depending on thickness, until the fish is fully cooked throughout; continue cooking if needed.
+  - Carefully remove the hot plate, add the spring onion if using, and serve with the cooking juices.
+source: 'original; AI-assisted draft'
+reviewed: false

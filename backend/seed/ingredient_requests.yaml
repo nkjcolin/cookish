@@ -1,0 +1,173 @@
+# Proposed canonical names and aliases for Role 2's catalogue work.
+# This is NOT ingredients.csv and contains no assigned ingredient UUIDs,
+# allergens, diet suitability, shelf lives, tracking modes or pack sizes.
+# recipe_units describes recipe amounts only, not inventory tracking.
+ingredients:
+  - canonical_name: black pepper
+    aliases: [ground black pepper]
+    recipe_units: [g, coarse]
+    notes: Ground spice; keep distinct from fresh chilli and capsicum.
+  - canonical_name: bok choy
+    aliases: [pak choi, pak choy]
+    recipe_units: [g, coarse]
+    notes: Keep distinct from chye sim and water spinach.
+  - canonical_name: broccoli
+    aliases: []
+    recipe_units: [g, coarse]
+    notes: Specify trimmed florets when recipes are drafted.
+  - canonical_name: cabbage
+    aliases: [white cabbage, green cabbage]
+    recipe_units: [g, coarse]
+    notes: Whole vegetable or cut portion; do not infer grams from a stock state.
+  - canonical_name: canned chickpea
+    aliases: [canned chickpeas, tinned chickpeas]
+    recipe_units: [g, coarse]
+    notes: Recipe amounts refer to drained cooked chickpeas; dry chickpeas are not interchangeable.
+  - canonical_name: carrot
+    aliases: [carrots]
+    recipe_units: [g, pcs, coarse]
+    notes: Recipe-specific amounts do not determine the inventory tracking mode.
+  - canonical_name: cauliflower
+    aliases: []
+    recipe_units: [g, coarse]
+    notes: Specify trimmed florets when recipes are drafted.
+  - canonical_name: chicken thigh
+    aliases: [boneless chicken thigh]
+    recipe_units: [g, coarse]
+    notes: Starter recipe uses boneless skinless meat; review whether bone-in products need a separate catalogue entry.
+  - canonical_name: chilli paste
+    aliases: [plain chilli paste]
+    recipe_units: [g, coarse]
+    notes: Intended as plain chilli paste. Do not map generic sambal or curry paste here without checking their additional ingredients.
+  - canonical_name: chye sim
+    aliases: [choy sum, cai xin]
+    recipe_units: [g, coarse]
+    notes: Keep distinct from bok choy and water spinach.
+  - canonical_name: coconut milk
+    aliases: [unsweetened coconut milk]
+    recipe_units: [ml, coarse]
+    notes: Cooking coconut milk; coconut drinks and cream need explicit conversion or separate entries.
+  - canonical_name: cooked rice
+    aliases: [cooked white rice]
+    recipe_units: [g, coarse]
+    notes: Keep separate from uncooked rice; do not convert automatically using an assumed yield.
+  - canonical_name: cucumber
+    aliases: [cucumbers]
+    recipe_units: [g, pcs, coarse]
+    notes: Fresh cucumber; pickled cucumber is a different product.
+  - canonical_name: cumin powder
+    aliases: [ground cumin]
+    recipe_units: [g, coarse]
+    notes: Ground spice; whole seeds need an explicit recipe substitution.
+  - canonical_name: egg
+    aliases: [eggs, chicken egg, telur]
+    recipe_units: [pcs]
+    notes: Whole chicken eggs; consistent with the existing seed format example.
+  - canonical_name: firm tofu
+    aliases: [tau kwa, dou gan]
+    recipe_units: [g, coarse]
+    notes: Plain firm tofu; silken, seasoned and fried tofu are not automatic substitutes. Role 2 should review local aliases.
+  - canonical_name: fresh shiitake mushroom
+    aliases: [fresh shiitake mushrooms]
+    recipe_units: [g, coarse]
+    notes: Fresh mushrooms; dried shiitake needs different quantities and preparation.
+  - canonical_name: frozen pea
+    aliases: [frozen peas, frozen green peas]
+    recipe_units: [g, coarse]
+    notes: Keep separate from dry split peas.
+  - canonical_name: garlic
+    aliases: [garlic clove, garlic cloves]
+    recipe_units: [g, pcs, coarse]
+    notes: If counted in a recipe, one piece means one clove, not one bulb; prep_note must say so.
+  - canonical_name: ginger
+    aliases: [fresh ginger]
+    recipe_units: [g, coarse]
+    notes: Fresh root; ground ginger is not an automatic match.
+  - canonical_name: lemon
+    aliases: [lemons]
+    recipe_units: [pcs, coarse]
+    notes: Whole lemon; recipes must state when using juice or zest.
+  - canonical_name: long bean
+    aliases: [long beans, yardlong bean, yardlong beans]
+    recipe_units: [g, coarse]
+    notes: Keep separate from other beans unless a recipe explicitly allows substitution.
+  - canonical_name: canola oil
+    aliases: []
+    recipe_units: [ml, coarse]
+    notes: Plain canola oil, not a blended or flavoured oil; do not alias generic cooking oil to this entry.
+  - canonical_name: onion
+    aliases: [onions]
+    recipe_units: [g, pcs, coarse]
+    notes: Bulb onion; spring onion is a separate ingredient.
+  - canonical_name: potato
+    aliases: [potatoes]
+    recipe_units: [g, pcs, coarse]
+    notes: Plain potato; sweet potato is a different ingredient.
+  - canonical_name: prawn
+    aliases: [prawns, shrimp]
+    recipe_units: [g, coarse]
+    notes: Planned recipe uses peeled meat; shell-on weights must not be silently treated as peeled weights.
+  - canonical_name: pumpkin
+    aliases: []
+    recipe_units: [g, coarse]
+    notes: Planned soup amounts will refer to peeled flesh.
+  - canonical_name: red lentil
+    aliases: [red lentils, split red lentils, masoor dal]
+    recipe_units: [g, coarse]
+    notes: Dry split red lentils; canned or already cooked lentils need a separate mapping.
+  - canonical_name: rice vermicelli
+    aliases: [bee hoon, bihun]
+    recipe_units: [g, coarse]
+    notes: Dry thin rice noodles; cooked noodles and wheat noodles are different inputs.
+  - canonical_name: salt
+    aliases: [table salt]
+    recipe_units: [g, coarse]
+    notes: Staple candidate for Role 2 to decide; small recipe quantities may remain coarse.
+  - canonical_name: sesame oil
+    aliases: [toasted sesame oil]
+    recipe_units: [ml, coarse]
+    notes: Distinct from canola oil; review product composition for catalogue metadata.
+  - canonical_name: soba noodle
+    aliases: [soba noodles]
+    recipe_units: [g, coarse]
+    notes: Dry noodles; Role 2 must choose a defined composition because products can differ.
+  - canonical_name: soy sauce
+    aliases: [light soy sauce]
+    recipe_units: [ml, coarse]
+    notes: Match the existing seed example; do not assume dark soy sauce or tamari has the same composition.
+  - canonical_name: spinach
+    aliases: []
+    recipe_units: [g, coarse]
+    notes: Keep separate from water spinach; aliases require review to avoid local-name ambiguity.
+  - canonical_name: spring onion
+    aliases: [spring onions, scallion, scallions]
+    recipe_units: [g, pcs, coarse]
+    notes: Distinct from bulb onion; counted pieces mean individual stalks.
+  - canonical_name: tempeh
+    aliases: [tempe]
+    recipe_units: [g, coarse]
+    notes: Plain tempeh; pre-seasoned products need composition review.
+  - canonical_name: tomato
+    aliases: [tomatoes]
+    recipe_units: [g, pcs, coarse]
+    notes: Fresh tomatoes; recipe count refers to medium tomatoes and is not a fixed gram conversion.
+  - canonical_name: turmeric powder
+    aliases: [ground turmeric]
+    recipe_units: [g, coarse]
+    notes: Ground spice; fresh turmeric is not an automatic match.
+  - canonical_name: uncooked rice
+    aliases: [uncooked white rice, dry white rice]
+    recipe_units: [g, coarse]
+    notes: Keep separate from cooked rice; generic rice is ambiguous and should be reviewed before matching.
+  - canonical_name: water
+    aliases: [drinking water]
+    recipe_units: [ml, coarse]
+    notes: Included for ingredient-complete instructions. Propose an assumed-available staple with no purchase item; Role 2 must agree how to encode that.
+  - canonical_name: water spinach
+    aliases: [kangkong, kang kong]
+    recipe_units: [g, coarse]
+    notes: Uses the existing seed example's canonical name.
+  - canonical_name: cod fillet
+    aliases: []
+    recipe_units: [g, coarse]
+    notes: Boneless raw cod fillet, thawed if frozen; do not alias all white fish to this entry.

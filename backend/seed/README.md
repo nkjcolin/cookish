@@ -8,6 +8,26 @@ The catalogue that every database starts with: ingredients (Role 2) and recipes 
 | `recipes/<slug>.yaml` | Role 5 | One recipe per file |
 | `seed.py` | Role 2 | Loads both; safe to run again |
 
+## First Role 5 handoff
+
+The [handoff notes](../../docs/role5-handoff.md) explain the starter recipe drafts,
+human review status, and the next integration steps for Roles 2 and 4.
+`recipe_plan.yaml` lists the proposed 48-recipe scope; `ingredient_requests.yaml`
+lists the canonical names and aliases proposed for Role 2's catalogue.
+These two manifests are planning inputs, not files consumed by `seed.py`.
+
+From `backend/`, validate the handoff with:
+
+```bash
+uv run python scripts/validate_recipe_handoff.py
+```
+
+Add `--ingredients-csv seed/ingredients.csv` when Role 2's CSV is available.
+Add `--require-reviewed` to reject recipe drafts before release; the starter
+recipes currently need human review and correctly fail that stricter check.
+
+## Agreed seed formats
+
 Every row and every recipe carries a fixed UUID written in the file. Generate one with `python -c "import uuid; print(uuid.uuid4())"`, and never change it afterwards: inventory, ratings and stars refer to it.
 
 ## ingredients.csv
