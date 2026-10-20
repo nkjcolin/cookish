@@ -104,7 +104,7 @@ class Recipe(SeedModel):
 class PlanEntry(SeedModel):
     slug: Text
     title: Text
-    status: Literal["draft", "planned"]
+    status: Literal["draft", "reviewed", "planned"]
     variant_of: Text | None
     ingredients: Annotated[list[Text], Field(min_length=1)]
 
@@ -237,16 +237,23 @@ def validate_handoff(
         check_variant_references(
             {entry.slug: entry.variant_of for entry in plan.recipes}, "recipe plan", result
         )
-        draft_slugs = {entry.slug for entry in plan.recipes if entry.status == "draft"}
+        delivered_slugs = {
+            entry.slug for entry in plan.recipes if entry.status in {"draft", "reviewed"}
+        }
         file_slugs = {path.stem for path in paths}
-        for slug in sorted(draft_slugs - file_slugs):
-            result.errors.append(f"recipe_plan.yaml: draft {slug} has no recipe file")
-        for slug in sorted(file_slugs - draft_slugs):
-            result.errors.append(f"{slug}.yaml: recipe file must have a draft entry in recipe_plan")
+        for slug in sorted(delivered_slugs - file_slugs):
+            result.errors.append(f"recipe_plan.yaml: {slug} has no recipe file")
+        for slug in sorted(file_slugs - delivered_slugs):
+            result.errors.append(
+                f"{slug}.yaml: recipe file must have a draft or reviewed entry in recipe_plan"
+            )
         for slug, recipe in recipes.items():
             if slug not in by_slug:
                 continue
             entry = by_slug[slug]
+            if entry.status in {"draft", "reviewed"}:
+                if recipe.reviewed != (entry.status == "reviewed"):
+                    result.errors.append(f"{slug}.yaml: review status does not match recipe_plan")
             if entry.title != recipe.title:
                 result.errors.append(f"{slug}.yaml: title does not match recipe_plan")
             if set(entry.ingredients) != {item.canonical_name for item in recipe.ingredients}:

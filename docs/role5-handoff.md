@@ -9,9 +9,9 @@ database seeding, or AI matching.
 
 | File | Status and purpose |
 |---|---|
-| [`backend/seed/recipes/`](../backend/seed/recipes/) | 48 complete original AI-assisted recipe drafts: 28 base recipes and 20 variants. All have fixed UUIDs and `reviewed: false`. |
-| [`recipe_plan.yaml`](../backend/seed/recipe_plan.yaml) | Index of all 48 draft files, their ingredients and base/variant relationships. No outlines remain. |
-| [`ingredient_requests.yaml`](../backend/seed/ingredient_requests.yaml) | The same 42 proposed canonical names, with suggested aliases, recipe units and mapping notes. All 42 are used by the completed drafts. |
+| [`backend/seed/recipes/`](../backend/seed/recipes/) | 48 original AI-assisted recipes: 28 base recipes and 20 variants. Wenlong approved all contents on 2026-10-20; fixed UUIDs and `reviewed: true`. |
+| [`recipe_plan.yaml`](../backend/seed/recipe_plan.yaml) | Index of all 48 reviewed files, their ingredients and base/variant relationships. No outlines remain. |
+| [`ingredient_requests.yaml`](../backend/seed/ingredient_requests.yaml) | The same 42 proposed canonical names, with suggested aliases, recipe units and mapping notes. All 42 are used by the reviewed recipes. |
 | [`recipe-review.md`](recipe-review.md) | Human review guide with all 48 recipe cards, selection rationale, external references and review checks. |
 | [`recipe_review.yaml`](../backend/seed/recipe_review.yaml) | Review coordination metadata, separate from the runtime recipe format. |
 | [`validate_recipe_handoff.py`](../backend/scripts/validate_recipe_handoff.py) | Checks the files together, including enum values, UUIDs, variants, ingredient coverage, amounts and review status. |
@@ -20,21 +20,21 @@ The manifests are inputs for coordination and review, not new runtime seed
 formats. The agreed recipe YAML and `ingredients.csv` formats remain those in
 [`backend/seed/README.md`](../backend/seed/README.md).
 
-Every draft describes a full meal portion, including any rice, noodles or
+Every recipe describes a full meal portion, including any rice, noodles or
 potatoes served with the dish. This prevents a suggestion or shopping basket
 from silently leaving out the staple. Timings include these components, with
-parallel cooking specified where assumed. The quantities, estimated times,
-flavour balance and portion suitability still need review.
+parallel cooking specified where assumed. Wenlong has approved the contents. Quantities, estimated times,
+flavour balance and portion suitability have not been checked through cooking trials.
 Recipes listing `cooked rice` start from safely stored, prepared rice; their
 timings exclude its original cooking and cooling.
 
-The earlier recipe UUIDs remain unchanged; the new drafts also have fixed UUIDs.
+All recipe UUIDs remain unchanged.
 Keep those identities when correcting quantities, wording or titles.
 
 ## Role 2: first integration steps
 
 1. Review the proposed canonical names and aliases in `ingredient_requests.yaml`.
-   `recipe_plan.yaml` shows where each name is used across the 48 drafts. Agree
+   `recipe_plan.yaml` shows where each name is used across the 48 recipes. Agree
    any renaming with Role 5 and update the manifests, review material and recipes
    together.
 2. Create the authoritative `ingredients.csv` with your fixed ingredient UUIDs,
@@ -50,10 +50,11 @@ Keep those identities when correcting quantities, wording or titles.
 5. Once the CSV exists, run the optional CSV validation below. Give the same CSV
    to Role 4 for bundling with the AI service.
 
-The full draft catalogue can exercise loading and development fixtures while
-humans review the recipes. It is not a reviewed catalogue for the user study. A proposed
-loader policy is to allow drafts only through an explicit development option and
-to exclude them from the catalogue offered to study participants.
+The recipe content handoff is approved by Wenlong and available to Role 2.
+All 48 review flags are true; the approval record identifies the exact recipe
+version and the user statement. Cooking trials and database integration remain
+separate work. Future unreviewed additions should remain excluded from a release
+until their review is recorded.
 
 ### Ingredient details to settle during catalogue review
 
@@ -108,11 +109,12 @@ ideas informed the draft and what changed.
 These are original project prototypes, not copies of the external authors'
 complete recipes. No third-party photos or recipe prose are included. An
 external reference does not validate our adaptations, timings, dietary
-suitability or nutrition. No recipe has yet been marked as human-reviewed, and
-the catalogue is not a third-party recipe API or a tested research dataset.
-The 48 drafts have not been cooking-tested.
+suitability or nutrition. Wenlong approved all 48 recipe contents in the project
+chat on 2026-10-20; `recipe_review.yaml` records the statement and the approved
+commit. The catalogue is not a third-party recipe API or a tested research
+dataset. Cooking trials have not been performed.
 
-Use the guide's review checks to assess ingredient names and amounts, full meal
+For further review and cooking trials, use the guide's checks to assess ingredient names and amounts, full meal
 portions, equipment, timing, complete instructions, optional ingredients and
 variant behaviour. Check meat, fish, egg and cooked-rice handling before use
 with participants. All equipment entries are required together; reviewers
@@ -156,5 +158,5 @@ Before treating the delivered recipe files as reviewed:
 uv run python scripts/validate_recipe_handoff.py --require-reviewed
 ```
 
-That last command is expected to fail for all 48 current drafts. It checks
-the review flags; it cannot verify that a human actually performed the review.
+That last command now passes for all 48 recipes. It checks the review flags;
+the human content approval is recorded separately and does not claim cooking trials.

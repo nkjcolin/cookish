@@ -126,6 +126,15 @@ def test_valid_handoff_allows_drafts_but_release_requires_review(handoff):
     assert errors(handoff, require_reviewed=True).count("reviewed must be true") == 2
     for path in (handoff / "recipes").glob("*.yaml"):
         change_yaml(path, lambda recipe: recipe.update(reviewed=True))
+    assert "review status does not match" in errors(handoff)
+    change_yaml(
+        handoff / "recipe_plan.yaml",
+        lambda plan: [
+            entry.update(status="reviewed")
+            for entry in plan["recipes"]
+            if entry["status"] == "draft"
+        ],
+    )
     assert errors(handoff, require_reviewed=True) == ""
 
 
@@ -211,7 +220,14 @@ def test_variant_requires_label_known_base_and_no_cycles(handoff):
     ("change", "expected"),
     [
         (lambda plan: plan["recipes"].append(deepcopy(plan["recipes"][0])), "duplicate slug"),
-        (lambda plan: plan["recipes"][0].update(status="planned"), "must have a draft entry"),
+        (
+            lambda plan: plan["recipes"][0].update(status="planned"),
+            "must have a draft or reviewed entry",
+        ),
+        (
+            lambda plan: plan["recipes"][0].update(status="reviewed"),
+            "review status does not match",
+        ),
         (lambda plan: plan["recipes"][2].update(status="draft"), "has no recipe file"),
         (lambda plan: plan["recipes"][0].update(title="Different"), "title does not match"),
         (

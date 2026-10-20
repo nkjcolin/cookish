@@ -1,10 +1,10 @@
 # Role 5 catalogue manifest for Role 2; not consumed by seed.py.
-# All 48 files are complete drafts, not human-reviewed recipes.
+# All 48 files received human content approval on 2026-10-20; no cooking trials.
 # Parent links use slugs here and fixed UUIDs in the recipe files.
 recipes:
 - slug: tomato-egg-stir-fry
   title: Tomato and egg rice bowls
-  status: draft
+  status: reviewed
   variant_of: null
   ingredients:
   - uncooked rice
@@ -16,7 +16,7 @@ recipes:
   - spring onion
 - slug: tomato-egg-stir-fry-less-oil
   title: Tomato and egg rice bowls with less oil
-  status: draft
+  status: reviewed
   variant_of: tomato-egg-stir-fry
   ingredients:
   - uncooked rice
@@ -28,7 +28,7 @@ recipes:
   - spring onion
 - slug: cabbage-tofu-stir-fry
   title: Cabbage and tofu rice bowls
-  status: draft
+  status: reviewed
   variant_of: null
   ingredients:
   - uncooked rice
@@ -40,7 +40,7 @@ recipes:
   - water
 - slug: cabbage-tofu-stir-fry-less-oil
   title: Cabbage and tofu rice bowls with less oil
-  status: draft
+  status: reviewed
   variant_of: cabbage-tofu-stir-fry
   ingredients:
   - uncooked rice
@@ -52,7 +52,7 @@ recipes:
   - water
 - slug: garlic-water-spinach
   title: Garlic water spinach and tofu rice bowls
-  status: draft
+  status: reviewed
   variant_of: null
   ingredients:
   - uncooked rice
@@ -64,7 +64,7 @@ recipes:
   - water
 - slug: ginger-chicken-rice
   title: One-pot ginger chicken and bok choy rice
-  status: draft
+  status: reviewed
   variant_of: null
   ingredients:
   - chicken thigh
@@ -78,7 +78,7 @@ recipes:
   - water
 - slug: tofu-mushroom-soup
   title: Tofu, mushroom and cabbage noodle soup
-  status: draft
+  status: reviewed
   variant_of: null
   ingredients:
   - rice vermicelli
@@ -91,7 +91,7 @@ recipes:
   - water
 - slug: red-lentil-dhal
   title: Tomato and red lentil dhal with rice
-  status: draft
+  status: reviewed
   variant_of: null
   ingredients:
   - uncooked rice
@@ -106,7 +106,7 @@ recipes:
   - water
 - slug: egg-fried-rice
   title: Egg fried rice with vegetables
-  status: draft
+  status: reviewed
   variant_of: null
   ingredients:
   - cooked rice
@@ -119,7 +119,7 @@ recipes:
   - spring onion
 - slug: steamed-ginger-fish
   title: Steamed ginger cod with broccoli and rice
-  status: draft
+  status: reviewed
   variant_of: null
   ingredients:
   - uncooked rice
@@ -132,7 +132,7 @@ recipes:
   - water
 - slug: ginger-chicken-rice-less-oil
   title: Ginger chicken and bok choy rice with less oil
-  status: draft
+  status: reviewed
   variant_of: ginger-chicken-rice
   ingredients:
   - uncooked rice
@@ -145,7 +145,7 @@ recipes:
   - water
 - slug: tofu-mushroom-rice
   title: One-pot tofu and mushroom rice
-  status: draft
+  status: reviewed
   variant_of: ginger-chicken-rice
   ingredients:
   - uncooked rice
@@ -159,7 +159,7 @@ recipes:
   - water
 - slug: quicker-tomato-egg-rice
   title: Quick tomato and egg rice
-  status: draft
+  status: reviewed
   variant_of: tomato-egg-stir-fry
   ingredients:
   - cooked rice
@@ -171,7 +171,7 @@ recipes:
   - water
 - slug: cabbage-carrot-egg-fried-rice
   title: Egg fried rice with extra cabbage and carrot
-  status: draft
+  status: reviewed
   variant_of: egg-fried-rice
   ingredients:
   - cooked rice
@@ -185,7 +185,7 @@ recipes:
   - canola oil
 - slug: tofu-vegetable-fried-rice
   title: Tofu and vegetable fried rice
-  status: draft
+  status: reviewed
   variant_of: egg-fried-rice
   ingredients:
   - cooked rice
@@ -198,7 +198,7 @@ recipes:
   - canola oil
 - slug: chicken-vegetable-fried-rice
   title: Chicken, egg and vegetable fried rice
-  status: draft
+  status: reviewed
   variant_of: egg-fried-rice
   ingredients:
   - cooked rice
@@ -212,7 +212,7 @@ recipes:
   - canola oil
 - slug: rice-vermicelli-tofu-soup
   title: Bok choy and tofu bee hoon soup
-  status: draft
+  status: reviewed
   variant_of: null
   ingredients:
   - rice vermicelli
@@ -223,7 +223,7 @@ recipes:
   - water
 - slug: rice-vermicelli-chicken-soup
   title: Bok choy and chicken bee hoon soup
-  status: draft
+  status: reviewed
   variant_of: rice-vermicelli-tofu-soup
   ingredients:
   - rice vermicelli
@@ -234,7 +234,7 @@ recipes:
   - water
 - slug: bee-hoon-cabbage
   title: Cabbage and carrot bee hoon
-  status: draft
+  status: reviewed
   variant_of: null
   ingredients:
   - rice vermicelli
@@ -246,7 +246,7 @@ recipes:
   - water
 - slug: bee-hoon-egg
   title: Egg, cabbage and carrot bee hoon
-  status: draft
+  status: reviewed
   variant_of: bee-hoon-cabbage
   ingredients:
   - rice vermicelli
@@ -259,7 +259,7 @@ recipes:
   - water
 - slug: microwave-broccoli-chickpea-rice
   title: Microwave broccoli and chickpea rice
-  status: draft
+  status: reviewed
   variant_of: null
   ingredients:
   - cooked rice
@@ -272,7 +272,7 @@ recipes:
   - water
 - slug: rice-cooker-bok-choy-tofu-rice
   title: Rice-cooker bok choy and tofu rice
-  status: draft
+  status: reviewed
   variant_of: null
   ingredients:
   - uncooked rice
@@ -284,7 +284,7 @@ recipes:
   - water
 - slug: chye-sim-egg-bee-hoon
   title: Chye sim and egg bee hoon soup
-  status: draft
+  status: reviewed
   variant_of: null
   ingredients:
   - rice vermicelli
@@ -297,7 +297,7 @@ recipes:
   - water
 - slug: tofu-broccoli-stir-fry
   title: Tofu and broccoli stir-fry with rice
-  status: draft
+  status: reviewed
   variant_of: null
   ingredients:
   - firm tofu
@@ -310,7 +310,7 @@ recipes:
   - water
 - slug: chicken-broccoli-stir-fry
   title: Chicken and broccoli stir-fry with rice
-  status: draft
+  status: reviewed
   variant_of: tofu-broccoli-stir-fry
   ingredients:
   - chicken thigh
@@ -323,7 +323,7 @@ recipes:
   - water
 - slug: mushroom-omelette
   title: Mushroom omelette with rice
-  status: draft
+  status: reviewed
   variant_of: null
   ingredients:
   - egg
@@ -335,7 +335,7 @@ recipes:
   - water
 - slug: tomato-onion-omelette
   title: Tomato and onion omelette with rice
-  status: draft
+  status: reviewed
   variant_of: mushroom-omelette
   ingredients:
   - egg
@@ -347,7 +347,7 @@ recipes:
   - water
 - slug: steamed-egg
   title: Steamed egg with rice
-  status: draft
+  status: reviewed
   variant_of: null
   ingredients:
   - egg
@@ -357,7 +357,7 @@ recipes:
   - water
 - slug: steamed-egg-tofu
   title: Steamed egg and tofu with rice
-  status: draft
+  status: reviewed
   variant_of: steamed-egg
   ingredients:
   - egg
@@ -368,7 +368,7 @@ recipes:
   - water
 - slug: ginger-chicken-soup
   title: Ginger chicken and potato soup
-  status: draft
+  status: reviewed
   variant_of: null
   ingredients:
   - chicken thigh
@@ -380,7 +380,7 @@ recipes:
   - water
 - slug: fish-tomato-soup
   title: Fish and tomato vermicelli soup
-  status: draft
+  status: reviewed
   variant_of: null
   ingredients:
   - cod fillet
@@ -392,7 +392,7 @@ recipes:
   - water
 - slug: lentil-spinach-dhal
   title: Red lentil and spinach dhal with rice
-  status: draft
+  status: reviewed
   variant_of: red-lentil-dhal
   ingredients:
   - red lentil
@@ -408,7 +408,7 @@ recipes:
   - water
 - slug: potato-cauliflower-curry
   title: Potato and cauliflower curry with rice
-  status: draft
+  status: reviewed
   variant_of: null
   ingredients:
   - potato
@@ -424,7 +424,7 @@ recipes:
   - water
 - slug: chickpea-tomato-curry
   title: Chickpea and tomato curry with rice
-  status: draft
+  status: reviewed
   variant_of: null
   ingredients:
   - canned chickpea
@@ -439,7 +439,7 @@ recipes:
   - water
 - slug: coconut-tofu-curry
   title: Coconut tofu and vegetable curry with rice
-  status: draft
+  status: reviewed
   variant_of: null
   ingredients:
   - firm tofu
@@ -457,7 +457,7 @@ recipes:
   - water
 - slug: coconut-chicken-curry
   title: Coconut chicken and vegetable curry with rice
-  status: draft
+  status: reviewed
   variant_of: coconut-tofu-curry
   ingredients:
   - chicken thigh
@@ -475,7 +475,7 @@ recipes:
   - water
 - slug: tempeh-long-bean-stir-fry
   title: Tempeh and long bean stir-fry with rice
-  status: draft
+  status: reviewed
   variant_of: null
   ingredients:
   - tempeh
@@ -487,7 +487,7 @@ recipes:
   - water
 - slug: tempeh-cabbage-stir-fry
   title: Tempeh and cabbage stir-fry with rice
-  status: draft
+  status: reviewed
   variant_of: tempeh-long-bean-stir-fry
   ingredients:
   - tempeh
@@ -499,7 +499,7 @@ recipes:
   - water
 - slug: sambal-tofu
   title: Chilli tofu with rice
-  status: draft
+  status: reviewed
   variant_of: null
   ingredients:
   - firm tofu
@@ -513,7 +513,7 @@ recipes:
   - water
 - slug: sambal-prawn
   title: Chilli prawns with rice
-  status: draft
+  status: reviewed
   variant_of: sambal-tofu
   ingredients:
   - prawn
@@ -527,7 +527,7 @@ recipes:
   - water
 - slug: lemon-pepper-fish
   title: Lemon pepper fish with potatoes and carrots
-  status: draft
+  status: reviewed
   variant_of: null
   ingredients:
   - cod fillet
@@ -540,7 +540,7 @@ recipes:
   - water
 - slug: lemon-pepper-chicken
   title: Lemon pepper chicken with potatoes and carrots
-  status: draft
+  status: reviewed
   variant_of: lemon-pepper-fish
   ingredients:
   - chicken thigh
@@ -553,7 +553,7 @@ recipes:
   - water
 - slug: pumpkin-lentil-soup
   title: Pumpkin, potato and red lentil soup
-  status: draft
+  status: reviewed
   variant_of: null
   ingredients:
   - pumpkin
@@ -567,7 +567,7 @@ recipes:
   - water
 - slug: chicken-rice-porridge
   title: Ginger chicken rice porridge
-  status: draft
+  status: reviewed
   variant_of: null
   ingredients:
   - uncooked rice
@@ -578,7 +578,7 @@ recipes:
   - water
 - slug: mushroom-rice-porridge
   title: Mushroom and tofu rice porridge
-  status: draft
+  status: reviewed
   variant_of: chicken-rice-porridge
   ingredients:
   - uncooked rice
@@ -590,7 +590,7 @@ recipes:
   - water
 - slug: cucumber-tomato-chickpea-salad
   title: Cucumber, tomato and chickpea rice salad
-  status: draft
+  status: reviewed
   variant_of: null
   ingredients:
   - cucumber
@@ -603,7 +603,7 @@ recipes:
   - black pepper
 - slug: sesame-soba-tofu
   title: Sesame soba with tofu and vegetables
-  status: draft
+  status: reviewed
   variant_of: null
   ingredients:
   - soba noodle
@@ -615,7 +615,7 @@ recipes:
   - water
 - slug: sesame-soba-egg
   title: Sesame soba with egg and vegetables
-  status: draft
+  status: reviewed
   variant_of: sesame-soba-tofu
   ingredients:
   - soba noodle

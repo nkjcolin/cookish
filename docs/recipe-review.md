@@ -1,8 +1,18 @@
 # Cookish recipe catalogue: Wenlong's review pack
 
-**48 complete recipe drafts: 28 base meals and 20 variants, using 42 canonical ingredients. 48 still await human review.**
+**48 complete recipes: 28 base meals and 20 variants, using 42 canonical ingredients. 0 still await human review.**
 
-This is the proposed coursework catalogue, ready for content review. It meets the SPEC's **40–60 recipes including variants** size target once approved; the number marked human-reviewed is currently 0. Recipe quantities and instructions are original AI-assisted project drafts. Named creator pages informed dish concepts and techniques; they do not validate these exact formulations. There have been no cooking trials, nutrition calculations or user acceptance tests.
+This is the coursework recipe catalogue. The SPEC calls for **40–60 human-reviewed recipes including variants**; the number marked human-reviewed is currently 48. Recipe quantities and instructions are original AI-assisted project drafts. Named creator pages informed dish concepts and techniques; they do not validate these exact formulations. There have been no cooking trials, nutrition calculations or user acceptance tests.
+
+## Human content approval
+
+**Wenlong approved all 48 recipes on 2026-10-20**, covering recipe content at commit `54cab235a78d832098915a8e0eda14f15ef3e8ce`.
+
+> okay great, all the recipe seems fine, whats next
+
+Human approval of all 48 recipe contents as presented in the review pack. Cooking trials, measured timing, nutritional analysis and user acceptance testing have not been performed. This record does not claim completion of each cooking-trial checklist.
+
+Approval was given in the project chat and recorded in recipe_review.yaml and the review PR. Later content changes need their own review.
 
 ## Why this selection fits Cookish
 
@@ -137,9 +147,9 @@ Reference pages accessed for this research: **2026-10-20**. Dish-specific creato
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/tomato-egg-stir-fry.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/tomato-egg-stir-fry.yaml) · reviewed: true
 
 <a id="tomato-egg-stir-fry-less-oil"></a>
 
@@ -181,9 +191,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/tomato-egg-stir-fry-less-oil.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/tomato-egg-stir-fry-less-oil.yaml) · reviewed: true
 
 <a id="cabbage-tofu-stir-fry"></a>
 
@@ -225,9 +235,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/cabbage-tofu-stir-fry.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/cabbage-tofu-stir-fry.yaml) · reviewed: true
 
 <a id="cabbage-tofu-stir-fry-less-oil"></a>
 
@@ -269,9 +279,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/cabbage-tofu-stir-fry-less-oil.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/cabbage-tofu-stir-fry-less-oil.yaml) · reviewed: true
 
 <a id="garlic-water-spinach"></a>
 
@@ -313,9 +323,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/garlic-water-spinach.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/garlic-water-spinach.yaml) · reviewed: true
 
 <a id="ginger-chicken-rice"></a>
 
@@ -359,9 +369,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/ginger-chicken-rice.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/ginger-chicken-rice.yaml) · reviewed: true
 
 <a id="tofu-mushroom-soup"></a>
 
@@ -403,9 +413,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/tofu-mushroom-soup.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/tofu-mushroom-soup.yaml) · reviewed: true
 
 <a id="red-lentil-dhal"></a>
 
@@ -450,9 +460,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/red-lentil-dhal.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/red-lentil-dhal.yaml) · reviewed: true
 
 <a id="egg-fried-rice"></a>
 
@@ -495,9 +505,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/egg-fried-rice.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/egg-fried-rice.yaml) · reviewed: true
 
 <a id="steamed-ginger-fish"></a>
 
@@ -540,9 +550,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/steamed-ginger-fish.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/steamed-ginger-fish.yaml) · reviewed: true
 
 <a id="ginger-chicken-rice-less-oil"></a>
 
@@ -585,9 +595,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/ginger-chicken-rice-less-oil.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/ginger-chicken-rice-less-oil.yaml) · reviewed: true
 
 <a id="tofu-mushroom-rice"></a>
 
@@ -630,9 +640,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/tofu-mushroom-rice.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/tofu-mushroom-rice.yaml) · reviewed: true
 
 <a id="quicker-tomato-egg-rice"></a>
 
@@ -675,9 +685,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/quicker-tomato-egg-rice.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/quicker-tomato-egg-rice.yaml) · reviewed: true
 
 <a id="cabbage-carrot-egg-fried-rice"></a>
 
@@ -722,9 +732,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/cabbage-carrot-egg-fried-rice.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/cabbage-carrot-egg-fried-rice.yaml) · reviewed: true
 
 <a id="tofu-vegetable-fried-rice"></a>
 
@@ -768,9 +778,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/tofu-vegetable-fried-rice.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/tofu-vegetable-fried-rice.yaml) · reviewed: true
 
 <a id="chicken-vegetable-fried-rice"></a>
 
@@ -816,9 +826,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/chicken-vegetable-fried-rice.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/chicken-vegetable-fried-rice.yaml) · reviewed: true
 
 <a id="rice-vermicelli-tofu-soup"></a>
 
@@ -859,9 +869,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/rice-vermicelli-tofu-soup.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/rice-vermicelli-tofu-soup.yaml) · reviewed: true
 
 <a id="rice-vermicelli-chicken-soup"></a>
 
@@ -902,9 +912,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/rice-vermicelli-chicken-soup.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/rice-vermicelli-chicken-soup.yaml) · reviewed: true
 
 <a id="bee-hoon-cabbage"></a>
 
@@ -945,9 +955,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/bee-hoon-cabbage.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/bee-hoon-cabbage.yaml) · reviewed: true
 
 <a id="bee-hoon-egg"></a>
 
@@ -989,9 +999,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/bee-hoon-egg.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/bee-hoon-egg.yaml) · reviewed: true
 
 <a id="microwave-broccoli-chickpea-rice"></a>
 
@@ -1035,9 +1045,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/microwave-broccoli-chickpea-rice.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/microwave-broccoli-chickpea-rice.yaml) · reviewed: true
 
 <a id="rice-cooker-bok-choy-tofu-rice"></a>
 
@@ -1079,9 +1089,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/rice-cooker-bok-choy-tofu-rice.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/rice-cooker-bok-choy-tofu-rice.yaml) · reviewed: true
 
 <a id="chye-sim-egg-bee-hoon"></a>
 
@@ -1124,9 +1134,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/chye-sim-egg-bee-hoon.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/chye-sim-egg-bee-hoon.yaml) · reviewed: true
 
 <a id="tofu-broccoli-stir-fry"></a>
 
@@ -1168,9 +1178,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/tofu-broccoli-stir-fry.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/tofu-broccoli-stir-fry.yaml) · reviewed: true
 
 <a id="chicken-broccoli-stir-fry"></a>
 
@@ -1212,9 +1222,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/chicken-broccoli-stir-fry.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/chicken-broccoli-stir-fry.yaml) · reviewed: true
 
 <a id="mushroom-omelette"></a>
 
@@ -1255,9 +1265,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/mushroom-omelette.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/mushroom-omelette.yaml) · reviewed: true
 
 <a id="tomato-onion-omelette"></a>
 
@@ -1298,9 +1308,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/tomato-onion-omelette.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/tomato-onion-omelette.yaml) · reviewed: true
 
 <a id="steamed-egg"></a>
 
@@ -1339,9 +1349,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/steamed-egg.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/steamed-egg.yaml) · reviewed: true
 
 <a id="steamed-egg-tofu"></a>
 
@@ -1381,9 +1391,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/steamed-egg-tofu.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/steamed-egg-tofu.yaml) · reviewed: true
 
 <a id="ginger-chicken-soup"></a>
 
@@ -1423,9 +1433,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/ginger-chicken-soup.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/ginger-chicken-soup.yaml) · reviewed: true
 
 <a id="fish-tomato-soup"></a>
 
@@ -1466,9 +1476,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/fish-tomato-soup.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/fish-tomato-soup.yaml) · reviewed: true
 
 <a id="lentil-spinach-dhal"></a>
 
@@ -1513,9 +1523,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/lentil-spinach-dhal.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/lentil-spinach-dhal.yaml) · reviewed: true
 
 <a id="potato-cauliflower-curry"></a>
 
@@ -1560,9 +1570,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/potato-cauliflower-curry.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/potato-cauliflower-curry.yaml) · reviewed: true
 
 <a id="chickpea-tomato-curry"></a>
 
@@ -1606,9 +1616,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/chickpea-tomato-curry.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/chickpea-tomato-curry.yaml) · reviewed: true
 
 <a id="coconut-tofu-curry"></a>
 
@@ -1655,9 +1665,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/coconut-tofu-curry.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/coconut-tofu-curry.yaml) · reviewed: true
 
 <a id="coconut-chicken-curry"></a>
 
@@ -1704,9 +1714,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/coconut-chicken-curry.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/coconut-chicken-curry.yaml) · reviewed: true
 
 <a id="tempeh-long-bean-stir-fry"></a>
 
@@ -1748,9 +1758,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/tempeh-long-bean-stir-fry.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/tempeh-long-bean-stir-fry.yaml) · reviewed: true
 
 <a id="tempeh-cabbage-stir-fry"></a>
 
@@ -1791,9 +1801,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/tempeh-cabbage-stir-fry.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/tempeh-cabbage-stir-fry.yaml) · reviewed: true
 
 <a id="sambal-tofu"></a>
 
@@ -1837,9 +1847,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/sambal-tofu.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/sambal-tofu.yaml) · reviewed: true
 
 <a id="sambal-prawn"></a>
 
@@ -1884,9 +1894,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/sambal-prawn.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/sambal-prawn.yaml) · reviewed: true
 
 <a id="lemon-pepper-fish"></a>
 
@@ -1929,9 +1939,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/lemon-pepper-fish.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/lemon-pepper-fish.yaml) · reviewed: true
 
 <a id="lemon-pepper-chicken"></a>
 
@@ -1975,9 +1985,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/lemon-pepper-chicken.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/lemon-pepper-chicken.yaml) · reviewed: true
 
 <a id="pumpkin-lentil-soup"></a>
 
@@ -2021,9 +2031,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/pumpkin-lentil-soup.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/pumpkin-lentil-soup.yaml) · reviewed: true
 
 <a id="chicken-rice-porridge"></a>
 
@@ -2065,9 +2075,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/chicken-rice-porridge.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/chicken-rice-porridge.yaml) · reviewed: true
 
 <a id="mushroom-rice-porridge"></a>
 
@@ -2109,9 +2119,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/mushroom-rice-porridge.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/mushroom-rice-porridge.yaml) · reviewed: true
 
 <a id="cucumber-tomato-chickpea-salad"></a>
 
@@ -2154,9 +2164,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/cucumber-tomato-chickpea-salad.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/cucumber-tomato-chickpea-salad.yaml) · reviewed: true
 
 <a id="sesame-soba-tofu"></a>
 
@@ -2198,9 +2208,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/sesame-soba-tofu.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/sesame-soba-tofu.yaml) · reviewed: true
 
 <a id="sesame-soba-egg"></a>
 
@@ -2242,9 +2252,9 @@ Record reviewer, date, changes and any cooking-trial evidence in the review PR. 
 - [ ] Equipment, timing, cooking steps and handling reviewed.
 - [ ] Variant differences and tags make sense for the project.
 
-Record reviewer, date, changes and any cooking-trial evidence in the review PR. These generated checkboxes are a review checklist, not the evidence record.
+Content approval is recorded above when available. Record later changes and any cooking-trial evidence in the review PR. These checkboxes are a checklist, not the evidence record.
 
-[Recipe YAML](../backend/seed/recipes/sesame-soba-egg.yaml) · reviewed: false
+[Recipe YAML](../backend/seed/recipes/sesame-soba-egg.yaml) · reviewed: true
 
 ## Ingredient reuse
 

@@ -1,7 +1,17 @@
 # Research and human-review notes; not consumed by seed.py.
 # Source pages support dish concepts/techniques, not these exact formulations.
 reference_access_date: '2026-10-20'
-status: All recipes are AI-assisted drafts awaiting human review and cooking trials.
+status: All 48 recipes received human content approval from Wenlong on 2026-10-20; no cooking trials have
+  been performed.
+human_content_review:
+  reviewer: Wenlong
+  date: '2026-10-20'
+  recipe_count: 48
+  recipe_commit: 54cab235a78d832098915a8e0eda14f15ef3e8ce
+  statement: okay great, all the recipe seems fine, whats next
+  scope: Human approval of all 48 recipe contents as presented in the review pack. Cooking trials, measured
+    timing, nutritional analysis and user acceptance testing have not been performed. This record does
+    not claim completion of each cooking-trial checklist.
 recipes:
   tomato-egg-stir-fry:
     rationale: A recognisable home-cooked rice meal using counted eggs and shared produce; serves as the

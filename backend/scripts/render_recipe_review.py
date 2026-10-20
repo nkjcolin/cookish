@@ -40,12 +40,12 @@ def render(seed: Path = SEED) -> str:
     lines = [
         "# Cookish recipe catalogue: Wenlong's review pack",
         "",
-        f"**{len(recipes)} complete recipe drafts: {bases} base meals and "
+        f"**{len(recipes)} complete recipes: {bases} base meals and "
         f"{len(recipes) - bases} variants, using {len(ingredients)} canonical ingredients. "
         f"{pending} still await human review.**",
         "",
-        "This is the proposed coursework catalogue, ready for content review. It meets "
-        "the SPEC's **40–60 recipes including variants** size target once approved; "
+        "This is the coursework recipe catalogue. The SPEC calls for "
+        "**40–60 human-reviewed recipes including variants**; "
         f"the number marked human-reviewed is currently {len(recipes) - pending}. "
         "Recipe quantities and "
         "instructions are original AI-assisted project drafts. Named creator pages informed "
@@ -131,6 +131,23 @@ def render(seed: Path = SEED) -> str:
         "| # | Meal | Estimated total / active minutes | Relationship |",
         "|---|---|---|---|",
     ]
+    approval = notes.get("human_content_review")
+    if approval:
+        lines[6:6] = [
+            "## Human content approval",
+            "",
+            f"**{approval['reviewer']} approved all {approval['recipe_count']} recipes "
+            f"on {approval['date']}**, covering recipe content at commit "
+            f"`{approval['recipe_commit']}`.",
+            "",
+            f"> {approval['statement']}",
+            "",
+            approval["scope"],
+            "",
+            "Approval was given in the project chat and recorded in recipe_review.yaml "
+            "and the review PR. Later content changes need their own review.",
+            "",
+        ]
     for entry in plan:
         slug = entry["slug"]
         recipe = recipes[slug]
@@ -216,8 +233,9 @@ def render(seed: Path = SEED) -> str:
             "- [ ] Equipment, timing, cooking steps and handling reviewed.",
             "- [ ] Variant differences and tags make sense for the project.",
             "",
-            "Record reviewer, date, changes and any cooking-trial evidence in the review PR. "
-            "These generated checkboxes are a review checklist, not the evidence record.",
+            "Content approval is recorded above when available. Record later changes and "
+            "any cooking-trial evidence in the review PR. These checkboxes are a checklist, "
+            "not the evidence record.",
             "",
             f"[Recipe YAML](../backend/seed/recipes/{slug}.yaml) · "
             f"reviewed: {str(recipe['reviewed']).lower()}",

@@ -5,9 +5,9 @@ The catalogue that every database starts with: ingredients (Role 2) and recipes 
 | Path | Owner | Contents |
 |---|---|---|
 | `ingredients.csv` | Role 2 | One row per ingredient. Also bundled into the `ai` Lambda |
-| `recipes/<slug>.yaml` | Role 5 | 48 complete recipe drafts, one per file; human review pending |
+| `recipes/<slug>.yaml` | Role 5 | 48 recipes with human content approval, one per file |
 | `seed.py` | Role 2 | Planned loader for ingredients and recipes; must be safe to run again |
-| `recipe_plan.yaml` | Role 5 | Index of the 48 draft files and their ingredient/variant relationships |
+| `recipe_plan.yaml` | Role 5 | Index of the 48 reviewed files and their ingredient/variant relationships |
 | `ingredient_requests.yaml` | Role 5 / Role 2 review | 42 proposed canonical names and aliases |
 | `recipe_review.yaml` | Role 5 / human reviewer | Review coordination metadata; not a runtime seed format |
 
@@ -16,9 +16,10 @@ The catalogue that every database starts with: ingredients (Role 2) and recipes 
 The [handoff notes](../../docs/role5-handoff.md) explain the next integration
 steps for Roles 2 and 4. All 48 catalogue entries now have complete recipe files:
 28 base recipes and 20 variants, using the same 42 proposed canonical ingredients.
-There are no remaining outlines. Every recipe is still `reviewed: false`.
+Wenlong approved all 48 recipe contents on 2026-10-20; every recipe is now
+`reviewed: true`. The approval record is in `recipe_review.yaml`.
 
-Start human review with the [recipe review guide](../../docs/recipe-review.md),
+Find the content approval record and further trial checklist in the [recipe review guide](../../docs/recipe-review.md),
 which provides all 48 recipe cards, selection rationale, sources and checks.
 The recipes are original AI-assisted project drafts with named external
 concept/technique references. These references do not establish approval of the
@@ -26,8 +27,8 @@ adapted recipe, its nutrition, timing or safety.
 
 Recipes include their meal portions and any rice, noodles or potatoes used to
 serve them. Total-time estimates include preparing those components; some rice
-meals assume parallel cooking on the stove. Amounts and timing still need human
-review and practical trials: these drafts have not been cooking-tested.
+meals assume parallel cooking on the stove. Human content approval is recorded;
+amounts and timing have not been verified through cooking trials.
 Existing recipe UUIDs are preserved.
 Where `cooked rice` is listed, the timing starts with already-prepared, safely
 stored rice and excludes its original cooking and cooling.
@@ -48,8 +49,8 @@ After editing recipe content or `recipe_review.yaml`, refresh the review guide
 with `uv run python scripts/render_recipe_review.py`.
 
 Add `--ingredients-csv seed/ingredients.csv` when Role 2's CSV is available.
-Add `--require-reviewed` to reject recipe drafts before release; all 48 recipes
-currently need human review and correctly fail that stricter check.
+Add `--require-reviewed` to require the human-review flags; all 48 approved
+recipes now pass that check. It does not certify cooking trials or nutrition.
 
 ## Agreed seed formats
 
