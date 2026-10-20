@@ -1,0 +1,69 @@
+id: 5e1d2eab-44fb-4882-bd2e-577b6e186a26
+title: Pumpkin, potato and red lentil soup
+variant_of: null
+cuisine: western
+total_minutes: 45
+active_minutes: 20
+difficulty: 1
+servings: 2
+equipment:
+- stove
+taste_tags:
+- soupy
+- vegetable_rich
+ingredients:
+- canonical_name: pumpkin
+  quantity: 350
+  unit: g
+  essential: true
+  prep_note: peeled and deseeded flesh cut into 2 cm cubes
+- canonical_name: potato
+  quantity: 250
+  unit: g
+  essential: true
+  prep_note: scrubbed and cut into 1.5 cm cubes
+- canonical_name: red lentil
+  quantity: 140
+  unit: g
+  essential: true
+  prep_note: dry split red lentils; rinsed and drained
+- canonical_name: onion
+  quantity: 100
+  unit: g
+  essential: true
+  prep_note: peeled and diced
+- canonical_name: garlic
+  quantity: 8
+  unit: g
+  essential: true
+  prep_note: peeled and minced
+- canonical_name: cumin powder
+  quantity: 2
+  unit: g
+  essential: true
+- canonical_name: canola oil
+  quantity: 10
+  unit: ml
+  essential: true
+- canonical_name: salt
+  quantity: 2
+  unit: g
+  essential: true
+- canonical_name: water
+  quantity: 1000
+  unit: ml
+  essential: true
+  prep_note: cooking water; separate tap water is used to rinse produce and lentils
+steps:
+- Prepare the vegetables and rinse the lentils. Heat the oil in a large saucepan over medium heat and
+  soften the onion for 4 minutes.
+- Add the garlic and cumin and stir for 30 seconds. Add the pumpkin, potato, lentils and measured water,
+  then bring to a boil.
+- Lower to a gentle simmer, partially cover, and cook for 25-30 minutes, stirring along the base regularly,
+  until the lentils have collapsed and the pumpkin and potato are easily crushed.
+- If it thickens too quickly, cover fully and lower the heat. Mash some of the pumpkin and potato against
+  the side of the pot with a spoon to thicken the soup without a blender.
+- Stir in the salt, check everything is tender, and divide the hot soup between bowls. The potatoes and
+  lentils are part of the meal; no unlisted bread or side is required.
+source: 'original AI-assisted draft; concept/technique reference: https://biancazapatka.com/en/pumpkin-lentil-curry/'
+reviewed: true

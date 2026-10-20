@@ -1,0 +1,62 @@
+id: 719b4fca-2889-4389-a4f7-8605dee34c48
+title: Cucumber, tomato and chickpea rice salad
+variant_of: null
+cuisine: western
+total_minutes: 15
+active_minutes: 15
+difficulty: 1
+servings: 2
+equipment: []
+taste_tags:
+- light
+- vegetable_rich
+ingredients:
+- canonical_name: cucumber
+  quantity: 200
+  unit: g
+  essential: true
+  prep_note: washed and diced
+- canonical_name: tomato
+  quantity: 250
+  unit: g
+  essential: true
+  prep_note: washed and diced
+- canonical_name: canned chickpea
+  quantity: 300
+  unit: g
+  essential: true
+  prep_note: drained cooked weight; ready to eat according to the label
+- canonical_name: cooked rice
+  quantity: 300
+  unit: g
+  essential: true
+  prep_note: freshly cooked for immediate use or promptly chilled and kept below 4 C; cooking and chilling
+    time excluded
+- canonical_name: lemon
+  quantity: 0.5
+  unit: pcs
+  essential: true
+  prep_note: washed; juice only
+- canonical_name: canola oil
+  quantity: 15
+  unit: ml
+  essential: true
+- canonical_name: salt
+  quantity: 1
+  unit: g
+  essential: true
+- canonical_name: black pepper
+  quantity: 0.5
+  unit: g
+  essential: true
+steps:
+- Start with freshly cooked rice for immediate assembly, or cold cooked rice that was chilled promptly
+  and kept below 4 C. The 15-minute time assumes cooked rice is already available; do not leave hot rice
+  out to cool for this salad.
+- Wash and dice the cucumber and tomato. Drain the canned chickpeas and check that the label permits eating
+  them without further cooking.
+- Squeeze the lemon juice into a large bowl and mix with the oil, salt and pepper.
+- Add the rice, chickpeas, cucumber and tomato. Fold together so the dressing is evenly distributed, then
+  divide between bowls and eat immediately. If serving later, refrigerate promptly below 4 C.
+source: 'original AI-assisted draft; concept/technique reference: https://www.loveandlemons.com/chickpea-salad/'
+reviewed: true

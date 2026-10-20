@@ -1,0 +1,650 @@
+# Research and human-review notes; not consumed by seed.py.
+# Source pages support dish concepts/techniques, not these exact formulations.
+reference_access_date: '2026-10-20'
+status: All 48 recipes received human content approval from Wenlong on 2026-10-20; no cooking trials have
+  been performed.
+human_content_review:
+  reviewer: Wenlong
+  date: '2026-10-20'
+  recipe_count: 48
+  recipe_commit: 54cab235a78d832098915a8e0eda14f15ef3e8ce
+  statement: okay great, all the recipe seems fine, whats next
+  scope: Human approval of all 48 recipe contents as presented in the review pack. Cooking trials, measured
+    timing, nutritional analysis and user acceptance testing have not been performed. This record does
+    not claim completion of each cooking-trial checklist.
+recipes:
+  tomato-egg-stir-fry:
+    rationale: A recognisable home-cooked rice meal using counted eggs and shared produce; serves as the
+      adjustment baseline.
+    references:
+    - url: https://thewoksoflife.com/stir-fried-tomato-and-egg/
+      title: The Woks of Life — Chinese Tomato Egg Stir-fry
+      usage: Dish or technique background only; quantities, meal composition and prose are original project
+        drafts.
+    adjustment_note: 'Baseline: 15 ml added oil and uncooked rice for two servings. Separate less-oil
+      and quicker variants retain the main topping.'
+    review_focus: Check rice yield, seasoning and the 35-minute estimate with parallel cooking; eggs are
+      counted, not converted from grams.
+  tomato-egg-stir-fry-less-oil:
+    rationale: A controlled less-oil alternative with the same eggs, tomatoes and rice.
+    references:
+    - url: https://thewoksoflife.com/stir-fried-tomato-and-egg/
+      title: The Woks of Life — Chinese Tomato Egg Stir-fry
+      usage: Dish or technique background only; quantities, meal composition and prose are original project
+        drafts.
+    adjustment_note: Added oil decreases from 15 ml to 5 ml per two servings; covered cooking uses water
+      instead of extra oil.
+    review_focus: Test sticking and texture on an ordinary nonstick pan; low_oil describes the added oil
+      only.
+  cabbage-tofu-stir-fry:
+    rationale: A plant-based ingredient combination with substantial tofu, shared cabbage and a complete
+      rice portion.
+    references:
+    - url: https://thewoksoflife.com/chinese-cabbage-stir-fry/
+      title: The Woks of Life — Chinese Cabbage Stir-Fry
+      usage: Dish or technique background only; quantities, meal composition and prose are original project
+        drafts.
+    adjustment_note: Baseline for the less-oil version; the source's broader dish is only a cabbage-cooking
+      reference, not a copied tofu meal.
+    review_focus: Check tofu breakage and cabbage tenderness. Optional soy sauce remains part of the stored
+      ingredient set for hard filtering.
+  cabbage-tofu-stir-fry-less-oil:
+    rationale: Tests a cooking-method refinement without changing the core ingredients or servings.
+    references:
+    - url: https://thewoksoflife.com/chinese-cabbage-stir-fry/
+      title: The Woks of Life — Chinese Cabbage Stir-Fry
+      usage: Dish or technique background only; quantities, meal composition and prose are original project
+        drafts.
+    adjustment_note: Same ingredient quantities as the base except added oil decreases from 15 ml to 5
+      ml; tofu is warmed through rather than browned.
+    review_focus: Compare the softer tofu texture against the base; check that the method works with the
+      smaller oil amount.
+  garlic-water-spinach:
+    rationale: Uses a recognisable local leafy vegetable while adding tofu and rice so it can occupy one
+      Shop meal slot.
+    references:
+    - url: https://www.nyonyacooking.com/recipes/kangkung-belacan~sL-aXO7Xn
+      title: Nyonya Cooking — Kangkung Belacan
+      usage: Dish or technique background only; quantities, meal composition and prose are original project
+        drafts.
+    adjustment_note: 'This is an original garlic/tofu composition, not kangkung belacan: no shrimp paste,
+      chilli paste or dried shrimp is implied.'
+    review_focus: Review the mild flavour and vegetable preparation; confirm the canonical kangkong alias
+      with Role 2.
+  ginger-chicken-rice:
+    rationale: A single-pan rice meal with a distinct protein and leafy vegetable; makes repeated ingredients
+      useful across the basket.
+    references:
+    - url: https://www.recipetineats.com/one-pot-chinese-chicken-and-rice/
+      title: RecipeTin Eats — One Pot Chinese Chicken and Rice
+      usage: Dish or technique background only; quantities, meal composition and prose are original project
+        drafts.
+    adjustment_note: Baseline for the no-added-oil simmered variant, with matched rice, chicken, bok choy
+      and seasonings.
+    review_focus: Test the rice/water ratio with the team's actual rice and saucepan. Time is an estimate,
+      not a substitute for checking chicken.
+  tofu-mushroom-soup:
+    rationale: A mushroom-forward noodle soup gives a different taste/texture from dry stir-fries while
+      using overlapping tofu and cabbage.
+    references:
+    - url: https://thewoksoflife.com/tofu-soup/
+      title: The Woks of Life — Tofu Soup
+      usage: Dish or technique background only; quantities, meal composition and prose are original project
+        drafts.
+    adjustment_note: No added cooking oil. This project broth omits the reference recipe's egg and other
+      additions; it is not a reproduction.
+    review_focus: Taste the broth without stock cubes and check noodle absorption; every stock ingredient
+      would need an explicit catalogue row if added later.
+  red-lentil-dhal:
+    rationale: A pantry-oriented meal with a different cuisine and protein source, useful when fresh leafy
+      stock is unavailable.
+    references:
+    - url: https://www.indianhealthyrecipes.com/red-lentil-curry/
+      title: Swasthi's Recipes — Red Lentil Curry
+      usage: Dish or technique background only; quantities, meal composition and prose are original project
+        drafts.
+    adjustment_note: Baseline for the spinach-added variant. The dry-lentil amount is not interchangeable
+      with canned or cooked lentils.
+    review_focus: Review spice balance, finished consistency and water needs; recipe times assume split
+      red lentils.
+  egg-fried-rice:
+    rationale: The cooked-rice baseline gives a quick path and supports controlled vegetable and chicken
+      additions.
+    references:
+    - url: https://www.madewithlau.com/recipes/egg-fried-rice
+      title: Made With Lau — Fried Rice
+      usage: Dish or technique background only; quantities, meal composition and prose are original project
+        drafts.
+    adjustment_note: Base quantities are 400 g cooked rice, 2 eggs, 100 g carrot and 80 g peas for two
+      servings.
+    review_focus: Review safe cooked-rice handling and the 20-minute estimate; do not present it as a
+      raw-rice recipe.
+  steamed-ginger-fish:
+    rationale: A fish-based meal with a genuine steamer requirement and no added oil supports hard equipment
+      filtering.
+    references:
+    - url: https://www.madewithlau.com/recipes/steamed-fish-ginger-scallion
+      title: Made With Lau — Steamed Fish with Ginger & Scallion
+      usage: Dish or technique background only; quantities, meal composition and prose are original project
+        drafts.
+    adjustment_note: Cod fillets, broccoli and rice are project choices; this is not the source's whole-fish
+      recipe or finishing-oil method.
+    review_focus: Test fillet thickness and steamer capacity. Confirm all fish is thoroughly cooked and
+      the rice remains hot if components are cooked sequentially.
+  ginger-chicken-rice-less-oil:
+    rationale: Keeps the familiar ginger chicken rice meal and its vegetables while using a simmering
+      method without added cooking oil.
+    references:
+    - url: https://www.recipetineats.com/ginger-chicken-and-rice/
+      title: 'RecipeTin Eats: Ginger chicken and rice'
+      usage: concept/technique reference only
+    - url: https://www.sfa.gov.sg/docs/default-source/circulars/others/2024/advisory-on-food-safety-practices-for-food-establishments_dec-24.pdf
+      title: 'Singapore Food Agency: Advisory on Food Safety Practices, December 2024'
+      usage: chicken cooking temperature reference; not a recipe endorsement
+    adjustment_note: Less-oil variant of the ginger chicken rice base; retain the same chicken, rice and
+      vegetable amounts.
+    review_focus: Check rice water absorption, chicken temperature, bok choy texture and whether the zero-added-oil
+      flavour is acceptable.
+  tofu-mushroom-rice:
+    rationale: A substantial plant-based rice meal using the same aromatics and grain as ginger chicken
+      rice.
+    references:
+    - url: https://thefoodietakesflight.com/one-pot-mushroom-rice/
+      title: 'The Foodie Takes Flight: One Pot Mushroom Rice with Spicy Miso Sauce'
+      usage: concept/technique reference only
+    adjustment_note: Vegetarian alternative in the ginger rice family, rather than a claim that changing
+      protein alone increases protein content.
+    review_focus: Check the final rice texture with fresh mushrooms, tofu firmness and seasoning; the
+      simplified sauce differs from the reference.
+  quicker-tomato-egg-rice:
+    rationale: Provides the same recognisable tomato and egg meal when safely stored cooked rice is already
+      available.
+    references:
+    - url: https://thewoksoflife.com/stir-fried-tomato-and-egg/
+      title: 'The Woks of Life: Chinese Tomato Egg Stir-fry'
+      usage: concept/technique reference only
+    - url: https://www.sfa.gov.sg/food-safety-tips/food-risk-concerns/risk-at-a-glance/fried-rice-syndrome
+      title: 'Singapore Food Agency: Fried Rice Syndrome'
+      usage: food handling reference; not a recipe endorsement
+    - url: https://www.sfa.gov.sg/food-safety-tips/safe-food-practices/food-safety-tips
+      title: 'Singapore Food Agency: Food Safety Tips'
+      usage: reheating reference; not a recipe endorsement
+    adjustment_note: 'Quicker variant: 20-minute estimate replaces cooking rice from dry; pre-cooking
+      and cooling rice are not included because cooked rice is the stated input.'
+    review_focus: Compare against the base meal, check whether the rice becomes too wet, and test the
+      timing including safe reheating.
+  cabbage-carrot-egg-fried-rice:
+    rationale: Uses cabbage and carrots that overlap with other meals and gives a clear increase in vegetable
+      quantity.
+    references:
+    - url: https://thewoksoflife.com/vegetable-fried-rice/
+      title: 'The Woks of Life: Vegetable Fried Rice'
+      usage: concept/technique reference only
+    - url: https://www.sfa.gov.sg/food-safety-tips/food-risk-concerns/risk-at-a-glance/fried-rice-syndrome
+      title: 'Singapore Food Agency: Fried Rice Syndrome'
+      usage: food handling reference; not a recipe endorsement
+    - url: https://www.sfa.gov.sg/food-safety-tips/safe-food-practices/food-safety-tips
+      title: 'Singapore Food Agency: Food Safety Tips'
+      usage: reheating reference; not a recipe endorsement
+    adjustment_note: Retains 400 g cooked rice, 2 eggs and 80 g peas from the base; increases carrot from
+      100 to 150 g and adds 200 g cabbage.
+    review_focus: Test pan capacity, whether the cabbage makes the rice wet, portion size and the 25-minute
+      estimate.
+  tofu-vegetable-fried-rice:
+    rationale: A substantial egg-free fried-rice option that reuses the base recipe vegetables and seasonings.
+    references:
+    - url: https://thewoksoflife.com/vegetable-fried-rice/
+      title: 'The Woks of Life: Vegetable Fried Rice'
+      usage: concept/technique reference only
+    - url: https://www.sfa.gov.sg/food-safety-tips/food-risk-concerns/risk-at-a-glance/fried-rice-syndrome
+      title: 'Singapore Food Agency: Fried Rice Syndrome'
+      usage: food handling reference; not a recipe endorsement
+    - url: https://www.sfa.gov.sg/food-safety-tips/safe-food-practices/food-safety-tips
+      title: 'Singapore Food Agency: Food Safety Tips'
+      usage: reheating reference; not a recipe endorsement
+    adjustment_note: Replaces the base eggs with a generous plain-tofu portion; dietary suitability still
+      comes from every ingredient in Role 2 metadata.
+    review_focus: Check tofu browning and water release; verify the tofu product and optional soy sauce
+      composition.
+  chicken-vegetable-fried-rice:
+    rationale: Adds chicken to the egg-rice base while keeping its vegetables and core seasoning.
+    references:
+    - url: https://thewoksoflife.com/classic-chicken-fried-rice/
+      title: 'The Woks of Life: Chicken Fried Rice'
+      usage: concept/technique reference only
+    - url: https://www.sfa.gov.sg/docs/default-source/circulars/others/2024/advisory-on-food-safety-practices-for-food-establishments_dec-24.pdf
+      title: 'Singapore Food Agency: Advisory on Food Safety Practices, December 2024'
+      usage: chicken cooking temperature reference; not a recipe endorsement
+    - url: https://www.sfa.gov.sg/food-safety-tips/food-risk-concerns/risk-at-a-glance/fried-rice-syndrome
+      title: 'Singapore Food Agency: Fried Rice Syndrome'
+      usage: food handling reference; not a recipe endorsement
+    - url: https://www.sfa.gov.sg/food-safety-tips/safe-food-practices/food-safety-tips
+      title: 'Singapore Food Agency: Food Safety Tips'
+      usage: reheating reference; not a recipe endorsement
+    adjustment_note: More-protein variant adds 250 g chicken without removing the original 2 eggs, so
+      the requested change is concrete.
+    review_focus: Review chicken piece size and temperature, total portion size, pan capacity and the
+      additional cooking time.
+  rice-vermicelli-tofu-soup:
+    rationale: A complete, simple soup meal without the mushrooms required by the other tofu soup; useful
+      for ingredient dislikes and differing inventory.
+    references:
+    - url: https://thewoksoflife.com/tofu-soup/
+      title: 'The Woks of Life: Tofu Soup'
+      usage: concept/technique reference only
+    - url: https://foongfamilyflat.com/recipes/better-for-you-than-instant-noodles-chicken-beehoon-soup
+      title: 'Foong Family Flat: Chicken Bee Hoon Soup'
+      usage: concept/technique reference only
+    adjustment_note: Low-added-oil plant-based soup option; the chicken variant keeps the same noodles,
+      greens and ginger.
+    review_focus: Taste the plain water-based broth and review noodle preparation, soup volume and whether
+      the tofu portion is satisfying.
+  rice-vermicelli-chicken-soup:
+    rationale: Provides a light poultry soup using almost the same shopping ingredients as the tofu version.
+    references:
+    - url: https://foongfamilyflat.com/recipes/better-for-you-than-instant-noodles-chicken-beehoon-soup
+      title: 'Foong Family Flat: Chicken Bee Hoon Soup'
+      usage: concept/technique reference only
+    - url: https://www.sfa.gov.sg/docs/default-source/circulars/others/2024/advisory-on-food-safety-practices-for-food-establishments_dec-24.pdf
+      title: 'Singapore Food Agency: Advisory on Food Safety Practices, December 2024'
+      usage: chicken cooking temperature reference; not a recipe endorsement
+    adjustment_note: Chicken alternative; do not represent a tofu-to-chicken substitution as an automatic
+      increase in protein without comparing quantities.
+    review_focus: Check the homemade broth flavour and safe cooking of sliced chicken; verify noodle texture
+      after reheating in the soup.
+  bee-hoon-cabbage:
+    rationale: A vegetable-heavy version of a familiar economical bee hoon meal, with a separate added-egg
+      variant.
+    references:
+    - url: https://noobcook.com/economical-fried-bee-hoon/2/
+      title: 'Noob Cook: Economical Fried Bee Hoon'
+      usage: concept/technique reference only
+    adjustment_note: The egg variant preserves the noodle and vegetable amounts and adds eggs; this base
+      intentionally has no high_protein tag.
+    review_focus: Review noodle brand and soaking time, saltiness, vegetable quantity and whether the
+      base is a sufficiently substantial meal for participants.
+  bee-hoon-egg:
+    rationale: Makes the more-protein adjustment visible while retaining the same bee hoon and vegetables.
+    references:
+    - url: https://noobcook.com/economical-fried-bee-hoon/2/
+      title: 'Noob Cook: Economical Fried Bee Hoon'
+      usage: concept/technique reference only
+    adjustment_note: Adds 4 eggs per two servings to the base without reducing the existing ingredients;
+      high_protein is an internal qualitative ranking tag.
+    review_focus: Check whether four eggs give suitable portions, whether the pan fits the food, and whether
+      the 30-minute estimate is realistic.
+  microwave-broccoli-chickpea-rice:
+    rationale: A complete microwave-only option using canned pulses and shared vegetables, including an
+      option without soy sauce.
+    references:
+    - url: https://www.panasonic.com/ca/consumer/home-appliances-learn/panasonickitchen/microwave-cooking-tips.html
+      title: 'Panasonic: Microwave Cooking Tips'
+      usage: concept/technique reference only
+    - url: https://www.sfa.gov.sg/food-safety-tips/food-risk-concerns/risk-at-a-glance/fried-rice-syndrome
+      title: 'Singapore Food Agency: Fried Rice Syndrome'
+      usage: food handling reference; not a recipe endorsement
+    - url: https://www.sfa.gov.sg/food-safety-tips/safe-food-practices/food-safety-tips
+      title: 'Singapore Food Agency: Food Safety Tips'
+      usage: reheating reference; not a recipe endorsement
+    adjustment_note: Provides equipment diversity and a low-added-oil meal; no stove, kettle or separately
+      cooked ingredient beyond the explicitly listed cooked rice.
+    review_focus: 'Test on the actual microwave: bowl capacity, power, even heating, steam handling, broccoli
+      texture and the 20-minute estimate.'
+  rice-cooker-bok-choy-tofu-rice:
+    rationale: A main meal for households with a rice cooker but no stove, using the same tofu and greens
+      as the soup dishes.
+    references:
+    - url: https://thefoodietakesflight.com/one-pot-mushroom-rice/
+      title: 'The Foodie Takes Flight: One Pot Mushroom Rice with Spicy Miso Sauce'
+      usage: concept/technique reference only
+    - url: https://nomadette.com/rice-cooker-chicken-rice/
+      title: 'Nomadette: Rice Cooker Chicken Rice'
+      usage: concept/technique reference only
+    adjustment_note: Adds appliance coverage without claiming every rice cooker supports every mixed recipe;
+      rice and toppings cook together in one appliance.
+    review_focus: 'A cooking trial is particularly important: verify cooker model, mixed-rice capacity,
+      water level, wet vegetables and the 55-minute estimate. Allow 55 minutes including preparation,
+      a 40-minute cycle and resting; verify against the actual cooker.'
+  chye-sim-egg-bee-hoon:
+    rationale: A simple local-style leafy-green noodle soup that uses chye sim and does not need soy sauce
+      or tofu.
+    references:
+    - url: https://meanderingrivr.blogspot.com/2014/12/vegetarianism-chye-sim-egg-soup.html
+      title: 'Meandering Rivr: Chye Sim Egg Soup'
+      usage: concept/technique reference only
+    - url: https://noobcook.com/economical-fried-bee-hoon/2/
+      title: 'Noob Cook: Economical Fried Bee Hoon'
+      usage: concept/technique reference only
+    adjustment_note: Quick, no-added-oil alternative with a different allergen combination from the tofu
+      noodle soups.
+    review_focus: Review seasoning in the simple broth, noodle texture, fully set egg and the 25-minute
+      estimate; the linked egg-soup reference is concept only, not copied instructions. Trial the 25-minute
+      estimate with noodle preparation and broth heating in parallel.
+  tofu-broccoli-stir-fry:
+    rationale: A common tofu-and-green-vegetable meal that reuses the shared broccoli, rice and aromatics;
+      useful for testing vegetarian protein swaps.
+    references:
+    - url: https://thewoksoflife.com/broccoli-tofu-bowls/
+      title: 10-Minute Broccoli Tofu Bowls — Sarah, The Woks of Life
+      usage: Dish concept and basic cooking technique only; the quantities, constrained ingredients and
+        instructions are original project choices, not a reproduction or source endorsement.
+    adjustment_note: Base of the chicken broccoli variant. Sauce is deliberately simpler and unthickened;
+      rice time is included.
+    review_focus: Check tofu browning with 10 ml oil, broccoli tenderness and soy sauce strength; test
+      the complete 35-minute meal.
+  chicken-broccoli-stir-fry:
+    rationale: A familiar meat alternative using the same vegetable and staple set as the tofu base.
+    references:
+    - url: https://thewoksoflife.com/chinese-chicken-broccoli-brown-sauce/
+      title: Chicken and Broccoli — Bill, The Woks of Life
+      usage: Dish concept and basic cooking technique only; the quantities, constrained ingredients and
+        instructions are original project choices, not a reproduction or source endorsement.
+    adjustment_note: Replaces firm tofu with chicken thigh; it is a protein-choice variant, not a quantified
+      higher-protein claim. Omits the reference sauce blend and uses a covered finish.
+    review_focus: Confirm poultry temperature, small piece size, actual cooking time and sauce balance.
+  mushroom-omelette:
+    rationale: A short ingredient-list egg meal that uses fresh mushrooms and offers a texture distinct
+      from stir-fried eggs.
+    references:
+    - url: https://www.recipetineats.com/omelette/
+      title: Omelette — Nagi Maehashi, RecipeTin Eats
+      usage: Dish concept and basic cooking technique only; the quantities, constrained ingredients and
+        instructions are original project choices, not a reproduction or source endorsement.
+    adjustment_note: Original rice meal with shiitake and spring onion, without the source butter, dairy
+      or cheese. Tomato-onion variant switches the vegetables.
+    review_focus: Check that the four-egg omelette sets evenly in the chosen pan and the rice and egg
+      portions feel sufficient.
+  tomato-onion-omelette:
+    rationale: A pantry-friendly alternative for users with tomatoes and onion instead of mushrooms.
+    references:
+    - url: https://www.recipetineats.com/omelette/
+      title: Omelette — Nagi Maehashi, RecipeTin Eats
+      usage: General omelette method only. Tomato-onion filling, rice, ingredient quantities and absence
+        of dairy are original project choices.
+    adjustment_note: Replaces mushrooms and spring onion with tomato and bulb onion; water is cooked off
+      before adding egg. This is an egg omelette, not the Indian chickpea-flour dish also called tomato
+      omelette.
+    review_focus: Check tomato moisture, tendency to stick and whether the estimated 35 minutes works
+      with rice.
+  steamed-egg:
+    rationale: An oil-free soft-texture meal with few tracked ingredients; distinct from omelettes and
+      fried rice.
+    references:
+    - url: https://thewoksoflife.com/steamed-egg/
+      title: Steamed Eggs — Judy, The Woks of Life
+      usage: Steamed egg custard and soy/spring onion serving concept only. The water ratio, continuous-steam
+        method and rice portions are original project choices.
+    adjustment_note: Base for the tofu addition variant. Uses plain water and a continuous gentle steam;
+      source timing and stock formula are not copied.
+    review_focus: Check custard depth, egg-to-water ratio, steamer fit, fully set centre and total time.
+  steamed-egg-tofu:
+    rationale: 'An explicit add-protein adjustment: retains all four eggs and adds tofu rather than merely
+      exchanging ingredients.'
+    references:
+    - url: https://thewoksoflife.com/steamed-egg/
+      title: Steamed Eggs — Judy, The Woks of Life
+      usage: Egg custard technique concept only; firm-tofu addition, rice and the continuous-steam method
+        are original project choices.
+    adjustment_note: Adds 200 g firm tofu to the same two-serving base. high_protein is an internal qualitative
+      tag for this increase, not a nutrition certification.
+    review_focus: Firm tofu gives a firmer texture than silken tofu; check acceptability, centre doneness,
+      steaming time and dish capacity.
+  ginger-chicken-soup:
+    rationale: A single-pot oil-free meal with potato as its starchy component; provides a non-rice choice
+      while keeping ingredients shared.
+    references:
+    - url: https://becs-table.com.au/ginger-chicken-soup/
+      title: Ginger Chicken Soup — Rebecca McLeod, Bec's Table
+      usage: Ginger/chicken-thigh soup pairing only. Potato, carrot, no added oil, water broth and stovetop
+        steps are independent project choices.
+    adjustment_note: Concept reference only. Original stove method replaces the source noodles and stock
+      with potato, carrot and a lightly seasoned water broth.
+    review_focus: Check broth flavour without stock, potato portion and tenderness, chicken temperature
+      and the 40-minute estimate.
+  fish-tomato-soup:
+    rationale: A fish-based soup with an explicit noodle portion so a recommendation does not silently
+      omit the meal staple.
+    references:
+    - url: https://thechinesesouplady.com/how-to-make-a-delicious-cantonese-styled-tomato-fish-soup-with-vegetables/
+      title: Cantonese-styled Tomato Fish Soup — The Chinese Soup Lady
+      usage: Fish, tomato and ginger pairing only. Boneless cod, vermicelli and short-simmer directions
+        are original project choices; no TCM or nutrition claims are used.
+    adjustment_note: Concept reference only. Uses small boneless cod pieces and vermicelli instead of
+      the source whole-fish broth; no health claims or reference timings are adopted.
+    review_focus: Confirm cod cost/availability, fish bone checks, noodle packet timing, broth concentration
+      and thermometer endpoint.
+  lentil-spinach-dhal:
+    rationale: Adds a leafy vegetable to the lentil base while reusing every base ingredient; useful for
+      an explainable vegetable-rich adjustment.
+    references:
+    - url: https://www.indianhealthyrecipes.com/red-lentil-curry/
+      title: Red Lentil Curry — Swasthi Shreekanth, Swasthi's Recipes
+      usage: Lentil curry with an onion-tomato base as concept only; the limited spice list, quantities,
+        spinach and single-pot lentil method are project choices.
+    adjustment_note: Keeps the base lentil, tomato, onion, spice, oil and rice amounts and adds 200 g
+      spinach; the simplified cumin/turmeric flavour and quantities are original.
+    review_focus: Check whether turmeric level is balanced, lentils soften in the proposed time, and spinach
+      texture and liquid level are acceptable.
+  potato-cauliflower-curry:
+    rationale: A vegetable-heavy curry expands ingredient use and mild flavour choices; the reduced rice
+      portion accounts for potato already in the dish.
+    references:
+    - url: https://www.indianhealthyrecipes.com/aloo-gobi-recipe/
+      title: Aloo Gobi Recipe (Cauliflower Potato Curry) — Swasthi Shreekanth
+      usage: Dish concept and basic cooking technique only; the quantities, constrained ingredients and
+        instructions are original project choices, not a reproduction or source endorsement.
+    adjustment_note: A simplified saucy potato-cauliflower meal using the existing cumin and turmeric
+      catalogue, not a claim to reproduce the traditional recipe.
+    review_focus: Assess satiety as a vegetable-led meal, potato/cauliflower timing, spice balance and
+      whether users would want an explicit protein addition.
+  chickpea-tomato-curry:
+    rationale: A canned-legume meal supports low-fresh-stock scenarios and avoids requiring advance soaking
+      or pressure cooking.
+    references:
+    - url: https://www.indianhealthyrecipes.com/chickpea-curry/
+      title: Chickpea Curry Recipe — Swasthi Shreekanth
+      usage: Dish concept and basic cooking technique only; the quantities, constrained ingredients and
+        instructions are original project choices, not a reproduction or source endorsement.
+    adjustment_note: Uses drained canned chickpeas, fresh tomato and a short spice list; omits coconut
+      milk and the source spice blend.
+    review_focus: Check drained-weight clarity, tomato acidity, sauce thickness and satiety for two servings.
+  coconut-tofu-curry:
+    rationale: A coconut-based option creates a clear rich/spicy contrast for feedback ranking while sharing
+      tofu, carrots and long beans.
+    references:
+    - url: https://www.nyonyacooking.com/recipes/the-best-sayur-lodeh-vegetables-in-coconut-milk~SMijNnrFRE
+      title: The Best Sayur Lodeh (Vegetables in Coconut Milk) — Emily Halim, Nyonya Cooking
+      usage: Vegetables and tofu in a coconut sauce concept only. The reference page contains shrimp despite
+        vegetarian prose; no dietary claims, recipe quantities or complete method are adopted.
+    adjustment_note: Original simplified coconut curry inspired by vegetable-coconut stew. Omits source
+      shrimp, dried shrimp and other extras; ingredients here determine suitability.
+    review_focus: Confirm plain chilli paste composition/heat, coconut sauce balance, bean tenderness
+      and the broad cuisine label.
+  coconut-chicken-curry:
+    rationale: A chicken alternative to the coconut tofu meal provides a controlled protein swap with
+      the same flavour and vegetable profile.
+    references:
+    - url: https://www.nyonyacooking.com/recipes/the-best-sayur-lodeh-vegetables-in-coconut-milk~SMijNnrFRE
+      title: The Best Sayur Lodeh (Vegetables in Coconut Milk) — Emily Halim, Nyonya Cooking
+      usage: Coconut-vegetable sauce concept only; chicken adaptation, ingredients and cooking sequence
+        are original project choices. Source dietary claims are not used.
+    adjustment_note: Replaces tofu with raw chicken; the poultry cooking sequence and longer total time
+      are original changes. No claim that this is the source recipe.
+    review_focus: Check chicken temperature, coconut sauce texture during the longer simmer and consistency
+      of flavour with the tofu base.
+  tempeh-long-bean-stir-fry:
+    rationale: A full tempeh-and-rice meal with a locally familiar vegetable. Reuses garlic, soy sauce
+      and rice across the catalogue while introducing a distinct tempeh texture for preference feedback.
+      Long beans provide a perishable item for use-soon ranking scenarios.
+    references:
+    - url: https://www.cookmeindonesian.com/tumis-tempe-kacang-panjang-stir-fried-tempeh-with-long-beans-vegan/
+      title: Nunuk Sri Rahayu — Tumis Tempe Kacang Panjang (Cook Me Indonesian)
+      usage: 'Concept only: tempeh and long beans can form a stir-fry served with rice. Project seasoning,
+        amounts and prose are original; no authentic Indonesian flavour claim.'
+    adjustment_note: Base for a cabbage variation. This relationship supplies ingredient reuse and preference
+      variety; it is not a less-oil, quicker or more-protein adjustment.
+    review_focus: Taste plain soy-seasoned tempeh; check bean tenderness, tempeh packet cooking guidance,
+      portions and 40-minute timing with a rice saucepan and frying pan. Confirm ingredient composition
+      before deriving diet flags.
+  tempeh-cabbage-stir-fry:
+    rationale: Reuses the tempeh base with cabbage, a shared ingredient in several other dishes. Allows
+      inventory-sensitive ranking without requiring a new condiment or ingredient family.
+    references:
+    - url: https://www.cookmeindonesian.com/tumis-tempe-kacang-panjang-stir-fried-tempeh-with-long-beans-vegan/
+      title: Nunuk Sri Rahayu — Tumis Tempe Kacang Panjang (Cook Me Indonesian)
+      usage: General vegetable-substitution concept. Cabbage, quantities and the simpler seasoning are
+        project choices.
+    adjustment_note: Cabbage variation of tempeh-long-bean-stir-fry; do not interpret its five-minute
+      estimate difference as a certified quicker adjustment.
+    review_focus: Check cabbage cut size, moisture and tenderness; compare portions and flavour with the
+      long-bean base.
+  sambal-tofu:
+    rationale: Adds a spicy tofu-and-rice choice so Like/Maybe/Dislike feedback has a meaningful spicy
+      tag to learn from. Tomato gives sauce body without extra canned sauces or sugar. Public title is
+      Chilli tofu, while the preallocated slug is retained.
+    references:
+    - url: https://rasamalaysia.com/sambal-udang-prawn-sambal/
+      title: Bee Yinn Low — Sambal Udang (Rasa Malaysia)
+      usage: Chilli-main-with-rice concept only. Our plain chilli, tomato and tofu dish is a distinct
+        simplified composition, without belacan, tamarind or an authenticity claim.
+    adjustment_note: Base for a prawn variation. Tofu versus prawn is a protein-source choice, not a verified
+      more-protein adjustment.
+    review_focus: Choose a specific plain chilli paste and test the 15 g heat level. Confirm the paste
+      contains no undeclared shrimp or other additions. Check tofu browning, sauce quantity and full-meal
+      portions.
+  sambal-prawn:
+    rationale: Adds a shellfish case for allergy filtering and a spicy alternative that otherwise reuses
+      the tofu recipe's vegetable-and-rice basket. The ingredient list measures peeled meat, avoiding
+      an unspoken shell-on conversion.
+    references:
+    - url: https://rasamalaysia.com/sambal-udang-prawn-sambal/
+      title: Bee Yinn Low — Sambal Udang (Rasa Malaysia)
+      usage: Prawn-and-chilli serving concept only. Tomato sauce, seasoning and amounts are original project
+        choices.
+    - url: https://www.sfa.gov.sg/docs/default-source/circulars/others/2024/advisory-on-food-safety-practices-for-food-establishments_dec-24.pdf
+      title: Singapore Food Agency — Adopting Good Food Safety and Personal Hygiene Practices (6 December
+        2024)
+      usage: Cooking endpoint and separation of raw and cooked food.
+    adjustment_note: Prawn variation of sambal-tofu, with cooking steps changed for raw seafood. Never
+      infer allergy safety from variant membership.
+    review_focus: Test chilli strength, prawn size and cooking endpoint. Ensure fridge thawing and peeled
+      raw weight are clear. Confirm shellfish restrictions come from Role 2's canonical ingredient metadata.
+  lemon-pepper-fish:
+    rationale: A complete plate outside the rice/noodle families, with cod, potatoes and carrots. Uses
+      fresh lemon and pepper rather than adding a seasoning blend whose contents would complicate ingredient
+      matching.
+    references:
+    - url: https://www.recipetineats.com/crispy-pan-fried-fish/
+      title: Nagi Maehashi — Crispy Pan Fried Fish (RecipeTin Eats)
+      usage: Technique reference for drying fillets and pan cooking. Our fish is uncoated and paired with
+        an original potato-and-carrot side.
+    - url: https://www.sfa.gov.sg/docs/default-source/circulars/others/2024/advisory-on-food-safety-practices-for-food-establishments_dec-24.pdf
+      title: Singapore Food Agency — Adopting Good Food Safety and Personal Hygiene Practices (6 December
+        2024)
+      usage: Cooking-temperature endpoint.
+    adjustment_note: Base for a chicken variation. The cuisine tag is a broad navigation label; no specific
+      regional authenticity is asserted.
+    review_focus: Check cod portion affordability, boneless handling, texture at the stated safe endpoint,
+      pan sticking, lemon balance and potato tenderness. Verify time with approximately 2 cm fillets.
+  lemon-pepper-chicken:
+    rationale: Reuses the fish meal's vegetables and flavour components with chicken, so the catalogue
+      offers a non-fish alternative without expanding the shopping vocabulary.
+    references:
+    - url: https://www.recipetineats.com/homemade-lemon-pepper-chicken/
+      title: Nagi Maehashi — Lemon Pepper Chicken (RecipeTin Eats)
+      usage: Lemon zest and pepper flavour concept only. No flour coating or source amounts are used;
+        our thigh-strip meal and sides are original.
+    - url: https://www.sfa.gov.sg/docs/default-source/circulars/others/2024/advisory-on-food-safety-practices-for-food-establishments_dec-24.pdf
+      title: Singapore Food Agency — Adopting Good Food Safety and Personal Hygiene Practices (6 December
+        2024)
+      usage: Chicken cooking endpoint and cross-contamination precautions.
+    adjustment_note: Chicken variation of lemon-pepper-fish. No more-protein claim; only the protein source
+      changes.
+    review_focus: Test 2 cm chicken strips, time to the specified endpoint, pan moisture, lemon bitterness
+      and balanced portions. Confirm that the ingredient is boneless skinless thigh.
+  pumpkin-lentil-soup:
+    rationale: Provides a substantial one-pot soup using dry lentils, pumpkin and potato, with no blender,
+      stock cube or cream needed. Useful for the soupy preference dimension and contrasting equipment/time
+      scenarios.
+    references:
+    - url: https://biancazapatka.com/en/pumpkin-lentil-curry/
+      title: Bianca Zapatka — Pumpkin Lentil Curry
+      usage: Pumpkin and red-lentil pairing and simmering concept. The potato soup, water-based cooking
+        liquid and seasoning are original project choices.
+    adjustment_note: Independent base recipe. Its low ingredient overlap with meat dishes adds variety
+      without introducing new catalogue names.
+    review_focus: Test the soup's thickness, pot capacity, lentil softness and salt/cumin balance. Portions
+      are intended as two substantial meal bowls. Verify 45-minute estimate including peeling pumpkin.
+  chicken-rice-porridge:
+    rationale: Adds a familiar rice-porridge meal and a genuinely longer-cooking option. Starting from
+      dry rice makes the total time honest and avoids silently requiring leftover rice. No added oil is
+      used.
+    references:
+    - url: https://www.madewithlau.com/recipes/chicken-congee
+      title: Daddy Lau — Congee (Made With Lau)
+      usage: Raw-rice porridge base concept. Project uses its own quantities, gentle simmer, simple ginger
+        seasoning and no source marinade.
+    - url: https://www.sfa.gov.sg/docs/default-source/circulars/others/2024/advisory-on-food-safety-practices-for-food-establishments_dec-24.pdf
+      title: Singapore Food Agency — Adopting Good Food Safety and Personal Hygiene Practices (6 December
+        2024)
+      usage: Chicken cooking endpoint and separate handling of raw meat.
+    adjustment_note: Base for mushroom-and-tofu porridge. low_oil is an internal qualitative tag here
+      because the recipe has no added oil, not a regulated nutrition claim.
+    review_focus: Test rice type and liquid amount, sticking, bowl size, 60-minute timing and chicken
+      endpoint. Confirm that the measured starting water amount is treated as a starting point, with texture
+      determining top-ups.
+  mushroom-rice-porridge:
+    rationale: A tofu-and-mushroom counterpart to chicken porridge that maintains a meaningful protein
+      ingredient and the same meal format. Reuses fresh shiitake and tofu from the other soup and rice
+      dishes.
+    references:
+    - url: https://www.madewithlau.com/recipes/chicken-congee
+      title: Daddy Lau — Congee (Made With Lau)
+      usage: Raw-rice porridge concept only; mushroom, tofu, soy seasoning and amounts are original.
+    adjustment_note: Mushroom-and-tofu variation of chicken-rice-porridge. Derive actual dietary eligibility
+      from ingredient metadata, particularly the selected soy sauce.
+    review_focus: Test seasoning without stock, mushroom texture, liquid ratio and portion size. Verify
+      fresh shiitake weight rather than substituting dried mushrooms at the same amount.
+  cucumber-tomato-chickpea-salad:
+    rationale: A no-appliance assembly option for users with already cooked rice, giving the catalogue
+      a useful equipment-filter boundary. Chickpeas and rice make it a meal, while cucumber and tomato
+      use shared perishable ingredients.
+    references:
+    - url: https://www.loveandlemons.com/chickpea-salad/
+      title: Jeanine Donofrio — Chickpea Salad (Love and Lemons)
+      usage: Chickpea, vegetable and lemon concept only; our rice meal and simple dressing are original.
+    - url: https://www.sfa.gov.sg/food-safety-tips/food-risk-concerns/risk-at-a-glance/fried-rice-syndrome
+      title: Singapore Food Agency — Fried Rice Syndrome
+      usage: Prompt chilling and cold storage of cooked rice; immediate service when freshly cooked rice
+        is used.
+    adjustment_note: Independent recipe. Fifteen minutes is assembly time with cooked rice already available;
+      it must not be offered as a 15-minute dry-rice substitution.
+    review_focus: Check filling portions, canned chickpea label, rice handling and lemon balance. Confirm
+      the UI preserves the advance-cooking caveat and does not automatically map uncooked rice to cooked
+      rice.
+  sesame-soba-tofu:
+    rationale: A noodle meal with a different texture from rice vermicelli, using shared tofu, carrot
+      and cucumber. Provides useful soy, sesame and soba-product composition cases for authoritative ingredient-based
+      filtering.
+    references:
+    - url: https://www.justonecookbook.com/soba-salad/
+      title: Nami — Soba Noodle Salad (Just One Cookbook)
+      usage: Noodle rinsing and substantial salad variation concepts; project dressing, tofu preparation,
+        amounts and prose are original.
+    adjustment_note: Base for an egg variation; no more-protein claim. Japanese is a broad catalogue label,
+      not an authenticity claim for this simplified dressing.
+    review_focus: Test noodle brand timing, sesame/soy balance and warm tofu with cooled noodles. Confirm
+      the selected soba's wheat/buckwheat composition and tofu's packet instructions before publishing
+      diet or allergen labels.
+  sesame-soba-egg:
+    rationale: An egg counterpart to tofu soba, retaining the same vegetables, dressing and noodle basket.
+      Gives an explicit egg-filter case without adding a new ingredient.
+    references:
+    - url: https://www.justonecookbook.com/soba-salad/
+      title: Nami — Soba Noodle Salad (Just One Cookbook)
+      usage: Noodle rinsing and egg-meal variation concept only; amounts, dressing and egg preparation
+        are project choices.
+    adjustment_note: Egg variation of sesame-soba-tofu. It replaces tofu rather than adding a certified
+      protein increase.
+    review_focus: Check egg doneness, portion appetite, noodle timing and the two-saucepan 30-minute estimate.
+      Keep egg, sesame, soy and soba composition visible to Role 2's metadata review.

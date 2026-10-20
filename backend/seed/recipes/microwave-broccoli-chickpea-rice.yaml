@@ -1,0 +1,66 @@
+id: 0c7bea35-103a-4199-b3cd-11cf607baf3f
+title: Microwave broccoli and chickpea rice
+variant_of: null
+cuisine: other
+total_minutes: 20
+active_minutes: 10
+difficulty: 1
+servings: 2
+equipment:
+- microwave
+taste_tags:
+- light
+- low_oil
+ingredients:
+- canonical_name: cooked rice
+  quantity: 350
+  unit: g
+  essential: true
+  prep_note: already cooked rice, cooled promptly and refrigerated below 4 C if not freshly cooked; do
+    not use rice left unrefrigerated or with uncertain storage
+- canonical_name: canned chickpea
+  quantity: 240
+  unit: g
+  essential: true
+  prep_note: drained cooked chickpeas, rinsed
+- canonical_name: broccoli
+  quantity: 250
+  unit: g
+  essential: true
+  prep_note: washed and cut into small even florets; tender stem thinly sliced
+- canonical_name: garlic
+  quantity: 6
+  unit: g
+  essential: false
+  prep_note: finely grated
+- canonical_name: canola oil
+  quantity: 5
+  unit: ml
+  essential: false
+- canonical_name: salt
+  quantity: 1
+  unit: g
+  essential: false
+- canonical_name: lemon
+  quantity: 0.5
+  unit: pcs
+  essential: false
+  prep_note: juice only
+- canonical_name: water
+  quantity: 60
+  unit: ml
+  essential: true
+steps:
+- Put the broccoli, garlic if using and half the water in a large microwave-safe bowl with room for the
+  remaining ingredients. Cover with a vented microwave-safe lid and microwave on high for about 3 to 4
+  minutes, until the broccoli starts to soften.
+- Open the lid away from your face. Stir in the rice, drained chickpeas, remaining water, oil and salt
+  if using. Cover loosely again and microwave on high for about 4 to 6 minutes, stirring thoroughly halfway
+  through; times depend on the microwave and portion size.
+- Check several places, including the centre, with a clean thermometer. Continue heating and stirring
+  until the rice mixture is at least 75 C for 2 minutes throughout. Allow to stand covered for 1 minute,
+  then stir again.
+- Add the lemon juice if using and divide into bowls. Serve immediately; only use rice that was safely
+  stored, because reheating cannot remove all risks from rice left out too long.
+source: 'original AI-assisted draft; concept/technique reference: https://www.panasonic.com/ca/consumer/home-appliances-learn/panasonickitchen/microwave-cooking-tips.html'
+reviewed: true

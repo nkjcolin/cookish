@@ -1,0 +1,63 @@
+id: ab302fa5-3663-4431-b28c-f380b5b9b1f7
+title: Steamed ginger cod with broccoli and rice
+variant_of: null
+cuisine: chinese
+total_minutes: 35
+active_minutes: 15
+difficulty: 1
+servings: 2
+equipment:
+- stove
+- steamer
+taste_tags:
+- light
+- low_oil
+ingredients:
+- canonical_name: uncooked rice
+  quantity: 160
+  unit: g
+  essential: true
+- canonical_name: cod fillet
+  quantity: 350
+  unit: g
+  essential: true
+  prep_note: boneless; thaw in the refrigerator if frozen
+- canonical_name: broccoli
+  quantity: 250
+  unit: g
+  essential: true
+  prep_note: cut into small florets
+- canonical_name: ginger
+  quantity: 20
+  unit: g
+  essential: true
+  prep_note: peeled and finely sliced
+- canonical_name: soy sauce
+  quantity: 15
+  unit: ml
+  essential: false
+- canonical_name: spring onion
+  quantity: 15
+  unit: g
+  essential: false
+  prep_note: thinly sliced
+- canonical_name: black pepper
+  quantity: 1
+  unit: g
+  essential: false
+- canonical_name: water
+  coarse_amount: for the rice according to its packet and the steamer according to its instructions
+  essential: true
+steps:
+- Start the uncooked rice in a covered saucepan using water and cooking time from the rice packet. Prepare
+  the topping while it cooks; keep the finished rice hot and serve both components together.
+- Set up the steamer with water according to its instructions. Put the fish on a heatproof plate and scatter
+  ginger over it; add soy sauce and black pepper if using.
+- When the steamer is producing steady steam, cover and cook the fish. Allow roughly 10 to 15 minutes,
+  adjusting for thickness, and continue until a clean thermometer in the thickest part reads at least
+  75 C for 2 minutes.
+- Steam the broccoli until tender, using a separate tray or steaming it after the fish if space is limited.
+  Keep the cooked components hot.
+- Check for any remaining bones, add spring onion if using and serve with the rice and broccoli immediately.
+source: 'original AI-assisted draft; concept/technique reference: https://www.madewithlau.com/recipes/steamed-fish-ginger-scallion'
+reviewed: true

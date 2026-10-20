@@ -1,0 +1,69 @@
+id: bf7c533d-ae14-4e97-b0a5-fa05ef11a822
+title: Chilli prawns with rice
+variant_of: c3729c50-e498-4026-94d0-a35154738ed9
+variant_label: prawn variation
+cuisine: other
+total_minutes: 35
+active_minutes: 20
+difficulty: 1
+servings: 2
+equipment:
+- stove
+taste_tags:
+- spicy
+- vegetable_rich
+ingredients:
+- canonical_name: prawn
+  quantity: 300
+  unit: g
+  essential: true
+  prep_note: raw peeled and deveined meat; thawed in the fridge if frozen
+- canonical_name: chilli paste
+  quantity: 15
+  unit: g
+  essential: true
+  prep_note: plain chilli paste without shrimp paste; heat varies by brand
+- canonical_name: onion
+  quantity: 100
+  unit: g
+  essential: true
+  prep_note: peeled and diced
+- canonical_name: garlic
+  quantity: 8
+  unit: g
+  essential: true
+  prep_note: peeled and minced
+- canonical_name: tomato
+  quantity: 300
+  unit: g
+  essential: true
+  prep_note: washed and diced
+- canonical_name: canola oil
+  quantity: 15
+  unit: ml
+  essential: true
+- canonical_name: salt
+  quantity: 1
+  unit: g
+  essential: true
+- canonical_name: uncooked rice
+  quantity: 180
+  unit: g
+  essential: true
+  prep_note: dry white rice
+- canonical_name: water
+  coarse_amount: enough to rinse and cook the rice plus a few splashes for the sauce
+  essential: true
+steps:
+- Rinse the rice and cook in a covered saucepan using its packet's water amount and cooking time. Rest
+  covered off the heat when cooked.
+- Prepare the onion, garlic and tomato. Keep the raw prawns and their utensils separate from the cooked
+  rice and vegetables.
+- Heat the oil in a frying pan over medium heat. Cook the onion for 4 minutes, then add the garlic and
+  chilli paste and stir for a minute.
+- Add the tomato, salt and a splash of water. Simmer for 6-8 minutes until the tomato forms a sauce, stirring
+  occasionally.
+- Add the prawns and turn them in the sauce for about 5-7 minutes. Verify the thickest prawns reach 75
+  C for 2 minutes; extend cooking as needed. Fluff the rice and serve immediately.
+source: 'original AI-assisted draft; concept/technique reference: https://rasamalaysia.com/sambal-udang-prawn-sambal/'
+reviewed: true

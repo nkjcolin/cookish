@@ -1,0 +1,60 @@
+id: eaacfdcd-aa3e-4fd9-9252-7602e8fedc65
+title: Quick tomato and egg rice
+variant_of: 645a8d38-bfae-47f2-b00e-3ca6828a964e
+variant_label: Quicker with cooked rice
+cuisine: chinese
+total_minutes: 20
+active_minutes: 20
+difficulty: 1
+servings: 2
+equipment:
+- stove
+taste_tags:
+- light
+- vegetable_rich
+ingredients:
+- canonical_name: cooked rice
+  quantity: 400
+  unit: g
+  essential: true
+  prep_note: already cooked rice, cooled promptly and refrigerated below 4 C if not freshly cooked; do
+    not use rice left unrefrigerated or with uncertain storage
+- canonical_name: tomato
+  quantity: 300
+  unit: g
+  essential: true
+  prep_note: cut into small wedges
+- canonical_name: egg
+  quantity: 3
+  unit: pcs
+  essential: true
+  prep_note: beaten
+- canonical_name: canola oil
+  quantity: 15
+  unit: ml
+  essential: true
+- canonical_name: salt
+  quantity: 1
+  unit: g
+  essential: false
+- canonical_name: spring onion
+  quantity: 10
+  unit: g
+  essential: false
+  prep_note: thinly sliced
+- canonical_name: water
+  quantity: 60
+  unit: ml
+  essential: true
+steps:
+- Break up the cooked rice clumps before starting. Heat two thirds of the oil in a large nonstick frying
+  pan, scramble the eggs until fully set, then transfer them to a clean plate.
+- Put the remaining oil and tomatoes in the pan. Stir for 2 minutes, add half the water, cover and cook
+  for about 3 minutes until the tomatoes soften.
+- Add the cooked rice, remaining water and salt if using. Fold through the tomatoes, cover and heat for
+  about 4 to 6 minutes, stirring to warm the rice evenly.
+- Return the eggs and spring onion if using and stir gently until combined. Stir and check several parts
+  with a clean food thermometer; keep the rice at 75 C or hotter for at least 2 minutes. Continue heating
+  if necessary and serve immediately. Reheating cannot make poorly stored rice safe.
+source: 'original AI-assisted draft; concept/technique reference: https://thewoksoflife.com/stir-fried-tomato-and-egg/'
+reviewed: true

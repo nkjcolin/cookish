@@ -1,0 +1,56 @@
+id: 404b4550-6cd6-4ee4-b79e-9b0b87161ece
+title: Tempeh and long bean stir-fry with rice
+variant_of: null
+cuisine: other
+total_minutes: 40
+active_minutes: 25
+difficulty: 1
+servings: 2
+equipment:
+- stove
+taste_tags: []
+ingredients:
+- canonical_name: tempeh
+  quantity: 300
+  unit: g
+  essential: true
+  prep_note: plain tempeh cut into 1 cm cubes
+- canonical_name: long bean
+  quantity: 250
+  unit: g
+  essential: true
+  prep_note: washed and trimmed; cut into 3 cm lengths
+- canonical_name: garlic
+  quantity: 8
+  unit: g
+  essential: true
+  prep_note: peeled and finely chopped
+- canonical_name: soy sauce
+  quantity: 20
+  unit: ml
+  essential: true
+- canonical_name: canola oil
+  quantity: 15
+  unit: ml
+  essential: true
+- canonical_name: uncooked rice
+  quantity: 180
+  unit: g
+  essential: true
+  prep_note: dry white rice
+- canonical_name: water
+  coarse_amount: enough for rinsing and cooking the rice plus a few splashes for the stir-fry
+  essential: true
+steps:
+- Rinse the rice, drain, and place in a saucepan with the water amount directed on its packet. Bring to
+  a boil, cover, and cook on low heat for the packet's time, then rest covered off the heat while finishing
+  the stir-fry.
+- While the rice cooks, wash and cut the beans, cube the tempeh, and chop the garlic.
+- Heat the oil in a lidded frying pan over medium heat. Cook the tempeh for 6-8 minutes, turning to colour
+  several sides.
+- Add the garlic and beans. Stir for a minute, then add a splash of water, cover, and cook for 8-10 minutes,
+  stirring occasionally and adding a little more water if dry, until the beans are tender.
+- Stir in the soy sauce and cook uncovered for 1-2 minutes to coat the tempeh. Check the tempeh is cooked
+  through according to its packet, fluff the rice, and serve together immediately.
+source: 'original AI-assisted draft; concept/technique reference: https://www.cookmeindonesian.com/tumis-tempe-kacang-panjang-stir-fried-tempeh-with-long-beans-vegan/'
+reviewed: true

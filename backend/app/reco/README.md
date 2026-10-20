@@ -9,7 +9,7 @@ The design is in [SPEC.md](../../../docs/SPEC.md), **B5**: the Cook algorithm (h
 | Path | Contents |
 |---|---|
 | `backend/app/reco/` | Pure recommendation functions, no database imports (empty) |
-| `backend/seed/recipes/*.yaml` | 40 to 60 recipes, one per file (empty) |
+| `backend/seed/recipes/*.yaml` | Target: 40 to 60 reviewed recipes; 48 AI-assisted recipes have human content approval; no cooking trials |
 | `backend/app/services/cook.py` | `start_session`, `adjust`, `next_suggestion`, `previous_suggestion`, `select`, `confirm`, `give_feedback`, `get_recipe`, `set_star`, `use_first` (optional) |
 | `backend/app/services/shop.py` | `start_session`, `adjust`, `confirm_basket` |
 | `eval/reco_scenarios/` | The 100 evaluation scenarios |
@@ -97,6 +97,42 @@ One file per recipe in `backend/seed/recipes/`, in the format in [seed/README.md
 - `cuisine`, `equipment` and `taste_tags` take only the values in `app/schemas/common.py`.
 
 Role 2 builds the ingredient catalogue from your recipes, so **send them your ingredient list early**.
+
+The [catalogue handoff](../../../docs/role5-handoff.md) contains 48 complete
+recipes (28 bases and 20 variants), a synchronised recipe index, the same 42-name
+ingredient request list and a validator. No outlines remain. Each recipe
+includes its meal portions and any accompanying rice, noodles or potatoes, so
+availability checks and basket generation must include those components.
+Existing UUIDs are preserved. Wenlong approved all 48 recipe contents on
+2026-10-20, recorded in `seed/recipe_review.yaml`; all flags are `reviewed: true`.
+
+The [recipe review guide](../../../docs/recipe-review.md) provides all recipe
+cards, selection rationale, named external concept/technique references and
+human review checks. The prose is original and AI-assisted; source references
+do not establish human approval or validate the adapted quantities, timings,
+dietary suitability or nutrition. `seed/recipe_review.yaml` stores review
+coordination metadata and adds no runtime fields to the recipe format.
+Human approval covers the recipe content. Cooking trials have not been performed.
+
+Use the existing taste-tag vocabulary consistently:
+
+- `low_oil`: at most 5 ml total added cooking oil, including seasoning oils,
+  per two servings. This is a cooking-method tag, not a total-fat claim.
+- `high_protein`: reserved for an explicit protein addition to a base recipe;
+  it is a qualitative ranking feature pending nutrition metrics, not a label
+  inferred for every animal-protein or legume recipe.
+- `vegetable_rich`: at least 300 g of the defined vegetable set per two
+  servings. The review guide details the counted ingredients and the other
+  transparent authoring heuristics; this is a culinary feature, not a
+  nutrition claim.
+- Equipment lists mean AND: all listed appliances are required. Total times
+  include meal staples and can assume the stated parallel cooking.
+
+Role 2 still needs to turn the ingredient request list into authoritative
+catalogue rows, settle water's assumed-available/no-purchase treatment, and
+agree count/weight/pack conversions. Role 4 consumes that same final catalogue.
+The reviewed recipe set does not itself implement the loader, recommendation
+algorithms or Cook/Shop services; those integration tasks remain.
 
 ## Tasks, in order
 

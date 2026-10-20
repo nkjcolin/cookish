@@ -1,0 +1,72 @@
+id: 5189d7a4-b3b0-4bbb-90f3-0622f193d72a
+title: Chicken, egg and vegetable fried rice
+variant_of: 82837c0b-d649-4fe6-aa5b-196c64459b28
+variant_label: More protein with added chicken
+cuisine: chinese
+total_minutes: 30
+active_minutes: 30
+difficulty: 1
+servings: 2
+equipment:
+- stove
+taste_tags:
+- light
+- high_protein
+ingredients:
+- canonical_name: cooked rice
+  quantity: 400
+  unit: g
+  essential: true
+  prep_note: already cooked rice, cooled promptly and refrigerated below 4 C if not freshly cooked; do
+    not use rice left unrefrigerated or with uncertain storage
+- canonical_name: chicken thigh
+  quantity: 250
+  unit: g
+  essential: true
+  prep_note: boneless skinless meat, cut into small pieces using a separate board
+- canonical_name: egg
+  quantity: 2
+  unit: pcs
+  essential: true
+  prep_note: beaten
+- canonical_name: carrot
+  quantity: 100
+  unit: g
+  essential: true
+  prep_note: cut into small dice
+- canonical_name: frozen pea
+  quantity: 80
+  unit: g
+  essential: true
+- canonical_name: garlic
+  quantity: 8
+  unit: g
+  essential: false
+  prep_note: finely chopped
+- canonical_name: spring onion
+  quantity: 10
+  unit: g
+  essential: false
+  prep_note: thinly sliced
+- canonical_name: soy sauce
+  quantity: 15
+  unit: ml
+  essential: false
+- canonical_name: canola oil
+  quantity: 15
+  unit: ml
+  essential: true
+steps:
+- Heat one third of the oil in a large nonstick pan. Scramble the eggs until fully set and transfer them
+  to a clean plate.
+- Add another third of the oil and the chicken. Stir-fry until cooked, using a clean thermometer to check
+  several thick pieces reach at least 75 C for 2 minutes. Transfer to a second clean plate, keeping raw-chicken
+  utensils separate.
+- Add the remaining oil, garlic if using, carrot and peas. Cook until the vegetables are tender, then
+  add the loosened rice and stir-fry for about 5 minutes.
+- Return the cooked chicken and egg, add soy sauce and spring onion if using, and turn everything through
+  the rice. Stir and check several parts with a clean food thermometer; keep the rice at 75 C or hotter
+  for at least 2 minutes. Continue heating if necessary and serve immediately. Reheating cannot make poorly
+  stored rice safe.
+source: 'original AI-assisted draft; concept/technique reference: https://thewoksoflife.com/classic-chicken-fried-rice/'
+reviewed: true

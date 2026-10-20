@@ -1,0 +1,67 @@
+id: cec3641a-2ff2-44ae-b64c-8e59d69bea59
+title: Tofu, mushroom and cabbage noodle soup
+variant_of: null
+cuisine: chinese
+total_minutes: 30
+active_minutes: 15
+difficulty: 1
+servings: 2
+equipment:
+- stove
+taste_tags:
+- light
+- soupy
+- low_oil
+- vegetable_rich
+ingredients:
+- canonical_name: rice vermicelli
+  quantity: 150
+  unit: g
+  essential: true
+  prep_note: dry; prepare according to packet
+- canonical_name: firm tofu
+  quantity: 300
+  unit: g
+  essential: true
+  prep_note: drained and cubed
+- canonical_name: fresh shiitake mushroom
+  quantity: 150
+  unit: g
+  essential: true
+  prep_note: cleaned and sliced; tough stems removed
+- canonical_name: cabbage
+  quantity: 200
+  unit: g
+  essential: true
+  prep_note: thinly sliced
+- canonical_name: ginger
+  quantity: 10
+  unit: g
+  essential: true
+  prep_note: peeled and sliced
+- canonical_name: spring onion
+  quantity: 10
+  unit: g
+  essential: false
+  prep_note: thinly sliced
+- canonical_name: soy sauce
+  quantity: 15
+  unit: ml
+  essential: false
+- canonical_name: water
+  essential: true
+  quantity: 1000
+  unit: ml
+  prep_note: measured cooking water; additional water for rinsing or preparing the noodles/rice as instructed,
+    plus small top-ups if needed
+steps:
+- Prepare the rice vermicelli as directed on its packet, then drain. Keep it separate while the broth
+  cooks.
+- Bring the measured broth water to a boil with the ginger and mushrooms. Simmer until the mushrooms are
+  tender.
+- Add cabbage and tofu. Bring the soup back to a boil, then simmer until the cabbage is soft and the tofu
+  is hot throughout.
+- Add the prepared noodles and soy sauce if using. Heat together, divide between bowls and add spring
+  onion if using.
+source: 'original AI-assisted draft; concept/technique reference: https://thewoksoflife.com/tofu-soup/'
+reviewed: true

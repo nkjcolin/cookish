@@ -1,0 +1,54 @@
+id: aa138433-2918-4a6f-b361-c1fe5eedeaaf
+title: Mushroom omelette with rice
+variant_of: null
+cuisine: other
+total_minutes: 35
+active_minutes: 20
+difficulty: 1
+servings: 2
+equipment:
+- stove
+taste_tags:
+- light
+ingredients:
+- canonical_name: egg
+  quantity: 4
+  unit: pcs
+  essential: true
+- canonical_name: fresh shiitake mushroom
+  quantity: 180
+  unit: g
+  essential: true
+  prep_note: tough stems removed; caps sliced
+- canonical_name: spring onion
+  quantity: 15
+  unit: g
+  essential: true
+  prep_note: washed and finely sliced
+- canonical_name: canola oil
+  quantity: 10
+  unit: ml
+  essential: true
+- canonical_name: salt
+  quantity: 1
+  unit: g
+  essential: true
+- canonical_name: uncooked rice
+  quantity: 150
+  unit: g
+  essential: true
+  prep_note: dry white rice
+- canonical_name: water
+  coarse_amount: for rinsing and cooking the rice according to its packet
+  essential: true
+steps:
+- 'Start the rice first: rinse the uncooked rice, then cook it in water in a covered saucepan following
+  its packet instructions. Prepare the rest of the meal while it cooks; keep the rice covered until serving.'
+- Beat the eggs with the salt and spring onion. Heat half the canola oil in a non-stick pan and cook the
+  fresh shiitake mushrooms for 5 to 7 minutes until tender and their liquid has evaporated.
+- Spread the mushrooms evenly, add the remaining oil, then pour over the egg mixture. Cook over medium-low
+  heat, gently lifting the set edges to let uncooked egg reach the pan.
+- Cover and cook for about 4 to 6 minutes until the centre is fully set with no runny egg; lower the heat
+  if the underside browns too quickly. Divide the omelette and serve with the rice.
+source: 'original AI-assisted draft; concept/technique reference: https://www.recipetineats.com/omelette/'
+reviewed: true

@@ -1,0 +1,58 @@
+id: bb825baf-2b21-466f-8709-03d9b8a3abcf
+title: Sesame soba with egg and vegetables
+variant_of: 4a8e2e32-267d-4c29-a05c-179aa9f0ce24
+variant_label: egg variation
+cuisine: japanese
+total_minutes: 30
+active_minutes: 20
+difficulty: 1
+servings: 2
+equipment:
+- stove
+taste_tags:
+- light
+- vegetable_rich
+ingredients:
+- canonical_name: soba noodle
+  quantity: 180
+  unit: g
+  essential: true
+  prep_note: dry soba; check packet cooking time and product composition
+- canonical_name: egg
+  quantity: 4
+  unit: pcs
+  essential: true
+  prep_note: whole chicken eggs
+- canonical_name: cucumber
+  quantity: 200
+  unit: g
+  essential: true
+  prep_note: washed and cut into thin strips
+- canonical_name: carrot
+  quantity: 150
+  unit: g
+  essential: true
+  prep_note: washed and coarsely grated
+- canonical_name: sesame oil
+  quantity: 10
+  unit: ml
+  essential: true
+- canonical_name: soy sauce
+  quantity: 20
+  unit: ml
+  essential: true
+- canonical_name: water
+  coarse_amount: enough to boil and cool the eggs and separately boil and rinse the noodles
+  essential: true
+steps:
+- Put the eggs in a saucepan, cover with water, and bring to a boil. Reduce to a gentle simmer for 10-12
+  minutes, until the whites and yolks are fully firm. Cool under cold running water, peel, and quarter.
+- While the eggs cook, wash and prepare the cucumber and carrot. Mix the sesame oil and soy sauce in a
+  large serving bowl.
+- In a separate saucepan, bring fresh water to a boil and cook the soba for the time on its packet, stirring
+  gently to separate the strands.
+- Drain the noodles and rinse under cold running water to remove surface starch, then drain well.
+- Toss the noodles and vegetables in the dressing, divide between bowls, and top with the egg. Serve immediately
+  or refrigerate promptly if keeping for later.
+source: 'original AI-assisted draft; concept/technique reference: https://www.justonecookbook.com/soba-salad/'
+reviewed: true

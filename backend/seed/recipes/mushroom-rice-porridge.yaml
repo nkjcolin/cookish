@@ -1,0 +1,64 @@
+id: ed9445a6-d029-4143-bbb5-22f64f133a2b
+title: Mushroom and tofu rice porridge
+variant_of: 1d920435-f931-4d7b-91d2-86d184e31e3b
+variant_label: mushroom and tofu variation
+cuisine: chinese
+total_minutes: 60
+active_minutes: 20
+difficulty: 1
+servings: 2
+equipment:
+- stove
+taste_tags:
+- light
+- soupy
+- low_oil
+ingredients:
+- canonical_name: uncooked rice
+  quantity: 140
+  unit: g
+  essential: true
+  prep_note: dry white rice; rinsed and drained
+- canonical_name: fresh shiitake mushroom
+  quantity: 150
+  unit: g
+  essential: true
+  prep_note: cleaned; tough stems removed and caps thinly sliced
+- canonical_name: firm tofu
+  quantity: 300
+  unit: g
+  essential: true
+  prep_note: drained and cut into 1.5 cm cubes
+- canonical_name: ginger
+  quantity: 15
+  unit: g
+  essential: true
+  prep_note: peeled and cut into fine strips
+- canonical_name: spring onion
+  quantity: 15
+  unit: g
+  essential: false
+  prep_note: washed and finely sliced
+- canonical_name: soy sauce
+  quantity: 20
+  unit: ml
+  essential: true
+- canonical_name: water
+  essential: true
+  quantity: 1400
+  unit: ml
+  prep_note: measured cooking water; additional water for rinsing or preparing the noodles/rice as instructed,
+    plus small top-ups if needed
+steps:
+- Rinse and drain the rice. Add to a large saucepan with the ginger and cooking water, using a little
+  more than a litre of water per 100 g dry rice as a starting point. Bring to a boil.
+- Lower to a gentle simmer, leave the lid partly open, and cook for 35-40 minutes, stirring regularly
+  along the base. Add more water if needed as the grains soften and split.
+- Meanwhile, prepare the mushrooms, tofu and spring onion if using. Add the mushrooms and tofu once the
+  rice is very soft.
+- Simmer for 10-12 minutes, stirring gently, until the mushrooms are tender and the tofu is hot through.
+  Stir in the soy sauce and spring onion if using.
+- Check the porridge is loose enough to spoon, adding water and bringing back to a simmer if needed. Divide
+  into bowls and serve promptly.
+source: 'original AI-assisted draft; concept/technique reference: https://www.madewithlau.com/recipes/chicken-congee'
+reviewed: true

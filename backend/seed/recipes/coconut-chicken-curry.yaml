@@ -1,0 +1,89 @@
+id: f7c59407-af6a-4501-8f26-ce7668147f45
+title: Coconut chicken and vegetable curry with rice
+variant_of: 5bd66173-7561-4c71-965d-ee17a8c8ebed
+variant_label: chicken
+cuisine: malay
+total_minutes: 45
+active_minutes: 20
+difficulty: 1
+servings: 2
+equipment:
+- stove
+taste_tags:
+- rich
+- spicy
+- vegetable_rich
+ingredients:
+- canonical_name: chicken thigh
+  quantity: 300
+  unit: g
+  essential: true
+  prep_note: raw boneless skinless meat, cut into 2 cm pieces
+- canonical_name: coconut milk
+  quantity: 200
+  unit: ml
+  essential: true
+  prep_note: unsweetened cooking coconut milk
+- canonical_name: carrot
+  quantity: 150
+  unit: g
+  essential: true
+  prep_note: thinly sliced
+- canonical_name: long bean
+  quantity: 180
+  unit: g
+  essential: true
+  prep_note: trimmed and cut into short lengths
+- canonical_name: onion
+  quantity: 80
+  unit: g
+  essential: true
+  prep_note: finely chopped
+- canonical_name: garlic
+  quantity: 8
+  unit: g
+  essential: true
+  prep_note: finely chopped
+- canonical_name: ginger
+  quantity: 8
+  unit: g
+  essential: true
+  prep_note: finely chopped
+- canonical_name: turmeric powder
+  quantity: 1
+  unit: g
+  essential: true
+- canonical_name: chilli paste
+  quantity: 10
+  unit: g
+  essential: true
+  prep_note: plain chilli paste; not sambal or curry paste
+- canonical_name: canola oil
+  quantity: 10
+  unit: ml
+  essential: true
+- canonical_name: salt
+  quantity: 1
+  unit: g
+  essential: true
+- canonical_name: uncooked rice
+  quantity: 150
+  unit: g
+  essential: true
+  prep_note: dry white rice
+- canonical_name: water
+  coarse_amount: for rinsing and cooking the rice according to its packet; extra water for a loose curry
+    sauce
+  essential: true
+steps:
+- 'Start the rice first: rinse the uncooked rice, then cook it in water in a covered saucepan following
+  its packet instructions. Prepare the rest of the meal while it cooks; keep the rice covered until serving.'
+- Heat the canola oil in a saucepan. Cook the onion for 4 minutes, then stir in the garlic, ginger, turmeric
+  and chilli paste for 1 minute.
+- Add the chicken thigh pieces and turn for 3 minutes. Add the coconut milk, carrot, long bean, salt and
+  enough water to make a loose sauce.
+- 'Simmer gently, partly covered, for about 15 to 20 minutes until the vegetables are tender. Check the
+  thickest chicken pieces with a food thermometer: they must reach at least 75 C and remain there for
+  2 minutes. Continue simmering if needed, then serve with the rice.'
+source: 'original AI-assisted draft; concept/technique reference: https://www.nyonyacooking.com/recipes/the-best-sayur-lodeh-vegetables-in-coconut-milk~SMijNnrFRE'
+reviewed: true

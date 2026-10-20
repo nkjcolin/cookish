@@ -1,0 +1,64 @@
+id: bd2118d6-393b-413f-b7e6-b3116b108437
+title: Ginger chicken and bok choy rice with less oil
+variant_of: 85d5ed52-10d6-4769-8bc5-435decbd08d8
+variant_label: Less added oil
+cuisine: chinese
+total_minutes: 45
+active_minutes: 15
+difficulty: 2
+servings: 2
+equipment:
+- stove
+taste_tags:
+- light
+- low_oil
+ingredients:
+- canonical_name: uncooked rice
+  quantity: 200
+  unit: g
+  essential: true
+  prep_note: white rice, rinsed and drained
+- canonical_name: chicken thigh
+  quantity: 300
+  unit: g
+  essential: true
+  prep_note: boneless and skinless, cut into small bite-size pieces
+- canonical_name: bok choy
+  quantity: 200
+  unit: g
+  essential: true
+  prep_note: washed, stems thinly sliced and leaves cut separately
+- canonical_name: ginger
+  quantity: 20
+  unit: g
+  essential: true
+  prep_note: peeled and finely sliced
+- canonical_name: garlic
+  quantity: 8
+  unit: g
+  essential: false
+  prep_note: finely chopped
+- canonical_name: soy sauce
+  quantity: 15
+  unit: ml
+  essential: false
+- canonical_name: spring onion
+  quantity: 10
+  unit: g
+  essential: false
+  prep_note: thinly sliced
+- canonical_name: water
+  quantity: 400
+  unit: ml
+  essential: true
+steps:
+- Put the rice, water, ginger, garlic if using, and soy sauce if using in a heavy saucepan with a close-fitting
+  lid. Stir once and distribute the chicken and bok choy stems evenly over the rice.
+- Bring to a full simmer, cover and lower the heat. Simmer for about 20 to 25 minutes, checking that the
+  rice is becoming tender; if the pan dries before the rice is cooked, add a little more drinking water.
+- Check the centre of several of the largest chicken pieces with a clean food thermometer. Continue covered
+  cooking until they reach at least 75 C for 2 minutes; elapsed time alone does not establish doneness.
+- Fold in the bok choy leaves, cover and cook for another 2 to 3 minutes until wilted. Turn off the heat,
+  rest covered for 5 minutes, fluff gently, and finish with spring onion if using.
+source: 'original AI-assisted draft; concept/technique reference: https://www.recipetineats.com/ginger-chicken-and-rice/'
+reviewed: true

@@ -1,0 +1,57 @@
+id: 645a8d38-bfae-47f2-b00e-3ca6828a964e
+title: Tomato and egg rice bowls
+variant_of: null
+cuisine: chinese
+total_minutes: 35
+active_minutes: 20
+difficulty: 1
+servings: 2
+equipment:
+- stove
+taste_tags:
+- light
+- vegetable_rich
+ingredients:
+- canonical_name: uncooked rice
+  quantity: 200
+  unit: g
+  essential: true
+- canonical_name: tomato
+  quantity: 300
+  unit: g
+  essential: true
+  prep_note: cut into wedges
+- canonical_name: egg
+  quantity: 3
+  unit: pcs
+  essential: true
+  prep_note: beaten
+- canonical_name: canola oil
+  quantity: 15
+  unit: ml
+  essential: true
+- canonical_name: salt
+  quantity: 1
+  unit: g
+  essential: false
+- canonical_name: water
+  coarse_amount: for the rice according to its packet and a splash for the tomatoes
+  essential: true
+- canonical_name: spring onion
+  quantity: 10
+  unit: g
+  essential: false
+  prep_note: thinly sliced
+steps:
+- Start the uncooked rice in a covered saucepan using water and cooking time from the rice packet. Prepare
+  the topping while it cooks; keep the finished rice hot and serve both components together.
+- Warm two thirds of the oil in a nonstick pan. Stir the beaten eggs over medium heat until set, then
+  transfer them to a clean bowl.
+- Use the remaining oil to soften the tomatoes for a few minutes. Add a splash of water, cover and cook
+  until the wedges release a sauce.
+- Fold the eggs into the tomatoes. Add the salt if using and heat until the eggs are completely cooked
+  and the topping is hot throughout.
+- Divide the cooked rice between bowls, spoon over the topping and add the spring onion if using. Serve
+  immediately.
+source: 'original AI-assisted draft; concept/technique reference: https://thewoksoflife.com/stir-fried-tomato-and-egg/'
+reviewed: true

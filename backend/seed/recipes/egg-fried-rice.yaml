@@ -1,0 +1,62 @@
+id: 82837c0b-d649-4fe6-aa5b-196c64459b28
+title: Egg fried rice with vegetables
+variant_of: null
+cuisine: chinese
+total_minutes: 20
+active_minutes: 20
+difficulty: 1
+servings: 2
+equipment:
+- stove
+taste_tags:
+- light
+ingredients:
+- canonical_name: cooked rice
+  quantity: 400
+  unit: g
+  essential: true
+  prep_note: already cooked rice; if stored, it must have been chilled promptly below 4 C and kept refrigerated;
+    break up clumps
+- canonical_name: egg
+  quantity: 2
+  unit: pcs
+  essential: true
+  prep_note: beaten
+- canonical_name: carrot
+  quantity: 100
+  unit: g
+  essential: false
+  prep_note: cut into small dice
+- canonical_name: frozen pea
+  quantity: 80
+  unit: g
+  essential: false
+- canonical_name: garlic
+  quantity: 8
+  unit: g
+  essential: false
+  prep_note: finely chopped
+- canonical_name: canola oil
+  quantity: 15
+  unit: ml
+  essential: true
+- canonical_name: soy sauce
+  quantity: 15
+  unit: ml
+  essential: false
+- canonical_name: spring onion
+  quantity: 10
+  unit: g
+  essential: false
+  prep_note: thinly sliced
+steps:
+- Use already cooked rice that has been handled safely; the time here excludes cooking rice from dry.
+  Do not use rice with uncertain storage history.
+- Heat one third of the oil in a large nonstick pan. Stir the beaten eggs until set and transfer them
+  to a clean bowl.
+- Add the remaining oil. Stir-fry the garlic, carrot and peas if using until the vegetables are tender.
+- Add the rice, break up clumps and stir until hot throughout. Fold in the eggs and soy sauce if using.
+  For refrigerated rice, ensure the whole mixture reaches at least 75 C for 2 minutes; reheat only once.
+- Add spring onion if using and serve immediately. Heating cannot make poorly stored rice safe.
+source: 'original AI-assisted draft; concept/technique reference: https://www.madewithlau.com/recipes/egg-fried-rice'
+reviewed: true
