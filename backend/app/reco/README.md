@@ -8,7 +8,7 @@ The design is in [SPEC.md](../../../docs/SPEC.md), **B5**: the Cook algorithm (h
 
 | Path | Contents |
 |---|---|
-| `backend/app/reco/` | Pure Cook filtering, stock assessment, scoring, suggestions and adjustments; Shop remains to implement |
+| `backend/app/reco/` | Pure Cook and Shop planning, stock assessment, scoring, adjustments and feedback learning |
 | `backend/seed/recipes/*.yaml` | Target: 40 to 60 reviewed recipes; 48 AI-assisted recipes have human content approval; no cooking trials |
 | `backend/app/services/cook.py` | `start_session`, `adjust`, `next_suggestion`, `previous_suggestion`, `select`, `confirm`, `give_feedback`, `get_recipe`, `set_star`, `use_first` (optional) |
 | `backend/app/services/shop.py` | `start_session`, `adjust`, `confirm_basket` |
@@ -23,7 +23,7 @@ You also own the taste-tag list in `app/schemas/common.py` (change it through th
 - **`app/db/session.py`**: `transaction()`, one per request.
 - **`app/clock.py`**: today's date in Singapore.
 - **The recipe file format**, agreed with Role 2, in [seed/README.md](../../seed/README.md).
-- **The pure Cook engine**, described below, tested independently of those service stubs.
+- **The pure Cook/Shop engines and learning**, described below, tested independently of those service stubs.
 
 ## Cook engine: implemented milestone
 
@@ -33,9 +33,9 @@ and classifies stock. `models.py` defines internal inputs and results;
 `config.py` contains all initial scoring weights. These modules perform no I/O,
 database access, live clock reads or session persistence.
 
-The **public Cook/Shop services still return mocks**. This milestone does not
-claim a working deployed recommendation flow, feedback persistence, a basket
-algorithm or completed evaluation scenarios.
+The **public Cook/Shop services still return mocks**. The pure basket and learning
+algorithms are implemented; database sessions, feedback persistence, deployed
+recommendation flows and evaluation scenarios remain to implement.
 
 ### Inputs and integration
 
@@ -54,7 +54,8 @@ The future service adapter supplies:
 Internal `CatalogIngredient.perishable` needs an agreed mapping from Role 2's
 catalogue data; it is not inferred from recipe names. Main-protein learning
 features remain pending a similarly authoritative mapping. The initial engine
-reads `tag:<tag>` and `cuisine:<cuisine>` weights; it does not update them.
+reads `tag:<tag>` and `cuisine:<cuisine>` weights. `learning.py` produces those
+weights from confirmed cooking and subsequent feedback.
 
 Typical service flow, once its repository adapter exists:
 
@@ -165,13 +166,133 @@ the engine never loosens a restriction to fabricate an answer. Only
 those soft filters actually restores a candidate after the hard gate. Difficulty
 caps and skipped IDs are not silently removed.
 
+## Shop engine: implemented milestone
+
+`shop.py` provides `new_shop_session`, `adjust_shop`, `plan_shop`,
+`shopping_list` and `to_basket`. `shop_models.py` holds internal inputs/results.
+Use `plan_shop` for hard filtering before shopping; the lower-level
+`shopping_list` assumes its caller has already selected eligible meals.
+
+In addition to the Cook inputs, the adapter supplies a `PurchaseSpec` for every
+eligible ingredient: category, explicit `buyable` flag, purchase unit, size and
+measure, and the estimated shelf life at default storage. Pack fields must be
+complete or all null. Missing rows raise an integration error rather than
+silently dropping an ingredient or treating it as safe. `buyable=False` is an
+explicit catalogue policy for something such as household tap water; the engine
+does not infer it from a name. No authoritative ingredient CSV exists yet.
+
+The algorithm is deterministic and bounded, with no optimality claim:
+
+1. Apply the same review/allergen/diet/equipment/strict-time gate as Cook.
+   Score eligible recipes by learned/static preference and effort, ignoring
+   stock for admission. The public preferred time remains a soft penalty.
+2. Keep the best-scoring variant in each family, then take at most 20 families.
+   Choose up to the requested number of meals by beam search of width 10.
+   No dish family repeats. A small catalogue can therefore return fewer meals.
+3. Score combinations with preference/effort, +0.5 per shared non-staple
+   occurrence beyond the first, +1 per ingredient with confirmed usable stock,
+   +0.5 per additional cuisine, and −0.5 per leftover pack fraction.
+   Main-protein variety awaits authoritative metadata. Coefficients are hand-set
+   in `config.py`; these are not evaluation results.
+4. Aggregate all ingredients, including optional ones and meal staples, scaled
+   by people/recipe servings. Subtract each compatible confirmed counted batch
+   once across the entire plan, then round the deficit up to whole packs.
+   Rational arithmetic preserves exact decimal quantities during aggregation.
+5. State-tracked ingredients marked `enough` and confirmed within 14 days are
+   omitted. `low`/`out`/absent ingredients are included with the planned amount;
+   no numeric stock or pack count is invented for state tracking. This
+   confirmation rule applies to pantry stock too. Untracked staples retain the
+   documented assumed-available policy.
+6. `unknown`, stale/future/invalid confirmations, tracking/unit mismatches and
+   freshness `check` stay visible with `needs_check=True`. Confirmed stock can
+   reduce the tentative purchase; uncertain stock cannot. An uncertain second
+   batch stays visible even when a confirmed batch already covers the plan.
+   Expired stock never reduces a purchase. Refresh the inventory and rebuild
+   the basket after a check; no stock is changed by planning.
+
+For example, two meals needing three eggs each for two people become twelve
+eggs for four people. With five confirmed eggs at home and ten eggs per tray,
+the basket suggests one tray, with three eggs left over. If the five eggs are
+uncertain, the tentative list suggests two trays and says to check at home.
+
+Coarse or conflicting recipe units, missing pack metadata and incompatible
+purchase measures retain the item with `suggested_packs=None` and an explicit
+quantity/unit check. Counts are not converted between pieces and grams. A
+suggestion over the existing 50-pack confirmation limit is similarly flagged.
+**The service must resolve these cases or reject confirmation with an existing
+validation error; it must never treat null as a verified one-pack purchase.**
+The nullable public field is unchanged; this unresolved-counted-item behavior
+needs Role 1/2 integration review before wiring the flow.
+
+`more_vegetables` adds +2 for `vegetable_rich`. `longer_lasting` adds up to +1
+from mean non-staple shelf life, capped at 30 days; unknown life earns zero.
+These tags bias ranking rather than eliminate all candidates.
+`cover_more_meals` increases the request by one per deliberate adjustment,
+capped at seven, unless the same patch explicitly supplies `meals`.
+Tags accumulate; people and explicit meal counts can change in either direction.
+The service must replay retries rather than apply an adjustment twice.
+
+`ShopPlan` retains the requested count; `to_basket` reports the actual number
+of planned meals in `Basket.meals`. It derives stable item UUIDs from the saved
+basket UUID and ingredient UUID. Persist those exact IDs for confirmation;
+assign a fresh basket UUID to a new basket revision. An empty plan means no
+hard-eligible recipes: map it to `NO_RESULT` with `relaxable: []`. A valid plan
+with every ingredient at home can have zero purchase items. There are no prices,
+cost totals or budget promises.
+
+## Feedback learning: implemented milestone
+
+`LearningState` belongs to one **household**, matching SPEC A6. This is not a
+separate model for each household member. `learn` accepts a trusted cook-record
+ID, its unchanged recipe/features, confirmed status and optional rating;
+`taste_weights` returns the map consumed by both Cook and Shop.
+
+| Evidence for one cooked meal | Feature contribution before clipping |
+|---|---|
+| Confirmed cooked, no rating yet | +0.0625 (step/4) |
+| Like | +0.25 |
+| Maybe | 0 |
+| Dislike | −0.25 |
+| Selected, skipped or abandoned | 0; a rating is rejected before confirmation |
+
+The step is 0.25 and each feature is clipped to [−2, +2]. A meal contributes to
+each distinct taste tag and its cuisine. A Like on a Chinese `low_oil` recipe,
+for example, increases `cuisine:chinese` and `tag:low_oil` by 0.25 each before
+clipping. A future recipe sharing both features gains 0.5 preference points;
+one sharing only the cuisine gains 0.25. Hard filters still run first.
+
+SPEC B5 mentions both no-rating neutrality and a small cooked-without-rating
+reward. The implemented interpretation is a **provisional cooking reward**:
+a later rating replaces it. Thus Like totals +0.25, not +0.3125, and Maybe
+removes the provisional contribution so that meal has no taste effect.
+No separate reward is given just for a missing feedback request.
+
+The state holds one evidence entry per cook record in first-confirmation order.
+Retries are no-ops; a late confirmation retry cannot erase a rating. Changed
+ratings replace the same entry. The engine replays evidence, clipping after
+each meal, because subtracting an old delta from a saturated weight loses
+information. Recipe identity/features for an existing entry cannot change.
+The current state starts from zero, rather than importing already clipped
+weights without their evidence.
+
+**Persistence handoff:** Role 2/5 must agree how to retain first-confirmation
+order, the feature snapshot and current rating for every confirmed cook record.
+Existing clipped `preferences.taste_weights` alone is insufficient for rating
+replacement. Persist the evidence and derived weights in one household-scoped
+transaction, with locking/revision checks to prevent concurrent lost updates.
+Load the record under the authenticated household and confirm its status
+before calling `learn`; the pure function is not an authorization layer.
+Replaying evidence is linear in meal history and is acceptable for the
+prototype; later compaction must preserve rating-edit semantics. No migrations
+or public schema changes are included here.
+
 ### Validation and remaining work
 
 Run from `backend/`:
 
 ```bash
 uv sync --frozen
-uv run pytest tests/test_reco.py
+uv run pytest tests/test_reco.py tests/test_shop.py tests/test_learning.py
 uv run pytest
 uv run ruff check .
 uv run ruff format --check .
@@ -183,13 +304,19 @@ variant preference, no-result diagnostics and the unchanged response schema.
 Hypothesis generates 150 combinations of allergens, inventory states, counts,
 freshness, people and up to three adjustments and checks that prohibited
 ingredients never appear in a selected recipe.
+Shop and learning tests cover aggregate stock subtraction, serving/pack
+arithmetic, uncertain/freshness cases, family diversity, adjustments, unchanged
+basket schema, bounded feedback, retries and replacement after saturation.
+Two additional property tests generate 80 Shop cases and 80 feedback sequences.
+A structural integration test loads all 48 approved recipe files and produces
+a seven-meal plan with explicit synthetic metadata; it does not validate the
+still-pending authoritative catalogue.
 
 These are development tests, **not the 100 report scenarios**. The 30 held-out
 scenarios have not been authored or used for tuning here. Still to implement:
-Shop basket search; bounded feedback updates and retry-safe persistence;
-database-backed Cook/Shop sessions and stock confirmation; the scenario suite;
-and deployed evaluation. No synthetic metadata from tests should be seeded as
-the authoritative ingredient catalogue.
+database-backed Cook/Shop sessions, stock confirmation and retry-safe feedback
+persistence; the scenario suite; and deployed evaluation. No synthetic metadata
+from tests should be seeded as the authoritative ingredient catalogue.
 
 ## What you may change, and what you must keep
 
