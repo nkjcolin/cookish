@@ -10,6 +10,11 @@ The specification targets 100 scenarios in total. The remaining **30 held-out
 scenarios are reserved and have not been authored or evaluated here**. See the
 protocol below before creating them.
 
+The [recorded development baseline](results/development.json) passes **70/70
+scenarios and 85/85 steps**, with no hard-constraint violations. It was generated
+from the clean source commit `6e5c8eb`; the report includes source/input hashes
+and runtime versions. This is synthetic development evidence only.
+
 ## Inputs and scope
 
 - `development/*.yaml` contains each scenario's ID, purpose, coverage categories,
