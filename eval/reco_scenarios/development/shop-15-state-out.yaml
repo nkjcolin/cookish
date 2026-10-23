@@ -1,0 +1,30 @@
+version: 1
+id: DEV-S15
+split: development
+mode: shop
+description: Explicitly out tomato must be purchased without a stock check; state-tracked ingredients
+  never receive a fabricated numeric pack count.
+categories:
+- state-out
+- coarse-stock
+recipes:
+- tomato-rice
+preferences: {}
+inventory:
+- ingredient: tomato
+  remaining_state: out
+- ingredient: rice
+  remaining_state: enough
+request:
+  people: 2
+  meals: 1
+expect:
+  result: true
+  meal_count: 1
+  planned:
+  - tomato-rice
+  items:
+    tomato:
+      packs: null
+      needs_check: false
+      amount_contains: 300 g

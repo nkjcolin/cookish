@@ -1,0 +1,92 @@
+version: 1
+id: DEV-S29
+split: development
+mode: shop
+description: Cover-more expands the single egg meal to both available families, a further tap cannot
+  invent a third family, and an explicit meal count of one overrides the tag increment.
+categories:
+- cover-more-meals
+- adjustment
+- fewer-meals
+- explicit-default-override
+recipes:
+- egg-rice
+- tomato-rice
+preferences: {}
+inventory: []
+request:
+  people: 2
+  meals: 1
+expect:
+  result: true
+  meal_count: 1
+  planned:
+  - egg-rice
+  items:
+    egg:
+      packs: 1
+      needs_check: false
+    rice:
+      packs: null
+      needs_check: false
+      amount_contains: 200 g
+adjustments:
+- patch:
+    tags:
+    - cover_more_meals
+  expect:
+    result: true
+    meal_count: 2
+    planned:
+    - egg-rice
+    - tomato-rice
+    items:
+      egg:
+        packs: 1
+        needs_check: false
+      tomato:
+        packs: null
+        needs_check: false
+        amount_contains: 300 g
+      rice:
+        packs: null
+        needs_check: false
+        amount_contains: 400 g
+- patch:
+    tags:
+    - cover_more_meals
+  expect:
+    result: true
+    meal_count: 2
+    planned:
+    - egg-rice
+    - tomato-rice
+    items:
+      egg:
+        packs: 1
+        needs_check: false
+      tomato:
+        packs: null
+        needs_check: false
+        amount_contains: 300 g
+      rice:
+        packs: null
+        needs_check: false
+        amount_contains: 400 g
+- patch:
+    tags:
+    - cover_more_meals
+    meals: 1
+  expect:
+    result: true
+    meal_count: 1
+    planned:
+    - egg-rice
+    items:
+      egg:
+        packs: 1
+        needs_check: false
+      rice:
+        packs: null
+        needs_check: false
+        amount_contains: 200 g

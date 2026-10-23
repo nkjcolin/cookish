@@ -1,0 +1,33 @@
+version: 1
+id: DEV-S12
+split: development
+mode: shop
+description: An explicit out state overrides an old count of one hundred eggs; the complete three-egg
+  need must still produce one tray without a check.
+categories:
+- explicit-out
+- counted-stock
+recipes:
+- egg-rice
+preferences: {}
+inventory:
+- ingredient: egg
+  count: 100
+  unit: pcs
+  remaining_state: out
+request:
+  people: 2
+  meals: 1
+expect:
+  result: true
+  meal_count: 1
+  planned:
+  - egg-rice
+  items:
+    egg:
+      packs: 1
+      needs_check: false
+    rice:
+      packs: null
+      needs_check: false
+      amount_contains: 200 g

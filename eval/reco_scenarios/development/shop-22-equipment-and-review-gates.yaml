@@ -1,0 +1,25 @@
+version: 1
+id: DEV-S22
+split: development
+mode: shop
+description: A stove-only household cannot use an oven recipe, and an unreviewed rice recipe is never
+  eligible; no safe candidate means no planned meal or basket item.
+categories:
+- equipment
+- review-gate
+- no-result
+recipes:
+- oven-tomato
+- unreviewed-rice
+preferences:
+  equipment:
+  - stove
+inventory: []
+request:
+  people: 2
+  meals: 1
+expect:
+  result: false
+  meal_count: 0
+  planned: []
+  items: {}

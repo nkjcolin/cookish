@@ -1,0 +1,900 @@
+version: 1
+description: Explicit synthetic metadata and small recipe records for development evaluation only.
+  These are not the approved recipe catalogue, measured nutrition, halal certification, or shelf-life
+  advice. All pack sizes, tags and diets are deliberately declared test inputs.
+as_of: '2026-10-24T12:00:00+08:00'
+ingredients:
+  egg:
+    countable: true
+    is_staple: false
+    perishable: true
+    allergens:
+    - egg
+    diet_flags:
+    - vegetarian
+    - pescatarian
+    - halal
+    - no_pork
+    - no_beef
+    purchase:
+      category: egg
+      buyable: true
+      purchase_unit: tray
+      purchase_unit_size: 10
+      purchase_unit_measure: pcs
+      shelf_life_days: 21
+  tomato:
+    countable: false
+    is_staple: false
+    perishable: true
+    allergens: []
+    diet_flags:
+    - vegetarian
+    - vegan
+    - pescatarian
+    - halal
+    - no_pork
+    - no_beef
+    purchase:
+      category: produce
+      buyable: true
+      purchase_unit: pack
+      purchase_unit_size: 500
+      purchase_unit_measure: g
+      shelf_life_days: 4
+  tofu:
+    countable: false
+    is_staple: false
+    perishable: true
+    allergens:
+    - soy
+    diet_flags:
+    - vegetarian
+    - vegan
+    - pescatarian
+    - halal
+    - no_pork
+    - no_beef
+    purchase:
+      category: produce
+      buyable: true
+      purchase_unit: pack
+      purchase_unit_size: 300
+      purchase_unit_measure: g
+      shelf_life_days: 3
+  rice:
+    countable: false
+    is_staple: false
+    perishable: false
+    allergens: []
+    diet_flags:
+    - vegetarian
+    - vegan
+    - pescatarian
+    - halal
+    - no_pork
+    - no_beef
+    purchase:
+      category: grain
+      buyable: true
+      purchase_unit: bag
+      purchase_unit_size: 1000
+      purchase_unit_measure: g
+      shelf_life_days: 365
+  water:
+    countable: false
+    is_staple: true
+    perishable: false
+    allergens: []
+    diet_flags:
+    - vegetarian
+    - vegan
+    - pescatarian
+    - halal
+    - no_pork
+    - no_beef
+    purchase:
+      category: other
+      buyable: false
+      purchase_unit: null
+      purchase_unit_size: null
+      purchase_unit_measure: null
+      shelf_life_days: null
+  oil:
+    countable: false
+    is_staple: true
+    perishable: false
+    allergens: []
+    diet_flags:
+    - vegetarian
+    - vegan
+    - pescatarian
+    - halal
+    - no_pork
+    - no_beef
+    purchase:
+      category: pantry
+      buyable: true
+      purchase_unit: bottle
+      purchase_unit_size: 1000
+      purchase_unit_measure: ml
+      shelf_life_days: 365
+  peanut:
+    countable: false
+    is_staple: false
+    perishable: false
+    allergens:
+    - peanut
+    diet_flags:
+    - vegetarian
+    - vegan
+    - pescatarian
+    - halal
+    - no_pork
+    - no_beef
+    purchase:
+      category: pantry
+      buyable: true
+      purchase_unit: pack
+      purchase_unit_size: 200
+      purchase_unit_measure: g
+      shelf_life_days: 90
+  almond:
+    countable: false
+    is_staple: false
+    perishable: false
+    allergens:
+    - tree_nut
+    diet_flags:
+    - vegetarian
+    - vegan
+    - pescatarian
+    - halal
+    - no_pork
+    - no_beef
+    purchase:
+      category: pantry
+      buyable: true
+      purchase_unit: pack
+      purchase_unit_size: 200
+      purchase_unit_measure: g
+      shelf_life_days: 90
+  milk:
+    countable: false
+    is_staple: false
+    perishable: true
+    allergens:
+    - milk
+    diet_flags:
+    - vegetarian
+    - pescatarian
+    - halal
+    - no_pork
+    - no_beef
+    purchase:
+      category: dairy
+      buyable: true
+      purchase_unit: carton
+      purchase_unit_size: 1000
+      purchase_unit_measure: ml
+      shelf_life_days: 7
+  fish:
+    countable: false
+    is_staple: false
+    perishable: true
+    allergens:
+    - fish
+    diet_flags:
+    - pescatarian
+    - halal
+    - no_pork
+    - no_beef
+    purchase:
+      category: seafood
+      buyable: true
+      purchase_unit: pack
+      purchase_unit_size: 300
+      purchase_unit_measure: g
+      shelf_life_days: 2
+  prawn:
+    countable: false
+    is_staple: false
+    perishable: true
+    allergens:
+    - shellfish
+    diet_flags:
+    - pescatarian
+    - halal
+    - no_pork
+    - no_beef
+    purchase:
+      category: seafood
+      buyable: true
+      purchase_unit: pack
+      purchase_unit_size: 300
+      purchase_unit_measure: g
+      shelf_life_days: 2
+  wheat:
+    countable: true
+    is_staple: false
+    perishable: false
+    allergens:
+    - gluten
+    diet_flags:
+    - vegetarian
+    - vegan
+    - pescatarian
+    - halal
+    - no_pork
+    - no_beef
+    purchase:
+      category: grain
+      buyable: true
+      purchase_unit: bag
+      purchase_unit_size: 1000
+      purchase_unit_measure: g
+      shelf_life_days: 365
+  sesame:
+    countable: false
+    is_staple: false
+    perishable: false
+    allergens:
+    - sesame
+    diet_flags:
+    - vegetarian
+    - vegan
+    - pescatarian
+    - halal
+    - no_pork
+    - no_beef
+    purchase:
+      category: pantry
+      buyable: true
+      purchase_unit: pack
+      purchase_unit_size: 100
+      purchase_unit_measure: g
+      shelf_life_days: 90
+  chicken:
+    countable: true
+    is_staple: false
+    perishable: true
+    allergens: []
+    diet_flags:
+    - halal
+    - no_pork
+    - no_beef
+    purchase:
+      category: meat
+      buyable: true
+      purchase_unit: pack
+      purchase_unit_size: 500
+      purchase_unit_measure: g
+      shelf_life_days: 2
+  pork:
+    countable: false
+    is_staple: false
+    perishable: true
+    allergens: []
+    diet_flags:
+    - no_beef
+    purchase:
+      category: meat
+      buyable: true
+      purchase_unit: pack
+      purchase_unit_size: 500
+      purchase_unit_measure: g
+      shelf_life_days: 2
+  beef:
+    countable: false
+    is_staple: false
+    perishable: true
+    allergens: []
+    diet_flags:
+    - no_pork
+    purchase:
+      category: meat
+      buyable: true
+      purchase_unit: pack
+      purchase_unit_size: 500
+      purchase_unit_measure: g
+      shelf_life_days: 2
+  greens:
+    countable: false
+    is_staple: false
+    perishable: true
+    allergens: []
+    diet_flags:
+    - vegetarian
+    - vegan
+    - pescatarian
+    - halal
+    - no_pork
+    - no_beef
+    purchase:
+      category: produce
+      buyable: true
+      purchase_unit: bunch
+      purchase_unit_size: 300
+      purchase_unit_measure: g
+      shelf_life_days: 3
+recipes:
+  egg-rice:
+    title: Synthetic egg base
+    cuisine: chinese
+    total_minutes: 40
+    difficulty: 3
+    servings: 2
+    taste_tags: []
+    equipment:
+    - stove
+    reviewed: true
+    starred: true
+    base_recipe: null
+    ingredients:
+    - ingredient: egg
+      essential: true
+      quantity: 3
+      unit: pcs
+    - ingredient: rice
+      essential: true
+      quantity: 200
+      unit: g
+    - ingredient: water
+      essential: true
+      quantity: 100
+      unit: ml
+    - ingredient: oil
+      essential: true
+      quantity: 10
+      unit: ml
+  egg-quick:
+    title: Synthetic quicker egg variant
+    cuisine: chinese
+    total_minutes: 20
+    difficulty: 3
+    servings: 2
+    taste_tags: []
+    equipment:
+    - stove
+    reviewed: true
+    starred: false
+    base_recipe: egg-rice
+    ingredients:
+    - ingredient: egg
+      essential: true
+      quantity: 3
+      unit: pcs
+    - ingredient: rice
+      essential: true
+      quantity: 200
+      unit: g
+    - ingredient: water
+      essential: true
+      quantity: 100
+      unit: ml
+    - ingredient: oil
+      essential: true
+      quantity: 10
+      unit: ml
+  egg-easy:
+    title: Synthetic easier egg variant
+    cuisine: chinese
+    total_minutes: 40
+    difficulty: 1
+    servings: 2
+    taste_tags: []
+    equipment:
+    - stove
+    reviewed: true
+    starred: false
+    base_recipe: egg-rice
+    ingredients:
+    - ingredient: egg
+      essential: true
+      quantity: 3
+      unit: pcs
+    - ingredient: rice
+      essential: true
+      quantity: 200
+      unit: g
+    - ingredient: water
+      essential: true
+      quantity: 100
+      unit: ml
+    - ingredient: oil
+      essential: true
+      quantity: 10
+      unit: ml
+  egg-light:
+    title: Synthetic low-oil egg variant
+    cuisine: chinese
+    total_minutes: 40
+    difficulty: 3
+    servings: 2
+    taste_tags:
+    - low_oil
+    equipment:
+    - stove
+    reviewed: true
+    starred: false
+    base_recipe: egg-rice
+    ingredients:
+    - ingredient: egg
+      essential: true
+      quantity: 3
+      unit: pcs
+    - ingredient: rice
+      essential: true
+      quantity: 200
+      unit: g
+    - ingredient: water
+      essential: true
+      quantity: 100
+      unit: ml
+    - ingredient: oil
+      essential: true
+      quantity: 10
+      unit: ml
+  egg-vegetables:
+    title: Synthetic vegetable egg variant
+    cuisine: chinese
+    total_minutes: 40
+    difficulty: 3
+    servings: 2
+    taste_tags:
+    - vegetable_rich
+    equipment:
+    - stove
+    reviewed: true
+    starred: false
+    base_recipe: egg-rice
+    ingredients:
+    - ingredient: egg
+      essential: true
+      quantity: 3
+      unit: pcs
+    - ingredient: rice
+      essential: true
+      quantity: 200
+      unit: g
+    - ingredient: water
+      essential: true
+      quantity: 100
+      unit: ml
+    - ingredient: oil
+      essential: true
+      quantity: 10
+      unit: ml
+    - ingredient: greens
+      essential: true
+      quantity: 300
+      unit: g
+  egg-protein:
+    title: Synthetic protein-tagged egg variant
+    cuisine: chinese
+    total_minutes: 40
+    difficulty: 3
+    servings: 2
+    taste_tags:
+    - high_protein
+    equipment:
+    - stove
+    reviewed: true
+    starred: false
+    base_recipe: egg-rice
+    ingredients:
+    - ingredient: egg
+      essential: true
+      quantity: 6
+      unit: pcs
+    - ingredient: rice
+      essential: true
+      quantity: 200
+      unit: g
+    - ingredient: water
+      essential: true
+      quantity: 100
+      unit: ml
+    - ingredient: oil
+      essential: true
+      quantity: 10
+      unit: ml
+  egg-second:
+    title: Synthetic unrelated egg meal
+    cuisine: chinese
+    total_minutes: 30
+    difficulty: 1
+    servings: 2
+    taste_tags: []
+    equipment:
+    - stove
+    reviewed: true
+    starred: false
+    base_recipe: null
+    ingredients:
+    - ingredient: egg
+      essential: true
+      quantity: 3
+      unit: pcs
+    - ingredient: rice
+      essential: true
+      quantity: 200
+      unit: g
+    - ingredient: water
+      essential: true
+      quantity: 100
+      unit: ml
+    - ingredient: oil
+      essential: true
+      quantity: 10
+      unit: ml
+  egg-coarse:
+    title: Synthetic coarse egg requirement
+    cuisine: chinese
+    total_minutes: 30
+    difficulty: 1
+    servings: 2
+    taste_tags: []
+    equipment:
+    - stove
+    reviewed: true
+    starred: false
+    base_recipe: null
+    ingredients:
+    - ingredient: egg
+      essential: true
+      coarse_amount: a few eggs
+    - ingredient: rice
+      essential: true
+      quantity: 200
+      unit: g
+  egg-mass:
+    title: Synthetic incompatible egg measure
+    cuisine: chinese
+    total_minutes: 30
+    difficulty: 1
+    servings: 2
+    taste_tags: []
+    equipment:
+    - stove
+    reviewed: true
+    starred: false
+    base_recipe: null
+    ingredients:
+    - ingredient: egg
+      essential: true
+      quantity: 150
+      unit: g
+    - ingredient: rice
+      essential: true
+      quantity: 200
+      unit: g
+  tofu-rice:
+    title: Synthetic tofu meal
+    cuisine: japanese
+    total_minutes: 30
+    difficulty: 1
+    servings: 2
+    taste_tags:
+    - light
+    equipment:
+    - stove
+    reviewed: true
+    starred: false
+    base_recipe: null
+    ingredients:
+    - ingredient: tofu
+      essential: true
+      quantity: 300
+      unit: g
+    - ingredient: rice
+      essential: true
+      quantity: 200
+      unit: g
+  tomato-rice:
+    title: Synthetic tomato meal
+    cuisine: chinese
+    total_minutes: 30
+    difficulty: 1
+    servings: 2
+    taste_tags:
+    - vegetable_rich
+    equipment:
+    - stove
+    reviewed: true
+    starred: false
+    base_recipe: null
+    ingredients:
+    - ingredient: tomato
+      essential: true
+      quantity: 300
+      unit: g
+    - ingredient: rice
+      essential: true
+      quantity: 200
+      unit: g
+  chicken-rice:
+    title: Synthetic chicken meal
+    cuisine: chinese
+    total_minutes: 30
+    difficulty: 1
+    servings: 2
+    taste_tags: []
+    equipment:
+    - stove
+    reviewed: true
+    starred: false
+    base_recipe: null
+    ingredients:
+    - ingredient: chicken
+      essential: true
+      quantity: 500
+      unit: g
+    - ingredient: rice
+      essential: true
+      quantity: 200
+      unit: g
+  chicken-kilograms:
+    title: Synthetic unmatched kilogram requirement
+    cuisine: chinese
+    total_minutes: 30
+    difficulty: 1
+    servings: 2
+    taste_tags: []
+    equipment:
+    - stove
+    reviewed: true
+    starred: false
+    base_recipe: null
+    ingredients:
+    - ingredient: chicken
+      essential: true
+      quantity: 0.5
+      unit: kg
+    - ingredient: rice
+      essential: true
+      quantity: 200
+      unit: g
+  pork-rice:
+    title: Synthetic pork meal
+    cuisine: chinese
+    total_minutes: 30
+    difficulty: 1
+    servings: 2
+    taste_tags: []
+    equipment:
+    - stove
+    reviewed: true
+    starred: false
+    base_recipe: null
+    ingredients:
+    - ingredient: pork
+      essential: true
+      quantity: 300
+      unit: g
+    - ingredient: rice
+      essential: true
+      quantity: 200
+      unit: g
+  beef-rice:
+    title: Synthetic beef meal
+    cuisine: chinese
+    total_minutes: 30
+    difficulty: 1
+    servings: 2
+    taste_tags: []
+    equipment:
+    - stove
+    reviewed: true
+    starred: false
+    base_recipe: null
+    ingredients:
+    - ingredient: beef
+      essential: true
+      quantity: 300
+      unit: g
+    - ingredient: rice
+      essential: true
+      quantity: 200
+      unit: g
+  peanut-rice:
+    title: Synthetic peanut meal
+    cuisine: chinese
+    total_minutes: 30
+    difficulty: 1
+    servings: 2
+    taste_tags: []
+    equipment:
+    - stove
+    reviewed: true
+    starred: false
+    base_recipe: null
+    ingredients:
+    - ingredient: peanut
+      essential: true
+      quantity: 50
+      unit: g
+    - ingredient: rice
+      essential: true
+      quantity: 200
+      unit: g
+  almond-rice:
+    title: Synthetic almond meal
+    cuisine: chinese
+    total_minutes: 30
+    difficulty: 1
+    servings: 2
+    taste_tags: []
+    equipment:
+    - stove
+    reviewed: true
+    starred: false
+    base_recipe: null
+    ingredients:
+    - ingredient: almond
+      essential: true
+      quantity: 50
+      unit: g
+    - ingredient: rice
+      essential: true
+      quantity: 200
+      unit: g
+  milk-rice:
+    title: Synthetic milk meal
+    cuisine: chinese
+    total_minutes: 30
+    difficulty: 1
+    servings: 2
+    taste_tags: []
+    equipment:
+    - stove
+    reviewed: true
+    starred: false
+    base_recipe: null
+    ingredients:
+    - ingredient: milk
+      essential: true
+      quantity: 200
+      unit: ml
+    - ingredient: rice
+      essential: true
+      quantity: 200
+      unit: g
+  fish-rice:
+    title: Synthetic fish meal
+    cuisine: chinese
+    total_minutes: 30
+    difficulty: 1
+    servings: 2
+    taste_tags: []
+    equipment:
+    - stove
+    reviewed: true
+    starred: false
+    base_recipe: null
+    ingredients:
+    - ingredient: fish
+      essential: true
+      quantity: 300
+      unit: g
+    - ingredient: rice
+      essential: true
+      quantity: 200
+      unit: g
+  prawn-rice:
+    title: Synthetic prawn meal
+    cuisine: chinese
+    total_minutes: 30
+    difficulty: 1
+    servings: 2
+    taste_tags: []
+    equipment:
+    - stove
+    reviewed: true
+    starred: false
+    base_recipe: null
+    ingredients:
+    - ingredient: prawn
+      essential: true
+      quantity: 300
+      unit: g
+    - ingredient: rice
+      essential: true
+      quantity: 200
+      unit: g
+  wheat-meal:
+    title: Synthetic wheat meal
+    cuisine: chinese
+    total_minutes: 30
+    difficulty: 1
+    servings: 2
+    taste_tags: []
+    equipment:
+    - stove
+    reviewed: true
+    starred: false
+    base_recipe: null
+    ingredients:
+    - ingredient: wheat
+      essential: true
+      quantity: 500
+      unit: g
+  sesame-rice:
+    title: Synthetic optional sesame meal
+    cuisine: chinese
+    total_minutes: 30
+    difficulty: 1
+    servings: 2
+    taste_tags: []
+    equipment:
+    - stove
+    reviewed: true
+    starred: false
+    base_recipe: null
+    ingredients:
+    - ingredient: sesame
+      essential: false
+      quantity: 5
+      unit: g
+    - ingredient: rice
+      essential: true
+      quantity: 200
+      unit: g
+  unreviewed-rice:
+    title: Synthetic recipe awaiting review
+    cuisine: chinese
+    total_minutes: 30
+    difficulty: 1
+    servings: 2
+    taste_tags: []
+    equipment:
+    - stove
+    reviewed: false
+    starred: false
+    base_recipe: null
+    ingredients:
+    - ingredient: rice
+      essential: true
+      quantity: 200
+      unit: g
+  oven-tomato:
+    title: Synthetic oven-only meal
+    cuisine: chinese
+    total_minutes: 30
+    difficulty: 1
+    servings: 2
+    taste_tags: []
+    equipment:
+    - oven
+    reviewed: true
+    starred: false
+    base_recipe: null
+    ingredients:
+    - ingredient: tomato
+      essential: true
+      quantity: 300
+      unit: g
+    - ingredient: rice
+      essential: true
+      quantity: 200
+      unit: g
+  coarse-greens:
+    title: Synthetic coarse greens meal
+    cuisine: chinese
+    total_minutes: 30
+    difficulty: 1
+    servings: 2
+    taste_tags: []
+    equipment:
+    - stove
+    reviewed: true
+    starred: false
+    base_recipe: null
+    ingredients:
+    - ingredient: greens
+      essential: true
+      coarse_amount: a handful
+    - ingredient: rice
+      essential: true
+      quantity: 200
+      unit: g

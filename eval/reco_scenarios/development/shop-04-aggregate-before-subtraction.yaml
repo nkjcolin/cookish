@@ -1,0 +1,36 @@
+version: 1
+id: DEV-S04
+split: development
+mode: shop
+description: Two meals for four people need twelve eggs in total; subtract one confirmed egg once,
+  leaving eleven eggs and therefore two trays. Incorrectly subtracting that egg per meal would yield
+  ten eggs and only one tray.
+categories:
+- aggregation
+- stock-subtraction
+- pack-rounding
+recipes:
+- egg-rice
+- egg-second
+preferences: {}
+inventory:
+- ingredient: egg
+  count: 1
+  unit: pcs
+request:
+  people: 4
+  meals: 2
+expect:
+  result: true
+  meal_count: 2
+  planned:
+  - egg-rice
+  - egg-second
+  items:
+    egg:
+      packs: 2
+      needs_check: false
+    rice:
+      packs: null
+      needs_check: false
+      amount_contains: 800 g

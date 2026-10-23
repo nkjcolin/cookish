@@ -1,0 +1,33 @@
+version: 1
+id: DEV-S11
+split: development
+mode: shop
+description: Expired eggs contribute no usable stock and require replacement; a known expired batch
+  does not masquerade as pending confirmation, so the replacement line is not marked needs_check.
+categories:
+- expired-stock
+- counted-stock
+recipes:
+- egg-rice
+preferences: {}
+inventory:
+- ingredient: egg
+  count: 100
+  unit: pcs
+  freshness_status: expired
+request:
+  people: 2
+  meals: 1
+expect:
+  result: true
+  meal_count: 1
+  planned:
+  - egg-rice
+  items:
+    egg:
+      packs: 1
+      needs_check: false
+    rice:
+      packs: null
+      needs_check: false
+      amount_contains: 200 g

@@ -1,0 +1,70 @@
+version: 1
+id: DEV-C34
+split: development
+mode: cook
+description: Quicker replaces the forty-minute starred base with its twenty-minute same-family variant;
+  a further five-minute cap yields only a soft time relaxation.
+categories:
+- adjustments
+- quicker
+- variants
+- accumulation
+recipes:
+- egg-rice
+- egg-quick
+preferences:
+  allergens: []
+  diets: []
+  equipment:
+  - stove
+  cuisines: []
+  disliked_ingredients: []
+  max_cook_minutes: 60
+  max_difficulty: 3
+  household_size: 2
+  last_cook_people: 2
+  last_shop_people: 2
+  last_shop_meals: 3
+inventory:
+- ingredient: egg
+  key: one
+  count: 3
+  unit: pcs
+  remaining_state: enough
+  freshness_status: ok
+  confirmed_days_ago: 1
+  acquired_days_ago: 2
+  use_first_in_days: 2
+- ingredient: rice
+  key: one
+  count: null
+  unit: null
+  remaining_state: enough
+  freshness_status: ok
+  confirmed_days_ago: 1
+  acquired_days_ago: 2
+  use_first_in_days: 2
+request:
+  people: null
+  meals: null
+  strict_max_minutes: null
+expect:
+  result: true
+  selected_any:
+  - egg-rice
+adjustments:
+- patch:
+    tags:
+    - quicker
+  expect:
+    result: true
+    selected_any:
+    - egg-quick
+- patch:
+    max_minutes: 5
+  expect:
+    result: false
+    selected_any: []
+    relaxable:
+    - max_minutes
+taste_weights: {}

@@ -1,0 +1,33 @@
+version: 1
+id: DEV-S19
+split: development
+mode: shop
+description: A few eggs cannot be converted into a tray count, even with ten eggs recorded; retain
+  the coarse quantity and an explicit unit check.
+categories:
+- coarse-amount
+- unsupported-conversion
+recipes:
+- egg-coarse
+preferences: {}
+inventory:
+- ingredient: egg
+  count: 10
+  unit: pcs
+request:
+  people: 2
+  meals: 1
+expect:
+  result: true
+  meal_count: 1
+  planned:
+  - egg-coarse
+  items:
+    egg:
+      packs: null
+      needs_check: true
+      amount_contains: a few eggs
+    rice:
+      packs: null
+      needs_check: false
+      amount_contains: 200 g

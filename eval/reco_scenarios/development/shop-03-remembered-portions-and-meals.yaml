@@ -1,0 +1,32 @@
+version: 1
+id: DEV-S03
+split: development
+mode: shop
+description: 'Omitted request values use remembered four people and two meals, rather than household
+  size two: two three-egg recipes need twelve eggs and 800 g rice.'
+categories:
+- remembered-defaults
+- aggregation
+recipes:
+- egg-rice
+- egg-second
+preferences:
+  household_size: 2
+  last_shop_people: 4
+  last_shop_meals: 2
+inventory: []
+request: {}
+expect:
+  result: true
+  meal_count: 2
+  planned:
+  - egg-rice
+  - egg-second
+  items:
+    egg:
+      packs: 2
+      needs_check: false
+    rice:
+      packs: null
+      needs_check: false
+      amount_contains: 800 g

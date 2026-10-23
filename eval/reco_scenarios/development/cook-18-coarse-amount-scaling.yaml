@@ -1,0 +1,59 @@
+version: 1
+id: DEV-C18
+split: development
+mode: cook
+description: A coarse egg amount cannot be converted into a precise count; four-person guidance preserves
+  the original wording and serving context.
+categories:
+- coarse_amount
+- portions
+recipes:
+- egg-coarse
+preferences:
+  allergens: []
+  diets: []
+  equipment:
+  - stove
+  cuisines: []
+  disliked_ingredients: []
+  max_cook_minutes: 60
+  max_difficulty: 3
+  household_size: 2
+  last_cook_people: 2
+  last_shop_people: 2
+  last_shop_meals: 3
+inventory:
+- ingredient: egg
+  key: one
+  count: 3
+  unit: pcs
+  remaining_state: enough
+  freshness_status: ok
+  confirmed_days_ago: 1
+  acquired_days_ago: 2
+  use_first_in_days: 2
+- ingredient: rice
+  key: one
+  count: null
+  unit: null
+  remaining_state: enough
+  freshness_status: ok
+  confirmed_days_ago: 1
+  acquired_days_ago: 2
+  use_first_in_days: 2
+request:
+  people: 4
+  meals: null
+  strict_max_minutes: null
+expect:
+  result: true
+  selected_any:
+  - egg-coarse
+  ingredient_status:
+    egg: unknown
+  amounts:
+    egg: a few eggs (adjust for 4 people; original serves 2)
+  needs_check:
+  - egg
+adjustments: []
+taste_weights: {}

@@ -1,0 +1,73 @@
+version: 1
+id: DEV-C37
+split: development
+mode: cook
+description: More vegetables selects the family variant with the explicit vegetable-rich tag when
+  its added greens are available.
+categories:
+- adjustments
+- more_vegetables
+- variants
+recipes:
+- egg-rice
+- egg-vegetables
+preferences:
+  allergens: []
+  diets: []
+  equipment:
+  - stove
+  cuisines: []
+  disliked_ingredients: []
+  max_cook_minutes: 60
+  max_difficulty: 3
+  household_size: 2
+  last_cook_people: 2
+  last_shop_people: 2
+  last_shop_meals: 3
+inventory:
+- ingredient: egg
+  key: one
+  count: 3
+  unit: pcs
+  remaining_state: enough
+  freshness_status: ok
+  confirmed_days_ago: 1
+  acquired_days_ago: 2
+  use_first_in_days: 2
+- ingredient: rice
+  key: one
+  count: null
+  unit: null
+  remaining_state: enough
+  freshness_status: ok
+  confirmed_days_ago: 1
+  acquired_days_ago: 2
+  use_first_in_days: 2
+- ingredient: greens
+  key: one
+  count: null
+  unit: null
+  remaining_state: enough
+  freshness_status: ok
+  confirmed_days_ago: 1
+  acquired_days_ago: 2
+  use_first_in_days: 2
+request:
+  people: null
+  meals: null
+  strict_max_minutes: null
+expect:
+  result: true
+  selected_any:
+  - egg-rice
+adjustments:
+- patch:
+    tags:
+    - more_vegetables
+  expect:
+    result: true
+    selected_any:
+    - egg-vegetables
+    ingredient_status:
+      greens: have
+taste_weights: {}
