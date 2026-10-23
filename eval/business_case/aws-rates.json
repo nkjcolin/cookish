@@ -1,0 +1,1327 @@
+{
+  "schema_version": 1,
+  "description": "Selected AWS public on-demand price-list rates for Cookish planning. Quantities and workloads are assumptions maintained separately. USD rates are strings copied from AWS; free allowances and account eligibility must be applied separately. The global Cognito allowance is included as reference evidence, not automatically deducted.",
+  "retrieved": "2026-10-24",
+  "retrieved_timezone": "Asia/Singapore",
+  "currency": "USD",
+  "primary_region": "ap-southeast-1",
+  "sources": [
+    {
+      "service": "AmazonRDS",
+      "region": "ap-southeast-1",
+      "source_url": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonRDS/current/ap-southeast-1/index.json",
+      "version": "20261020003232",
+      "publicationDate": "2026-10-20T00:32:32Z",
+      "retrieved": "2026-10-24",
+      "source_sha256": "f744523c1c34359bff4b2687f4ab043d6d0579c2b7450b3eae63a9d3cd7d2f60",
+      "selected": [
+        {
+          "sku": "BQ5T85JXP99J9D2J",
+          "productFamily": "Database Instance",
+          "attributes": {
+            "servicecode": "AmazonRDS",
+            "location": "Asia Pacific (Singapore)",
+            "locationType": "AWS Region",
+            "instanceType": "db.t4g.micro",
+            "currentGeneration": "Yes",
+            "instanceFamily": "General purpose",
+            "vcpu": "2",
+            "physicalProcessor": "AWS Graviton2",
+            "memory": "1 GiB",
+            "storage": "EBS Only",
+            "networkPerformance": "Up to 5 Gigabit",
+            "processorArchitecture": "64-bit",
+            "engineCode": "14",
+            "databaseEngine": "PostgreSQL",
+            "licenseModel": "No license required",
+            "deploymentOption": "Single-AZ",
+            "usagetype": "APS1-InstanceUsage:db.t4g.micro",
+            "operation": "CreateDBInstance:0014",
+            "instanceTypeFamily": "T4G",
+            "normalizationSizeFactor": "0.5",
+            "regionCode": "ap-southeast-1",
+            "servicename": "Amazon Relational Database Service",
+            "unbundledLicensing": "FALSE"
+          },
+          "terms": [
+            {
+              "offerTermCode": "JRTCKXETXF",
+              "effectiveDate": "2026-10-01T00:00:00Z",
+              "termAttributes": {},
+              "dimensions": [
+                {
+                  "rateCode": "BQ5T85JXP99J9D2J.JRTCKXETXF.6YS6EN2CT7",
+                  "description": "$ 0.025 per RDS db.t4g.micro Single-AZ instance hour (or partial hour) running PostgreSQL",
+                  "unit": "Hrs",
+                  "rateUSD": "0.0250000000",
+                  "beginRange": "0",
+                  "endRange": "Inf",
+                  "appliesTo": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "sku": "FXXDJWB23UZKQHCN",
+          "productFamily": "Database Storage",
+          "attributes": {
+            "servicecode": "AmazonRDS",
+            "location": "Asia Pacific (Singapore)",
+            "locationType": "AWS Region",
+            "storageMedia": "SSD",
+            "volumeType": "General Purpose-GP3",
+            "minVolumeSize": "5 GB",
+            "maxVolumeSize": "16 TB",
+            "engineCode": "14",
+            "databaseEngine": "PostgreSQL",
+            "deploymentOption": "Single-AZ",
+            "usagetype": "APS1-RDS:GP3-Storage",
+            "operation": "CreateDBInstance:0014",
+            "regionCode": "ap-southeast-1",
+            "servicename": "Amazon Relational Database Service"
+          },
+          "terms": [
+            {
+              "offerTermCode": "JRTCKXETXF",
+              "effectiveDate": "2026-10-01T00:00:00Z",
+              "termAttributes": {},
+              "dimensions": [
+                {
+                  "rateCode": "FXXDJWB23UZKQHCN.JRTCKXETXF.6YS6EN2CT7",
+                  "description": "$0.138 per GB-month of provisioned GP3 storage running PostgreSQL",
+                  "unit": "GB-Mo",
+                  "rateUSD": "0.1380000000",
+                  "beginRange": "0",
+                  "endRange": "Inf",
+                  "appliesTo": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "sku": "MP6SPJ889449AMT3",
+          "productFamily": "CPU Credits",
+          "attributes": {
+            "servicecode": "AmazonRDS",
+            "location": "Asia Pacific (Singapore)",
+            "locationType": "AWS Region",
+            "instanceFamily": "T4G",
+            "engineCode": "14",
+            "databaseEngine": "PostgreSQL",
+            "usagetype": "APS1-CPUCredits:db.t4g",
+            "operation": "CreateDBInstance:0014",
+            "regionCode": "ap-southeast-1",
+            "servicename": "Amazon Relational Database Service"
+          },
+          "terms": [
+            {
+              "offerTermCode": "JRTCKXETXF",
+              "effectiveDate": "2026-10-01T00:00:00Z",
+              "termAttributes": {},
+              "dimensions": [
+                {
+                  "rateCode": "MP6SPJ889449AMT3.JRTCKXETXF.6YS6EN2CT7",
+                  "description": "USD 0.075 per vCPU-Hour of T4g CPU Credits",
+                  "unit": "vCPU-Hours",
+                  "rateUSD": "0.0750000000",
+                  "beginRange": "0",
+                  "endRange": "Inf",
+                  "appliesTo": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "service": "AWSLambda",
+      "region": "ap-southeast-1",
+      "source_url": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AWSLambda/current/ap-southeast-1/index.json",
+      "version": "20261022183959",
+      "publicationDate": "2026-10-22T18:39:59Z",
+      "retrieved": "2026-10-24",
+      "source_sha256": "f49dd0bcb13ff044c910ab4d71a7e04531ce9c36de66bbf14ce7de65142ea89b",
+      "selected": [
+        {
+          "sku": "67ZV6RMYY72YSRDC",
+          "productFamily": "Serverless",
+          "attributes": {
+            "servicecode": "AWSLambda",
+            "location": "Asia Pacific (Singapore)",
+            "locationType": "AWS Region",
+            "group": "AWS-Lambda-Duration",
+            "groupDescription": "Invocation duration weighted by memory assigned to function, measured in GB-s",
+            "usagetype": "APS1-Lambda-GB-Second",
+            "operation": "",
+            "regionCode": "ap-southeast-1",
+            "servicename": "AWS Lambda"
+          },
+          "terms": [
+            {
+              "offerTermCode": "JRTCKXETXF",
+              "effectiveDate": "2026-10-01T00:00:00Z",
+              "termAttributes": {},
+              "dimensions": [
+                {
+                  "rateCode": "67ZV6RMYY72YSRDC.JRTCKXETXF.CUKFZ388N3",
+                  "description": "AWS Lambda - Total Compute - Asia Pacific (Singapore)-Tier-1",
+                  "unit": "Lambda-GB-Second",
+                  "rateUSD": "0.0000166667",
+                  "beginRange": "0",
+                  "endRange": "6000000000",
+                  "appliesTo": []
+                },
+                {
+                  "rateCode": "67ZV6RMYY72YSRDC.JRTCKXETXF.QZE2SB4KVB",
+                  "description": "AWS Lambda - Total Compute - Asia Pacific (Singapore)-Tier-2",
+                  "unit": "Lambda-GB-Second",
+                  "rateUSD": "0.0000150000",
+                  "beginRange": "6000000000",
+                  "endRange": "15000000000",
+                  "appliesTo": []
+                },
+                {
+                  "rateCode": "67ZV6RMYY72YSRDC.JRTCKXETXF.V7R92EXG27",
+                  "description": "AWS Lambda - Total Compute - Asia Pacific (Singapore)-Tier-3",
+                  "unit": "Lambda-GB-Second",
+                  "rateUSD": "0.0000133334",
+                  "beginRange": "15000000000",
+                  "endRange": "Inf",
+                  "appliesTo": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "sku": "KSD76ZR243WEPWRS",
+          "productFamily": "Serverless",
+          "attributes": {
+            "servicecode": "AWSLambda",
+            "location": "Asia Pacific (Singapore)",
+            "locationType": "AWS Region",
+            "group": "AWS-Lambda-Duration-ARM",
+            "groupDescription": "Invocation duration weighted by memory assigned to function, measured in GB-s for ARM",
+            "usagetype": "APS1-Lambda-GB-Second-ARM",
+            "operation": "",
+            "regionCode": "ap-southeast-1",
+            "servicename": "AWS Lambda"
+          },
+          "terms": [
+            {
+              "offerTermCode": "JRTCKXETXF",
+              "effectiveDate": "2026-10-01T00:00:00Z",
+              "termAttributes": {},
+              "dimensions": [
+                {
+                  "rateCode": "KSD76ZR243WEPWRS.JRTCKXETXF.6JGAYSJBNY",
+                  "description": "AWS Lambda - Total Compute for ARM - Asia Pacific (Singapore)-Tier-2",
+                  "unit": "Lambda-GB-Second",
+                  "rateUSD": "0.0000120001",
+                  "beginRange": "7500000000",
+                  "endRange": "18750000000",
+                  "appliesTo": []
+                },
+                {
+                  "rateCode": "KSD76ZR243WEPWRS.JRTCKXETXF.6NBUNBXSC3",
+                  "description": "AWS Lambda - Total Compute for ARM - Asia Pacific (Singapore)-Tier-1",
+                  "unit": "Lambda-GB-Second",
+                  "rateUSD": "0.0000133334",
+                  "beginRange": "0",
+                  "endRange": "7500000000",
+                  "appliesTo": []
+                },
+                {
+                  "rateCode": "KSD76ZR243WEPWRS.JRTCKXETXF.AVR3V96UTF",
+                  "description": "AWS Lambda - Total Compute for ARM - Asia Pacific (Singapore)-Tier-3",
+                  "unit": "Lambda-GB-Second",
+                  "rateUSD": "0.0000106667",
+                  "beginRange": "18750000000",
+                  "endRange": "Inf",
+                  "appliesTo": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "sku": "36D3E7396ZKUSWWW",
+          "productFamily": "Serverless",
+          "attributes": {
+            "servicecode": "AWSLambda",
+            "location": "Asia Pacific (Singapore)",
+            "locationType": "AWS Region",
+            "group": "AWS-Lambda-Requests",
+            "groupDescription": "Invocation call for a Lambda function",
+            "usagetype": "APS1-Request",
+            "operation": "",
+            "regionCode": "ap-southeast-1",
+            "servicename": "AWS Lambda"
+          },
+          "terms": [
+            {
+              "offerTermCode": "JRTCKXETXF",
+              "effectiveDate": "2026-10-01T00:00:00Z",
+              "termAttributes": {},
+              "dimensions": [
+                {
+                  "rateCode": "36D3E7396ZKUSWWW.JRTCKXETXF.6YS6EN2CT7",
+                  "description": "AWS Lambda - Total Requests - Asia Pacific (Singapore)",
+                  "unit": "Request",
+                  "rateUSD": "0.0000002000",
+                  "beginRange": "0",
+                  "endRange": "Inf",
+                  "appliesTo": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "service": "AmazonApiGateway",
+      "region": "ap-southeast-1",
+      "source_url": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonApiGateway/current/ap-southeast-1/index.json",
+      "version": "20261013003044",
+      "publicationDate": "2026-10-13T00:30:44Z",
+      "retrieved": "2026-10-24",
+      "source_sha256": "1b68d3d8297d075649914fdecd8d47c39e426af4788f8ecb11e3feeb9fcaf107",
+      "selected": [
+        {
+          "sku": "HTX6VZU3YCMMNRM5",
+          "productFamily": "API Calls",
+          "attributes": {
+            "servicecode": "AmazonApiGateway",
+            "description": "HTTP API Requests",
+            "location": "Asia Pacific (Singapore)",
+            "locationType": "AWS Region",
+            "usagetype": "APS1-ApiGatewayHttpRequest",
+            "operation": "ApiGatewayHttpApi",
+            "regionCode": "ap-southeast-1",
+            "servicename": "Amazon API Gateway"
+          },
+          "terms": [
+            {
+              "offerTermCode": "JRTCKXETXF",
+              "effectiveDate": "2026-10-01T00:00:00Z",
+              "termAttributes": {},
+              "dimensions": [
+                {
+                  "rateCode": "HTX6VZU3YCMMNRM5.JRTCKXETXF.9NXBCPDZYR",
+                  "description": "$1.25/million requests - API Gateway HTTP API (first 300 million)",
+                  "unit": "Requests",
+                  "rateUSD": "0.0000012500",
+                  "beginRange": "0",
+                  "endRange": "300000000",
+                  "appliesTo": []
+                },
+                {
+                  "rateCode": "HTX6VZU3YCMMNRM5.JRTCKXETXF.Y5DREYKEMT",
+                  "description": "$1.13/million requests - API Gateway HTTP API (more than 300 million)",
+                  "unit": "Requests",
+                  "rateUSD": "0.0000011300",
+                  "beginRange": "300000000",
+                  "endRange": "Inf",
+                  "appliesTo": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "service": "AWSAmplify",
+      "region": "ap-southeast-1",
+      "source_url": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AWSAmplify/current/ap-southeast-1/index.json",
+      "version": "20260911124522",
+      "publicationDate": "2026-09-11T12:45:22Z",
+      "retrieved": "2026-10-24",
+      "source_sha256": "10085dae789875acc48fd418bc32d80ed7658b0eedcd5cf920427de8891ee5d3",
+      "selected": [
+        {
+          "sku": "KB43EC4E5JSNXU5D",
+          "productFamily": "AWS Amplify",
+          "attributes": {
+            "servicecode": "AWSAmplify",
+            "location": "Asia Pacific (Singapore)",
+            "locationType": "AWS Region",
+            "usagetype": "APS1-BuildDuration",
+            "operation": "",
+            "instancetype": "Standard8GB",
+            "regionCode": "ap-southeast-1",
+            "servicename": "AWS Amplify"
+          },
+          "terms": [
+            {
+              "offerTermCode": "JRTCKXETXF",
+              "effectiveDate": "2025-05-01T00:00:00Z",
+              "termAttributes": {},
+              "dimensions": [
+                {
+                  "rateCode": "KB43EC4E5JSNXU5D.JRTCKXETXF.6YS6EN2CT7",
+                  "description": "USD0.01 per minutes for BuildDuration in Asia Pacific (Singapore)",
+                  "unit": "minutes",
+                  "rateUSD": "0.0100000000",
+                  "beginRange": "0",
+                  "endRange": "Inf",
+                  "appliesTo": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "sku": "7PVCZ36NR3NH9JUK",
+          "productFamily": "AWS Amplify",
+          "attributes": {
+            "servicecode": "AWSAmplify",
+            "location": "Asia Pacific (Singapore)",
+            "locationType": "AWS Region",
+            "storage": "Storage",
+            "usagetype": "APS1-DataStorage",
+            "operation": "",
+            "datatransferout": "NoDataTransferOut",
+            "regionCode": "ap-southeast-1",
+            "servicename": "AWS Amplify"
+          },
+          "terms": [
+            {
+              "offerTermCode": "JRTCKXETXF",
+              "effectiveDate": "2025-05-01T00:00:00Z",
+              "termAttributes": {},
+              "dimensions": [
+                {
+                  "rateCode": "7PVCZ36NR3NH9JUK.JRTCKXETXF.6YS6EN2CT7",
+                  "description": "USD0.023 per GigaBytes for DataStorage in Asia Pacific (Singapore)",
+                  "unit": "GigaBytes",
+                  "rateUSD": "0.0230000000",
+                  "beginRange": "0",
+                  "endRange": "Inf",
+                  "appliesTo": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "sku": "GAEKRC2DWFX3A8TT",
+          "productFamily": "AWS Amplify",
+          "attributes": {
+            "servicecode": "AWSAmplify",
+            "location": "Asia Pacific (Singapore)",
+            "locationType": "AWS Region",
+            "storage": "NoStorage",
+            "usagetype": "APS1-DataTransferOut",
+            "operation": "",
+            "datatransferout": "DataTransferOut",
+            "regionCode": "ap-southeast-1",
+            "servicename": "AWS Amplify"
+          },
+          "terms": [
+            {
+              "offerTermCode": "JRTCKXETXF",
+              "effectiveDate": "2025-05-01T00:00:00Z",
+              "termAttributes": {},
+              "dimensions": [
+                {
+                  "rateCode": "GAEKRC2DWFX3A8TT.JRTCKXETXF.6YS6EN2CT7",
+                  "description": "USD0.15 per GigaBytes for DataTransferOut in Asia Pacific (Singapore)",
+                  "unit": "GigaBytes",
+                  "rateUSD": "0.1500000000",
+                  "beginRange": "0",
+                  "endRange": "Inf",
+                  "appliesTo": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "service": "AmazonCloudWatch",
+      "region": "ap-southeast-1",
+      "source_url": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonCloudWatch/current/ap-southeast-1/index.json",
+      "version": "20261007115540",
+      "publicationDate": "2026-10-07T11:55:40Z",
+      "retrieved": "2026-10-24",
+      "source_sha256": "526cc318a18047ec5b058dcbe1a69e5b44065475a6ca86060998c542f9b2c800",
+      "selected": [
+        {
+          "sku": "ZEKCE7VGMSM5XZPW",
+          "productFamily": "Data Payload",
+          "attributes": {
+            "servicecode": "AmazonCloudWatch",
+            "location": "Asia Pacific (Singapore)",
+            "locationType": "AWS Region",
+            "group": "Ingested Logs",
+            "groupDescription": "Existing system, application, and custom log files",
+            "usagetype": "APS1-DataProcessing-Bytes",
+            "operation": "PutLogEvents",
+            "logsDestination": "Amazon CloudWatch Logs",
+            "regionCode": "ap-southeast-1",
+            "servicename": "AmazonCloudWatch",
+            "version": "Current"
+          },
+          "terms": [
+            {
+              "offerTermCode": "JRTCKXETXF",
+              "effectiveDate": "2026-10-01T00:00:00Z",
+              "termAttributes": {},
+              "dimensions": [
+                {
+                  "rateCode": "ZEKCE7VGMSM5XZPW.JRTCKXETXF.6YS6EN2CT7",
+                  "description": "$0.70 per GB custom log data ingested in Standard log class - Asia Pacific (Singapore)",
+                  "unit": "GB",
+                  "rateUSD": "0.7000000000",
+                  "beginRange": "0",
+                  "endRange": "Inf",
+                  "appliesTo": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "sku": "RKCBFFXUWXG8KUQY",
+          "productFamily": "Storage Snapshot",
+          "attributes": {
+            "servicecode": "AmazonCloudWatch",
+            "location": "Asia Pacific (Singapore)",
+            "locationType": "AWS Region",
+            "storageMedia": "Amazon S3",
+            "group": "Amazon CloudWatch Standard Storage pricing current",
+            "groupDescription": "Amazon CloudWatch Logs Storage Current version",
+            "usagetype": "APS1-TimedStorage-ByteHrs",
+            "operation": "",
+            "regionCode": "ap-southeast-1",
+            "servicename": "AmazonCloudWatch",
+            "version": "Current"
+          },
+          "terms": [
+            {
+              "offerTermCode": "JRTCKXETXF",
+              "effectiveDate": "2026-10-01T00:00:00Z",
+              "termAttributes": {},
+              "dimensions": [
+                {
+                  "rateCode": "RKCBFFXUWXG8KUQY.JRTCKXETXF.6YS6EN2CT7",
+                  "description": "$0.03 per GB-mo of log storage - Asia Pacific (Singapore)",
+                  "unit": "GB-Mo",
+                  "rateUSD": "0.0300000000",
+                  "beginRange": "0",
+                  "endRange": "Inf",
+                  "appliesTo": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "sku": "2BF5WZ4QVWF9XRRT",
+          "productFamily": "Metric",
+          "attributes": {
+            "servicecode": "AmazonCloudWatch",
+            "location": "Asia Pacific (Singapore)",
+            "locationType": "AWS Region",
+            "group": "Metric",
+            "groupDescription": "CloudWatch Custom Metrics",
+            "usagetype": "APS1-CW:MetricMonitorUsage",
+            "operation": "",
+            "regionCode": "ap-southeast-1",
+            "servicename": "AmazonCloudWatch"
+          },
+          "terms": [
+            {
+              "offerTermCode": "JRTCKXETXF",
+              "effectiveDate": "2026-10-01T00:00:00Z",
+              "termAttributes": {},
+              "dimensions": [
+                {
+                  "rateCode": "2BF5WZ4QVWF9XRRT.JRTCKXETXF.95SDKRWVHH",
+                  "description": "$0.05 per metric-month for the next 750,000 metrics - Asia Pacific (Singapore)",
+                  "unit": "Metrics",
+                  "rateUSD": "0.0500000000",
+                  "beginRange": "250000",
+                  "endRange": "1000000",
+                  "appliesTo": []
+                },
+                {
+                  "rateCode": "2BF5WZ4QVWF9XRRT.JRTCKXETXF.A6VD9GXV7W",
+                  "description": "$0.30 per metric-month for the first 10,000 metrics - Asia Pacific (Singapore)",
+                  "unit": "Metrics",
+                  "rateUSD": "0.3000000000",
+                  "beginRange": "0",
+                  "endRange": "10000",
+                  "appliesTo": []
+                },
+                {
+                  "rateCode": "2BF5WZ4QVWF9XRRT.JRTCKXETXF.FG3KHZ79QN",
+                  "description": "$0.10 per metric-month for the next 240,000 metrics - Asia Pacific (Singapore)",
+                  "unit": "Metrics",
+                  "rateUSD": "0.1000000000",
+                  "beginRange": "10000",
+                  "endRange": "250000",
+                  "appliesTo": []
+                },
+                {
+                  "rateCode": "2BF5WZ4QVWF9XRRT.JRTCKXETXF.VNJQCFJPS4",
+                  "description": "$0.02 per metric-month for over 1,000,000 metrics - Asia Pacific (Singapore)",
+                  "unit": "Metrics",
+                  "rateUSD": "0.0200000000",
+                  "beginRange": "1000000",
+                  "endRange": "Inf",
+                  "appliesTo": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "sku": "ERS2PGV5BX4XH4WQ",
+          "productFamily": "Alarm",
+          "attributes": {
+            "servicecode": "AmazonCloudWatch",
+            "location": "Asia Pacific (Singapore)",
+            "locationType": "AWS Region",
+            "group": "Alarm",
+            "groupDescription": "CloudWatch Alarms",
+            "usagetype": "APS1-CW:AlarmMonitorUsage",
+            "operation": "",
+            "alarmType": "Standard",
+            "regionCode": "ap-southeast-1",
+            "servicename": "AmazonCloudWatch"
+          },
+          "terms": [
+            {
+              "offerTermCode": "JRTCKXETXF",
+              "effectiveDate": "2026-10-01T00:00:00Z",
+              "termAttributes": {},
+              "dimensions": [
+                {
+                  "rateCode": "ERS2PGV5BX4XH4WQ.JRTCKXETXF.6YS6EN2CT7",
+                  "description": "$0.10 per alarm metric month (standard resolution) - Asia Pacific (Singapore)",
+                  "unit": "Alarms",
+                  "rateUSD": "0.1000000000",
+                  "beginRange": "0",
+                  "endRange": "Inf",
+                  "appliesTo": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "service": "AWSSecretsManager",
+      "region": "ap-southeast-1",
+      "source_url": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AWSSecretsManager/current/ap-southeast-1/index.json",
+      "version": "20260911124610",
+      "publicationDate": "2026-09-11T12:46:10Z",
+      "retrieved": "2026-10-24",
+      "source_sha256": "61b9b4cb8b723f4fe402efe0c181185327eef852a64d18996e5cebfa17062c5e",
+      "selected": [
+        {
+          "sku": "J5PMSXRJZ3HNHFEV",
+          "productFamily": "Secret",
+          "attributes": {
+            "servicecode": "AWSSecretsManager",
+            "location": "Asia Pacific (Singapore)",
+            "locationType": "AWS Region",
+            "group": "AWSSecretsManager-Secret",
+            "usagetype": "APS1-AWSSecretsManager-Secret",
+            "operation": "",
+            "regionCode": "ap-southeast-1",
+            "servicename": "AWS Secrets Manager"
+          },
+          "terms": [
+            {
+              "offerTermCode": "JRTCKXETXF",
+              "effectiveDate": "2025-07-01T00:00:00Z",
+              "termAttributes": {},
+              "dimensions": [
+                {
+                  "rateCode": "J5PMSXRJZ3HNHFEV.JRTCKXETXF.6YS6EN2CT7",
+                  "description": "$0.40 per Secret",
+                  "unit": "Secrets",
+                  "rateUSD": "0.4000000000",
+                  "beginRange": "0",
+                  "endRange": "Inf",
+                  "appliesTo": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "sku": "KAUJ7G87ND7HD8N8",
+          "productFamily": "API Request",
+          "attributes": {
+            "servicecode": "AWSSecretsManager",
+            "location": "Asia Pacific (Singapore)",
+            "locationType": "AWS Region",
+            "group": "AWSSecretsManager-APIRequest",
+            "usagetype": "APS1-AWSSecretsManagerAPIRequest",
+            "operation": "",
+            "regionCode": "ap-southeast-1",
+            "servicename": "AWS Secrets Manager"
+          },
+          "terms": [
+            {
+              "offerTermCode": "JRTCKXETXF",
+              "effectiveDate": "2025-07-01T00:00:00Z",
+              "termAttributes": {},
+              "dimensions": [
+                {
+                  "rateCode": "KAUJ7G87ND7HD8N8.JRTCKXETXF.6YS6EN2CT7",
+                  "description": "$0.05 per 10000 API Requests",
+                  "unit": "API Requests",
+                  "rateUSD": "0.0000050000",
+                  "beginRange": "0",
+                  "endRange": "Inf",
+                  "appliesTo": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "service": "AmazonCognito",
+      "region": "ap-southeast-1",
+      "source_url": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonCognito/current/ap-southeast-1/index.json",
+      "version": "20261020233814",
+      "publicationDate": "2026-10-20T23:38:14Z",
+      "retrieved": "2026-10-24",
+      "source_sha256": "1241405c592cbac31678c69f3794b06749a37213eea2a594f0f2a3258c6defe2",
+      "selected": [
+        {
+          "sku": "CWU8WFA2ZYMH5EK9",
+          "productFamily": "Amazon Cognito - Essentials",
+          "attributes": {
+            "servicecode": "AmazonCognito",
+            "location": "Asia Pacific (Singapore)",
+            "locationType": "AWS Region",
+            "usagetype": "APS1-CognitoEssentialsMAU",
+            "operation": "CognitoEssentialsOperation",
+            "regionCode": "ap-southeast-1",
+            "servicename": "Amazon Cognito"
+          },
+          "terms": [
+            {
+              "offerTermCode": "JRTCKXETXF",
+              "effectiveDate": "2026-09-01T00:00:00Z",
+              "termAttributes": {},
+              "dimensions": [
+                {
+                  "rateCode": "CWU8WFA2ZYMH5EK9.JRTCKXETXF.6YS6EN2CT7",
+                  "description": "Cognito Essentials ap-southeast-1 tier 1 pricing",
+                  "unit": "CognitoUserPoolsMAU",
+                  "rateUSD": "0.0150000000",
+                  "beginRange": "0",
+                  "endRange": "Inf",
+                  "appliesTo": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "sku": "CJUNATY8K3J8WJ5U",
+          "productFamily": "Amazon Cognito - Lite",
+          "attributes": {
+            "servicecode": "AmazonCognito",
+            "location": "Asia Pacific (Singapore)",
+            "locationType": "AWS Region",
+            "usagetype": "APS1-CognitoLiteMAU",
+            "operation": "CognitoLiteOperation",
+            "regionCode": "ap-southeast-1",
+            "servicename": "Amazon Cognito"
+          },
+          "terms": [
+            {
+              "offerTermCode": "JRTCKXETXF",
+              "effectiveDate": "2026-09-01T00:00:00Z",
+              "termAttributes": {},
+              "dimensions": [
+                {
+                  "rateCode": "CJUNATY8K3J8WJ5U.JRTCKXETXF.75WZUA4FXN",
+                  "description": "Cognito Lite ap-southeast-1 tier 4 pricing",
+                  "unit": "CognitoUserPoolsMAU",
+                  "rateUSD": "0.0025000000",
+                  "beginRange": "9990000",
+                  "endRange": "Inf",
+                  "appliesTo": []
+                },
+                {
+                  "rateCode": "CJUNATY8K3J8WJ5U.JRTCKXETXF.KQSJQ3YMHA",
+                  "description": "Cognito Lite ap-southeast-1 tier 3 pricing",
+                  "unit": "CognitoUserPoolsMAU",
+                  "rateUSD": "0.0032500000",
+                  "beginRange": "990000",
+                  "endRange": "9990000",
+                  "appliesTo": []
+                },
+                {
+                  "rateCode": "CJUNATY8K3J8WJ5U.JRTCKXETXF.Q9R5NSMVGC",
+                  "description": "Cognito Lite ap-southeast-1 tier 2 pricing",
+                  "unit": "CognitoUserPoolsMAU",
+                  "rateUSD": "0.0046000000",
+                  "beginRange": "90000",
+                  "endRange": "990000",
+                  "appliesTo": []
+                },
+                {
+                  "rateCode": "CJUNATY8K3J8WJ5U.JRTCKXETXF.VV2AUKAVFP",
+                  "description": "Cognito Lite ap-southeast-1 tier 1 pricing",
+                  "unit": "CognitoUserPoolsMAU",
+                  "rateUSD": "0.0055000000",
+                  "beginRange": "0",
+                  "endRange": "90000",
+                  "appliesTo": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "sku": "AH8UFFURUFH2VCD9",
+          "productFamily": "Amazon Cognito - Essentials",
+          "attributes": {
+            "servicecode": "AmazonCognito",
+            "location": "Any",
+            "locationType": "AWS Region",
+            "usagetype": "Global-CognitoFreeTierMAU",
+            "operation": "",
+            "regionCode": "",
+            "servicename": "Amazon Cognito"
+          },
+          "terms": [
+            {
+              "offerTermCode": "A429C66SYZ",
+              "effectiveDate": "2026-09-01T00:00:00Z",
+              "termAttributes": {
+                "Restriction": "Limited SKU Usage"
+              },
+              "dimensions": [
+                {
+                  "rateCode": "AH8UFFURUFH2VCD9.A429C66SYZ.A6VD9GXV7W",
+                  "description": "Cognito  global free tier pricing",
+                  "unit": "CognitoUserPoolsMAU",
+                  "rateUSD": "0.0000000000",
+                  "beginRange": "0",
+                  "endRange": "10000",
+                  "appliesTo": [
+                    "PAWEFWT3AVM5G88J",
+                    "JVU799QJR37664RR",
+                    "EVZAYBBFN7P2HUZQ",
+                    "DUEYJN2PTYBG4J3T",
+                    "BEFSFEYNF4BZA7MC",
+                    "Y63YB6CSPG7WZHBK",
+                    "Y8KDQDK39UDRG6XJ",
+                    "FCGBT3RQAZU8XG3H",
+                    "BXAB68AG56DFTJ7J",
+                    "RDQXCR9N423N6FHP",
+                    "PUSB2GCP8RF2MEMH",
+                    "SCWNSEWJPCRKJ4PU",
+                    "RB4QWZK5J9YCU7Q9",
+                    "5YCEBXG4JEW286ZP",
+                    "5J74Y3YBXDR26WXU",
+                    "536563UHCHJXTENY",
+                    "EWGAQDDF3DMFK2N3",
+                    "K3SY4K7YCTNPBUPK",
+                    "NQKE2UA6GA2HDANG",
+                    "PVNJNQNM2RM23UTB",
+                    "AQXZ7B2EDGBA5387",
+                    "3MY5CTD2GSP5F45Y",
+                    "CWU8WFA2ZYMH5EK9",
+                    "M6TB36F68GMWUH6T",
+                    "YZZRGFGGZZPMR92V",
+                    "3SBZU3S3XSNTN9XK",
+                    "YJ4TYMGXRS5N6ACK",
+                    "XK94SPH8SW72KYTT",
+                    "CNHN82F3S2AZPTXR",
+                    "5PJHSZU2XZMWHNTW",
+                    "3GVVE46F3BD9CRPA",
+                    "63GYR4KMEWCBT6DY",
+                    "Y4HPSE6CS9SD96JP",
+                    "UJ4M5FKHAN4TA9VD",
+                    "TTFFBJP2K9P7RKHQ",
+                    "XGDZTUEKH8EGQHEM",
+                    "2BTX6F7Y357WASFT",
+                    "ZZG43CRJJFCYX26Z",
+                    "SS63SQ6T3Y6ASC3Q",
+                    "BARM6XXPJNRY73CQ",
+                    "QKGZH5UTDUJE649F",
+                    "G2B28QW9VSYB6UVB",
+                    "5HKYV426P4G9BMSG",
+                    "YR928W49T5QRMP6S",
+                    "8ZY7Q5SKS4WKZHYF",
+                    "A7WPS857FB7PHDGS",
+                    "DYBNEDWSCPCS2BUZ",
+                    "BN6V69DXVARP9XZQ",
+                    "4YCJTDX7BUH9V54R",
+                    "7YJ8S5JYQJ6MZWSW",
+                    "BSXW287GKHPP2CFM",
+                    "TJFUTGYWGKNBSHG2",
+                    "XVYWD6TWRYVQWN85",
+                    "F4M2AY3YMYJKWJBS",
+                    "EBSF4REW8Q54M9PN",
+                    "YPQMGWCVPGDBE4V5",
+                    "CQDYDGHKVVFVZZRP",
+                    "CJUNATY8K3J8WJ5U",
+                    "QA55XHQT8NAY3D4U",
+                    "KSXMU6NXDGDEEHXQ",
+                    "NBCHU5WKQQ2GJ947",
+                    "BR4R96M4DGMHCFJE",
+                    "KXPEEH5NVRPPH6UH",
+                    "WZTQ7QDE9T262WNY",
+                    "EYGK5MNEV88JRZDR",
+                    "AHWP4TMEFUMZNQ7T",
+                    "VF5M4Q43UHW79W35",
+                    "D7UFP5TDYG2PN8M7"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "service": "AWSDataTransfer",
+      "region": "ap-southeast-1",
+      "source_url": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AWSDataTransfer/current/ap-southeast-1/index.json",
+      "version": "20260916132208",
+      "publicationDate": "2026-09-16T13:22:08Z",
+      "retrieved": "2026-10-24",
+      "source_sha256": "cfc36a6012cb0939f3d4da299697ca9a542bd8711bd083b84f457ccbc8303108",
+      "selected": [
+        {
+          "sku": "SDHP4R7WGBVJPQPY",
+          "productFamily": "Data Transfer",
+          "attributes": {
+            "servicecode": "AWSDataTransfer",
+            "transferType": "AWS Outbound",
+            "fromLocation": "Asia Pacific (Singapore)",
+            "fromLocationType": "AWS Region",
+            "toLocation": "External",
+            "toLocationType": "Other",
+            "usagetype": "APS1-DataTransfer-Out-Bytes",
+            "operation": "",
+            "fromRegionCode": "ap-southeast-1",
+            "servicename": "AWS Data Transfer",
+            "toRegionCode": ""
+          },
+          "terms": [
+            {
+              "offerTermCode": "JRTCKXETXF",
+              "effectiveDate": "2026-06-01T00:00:00Z",
+              "termAttributes": {},
+              "dimensions": [
+                {
+                  "rateCode": "SDHP4R7WGBVJPQPY.JRTCKXETXF.GPHXDESFBB",
+                  "description": "$0.080 per GB - greater than 150 TB / month data transfer out",
+                  "unit": "GB",
+                  "rateUSD": "0.0800000000",
+                  "beginRange": "153600",
+                  "endRange": "Inf",
+                  "appliesTo": []
+                },
+                {
+                  "rateCode": "SDHP4R7WGBVJPQPY.JRTCKXETXF.N9EW5UVVPA",
+                  "description": "$0.082 per GB - next 100 TB / month data transfer out",
+                  "unit": "GB",
+                  "rateUSD": "0.0820000000",
+                  "beginRange": "51200",
+                  "endRange": "153600",
+                  "appliesTo": []
+                },
+                {
+                  "rateCode": "SDHP4R7WGBVJPQPY.JRTCKXETXF.Q3Z75P77EN",
+                  "description": "$0.120 per GB - first 10 TB / month data transfer out beyond the global free tier",
+                  "unit": "GB",
+                  "rateUSD": "0.1200000000",
+                  "beginRange": "0",
+                  "endRange": "10240",
+                  "appliesTo": []
+                },
+                {
+                  "rateCode": "SDHP4R7WGBVJPQPY.JRTCKXETXF.VF6T3GAUKQ",
+                  "description": "$0.085 per GB - next 40 TB / month data transfer out",
+                  "unit": "GB",
+                  "rateUSD": "0.0850000000",
+                  "beginRange": "10240",
+                  "endRange": "51200",
+                  "appliesTo": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "service": "AmazonCloudWatch",
+      "region": "global",
+      "source_url": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonCloudWatch/current/index.json",
+      "version": "20261007115540",
+      "publicationDate": "2026-10-07T11:55:40Z",
+      "retrieved": "2026-10-24",
+      "source_sha256": "b61cce086dfcc184c901064a388fbcc9ab6bbe355a417dc8c04c706e0cbcd51e",
+      "selected": [
+        {
+          "sku": "5P8PBB6MXV325TDC",
+          "productFamily": "Dashboard",
+          "attributes": {
+            "servicecode": "AmazonCloudWatch",
+            "location": "Any",
+            "locationType": "AWS Region",
+            "group": "Dashboard",
+            "groupDescription": "CloudWatch Dashboards",
+            "usagetype": "DashboardsUsageHour-Basic",
+            "operation": "DashboardHour",
+            "regionCode": "",
+            "servicename": "AmazonCloudWatch",
+            "version": "Basic"
+          },
+          "terms": [
+            {
+              "offerTermCode": "JRTCKXETXF",
+              "effectiveDate": "2026-10-01T00:00:00Z",
+              "termAttributes": {},
+              "dimensions": [
+                {
+                  "rateCode": "5P8PBB6MXV325TDC.JRTCKXETXF.6YS6EN2CT7",
+                  "description": "$3.00 per Dashboard per Month",
+                  "unit": "Dashboards",
+                  "rateUSD": "3.0000000000",
+                  "beginRange": "0",
+                  "endRange": "Inf",
+                  "appliesTo": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "sku": "ZXHCNVUBD6E8UPH8",
+          "productFamily": "Dashboard",
+          "attributes": {
+            "servicecode": "AmazonCloudWatch",
+            "location": "Any",
+            "locationType": "AWS Region",
+            "group": "Dashboard",
+            "groupDescription": "CloudWatch Dashboards",
+            "usagetype": "Global-DashboardsUsageHour-Basic",
+            "operation": "DashboardHour",
+            "regionCode": "",
+            "servicename": "AmazonCloudWatch",
+            "version": "Basic (Free)"
+          },
+          "terms": [
+            {
+              "offerTermCode": "A429C66SYZ",
+              "effectiveDate": "2026-10-01T00:00:00Z",
+              "termAttributes": {
+                "Restriction": "Limited SKU Usage"
+              },
+              "dimensions": [
+                {
+                  "rateCode": "ZXHCNVUBD6E8UPH8.A429C66SYZ.D5YRXPX4C7",
+                  "description": "Global",
+                  "unit": "Dashboards",
+                  "rateUSD": "0.0000000000",
+                  "beginRange": "0",
+                  "endRange": "3",
+                  "appliesTo": [
+                    "5P8PBB6MXV325TDC"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "rates": {
+    "rds_hour": {
+      "usd": "0.0250000000",
+      "unit": "Hrs",
+      "description": "$ 0.025 per RDS db.t4g.micro Single-AZ instance hour (or partial hour) running PostgreSQL",
+      "service": "AmazonRDS",
+      "region": "ap-southeast-1",
+      "sku": "BQ5T85JXP99J9D2J",
+      "rateCode": "BQ5T85JXP99J9D2J.JRTCKXETXF.6YS6EN2CT7",
+      "source_url": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonRDS/current/ap-southeast-1/index.json",
+      "publicationDate": "2026-10-20T00:32:32Z",
+      "retrieved": "2026-10-24",
+      "effectiveDate": "2026-10-01T00:00:00Z",
+      "beginRange": "0",
+      "endRange": "Inf"
+    },
+    "rds_storage_gb_month": {
+      "usd": "0.1380000000",
+      "unit": "GB-Mo",
+      "description": "$0.138 per GB-month of provisioned GP3 storage running PostgreSQL",
+      "service": "AmazonRDS",
+      "region": "ap-southeast-1",
+      "sku": "FXXDJWB23UZKQHCN",
+      "rateCode": "FXXDJWB23UZKQHCN.JRTCKXETXF.6YS6EN2CT7",
+      "source_url": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonRDS/current/ap-southeast-1/index.json",
+      "publicationDate": "2026-10-20T00:32:32Z",
+      "retrieved": "2026-10-24",
+      "effectiveDate": "2026-10-01T00:00:00Z",
+      "beginRange": "0",
+      "endRange": "Inf"
+    },
+    "rds_cpu_credit": {
+      "usd": "0.0750000000",
+      "unit": "vCPU-Hours",
+      "description": "USD 0.075 per vCPU-Hour of T4g CPU Credits",
+      "service": "AmazonRDS",
+      "region": "ap-southeast-1",
+      "sku": "MP6SPJ889449AMT3",
+      "rateCode": "MP6SPJ889449AMT3.JRTCKXETXF.6YS6EN2CT7",
+      "source_url": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonRDS/current/ap-southeast-1/index.json",
+      "publicationDate": "2026-10-20T00:32:32Z",
+      "retrieved": "2026-10-24",
+      "effectiveDate": "2026-10-01T00:00:00Z",
+      "beginRange": "0",
+      "endRange": "Inf"
+    },
+    "lambda_gb_second": {
+      "usd": "0.0000166667",
+      "unit": "Lambda-GB-Second",
+      "description": "AWS Lambda - Total Compute - Asia Pacific (Singapore)-Tier-1",
+      "service": "AWSLambda",
+      "region": "ap-southeast-1",
+      "sku": "67ZV6RMYY72YSRDC",
+      "rateCode": "67ZV6RMYY72YSRDC.JRTCKXETXF.CUKFZ388N3",
+      "source_url": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AWSLambda/current/ap-southeast-1/index.json",
+      "publicationDate": "2026-10-22T18:39:59Z",
+      "retrieved": "2026-10-24",
+      "effectiveDate": "2026-10-01T00:00:00Z",
+      "beginRange": "0",
+      "endRange": "6000000000"
+    },
+    "lambda_request": {
+      "usd": "0.0000002000",
+      "unit": "Request",
+      "description": "AWS Lambda - Total Requests - Asia Pacific (Singapore)",
+      "service": "AWSLambda",
+      "region": "ap-southeast-1",
+      "sku": "36D3E7396ZKUSWWW",
+      "rateCode": "36D3E7396ZKUSWWW.JRTCKXETXF.6YS6EN2CT7",
+      "source_url": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AWSLambda/current/ap-southeast-1/index.json",
+      "publicationDate": "2026-10-22T18:39:59Z",
+      "retrieved": "2026-10-24",
+      "effectiveDate": "2026-10-01T00:00:00Z",
+      "beginRange": "0",
+      "endRange": "Inf"
+    },
+    "http_api_unit": {
+      "usd": "0.0000012500",
+      "unit": "Requests",
+      "description": "$1.25/million requests - API Gateway HTTP API (first 300 million)",
+      "service": "AmazonApiGateway",
+      "region": "ap-southeast-1",
+      "sku": "HTX6VZU3YCMMNRM5",
+      "rateCode": "HTX6VZU3YCMMNRM5.JRTCKXETXF.9NXBCPDZYR",
+      "source_url": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonApiGateway/current/ap-southeast-1/index.json",
+      "publicationDate": "2026-10-13T00:30:44Z",
+      "retrieved": "2026-10-24",
+      "effectiveDate": "2026-10-01T00:00:00Z",
+      "beginRange": "0",
+      "endRange": "300000000"
+    },
+    "amplify_build_minute": {
+      "usd": "0.0100000000",
+      "unit": "minutes",
+      "description": "USD0.01 per minutes for BuildDuration in Asia Pacific (Singapore)",
+      "service": "AWSAmplify",
+      "region": "ap-southeast-1",
+      "sku": "KB43EC4E5JSNXU5D",
+      "rateCode": "KB43EC4E5JSNXU5D.JRTCKXETXF.6YS6EN2CT7",
+      "source_url": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AWSAmplify/current/ap-southeast-1/index.json",
+      "publicationDate": "2026-09-11T12:45:22Z",
+      "retrieved": "2026-10-24",
+      "effectiveDate": "2025-05-01T00:00:00Z",
+      "beginRange": "0",
+      "endRange": "Inf"
+    },
+    "amplify_storage_gb_month": {
+      "usd": "0.0230000000",
+      "unit": "GigaBytes",
+      "description": "USD0.023 per GigaBytes for DataStorage in Asia Pacific (Singapore)",
+      "service": "AWSAmplify",
+      "region": "ap-southeast-1",
+      "sku": "7PVCZ36NR3NH9JUK",
+      "rateCode": "7PVCZ36NR3NH9JUK.JRTCKXETXF.6YS6EN2CT7",
+      "source_url": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AWSAmplify/current/ap-southeast-1/index.json",
+      "publicationDate": "2026-09-11T12:45:22Z",
+      "retrieved": "2026-10-24",
+      "effectiveDate": "2025-05-01T00:00:00Z",
+      "beginRange": "0",
+      "endRange": "Inf"
+    },
+    "amplify_egress_gb": {
+      "usd": "0.1500000000",
+      "unit": "GigaBytes",
+      "description": "USD0.15 per GigaBytes for DataTransferOut in Asia Pacific (Singapore)",
+      "service": "AWSAmplify",
+      "region": "ap-southeast-1",
+      "sku": "GAEKRC2DWFX3A8TT",
+      "rateCode": "GAEKRC2DWFX3A8TT.JRTCKXETXF.6YS6EN2CT7",
+      "source_url": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AWSAmplify/current/ap-southeast-1/index.json",
+      "publicationDate": "2026-09-11T12:45:22Z",
+      "retrieved": "2026-10-24",
+      "effectiveDate": "2025-05-01T00:00:00Z",
+      "beginRange": "0",
+      "endRange": "Inf"
+    },
+    "log_ingest_gb": {
+      "usd": "0.7000000000",
+      "unit": "GB",
+      "description": "$0.70 per GB custom log data ingested in Standard log class - Asia Pacific (Singapore)",
+      "service": "AmazonCloudWatch",
+      "region": "ap-southeast-1",
+      "sku": "ZEKCE7VGMSM5XZPW",
+      "rateCode": "ZEKCE7VGMSM5XZPW.JRTCKXETXF.6YS6EN2CT7",
+      "source_url": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonCloudWatch/current/ap-southeast-1/index.json",
+      "publicationDate": "2026-10-07T11:55:40Z",
+      "retrieved": "2026-10-24",
+      "effectiveDate": "2026-10-01T00:00:00Z",
+      "beginRange": "0",
+      "endRange": "Inf"
+    },
+    "log_storage_gb_month": {
+      "usd": "0.0300000000",
+      "unit": "GB-Mo",
+      "description": "$0.03 per GB-mo of log storage - Asia Pacific (Singapore)",
+      "service": "AmazonCloudWatch",
+      "region": "ap-southeast-1",
+      "sku": "RKCBFFXUWXG8KUQY",
+      "rateCode": "RKCBFFXUWXG8KUQY.JRTCKXETXF.6YS6EN2CT7",
+      "source_url": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonCloudWatch/current/ap-southeast-1/index.json",
+      "publicationDate": "2026-10-07T11:55:40Z",
+      "retrieved": "2026-10-24",
+      "effectiveDate": "2026-10-01T00:00:00Z",
+      "beginRange": "0",
+      "endRange": "Inf"
+    },
+    "custom_metric": {
+      "usd": "0.3000000000",
+      "unit": "Metrics",
+      "description": "$0.30 per metric-month for the first 10,000 metrics - Asia Pacific (Singapore)",
+      "service": "AmazonCloudWatch",
+      "region": "ap-southeast-1",
+      "sku": "2BF5WZ4QVWF9XRRT",
+      "rateCode": "2BF5WZ4QVWF9XRRT.JRTCKXETXF.A6VD9GXV7W",
+      "source_url": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonCloudWatch/current/ap-southeast-1/index.json",
+      "publicationDate": "2026-10-07T11:55:40Z",
+      "retrieved": "2026-10-24",
+      "effectiveDate": "2026-10-01T00:00:00Z",
+      "beginRange": "0",
+      "endRange": "10000"
+    },
+    "alarm_metric": {
+      "usd": "0.1000000000",
+      "unit": "Alarms",
+      "description": "$0.10 per alarm metric month (standard resolution) - Asia Pacific (Singapore)",
+      "service": "AmazonCloudWatch",
+      "region": "ap-southeast-1",
+      "sku": "ERS2PGV5BX4XH4WQ",
+      "rateCode": "ERS2PGV5BX4XH4WQ.JRTCKXETXF.6YS6EN2CT7",
+      "source_url": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonCloudWatch/current/ap-southeast-1/index.json",
+      "publicationDate": "2026-10-07T11:55:40Z",
+      "retrieved": "2026-10-24",
+      "effectiveDate": "2026-10-01T00:00:00Z",
+      "beginRange": "0",
+      "endRange": "Inf"
+    },
+    "dashboard": {
+      "usd": "3.0000000000",
+      "unit": "Dashboards",
+      "description": "$3.00 per Dashboard per Month",
+      "service": "AmazonCloudWatch",
+      "region": "global",
+      "sku": "5P8PBB6MXV325TDC",
+      "rateCode": "5P8PBB6MXV325TDC.JRTCKXETXF.6YS6EN2CT7",
+      "source_url": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonCloudWatch/current/index.json",
+      "publicationDate": "2026-10-07T11:55:40Z",
+      "retrieved": "2026-10-24",
+      "effectiveDate": "2026-10-01T00:00:00Z",
+      "beginRange": "0",
+      "endRange": "Inf"
+    },
+    "secret_month": {
+      "usd": "0.4000000000",
+      "unit": "Secrets",
+      "description": "$0.40 per Secret",
+      "service": "AWSSecretsManager",
+      "region": "ap-southeast-1",
+      "sku": "J5PMSXRJZ3HNHFEV",
+      "rateCode": "J5PMSXRJZ3HNHFEV.JRTCKXETXF.6YS6EN2CT7",
+      "source_url": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AWSSecretsManager/current/ap-southeast-1/index.json",
+      "publicationDate": "2026-09-11T12:46:10Z",
+      "retrieved": "2026-10-24",
+      "effectiveDate": "2025-07-01T00:00:00Z",
+      "beginRange": "0",
+      "endRange": "Inf"
+    },
+    "secret_api_call": {
+      "usd": "0.0000050000",
+      "unit": "API Requests",
+      "description": "$0.05 per 10000 API Requests",
+      "service": "AWSSecretsManager",
+      "region": "ap-southeast-1",
+      "sku": "KAUJ7G87ND7HD8N8",
+      "rateCode": "KAUJ7G87ND7HD8N8.JRTCKXETXF.6YS6EN2CT7",
+      "source_url": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AWSSecretsManager/current/ap-southeast-1/index.json",
+      "publicationDate": "2026-09-11T12:46:10Z",
+      "retrieved": "2026-10-24",
+      "effectiveDate": "2025-07-01T00:00:00Z",
+      "beginRange": "0",
+      "endRange": "Inf"
+    },
+    "cognito_mau": {
+      "usd": "0.0150000000",
+      "unit": "CognitoUserPoolsMAU",
+      "description": "Cognito Essentials ap-southeast-1 tier 1 pricing",
+      "service": "AmazonCognito",
+      "region": "ap-southeast-1",
+      "sku": "CWU8WFA2ZYMH5EK9",
+      "rateCode": "CWU8WFA2ZYMH5EK9.JRTCKXETXF.6YS6EN2CT7",
+      "source_url": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonCognito/current/ap-southeast-1/index.json",
+      "publicationDate": "2026-10-20T23:38:14Z",
+      "retrieved": "2026-10-24",
+      "effectiveDate": "2026-09-01T00:00:00Z",
+      "beginRange": "0",
+      "endRange": "Inf"
+    },
+    "internet_egress_gb": {
+      "usd": "0.1200000000",
+      "unit": "GB",
+      "description": "$0.120 per GB - first 10 TB / month data transfer out beyond the global free tier",
+      "service": "AWSDataTransfer",
+      "region": "ap-southeast-1",
+      "sku": "SDHP4R7WGBVJPQPY",
+      "rateCode": "SDHP4R7WGBVJPQPY.JRTCKXETXF.Q3Z75P77EN",
+      "source_url": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AWSDataTransfer/current/ap-southeast-1/index.json",
+      "publicationDate": "2026-09-16T13:22:08Z",
+      "retrieved": "2026-10-24",
+      "effectiveDate": "2026-06-01T00:00:00Z",
+      "beginRange": "0",
+      "endRange": "10240"
+    }
+  }
+}

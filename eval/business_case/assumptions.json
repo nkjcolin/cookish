@@ -1,0 +1,67 @@
+{
+  "version": 1,
+  "as_of": "2026-10-24",
+  "status": "Illustrative planning assumptions, not measured usage, demand or capacity",
+  "currency": "USD",
+  "region": "ap-southeast-1",
+  "monthly_price_per_paying_household": 4.99,
+  "active_households": [100, 1000, 10000],
+  "main_paid_share": 0.10,
+  "paid_share_sensitivity": [0.05, 0.10, 0.20],
+  "fixed": {
+    "database_hours": 730,
+    "database_storage_gb": 20,
+    "secrets": 2,
+    "build_minutes": 200,
+    "frontend_storage_gb": 1,
+    "dashboards": 1,
+    "custom_metrics": 5,
+    "alarm_metrics": 5
+  },
+  "common_usage": {
+    "lambda_memory_gb": 0.5,
+    "monthly_active_accounts_per_household": 2,
+    "free_trial_imports_once": 3,
+    "share_of_active_free_households_new_this_month": 0.10,
+    "proposed_paid_import_limit_per_month": 20,
+    "outer_attempts_per_import": 1,
+    "http_billing_units_per_ai_upload": 3,
+    "secret_reads_per_lambda_invocation": 0.1,
+    "cognito_allowance_for_separate_sensitivity": 10000
+  },
+  "workloads": {
+    "low": {
+      "non_ai_api_requests": 150,
+      "api_seconds": 0.1,
+      "paid_imports": 5,
+      "model_attempts_per_import": 1.0,
+      "ai_seconds_per_model_attempt": 3,
+      "assumed_model_usd_per_attempt": 0.002,
+      "frontend_egress_gb": 0.02,
+      "other_internet_egress_gb": 0.005,
+      "log_ingestion_and_retention_gb": 0.001
+    },
+    "base": {
+      "non_ai_api_requests": 300,
+      "api_seconds": 0.2,
+      "paid_imports": 10,
+      "model_attempts_per_import": 1.1,
+      "ai_seconds_per_model_attempt": 8,
+      "assumed_model_usd_per_attempt": 0.01,
+      "frontend_egress_gb": 0.05,
+      "other_internet_egress_gb": 0.02,
+      "log_ingestion_and_retention_gb": 0.003
+    },
+    "high": {
+      "non_ai_api_requests": 600,
+      "api_seconds": 0.4,
+      "paid_imports": 20,
+      "model_attempts_per_import": 1.2,
+      "ai_seconds_per_model_attempt": 15,
+      "assumed_model_usd_per_attempt": 0.05,
+      "frontend_egress_gb": 0.10,
+      "other_internet_egress_gb": 0.05,
+      "log_ingestion_and_retention_gb": 0.010
+    }
+  }
+}
