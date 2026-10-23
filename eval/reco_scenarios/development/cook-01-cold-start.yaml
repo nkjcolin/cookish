@@ -1,0 +1,47 @@
+version: 1
+id: DEV-C01
+split: development
+mode: cook
+description: With no inventory or learned history, the starred recipe wins the initial soft preference
+  comparison; missing staples are explicitly assumed.
+categories:
+- cold_start
+- stars
+- missing_fallback
+- staples
+recipes:
+- egg-rice
+- tofu-rice
+- tomato-rice
+preferences:
+  allergens: []
+  diets: []
+  equipment:
+  - stove
+  cuisines: []
+  disliked_ingredients: []
+  max_cook_minutes: 60
+  max_difficulty: 3
+  household_size: 2
+  last_cook_people: 2
+  last_shop_people: 2
+  last_shop_meals: 3
+inventory: []
+request:
+  people: null
+  meals: null
+  strict_max_minutes: null
+expect:
+  result: true
+  selected_any:
+  - egg-rice
+  ingredient_status:
+    egg: missing
+    rice: missing
+    water: staple
+    oil: staple
+  needs_check: []
+  freshness_check: []
+  missing_essential_fallback: true
+adjustments: []
+taste_weights: {}

@@ -1,0 +1,41 @@
+version: 1
+id: DEV-S24
+split: development
+mode: shop
+description: Vegan constraints remove egg and chicken recipes; requesting seven meals returns the
+  two eligible plant dishes and aggregates their rice to 400 g.
+categories:
+- diet
+- hard-filter
+- fewer-meals
+recipes:
+- egg-rice
+- chicken-rice
+- tofu-rice
+- tomato-rice
+preferences:
+  diets:
+  - vegan
+inventory: []
+request:
+  people: 2
+  meals: 7
+expect:
+  result: true
+  meal_count: 2
+  planned:
+  - tofu-rice
+  - tomato-rice
+  items:
+    tofu:
+      packs: null
+      needs_check: false
+      amount_contains: 300 g
+    tomato:
+      packs: null
+      needs_check: false
+      amount_contains: 300 g
+    rice:
+      packs: null
+      needs_check: false
+      amount_contains: 400 g

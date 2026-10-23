@@ -1,0 +1,33 @@
+version: 1
+id: DEV-S21
+split: development
+mode: shop
+description: A 0.5 kg chicken requirement cannot silently use 500 g stock or a 500 g pack without
+  a conversion adapter; keep the recipe and expose the unresolved quantity.
+categories:
+- unsupported-conversion
+- pack-units
+recipes:
+- chicken-kilograms
+preferences: {}
+inventory:
+- ingredient: chicken
+  count: 500
+  unit: g
+request:
+  people: 2
+  meals: 1
+expect:
+  result: true
+  meal_count: 1
+  planned:
+  - chicken-kilograms
+  items:
+    chicken:
+      packs: null
+      needs_check: true
+      amount_contains: 0.5 kg
+    rice:
+      packs: null
+      needs_check: false
+      amount_contains: 200 g

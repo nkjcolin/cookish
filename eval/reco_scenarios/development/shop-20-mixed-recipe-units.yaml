@@ -1,0 +1,36 @@
+version: 1
+id: DEV-S20
+split: development
+mode: shop
+description: One meal needs three eggs by piece and another needs 150 g egg; their units cannot be
+  added, so ten recorded pieces cannot erase the combined check line.
+categories:
+- mixed-units
+- aggregation
+- unsupported-conversion
+recipes:
+- egg-rice
+- egg-mass
+preferences: {}
+inventory:
+- ingredient: egg
+  count: 10
+  unit: pcs
+request:
+  people: 2
+  meals: 2
+expect:
+  result: true
+  meal_count: 2
+  planned:
+  - egg-rice
+  - egg-mass
+  items:
+    egg:
+      packs: null
+      needs_check: true
+      amount_contains: check quantity and purchase units
+    rice:
+      packs: null
+      needs_check: false
+      amount_contains: 400 g

@@ -1,0 +1,38 @@
+version: 1
+id: DEV-S07
+split: development
+mode: shop
+description: 'Three confirmed eggs already cover the meal, but a second unknown-count batch must
+  stay visible: check the stock and suggest no additional tray.'
+categories:
+- multi-batch
+- uncertainty-visibility
+recipes:
+- egg-rice
+preferences: {}
+inventory:
+- ingredient: egg
+  count: 3
+  unit: pcs
+  key: known
+- ingredient: egg
+  count: null
+  unit: pcs
+  key: unknown
+request:
+  people: 2
+  meals: 1
+expect:
+  result: true
+  meal_count: 1
+  planned:
+  - egg-rice
+  items:
+    egg:
+      packs: null
+      needs_check: true
+      amount_contains: Confirmed stock covers the plan
+    rice:
+      packs: null
+      needs_check: false
+      amount_contains: 200 g

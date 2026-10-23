@@ -1,0 +1,31 @@
+version: 1
+id: DEV-S17
+split: development
+mode: shop
+description: 'Shop requires recent stock confirmation even for nonperishable pantry rice: fifteen-day-old
+  enough rice stays as a check while recent enough tomato is omitted.'
+categories:
+- stale-stock
+- pantry-stock
+recipes:
+- tomato-rice
+preferences: {}
+inventory:
+- ingredient: tomato
+  remaining_state: enough
+- ingredient: rice
+  remaining_state: enough
+  confirmed_days_ago: 15
+request:
+  people: 2
+  meals: 1
+expect:
+  result: true
+  meal_count: 1
+  planned:
+  - tomato-rice
+  items:
+    rice:
+      packs: null
+      needs_check: true
+      amount_contains: 200 g

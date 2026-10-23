@@ -1,0 +1,58 @@
+version: 1
+id: DEV-C06
+split: development
+mode: cook
+description: A null egg count is uncertainty rather than zero and requires a real stock-check batch.
+categories:
+- counted_stock
+- unknown_stock
+recipes:
+- egg-rice
+preferences:
+  allergens: []
+  diets: []
+  equipment:
+  - stove
+  cuisines: []
+  disliked_ingredients: []
+  max_cook_minutes: 60
+  max_difficulty: 3
+  household_size: 2
+  last_cook_people: 2
+  last_shop_people: 2
+  last_shop_meals: 3
+inventory:
+- ingredient: egg
+  key: one
+  count: null
+  unit: pcs
+  remaining_state: enough
+  freshness_status: ok
+  confirmed_days_ago: 1
+  acquired_days_ago: 2
+  use_first_in_days: 2
+- ingredient: rice
+  key: one
+  count: null
+  unit: null
+  remaining_state: enough
+  freshness_status: ok
+  confirmed_days_ago: 1
+  acquired_days_ago: 2
+  use_first_in_days: 2
+request:
+  people: null
+  meals: null
+  strict_max_minutes: null
+expect:
+  result: true
+  selected_any:
+  - egg-rice
+  ingredient_status:
+    egg: unknown
+  needs_check:
+  - egg
+  freshness_check: []
+  missing_essential_fallback: false
+adjustments: []
+taste_weights: {}

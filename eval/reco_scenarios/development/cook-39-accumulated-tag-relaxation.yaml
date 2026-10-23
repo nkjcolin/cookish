@@ -1,0 +1,80 @@
+version: 1
+id: DEV-C39
+split: development
+mode: cook
+description: Less-oil remains active after a later more-vegetables request; disjoint tagged variants
+  cannot satisfy both, so relaxing tags is the useful recovery.
+categories:
+- adjustments
+- accumulation
+- relaxation
+recipes:
+- egg-rice
+- egg-light
+- egg-vegetables
+preferences:
+  allergens: []
+  diets: []
+  equipment:
+  - stove
+  cuisines: []
+  disliked_ingredients: []
+  max_cook_minutes: 60
+  max_difficulty: 3
+  household_size: 2
+  last_cook_people: 2
+  last_shop_people: 2
+  last_shop_meals: 3
+inventory:
+- ingredient: egg
+  key: one
+  count: 3
+  unit: pcs
+  remaining_state: enough
+  freshness_status: ok
+  confirmed_days_ago: 1
+  acquired_days_ago: 2
+  use_first_in_days: 2
+- ingredient: rice
+  key: one
+  count: null
+  unit: null
+  remaining_state: enough
+  freshness_status: ok
+  confirmed_days_ago: 1
+  acquired_days_ago: 2
+  use_first_in_days: 2
+- ingredient: greens
+  key: one
+  count: null
+  unit: null
+  remaining_state: enough
+  freshness_status: ok
+  confirmed_days_ago: 1
+  acquired_days_ago: 2
+  use_first_in_days: 2
+request:
+  people: null
+  meals: null
+  strict_max_minutes: null
+expect:
+  result: true
+  selected_any:
+  - egg-rice
+adjustments:
+- patch:
+    tags:
+    - less_oil
+  expect:
+    result: true
+    selected_any:
+    - egg-light
+- patch:
+    tags:
+    - more_vegetables
+  expect:
+    result: false
+    selected_any: []
+    relaxable:
+    - tags
+taste_weights: {}

@@ -1,0 +1,24 @@
+version: 1
+id: DEV-S25
+split: development
+mode: shop
+description: An explicitly strict ten-minute cooking cap excludes both thirty-minute dishes even
+  though ordinary Shop time preferences are soft.
+categories:
+- strict-time
+- hard-filter
+- no-result
+recipes:
+- tomato-rice
+- tofu-rice
+preferences: {}
+inventory: []
+request:
+  people: 2
+  meals: 2
+  strict_max_minutes: 10
+expect:
+  result: false
+  meal_count: 0
+  planned: []
+  items: {}

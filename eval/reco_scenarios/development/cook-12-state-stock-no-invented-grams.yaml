@@ -1,0 +1,59 @@
+version: 1
+id: DEV-C12
+split: development
+mode: cook
+description: A recently confirmed enough state stays qualitative for twelve people; recipe amounts
+  scale without inventing grams in inventory.
+categories:
+- state_stock
+- portions
+recipes:
+- tomato-rice
+preferences:
+  allergens: []
+  diets: []
+  equipment:
+  - stove
+  cuisines: []
+  disliked_ingredients: []
+  max_cook_minutes: 60
+  max_difficulty: 3
+  household_size: 2
+  last_cook_people: 2
+  last_shop_people: 2
+  last_shop_meals: 3
+inventory:
+- ingredient: tomato
+  key: one
+  count: null
+  unit: null
+  remaining_state: enough
+  freshness_status: ok
+  confirmed_days_ago: 1
+  acquired_days_ago: 2
+  use_first_in_days: 2
+- ingredient: rice
+  key: one
+  count: null
+  unit: null
+  remaining_state: enough
+  freshness_status: ok
+  confirmed_days_ago: 1
+  acquired_days_ago: 2
+  use_first_in_days: 2
+request:
+  people: 12
+  meals: null
+  strict_max_minutes: null
+expect:
+  result: true
+  selected_any:
+  - tomato-rice
+  ingredient_status:
+    tomato: have
+    rice: have
+  amounts:
+    tomato: 1800 g
+    rice: 1200 g
+adjustments: []
+taste_weights: {}

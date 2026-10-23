@@ -1,0 +1,46 @@
+version: 1
+id: DEV-S28
+split: development
+mode: shop
+description: Without a shelf-life preference the tomato meal avoids half a bag of wheat surplus;
+  longer-lasting then favors pantry wheat over a meal containing short-lived tomato.
+categories:
+- longer-lasting
+- adjustment
+- shelf-life
+recipes:
+- wheat-meal
+- tomato-rice
+preferences: {}
+inventory: []
+request:
+  people: 2
+  meals: 1
+expect:
+  result: true
+  meal_count: 1
+  planned:
+  - tomato-rice
+  items:
+    tomato:
+      packs: null
+      needs_check: false
+      amount_contains: 300 g
+    rice:
+      packs: null
+      needs_check: false
+      amount_contains: 200 g
+adjustments:
+- patch:
+    tags:
+    - longer_lasting
+  expect:
+    result: true
+    meal_count: 1
+    planned:
+    - wheat-meal
+    items:
+      wheat:
+        packs: 1
+        needs_check: false
+        amount_contains: 1 × bag (1000 g each)

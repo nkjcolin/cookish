@@ -12,7 +12,7 @@ The design is in [SPEC.md](../../../docs/SPEC.md), **B5**: the Cook algorithm (h
 | `backend/seed/recipes/*.yaml` | Target: 40 to 60 reviewed recipes; 48 AI-assisted recipes have human content approval; no cooking trials |
 | `backend/app/services/cook.py` | `start_session`, `adjust`, `next_suggestion`, `previous_suggestion`, `select`, `confirm`, `give_feedback`, `get_recipe`, `set_star`, `use_first` (optional) |
 | `backend/app/services/shop.py` | `start_session`, `adjust`, `confirm_basket` |
-| `eval/reco_scenarios/` | The 100 evaluation scenarios |
+| `eval/reco_scenarios/` | 70 development scenarios (40 Cook, 30 Shop); 30 held-out scenarios reserved |
 
 You also own the taste-tag list in `app/schemas/common.py` (change it through the contract procedure), and the business case and pricing section of the final report.
 
@@ -37,7 +37,9 @@ The **public Cook/Shop services still return mocks**. The pure basket and learni
 algorithms and a transaction-scoped service workflow are implemented. The
 [integration handoff](../../../docs/role5-integration.md) describes its repository
 port, tests and proposed snapshot storage. The database adapter, real feedback
-persistence, deployed recommendation flows and evaluation scenarios remain to implement.
+persistence and deployed recommendation flows remain to implement. The
+[development scenario suite](../../../eval/reco_scenarios/README.md) now contains
+70 cases; the 30 independently authored held-out cases remain reserved.
 
 ### Inputs and integration
 
@@ -315,12 +317,22 @@ A structural integration test loads all 48 approved recipe files and produces
 a seven-meal plan with explicit synthetic metadata; it does not validate the
 still-pending authoritative catalogue.
 
-These are development tests, **not the 100 report scenarios**. The 30 held-out
-scenarios have not been authored or used for tuning here. Still to implement:
-the database repository adapter for the implemented Cook/Shop workflow, real
-stock confirmation and retry-safe feedback persistence; the scenario suite;
-and deployed evaluation. No synthetic metadata
-from tests should be seeded as the authoritative ingredient catalogue.
+These unit, property and workflow tests remain separate from the report
+scenario suite. The [scenario runner](../../../eval/reco_scenarios/README.md)
+evaluates 70 development cases (40 Cook and 30 Shop), with checks after the
+initial result and every adjustment, exact basket expectations and source-hash
+provenance. Its fixture clock is `2026-10-24T12:00:00+08:00`. Its small synthetic
+recipe records are separate from the 48 approved seed recipes.
+
+The 30 held-out scenarios have not been authored or used for tuning here.
+They must remain unseen until a frozen implementation is evaluated, with the
+first result preserved and reported separately. See the scenario README for
+the protocol; no held-out pass claim is made.
+
+Still to implement: the database repository adapter for the implemented
+Cook/Shop workflow, real stock confirmation and retry-safe feedback persistence,
+the held-out evaluation and deployed evaluation. No synthetic metadata from
+tests or scenarios should be seeded as the authoritative ingredient catalogue.
 
 ## What you may change, and what you must keep
 
@@ -439,6 +451,6 @@ algorithms or Cook/Shop services; those integration tasks remain.
 3. Wire the Cook and Shop services to sessions and to Role 2's functions. Their stubs return sample data, so this can start now.
 4. Fill `needs_check` and `freshness_check`, and return `NO_RESULT` as described above.
 5. Ratings: Like and Dislike adjust `taste_weights` as in SPEC B5; Maybe and "Not tonight" do not.
-6. 100 scenarios in `eval/reco_scenarios/`, keeping 30 unseen during development, plus property-based tests that an allergen never appears in any output.
+6. Evaluation target: 100 scenarios in `eval/reco_scenarios/`, keeping 30 unseen during development, plus property-based tests that an allergen never appears in any output. The 70 development scenarios and property tests are implemented; the 30 held-out cases remain reserved under the [evaluation protocol](../../../eval/reco_scenarios/README.md).
 
 **Done when** all 100 scenarios pass, and Cook and Shop work on the deployed stack against real inventory.

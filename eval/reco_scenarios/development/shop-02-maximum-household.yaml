@@ -1,0 +1,30 @@
+version: 1
+id: DEV-S02
+split: development
+mode: shop
+description: 'Twelve people multiply the two-serving recipe by six: eighteen eggs require two ten-egg
+  trays and rice becomes 1200 g.'
+categories:
+- portion-scaling
+- boundary
+- pack-rounding
+recipes:
+- egg-rice
+preferences: {}
+inventory: []
+request:
+  people: 12
+  meals: 1
+expect:
+  result: true
+  meal_count: 1
+  planned:
+  - egg-rice
+  items:
+    egg:
+      packs: 2
+      needs_check: false
+    rice:
+      packs: null
+      needs_check: false
+      amount_contains: 1200 g

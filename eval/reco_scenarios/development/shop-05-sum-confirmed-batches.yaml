@@ -1,0 +1,34 @@
+version: 1
+id: DEV-S05
+split: development
+mode: shop
+description: One confirmed egg plus two confirmed eggs in another batch exactly cover the three-egg
+  meal; both batches contribute and only rice remains to buy.
+categories:
+- multi-batch
+- stock-subtraction
+recipes:
+- egg-rice
+preferences: {}
+inventory:
+- ingredient: egg
+  count: 1
+  unit: pcs
+  key: first
+- ingredient: egg
+  count: 2
+  unit: pcs
+  key: second
+request:
+  people: 2
+  meals: 1
+expect:
+  result: true
+  meal_count: 1
+  planned:
+  - egg-rice
+  items:
+    rice:
+      packs: null
+      needs_check: false
+      amount_contains: 200 g

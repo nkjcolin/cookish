@@ -1,0 +1,30 @@
+version: 1
+id: DEV-S16
+split: development
+mode: shop
+description: Unknown tomato stock stays in the basket with a check marker and the requested 300 g;
+  confirmed rice still disappears from the list.
+categories:
+- state-unknown
+- uncertainty-visibility
+recipes:
+- tomato-rice
+preferences: {}
+inventory:
+- ingredient: tomato
+  remaining_state: unknown
+- ingredient: rice
+  remaining_state: enough
+request:
+  people: 2
+  meals: 1
+expect:
+  result: true
+  meal_count: 1
+  planned:
+  - tomato-rice
+  items:
+    tomato:
+      packs: null
+      needs_check: true
+      amount_contains: 300 g
