@@ -1,0 +1,57 @@
+version: 1
+id: DEV-C14
+split: development
+mode: cook
+description: Unknown tomato stock prompts confirmation without fabricating an available or zero quantity.
+categories:
+- state_stock
+- unknown_stock
+recipes:
+- tomato-rice
+preferences:
+  allergens: []
+  diets: []
+  equipment:
+  - stove
+  cuisines: []
+  disliked_ingredients: []
+  max_cook_minutes: 60
+  max_difficulty: 3
+  household_size: 2
+  last_cook_people: 2
+  last_shop_people: 2
+  last_shop_meals: 3
+inventory:
+- ingredient: tomato
+  key: one
+  count: null
+  unit: null
+  remaining_state: unknown
+  freshness_status: ok
+  confirmed_days_ago: 1
+  acquired_days_ago: 2
+  use_first_in_days: 2
+- ingredient: rice
+  key: one
+  count: null
+  unit: null
+  remaining_state: enough
+  freshness_status: ok
+  confirmed_days_ago: 1
+  acquired_days_ago: 2
+  use_first_in_days: 2
+request:
+  people: null
+  meals: null
+  strict_max_minutes: null
+expect:
+  result: true
+  selected_any:
+  - tomato-rice
+  ingredient_status:
+    tomato: unknown
+  needs_check:
+  - tomato
+  missing_essential_fallback: false
+adjustments: []
+taste_weights: {}

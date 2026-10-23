@@ -1,0 +1,55 @@
+version: 1
+id: DEV-C20
+split: development
+mode: cook
+description: The declared soy allergy excludes the synthetic tofu recipe, including optional ingredients;
+  no soft relaxation may restore it.
+categories:
+- allergen_gate
+- soy
+- hard_constraints
+recipes:
+- tofu-rice
+preferences:
+  allergens:
+  - soy
+  diets: []
+  equipment:
+  - stove
+  cuisines: []
+  disliked_ingredients: []
+  max_cook_minutes: 60
+  max_difficulty: 3
+  household_size: 2
+  last_cook_people: 2
+  last_shop_people: 2
+  last_shop_meals: 3
+inventory:
+- ingredient: tofu
+  key: one
+  count: null
+  unit: null
+  remaining_state: enough
+  freshness_status: ok
+  confirmed_days_ago: 1
+  acquired_days_ago: 2
+  use_first_in_days: 2
+- ingredient: rice
+  key: one
+  count: null
+  unit: null
+  remaining_state: enough
+  freshness_status: ok
+  confirmed_days_ago: 1
+  acquired_days_ago: 2
+  use_first_in_days: 2
+request:
+  people: null
+  meals: null
+  strict_max_minutes: null
+expect:
+  result: false
+  selected_any: []
+  relaxable: []
+adjustments: []
+taste_weights: {}

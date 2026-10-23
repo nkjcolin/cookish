@@ -1,0 +1,36 @@
+version: 1
+id: DEV-S18
+split: development
+mode: shop
+description: An explicitly out oil staple must be bought despite the usual pantry assumption; nonbuyable
+  tap water remains absent even when tracked as out.
+categories:
+- staples
+- nonbuyable-water
+- explicit-out
+recipes:
+- egg-rice
+preferences: {}
+inventory:
+- ingredient: egg
+  count: 3
+  unit: pcs
+- ingredient: rice
+  remaining_state: enough
+- ingredient: oil
+  remaining_state: out
+- ingredient: water
+  remaining_state: out
+request:
+  people: 2
+  meals: 1
+expect:
+  result: true
+  meal_count: 1
+  planned:
+  - egg-rice
+  items:
+    oil:
+      packs: null
+      needs_check: false
+      amount_contains: 10 ml

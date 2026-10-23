@@ -1,0 +1,40 @@
+version: 1
+id: DEV-S06
+split: development
+mode: shop
+description: 'A twelve-person meal needs eighteen eggs: eight confirmed eggs reduce the deficit to
+  ten and one tray, while a second batch marked unknown contributes none even though its stored count
+  is 99; retain its check marker.'
+categories:
+- multi-batch
+- unknown-state
+- stock-subtraction
+recipes:
+- egg-rice
+preferences: {}
+inventory:
+- ingredient: egg
+  count: 8
+  unit: pcs
+  key: known
+- ingredient: egg
+  count: 99
+  unit: pcs
+  key: unknown
+  remaining_state: unknown
+request:
+  people: 12
+  meals: 1
+expect:
+  result: true
+  meal_count: 1
+  planned:
+  - egg-rice
+  items:
+    egg:
+      packs: 1
+      needs_check: true
+    rice:
+      packs: null
+      needs_check: false
+      amount_contains: 1200 g

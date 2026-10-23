@@ -1,0 +1,39 @@
+version: 1
+id: DEV-C29
+split: development
+mode: cook
+description: 'Every requested diet flag must be declared: no-pork plus no-beef rejects both meat
+  fixtures and leaves only the plant fixture.'
+categories:
+- diet_gate
+- combined_constraints
+recipes:
+- pork-rice
+- beef-rice
+- tomato-rice
+preferences:
+  allergens: []
+  diets:
+  - no_pork
+  - no_beef
+  equipment:
+  - stove
+  cuisines: []
+  disliked_ingredients: []
+  max_cook_minutes: 60
+  max_difficulty: 3
+  household_size: 2
+  last_cook_people: 2
+  last_shop_people: 2
+  last_shop_meals: 3
+inventory: []
+request:
+  people: null
+  meals: null
+  strict_max_minutes: null
+expect:
+  result: true
+  selected_any:
+  - tomato-rice
+adjustments: []
+taste_weights: {}

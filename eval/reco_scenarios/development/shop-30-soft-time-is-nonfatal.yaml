@@ -1,0 +1,32 @@
+version: 1
+id: DEV-S30
+split: development
+mode: shop
+description: A preferred five-minute cook time and easy difficulty do not discard a forty-minute
+  difficult Shop recipe; it remains a complete plan when no strict time cap was supplied.
+categories:
+- soft-time
+- soft-difficulty
+- no-false-no-result
+recipes:
+- egg-rice
+preferences:
+  max_cook_minutes: 5
+  max_difficulty: 1
+inventory: []
+request:
+  people: 2
+  meals: 1
+expect:
+  result: true
+  meal_count: 1
+  planned:
+  - egg-rice
+  items:
+    egg:
+      packs: 1
+      needs_check: false
+    rice:
+      packs: null
+      needs_check: false
+      amount_contains: 200 g

@@ -1,0 +1,31 @@
+version: 1
+id: DEV-S01
+split: development
+mode: shop
+description: 'A new household can shop for one meal without inventory: three eggs require one tray,
+  rice stays a state-tracked amount, and untracked oil and nonbuyable water add no purchases.'
+categories:
+- cold-start
+- pack-rounding
+- staples
+recipes:
+- egg-rice
+preferences: {}
+inventory: []
+request:
+  people: 2
+  meals: 1
+expect:
+  result: true
+  meal_count: 1
+  planned:
+  - egg-rice
+  items:
+    egg:
+      packs: 1
+      needs_check: false
+      amount_contains: 1 × tray (10 pcs each)
+    rice:
+      packs: null
+      needs_check: false
+      amount_contains: 200 g

@@ -1,0 +1,54 @@
+version: 1
+id: DEV-C33
+split: development
+mode: cook
+description: A twenty-minute remembered Cook preference has an actionable time relaxation when a
+  safe thirty-minute recipe exists.
+categories:
+- soft_time
+- relaxation
+recipes:
+- tomato-rice
+preferences:
+  allergens: []
+  diets: []
+  equipment:
+  - stove
+  cuisines: []
+  disliked_ingredients: []
+  max_cook_minutes: 20
+  max_difficulty: 3
+  household_size: 2
+  last_cook_people: 2
+  last_shop_people: 2
+  last_shop_meals: 3
+inventory:
+- ingredient: tomato
+  key: one
+  count: null
+  unit: null
+  remaining_state: enough
+  freshness_status: ok
+  confirmed_days_ago: 1
+  acquired_days_ago: 2
+  use_first_in_days: 2
+- ingredient: rice
+  key: one
+  count: null
+  unit: null
+  remaining_state: enough
+  freshness_status: ok
+  confirmed_days_ago: 1
+  acquired_days_ago: 2
+  use_first_in_days: 2
+request:
+  people: null
+  meals: null
+  strict_max_minutes: null
+expect:
+  result: false
+  selected_any: []
+  relaxable:
+  - max_minutes
+adjustments: []
+taste_weights: {}

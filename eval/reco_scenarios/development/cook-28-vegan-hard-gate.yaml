@@ -1,0 +1,38 @@
+version: 1
+id: DEV-C28
+split: development
+mode: cook
+description: The declared vegan constraint excludes the starred egg recipe and retains the synthetic
+  plant-only recipe.
+categories:
+- diet_gate
+- vegan
+recipes:
+- egg-rice
+- tomato-rice
+preferences:
+  allergens: []
+  diets:
+  - vegan
+  equipment:
+  - stove
+  cuisines: []
+  disliked_ingredients: []
+  max_cook_minutes: 60
+  max_difficulty: 3
+  household_size: 2
+  last_cook_people: 2
+  last_shop_people: 2
+  last_shop_meals: 3
+inventory: []
+request:
+  people: null
+  meals: null
+  strict_max_minutes: null
+expect:
+  result: true
+  selected_any:
+  - tomato-rice
+  missing_essential_fallback: true
+adjustments: []
+taste_weights: {}

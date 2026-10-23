@@ -1,0 +1,30 @@
+version: 1
+id: DEV-S14
+split: development
+mode: shop
+description: Low tomato stock keeps the full displayed 300 g meal need, with no invented gram balance
+  and no numeric pack count; confirmed rice is omitted.
+categories:
+- state-low
+- coarse-stock
+recipes:
+- tomato-rice
+preferences: {}
+inventory:
+- ingredient: tomato
+  remaining_state: low
+- ingredient: rice
+  remaining_state: enough
+request:
+  people: 2
+  meals: 1
+expect:
+  result: true
+  meal_count: 1
+  planned:
+  - tomato-rice
+  items:
+    tomato:
+      packs: null
+      needs_check: false
+      amount_contains: 300 g

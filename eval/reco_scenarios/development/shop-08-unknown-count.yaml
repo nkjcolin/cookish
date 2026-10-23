@@ -1,0 +1,31 @@
+version: 1
+id: DEV-S08
+split: development
+mode: shop
+description: 'A countable batch whose count is null does not count as zero or confirmed supply: retain
+  a check and the full one-tray purchase suggestion.'
+categories:
+- unknown-count
+recipes:
+- egg-rice
+preferences: {}
+inventory:
+- ingredient: egg
+  count: null
+  unit: pcs
+request:
+  people: 2
+  meals: 1
+expect:
+  result: true
+  meal_count: 1
+  planned:
+  - egg-rice
+  items:
+    egg:
+      packs: 1
+      needs_check: true
+    rice:
+      packs: null
+      needs_check: false
+      amount_contains: 200 g
