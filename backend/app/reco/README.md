@@ -16,6 +16,11 @@ The design is in [SPEC.md](../../../docs/SPEC.md), **B5**: the Cook algorithm (h
 
 You also own the taste-tag list in `app/schemas/common.py` (change it through the contract procedure), and the business case and pricing section of the final report.
 
+The [business case draft](../../../docs/business-case.md) now has market and
+competitor references, traceable review evidence and a reproducible initial cost
+model. Workload and payment assumptions remain provisional; Role 3's measured
+costs and user research are still required.
+
 ## What already exists
 
 - **Every service function above, as a stub** marked `STUB`, returning sample data from `app/mock.py`. The frontend is built against them.
