@@ -1,16 +1,12 @@
 """The pipeline around the model, tested with scripted model answers."""
 
 import json
-from uuid import UUID, uuid4
 
 import pytest
 from fastapi.testclient import TestClient
 
 from app.main import app
 from app.model_client import ModelReply, ModelRequest, ModelUnavailable, get_client
-
-EGG = UUID("0b4f3c9e-5c55-4c49-9a35-6f1e2d3b7a01")
-KANGKONG = UUID("0b4f3c9e-5c55-4c49-9a35-6f1e2d3b7a03")
 
 
 class ScriptedClient:
@@ -45,10 +41,9 @@ def use_model():
 client = TestClient(app)
 
 
-def _item(display_name: str, ingredient_id: UUID | None = None) -> dict[str, object]:
+def _item(display_name: str) -> dict[str, object]:
     return {
         "raw_text": display_name.upper(),
-        "ingredient_id": str(ingredient_id) if ingredient_id else None,
         "display_name": display_name,
         "count": None,
         "unit": None,
@@ -63,34 +58,42 @@ def test_fake_model_answers_without_configuration() -> None:
     assert response.status_code == 200
     names = [item["display_name"] for item in response.json()["items"]]
     assert names == ["Egg", "Cabbage", "Sambal"]
+    assert all("ingredient_id" not in item for item in response.json()["items"])
 
 
-def test_ingredient_ids_are_checked_against_the_catalogue(use_model) -> None:
-    use_model(
-        {
-            "items": [
-                _item("Egg", EGG),  # known id: kept
-                _item("Kangkong", uuid4()),  # invented id: replaced through the alias
-                _item("Sambal", uuid4()),  # invented id, unknown name: null
-            ]
-        }
-    )
+@pytest.mark.parametrize("kind", ["receipt", "photo"])
+def test_image_routes_no_longer_use_catalogue(use_model, image_payload, monkeypatch, kind) -> None:
+    monkeypatch.setenv("INGREDIENTS_CSV", "/nonexistent/catalogue.csv")
+    model = use_model({"items": [_item("Egg")]})
+    response = client.post("/ai/parse-image", json={**image_payload, "kind": kind})
+    assert response.status_code == 200
+    assert "ingredient_id" not in response.json()["items"][0]
+    assert "ingredient_id" not in model.requests[0].system
+    assert "catalogue" not in model.requests[0].system.lower()
+
+
+def test_old_model_identifiers_are_not_exposed(use_model) -> None:
+    # A stale provider may still send the removed field; never expose it to callers.
+    use_model({"items": [{**_item("Egg"), "ingredient_id": "old-provider-id"}]})
 
     response = client.post("/ai/parse-items", json={"text": "eggs, kangkong, sambal"})
 
-    ids = [item["ingredient_id"] for item in response.json()["items"]]
-    assert ids == [str(EGG), str(KANGKONG), None]
+    assert response.status_code == 200
+    assert "ingredient_id" not in response.json()["items"][0]
 
 
-def test_prompt_contains_the_catalogue(use_model) -> None:
+def test_prompt_has_no_identifiers_or_catalogue(use_model, image_payload) -> None:
     model = use_model({"items": []})
 
-    client.post("/ai/parse-image", json={"kind": "receipt", "image_base64": "aGVsbG8="})
+    client.post("/ai/parse-image", json=image_payload)
 
     request = model.requests[0]
     assert request.task == "receipt"
-    assert f"{EGG} | egg" in request.system
-    assert request.image is not None and request.image.base64 == "aGVsbG8="
+    assert "ingredient_id" not in request.system
+    assert "catalogue" not in request.system.lower()
+    assert "{catalogue}" not in request.system
+    assert request.image is not None
+    assert request.image.base64 == image_payload["image_base64"]
 
 
 def test_invalid_answer_is_retried_once(use_model) -> None:
@@ -111,10 +114,10 @@ def test_two_invalid_answers_mean_upstream_unavailable(use_model) -> None:
     assert response.json()["error"]["code"] == "UPSTREAM_UNAVAILABLE"
 
 
-def test_model_failure_means_upstream_unavailable(use_model) -> None:
+def test_model_failure_means_upstream_unavailable(use_model, image_payload) -> None:
     use_model(ModelUnavailable("timeout"))
 
-    response = client.post("/ai/parse-image", json={"kind": "photo", "image_base64": "aGVsbG8="})
+    response = client.post("/ai/parse-image", json={**image_payload, "kind": "photo"})
 
     assert response.status_code == 503
     assert response.json()["error"]["code"] == "UPSTREAM_UNAVAILABLE"

@@ -1,0 +1,14 @@
+.env
+.env.*
+!.env.example
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+# Local working inputs and outputs only; shared dataset/ and its tools are published.
+/output/
+/dataset/work/
+eval/results/
+eval/data/
+eval/private/
+eval/manifest.local*.json

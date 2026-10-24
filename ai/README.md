@@ -11,11 +11,28 @@ This folder is a small FastAPI app of its own, deployed as the `ai` Lambda. It r
 | Path | Contents |
 |---|---|
 | `ai/` | Everything in this folder |
-| `eval/image_set/` | The labelled test set and the script that scores it |
+| `ai/eval/` | Evaluation tooling, manifests and local test data |
 
 ## What already exists
 
-The whole pipeline works, but the model is a fake that always gives the same three items. Choosing and wiring a real model is the main work left.
+The service supports an offline fake and the school's image-capable Chat Completions
+API. Parts 1–11 of [implementation.md](implementation.md), with Part 8 revised
+after identifier removal, now include all routes, request deadlines, local test
+tools and Lambda container packaging. Part 12's evaluation runner and handoff
+documentation exist; formal accuracy, final model choice and deployment acceptance
+still require labelled data and live measurements. Nothing has been deployed to AWS.
+
+Known limitation: live school-model checks have returned incorrect numeric
+quantities even when the unit was preserved. Draft quantities require review;
+passing software tests does not establish extraction accuracy. The formal
+evaluation dataset and labels are still to be selected.
+
+`laas.py` is a standalone script for testing the school model API. It
+is never imported by the service and is excluded from Docker images. Local
+`eval/data/` and `output/` folders are ignored by Git. Shared input copies are
+published under [dataset/](dataset/README.md) and used by the default test paths.
+Both datasets and local outputs are excluded from Docker images. Live uploads are
+processed only in memory.
 
 | Endpoint | Input | Output |
 |---|---|---|
@@ -27,7 +44,9 @@ The whole pipeline works, but the model is a fake that always gives the same thr
 
 **Yours to decide:** the model and provider, the prompts, image handling, matching, and everything inside `app/` other than the two copied files.
 
-**Keep:** the request and response shapes, which are part of the API contract (`app/schemas.py`, `app/errors.py`, see below), and the columns you read from `ingredients.csv`.
+**Keep:** request and error shapes and all response fields other than the
+user-requested removal of `DraftItem.ingredient_id`. That AI-only change is pending
+in the shared backend contract and frontend types (see below).
 
 ## How the frontend uses you
 
@@ -42,6 +61,7 @@ The whole pipeline works, but the model is a fake that always gives the same thr
 Requires [uv](https://docs.astral.sh/uv/). `docker compose up` in the repository root also starts it, on port 8001.
 
 ```bash
+cd ai
 uv sync
 uv run uvicorn app.main:app --reload --port 8001   # http://localhost:8001/ai/docs
 uv run pytest
@@ -50,10 +70,311 @@ uv run ruff check . && uv run ruff format --check .
 
 To try it through the web app, start the frontend with `VITE_AI_PROXY_TARGET=http://localhost:8001`.
 
+### Local testing with Docker
+
+The following commands run from the **repository root**. Docker is sufficient;
+you do not need to install Python 3.12 or uv on your host.
+
+```bash
+docker build -t cookish-ai:local ./ai
+docker run --rm --name cookish-ai-local \
+  -p 127.0.0.1:8001:8000 \
+  -e AI_PROVIDER=fake \
+  cookish-ai:local
+```
+
+Open <http://localhost:8001/ai/docs>. In another terminal:
+
+```bash
+python3 ai/scripts/test_local.py --text "a dozen eggs, two packs of tofu, some kangkong"
+python3 ai/scripts/test_local.py --source voice --text "some kang kong and eggs"
+python3 ai/scripts/test_local.py --image ai/dataset/receipt/fairprice-receipt.jpeg --kind receipt
+python3 ai/scripts/test_local.py --image YOUR_GROCERY_PHOTO.jpeg --kind photo
+python3 ai/scripts/test_local.py --interpret "less oily and ready in 20 minutes"
+```
+
+The image command uses a local sample if present; substitute your own compressed
+JPEG, PNG or WebP. The helper uses only Python's standard library, sends one
+request to your local API and never reads school credentials. Fake mode always
+returns fixed items, so it tests wiring rather than recognition accuracy.
+
+To use the school API, keep your existing `ai/.env` private and supply
+`SOCLAAS_BASE_URL`, `SOCLAAS_MODEL` and `SOCLAAS_API_KEY`. See `.env.example` for
+settings; do not overwrite an existing `.env` with the example. Stop the fake
+container before starting the school-backed instance on the same port:
+
+```bash
+docker stop cookish-ai-local
+docker run --rm --name cookish-ai-local \
+  -p 127.0.0.1:8001:8000 \
+  --env-file ai/.env \
+  -e AI_PROVIDER=soclaas \
+  -e SOCLAAS_TIMEOUT_SECONDS=20 \
+  -e AI_REQUEST_TIMEOUT_SECONDS=27 \
+  cookish-ai:local
+```
+
+The helper waits up to 45 seconds by default, longer than the normal 27-second
+request budget. To explicitly choose a different client wait:
+
+```bash
+python3 ai/scripts/test_local.py --text "2 eggs" --timeout 35
+python3 ai/scripts/test_local.py --image ai/dataset/receipt/fairprice-receipt.jpeg --timeout 35
+```
+
+The provider default is 20 seconds; the whole request, including one repair
+attempt, defaults to 27 seconds. For deliberately slow local experiments only,
+override both `SOCLAAS_TIMEOUT_SECONDS=60` and `AI_REQUEST_TIMEOUT_SECONDS=90`,
+and use helper `--timeout 100`. This does not demonstrate AWS suitability; the
+Lambda request budget is always capped at 27 seconds and by remaining invocation time.
+Repeat the helper requests to exercise the real school endpoint. These calls use
+school quota but create no AWS resources. View logs with
+`docker logs -f cookish-ai-local`; stop with `docker stop cookish-ai-local`.
+
+For slow local receipt experiments, use `-e SOCLAAS_TIMEOUT_SECONDS=60` and
+`-e AI_REQUEST_TIMEOUT_SECONDS=90` in the Docker run command, with
+`scripts/test_local.py --timeout 100`. The current local container uses these
+testing overrides: a 12-item generated receipt took about 27 seconds with the
+school model and private quantity evidence. Lambda still caps requests at 27
+seconds; these overrides do not establish deployment latency acceptance.
+AI drafts contain food names, not catalogue identifiers. Neither prompts nor the
+live parsing pipeline load an ingredient CSV.
+
+Run automated checks inside the image, mounting the API contract read-only:
+
+```bash
+docker run --rm \
+  --mount "type=bind,source=$PWD/docs,target=/docs,readonly" \
+  cookish-ai:local uv run --frozen pytest
+docker run --rm cookish-ai:local uv run --frozen ruff check .
+docker run --rm cookish-ai:local uv run --frozen ruff format --check .
+```
+
+The tests use mocked providers and make no school or AWS calls. The standalone
+`laas.py` test script is excluded from application linting and packaging.
+
+### Standalone receipt experiment
+
+`laas.py` uses `app/prompts/receipt.md` in both batch modes, with the current
+`DraftResult` public shape (no prices or ingredient IDs). It reads that file at run time;
+there is no second hardcoded receipt prompt or catalogue lookup. It remains
+separate from the FastAPI/Lambda app and does not apply the app's non-food filter.
+Structured receipt helpers share the API's quantity normalization and defaults:
+totals in their original measurement units, unknown measured amounts left null,
+and a final null-unit
+fallback to `pcs`. Generic `ask_image` helpers
+still return the model's raw text without changing its fields.
+
+`main()` at the bottom of `laas.py` has three numbered test blocks. Keep the call
+for the one you want uncommented, comment out the others, then run the file. The
+prompt-file photo test is currently enabled, preserving your selected grocery
+image. No command-line arguments are used.
+
+1. **Receipt images + prompt file:** uncomment `process_receipts_with_prompt()`.
+   This is the existing function: it reads `app/prompts/receipt.md`, processes every
+   image in `ai/dataset/receipt/` and saves/overwrites `ai/output/prompt.json`.
+2. **Image + selected prompt file:** edit `image_path` and `prompt_name`, then use
+   `print(ask_image_with_prompt_file(image_path, prompt_name))`. Set the name to
+   `photo.md`, `receipt.md`, or any new prompt you add inside `ai/app/prompts/`.
+   The `.md` extension is optional: `photo` also works. The file is read fresh on
+   every call, regardless of your terminal's working directory. Missing/empty
+   prompts fail before any API call, with available filenames shown for missing files.
+3. **Custom image + inline prompt:** edit `image_path` and the multiline
+   `custom_prompt`, then uncomment `print(ask_image(image_path, custom_prompt))`.
+   Both single-image helpers return plain model text without forcing receipt JSON,
+   adding receipt instructions or applying app cleanup. They print but do not save.
+
+These functions read credentials from your private `ai/.env`; no Docker or running
+local API is needed.
+
+From the repository root:
+
+```bash
+conda run -n cookish python ai/laas.py
+```
+
+Use `script_dir / "dataset/grocery/your-image.jpg"` for a path relative to `ai/`, or
+`Path("/absolute/path/to/image.jpg")` for any other location in the custom block.
+Calls consume school quota when you uncomment a test.
+The default timeout is 180 seconds with no automatic retries. The helper still
+accepts optional Python keywords `model` and `timeout` if you need them. Otherwise
+`SOCLAAS_IMAGE_MODEL` takes precedence over `SOCLAAS_MODEL`. Supported formats are
+JPEG, PNG, WebP and GIF; export HEIC images to JPEG first.
+
+From a Python session started in `ai/`, with the `cookish` environment active:
+
+```python
+from laas import ask_image, ask_image_with_prompt_file
+
+answer = ask_image("/path/to/your/image.jpg", "Your own instructions here")
+print(answer)
+print(ask_image_with_prompt_file("/path/to/your/image.jpg", "photo.md"))
+```
+
+The other batch helper `process_receipts()` remains available to call directly if
+needed. The numbered calls in `main()` are the normal manual test switches.
+
+`count` is the **total amount expressed in `unit`**, rather than a package count
+paired with its contents' measurement unit. The model reads purchased packages
+and contents per package from the full receipt block as separate numeric factors.
+Python multiplies them once and preserves their measurement unit, including `kg`,
+`g`, `l`, `ml` or `pcs`.
+For example, two 280 g packs return
+`count: 560, unit: "g"`; two 0.5 kg packs return `count: 1, unit: "kg"`;
+one 1 L bottle returns `count: 1, unit: "l"`.
+An explicitly printed total measured amount is used directly, without multiplying
+it again. Code normalizes spelling (such as kilograms to `kg`) without rescaling
+quantities. It does not derive quantities
+from prices or re-parse `raw_text` with quantity regexes. Live tests found model
+arithmetic unreliable even with a final prompt check.
+
+If the model rescaled a measured amount despite the prompt, a narrow source-unit
+check restores the single unambiguous measurement scale in `raw_text`, adjusting
+the amount to that scale. It does not infer package counts or contents from text.
+When several scales are printed, or no source measurement is available (including
+food-photo drafts with null `raw_text`), it retains the extracted unit.
+
+The school model's private `ExtractionResult` schema adds a `quantity` object
+containing `factors` and their original `unit`. `app/quantities.py` calculates the
+product, then removes that object. The app still exposes only `DraftResult` and
+the same six public item fields. Generic LAAS helpers return raw model text;
+use the structured receipt helpers or the API to test the calculated public result.
+
+If no purchase count is printed, the prompt assumes one package internally and
+uses its readable contents amount. Unknown contents retain a known package count
+and explicit purchase unit, or a null measured amount for review. No pack sizes,
+weights, densities or drained yields are guessed. Printed net contents remain
+net contents; they do not establish a drained or cooked yield. Prefer a printed
+drained amount for solids in liquid when available, and preserve that evidence.
+When neither amount nor unit is identifiable, receipts keep the `1 pcs` fallback.
+Unknown measured quantities stay null, rather than becoming 1 g or 1 ml. Invalid
+non-positive/non-finite counts also stay null. Identifiable units survive; only
+a null unit defaults to `pcs` after spelling normalization.
+
+Quantities may precede or follow the description, appear in a quantity column,
+or on associated continuation lines without a price or literal Qty label. The
+prompt preserves all supporting evidence in `raw_text`, without adding calculated
+totals. Layout interpretation and selecting the correct factors remain model
+responsibilities and need evaluation. Text/photo prompts use the same convention when
+evidence is available, with no receipt-specific missing-count or unit defaults.
+Backend ingredient matching, countable batch creation and exact unit agreement
+are still integration responsibilities; this service never writes stock.
+
+From the repository root, install the locked dependencies and run the standalone
+script or its offline checks. `uv sync` includes `openai` and `python-dotenv`:
+
+```bash
+cd ai
+uv sync --frozen
+uv run python laas.py  # run whichever test you uncommented in main()
+uv run python scripts/test_laas.py  # offline checks, no model calls
+```
+
+Configure `SOCLAAS_BASE_URL`, `SOCLAAS_API_KEY` and `SOCLAAS_MODEL` in your local
+`ai/.env` or process environment. The comments at the top of `laas.py` explain the
+optional image-model override and which settings take precedence. Image paths
+under `dataset/` use the shared fixtures; put private working inputs in `eval/data/`.
+
+If explicitly called, the batch functions process supported files in `ai/dataset/receipt/`
+and overwrite their corresponding output files. The custom-image test does not
+run those functions or overwrite batch outputs.
+
+The root Compose configuration still explicitly sets `AI_PROVIDER=fake`. Running
+Compose alone does not enable the school client. Use the standalone commands
+above for school testing; coordinate shared Compose changes with its owner.
+
+### Configuration
+
+The app reads **process environment variables**, not `.env` files implicitly. Use
+Docker's `--env-file` as above, or from `ai/` with host uv installed:
+
+```bash
+AI_PROVIDER=soclaas uv run --env-file .env uvicorn app.main:app --reload --port 8001
+```
+
+Restart the service after changing provider/model settings; the client is cached.
+Paired wrapping quotes in environment-file values are accepted, including when
+Docker preserves them, so an existing dotenv-style school configuration works.
+Use a base URL such as `https://school-api.example/v1`, not a full
+`/chat/completions` endpoint. HTTPS is required except for loopback mock servers.
+
 | Variable | Default | Meaning |
 |---|---|---|
-| `AI_PROVIDER` | `fake` | Which model client to use; only `fake` exists so far |
-| `INGREDIENTS_CSV` | `../backend/seed/ingredients.csv` | The ingredient catalogue. If missing, every item is returned unmatched |
+| `AI_PROVIDER` | `fake` | `fake` or `soclaas`; missing school settings never fall back to fake |
+| `SOCLAAS_BASE_URL` | Required for school | API base URL, without credentials or query parameters |
+| `SOCLAAS_MODEL` | Required for school | Default hosted model |
+| `SOCLAAS_IMAGE_MODEL` | Default model | Optional override for receipt/photo tasks |
+| `SOCLAAS_TEXT_MODEL` | Default model | Optional override for typed/voice lists |
+| `SOCLAAS_INTERPRET_MODEL` | Default model | Optional override for interpretation; final choice awaits testing |
+| `SOCLAAS_API_KEY` | None | Local school credential; keep it outside code and images |
+| `SOCLAAS_API_KEY_SECRET_ARN` | None | AWS alternative to a local key; set exactly one credential source |
+| `SOCLAAS_OUTPUT_MODE` | `json_schema` | Structured output; explicitly choose `json_object` if the school endpoint lacks schema support |
+| `SOCLAAS_MAX_OUTPUT_TOKENS` | `4096` | Output limit, from 1 to 16384; tune for long receipts during evaluation |
+| `SOCLAAS_TIMEOUT_SECONDS` | `20` | HTTP read/write timeout; 60 can help slow local experiments, but does not fit the AWS budget; maximum 120 |
+| `AI_REQUEST_TIMEOUT_SECONDS` | `27` | Overall deadline across preparation, calls and validation retry; local maximum 120; Lambda cap 27 and remaining invocation time minus 1 second |
+
+In AWS, grant the Lambda role read access to the specific Secrets Manager secret.
+The secret can contain the raw API key or JSON with `SOCLAAS_API_KEY` or `api_key`.
+AWS keys are retrieved lazily and cached for five minutes, then refreshed. Local
+key and fake configurations do not contact AWS.
+
+### Image input and current limits
+
+Send base64 bytes **without** a `data:` prefix, along with the actual media type.
+The service checks base64, format, still-image content, complete decoding and
+dimensions before contacting the school API. Uploads must be at most **3 MiB**,
+with an edge at most 8192 pixels and at most 16 million pixels in total. The
+browser's 1500-pixel resize remains the recommended starting point; actual byte
+size still matters. Oversized, mismatched or corrupt uploads return `VALIDATION`
+without echoing the image in the error details.
+
+The provider defaults to 20-second HTTP timeouts, with at most 5-second connection/
+pool timeouts and no automatic HTTP retries. HTTP timeouts are clipped to the
+remaining request budget. Invalid model JSON gets at most one validation retry
+within the same overall deadline, not a new timeout allowance. On expiry the API
+returns `503 UPSTREAM_UNAVAILABLE`. Responses are buffered before sending headers
+so expiry cannot leave a partial success response.
+
+Synchronous provider work runs off the event loop. Deadline cancellation stops
+waiting and discards its result; a synchronous HTTP call may finish in the
+background until its own timeout. It does not cancel generation on the school's
+server or guarantee quota is refunded. No inventory mutation is performed.
+
+Each response has `X-Request-ID`; model responses also include `X-AI-Model`,
+`X-AI-Provider`, `X-AI-Attempts` and known token-usage headers. Missing or timed-out
+usage stays unknown, not zero. JSON logs correlate model attempts and total request
+time without recording prompts, grocery text, images or API keys. An incoming
+UUID request ID is accepted; arbitrary strings are replaced with a generated UUID.
+
+Initial live checks also showed that the currently configured school model can
+time out on text requests and exceed the approximately 10-second image target.
+Use `SOCLAAS_TEXT_MODEL` to evaluate a suitable text model later; do not assume a
+vision-model configuration meets the typed-entry latency requirement. Upstream
+timeouts are returned as the documented 503 error rather than hidden with fake
+results. Model choice and latency remain evaluation work.
+
+Receipt cleanup removes clear non-food categories and grooming razors that the
+model might mislabel as razor clams. It no longer re-parses `raw_text` with a
+narrow quantity regex: positive finite counts and units from the model survive
+cleanup, including leading, trailing, column and continuation-line quantities.
+Python calculates totals from the model's private numeric factors. Missing unmeasured
+purchase counts default to 1; unknown measured and invalid numeric counts remain
+null. After unit spelling normalization, only a null unit defaults to `pcs`.
+The prompt distinguishes package contents and prices from purchase quantity and
+preserves supporting lines in `raw_text`. These are
+model instructions, not independently verified OCR guarantees; recognition and
+quantity accuracy still require live evaluation.
+
+Common draft cleanup normalizes unit spellings, preserves measurement scale and
+clears non-finite/non-positive counts after factor multiplication, without repeating
+package arithmetic or
+assigning identifiers. Receipt-only
+defaults do not affect text or food-photo requests. All supported interpretation
+fields and boundary checks have dedicated tests, including rejection of unsupported
+fields and all-null/no-op results. Confidence calibration and inventory integration
+still require labelled evaluation and backend integration. Before comparing
+inventory against recipes, the backend must reconcile units such as kg and g;
+the AI now preserves the receipt's original measurement scale.
 
 ## Layout
 
@@ -61,54 +382,126 @@ To try it through the web app, start the frontend with `VITE_AI_PROXY_TARGET=htt
 |---|---|
 | `app/main.py` | The three routes; no logic |
 | `app/lambda_handler.py` | Lambda entry point (`app.lambda_handler.handler`) |
-| `app/parse.py` | The pipeline: prompt → model → validate (one retry) → check ids → draft |
-| `app/model_client.py` | The only code that talks to the model provider. Holds the fake |
-| `app/matching.py` | Loads the catalogue; keeps an `ingredient_id` only if it exists, else matches by name or alias |
+| `app/parse.py` | The pipeline: prompt → model → validate (one retry) → receipt checks → draft |
+| `app/model_client.py` | School API transport, model selection, usage extraction and offline fake |
+| `app/config.py` | Validated server-side provider and model configuration |
+| `app/credentials.py` | Local credentials or cached Secrets Manager retrieval |
+| `app/images.py` | In-memory image validation before provider calls |
+| `app/receipts.py` | Conservative non-food checks and receipt count/unit defaults |
+| `app/quantities.py` | Private quantity evidence and deterministic factor multiplication |
+| `app/drafts.py` | Unit spelling and numeric consistency, without catalogue matching |
+| `app/runtime.py` | Shared deadlines, correlation headers and content-free request logs |
+| `app/matching.py` | Legacy catalogue utility; no longer called by the AI routes |
 | `app/prompts/` | One prompt per task: `receipt`, `photo`, `items`, `interpret`. First drafts |
 | `app/schemas.py` | Request and response shapes, copied from the backend |
 | `app/errors.py` | The shared error format, copied from the backend |
 | `tests/` | Contract check and pipeline tests with a scripted model |
+| `scripts/test_local.py` | Standard-library helper for local text and image requests |
+| `Dockerfile.lambda` | Production Lambda base image; runtime dependencies and app only |
+| `scripts/test_lambda.py` | API Gateway-shaped local emulator invocations |
+| `eval/` | AI-owned evaluation runner and example manifests; not production assets |
+| `dataset/tools/` | Published dataset preparation, validation and macOS OCR helpers |
+| `dataset/` | Shared receipt/grocery images and current synthetic-scenario metadata |
 
-Evaluation scripts and the labelled image set belong in `eval/image_set/` at the repository root, not here, so they are not packaged into the Lambda.
+Evaluation tooling lives in `ai/eval/`. Shared images in `ai/dataset/receipt/`
+and `ai/dataset/grocery/` are intended for Git; local working copies under
+`ai/eval/data/`, result folders and `ai/output/` remain ignored. All dataset
+inputs and local outputs are excluded from Docker builds. The project specification's
+root-level `eval/image_set/` remains a separate formal-dataset handoff location.
 
-## Adding the real model
+### Lambda image and evaluation
+
+The separate [deployment handoff](DEPLOYMENT.md) contains production-image build
+commands, read-only local Lambda emulator tests, runtime settings and the platform
+owner's AWS checklist. Example, from the repository root:
+
+```bash
+python3 ai/scripts/build_lambda.py --arch arm64
+docker run --rm --name cookish-ai-lambda-local --read-only \
+  --tmpfs /tmp:rw,noexec,nosuid,size=64m \
+  -p 127.0.0.1:9000:8080 -e AI_PROVIDER=fake cookish-ai:lambda
+```
+
+In another terminal:
+
+```bash
+python3 ai/scripts/test_lambda.py --text "2 eggs"
+python3 ai/scripts/test_lambda.py --interpret "something quicker"
+```
+
+See [eval/README.md](eval/README.md) for the labelled-manifest format,
+offline scoring, explicitly enabled model calls, confidence/quantity/latency
+reports and incomplete-dataset gates. The AI-owned runner stays here to honor the
+`ai/`-only edit restriction; the dataset owner must supply the final root-level
+labelled set. No test images, labels or evaluation code enter the Lambda image.
+
+## Provider integration
+
+The school client sends Chat Completions requests directly with HTTPX; it does
+not require an OpenAI account, import `laas.py`, or use the prototype's price
+schema. Model JSON is validated by the shared pipeline. Token usage is logged as
+`null` if the provider omits it, rather than fabricated as zero. Logs identify the
+selected task model. Provider errors/refusals return `UPSTREAM_UNAVAILABLE` without
+exposing credentials or school error bodies.
+
+To add a different provider later:
 
 1. In `app/model_client.py`, write a class with `model_id` and `generate(request) -> ModelReply`, using the provider's structured-output or JSON mode.
 2. Raise `ModelUnavailable` on timeout (`TIMEOUT_SECONDS`), throttling or any provider error. The user then sees "try again or enter by hand".
 3. Return the token counts in `ModelReply`; `parse.py` logs them with the latency as one JSON line per call, for the cost model.
 4. Select it in `get_client()` with a new `AI_PROVIDER` value, and add the SDK to `pyproject.toml`.
-5. How the Lambda gets model credentials is not decided yet; settle it with Role 3 once the provider is chosen. Never commit a key.
+5. Configure the credential source with Role 3. The school client supports a Secrets Manager reference; the deployment must grant access to that secret. Never commit a key.
 
 Rules already enforced in code, whatever the model answers:
 
 - The answer must validate against the schema, or it is retried once and then reported as `UPSTREAM_UNAVAILABLE`.
-- An `ingredient_id` that is not in the catalogue is replaced by a name or alias match, or by `null`.
+- AI drafts expose no `ingredient_id`; provider schemas and prompts do not request it.
 - `/ai/interpret` can only return the fields of `CookAdjust`; an answer that tries to set allergens or diets is rejected.
 - There is no freshness field in a draft, so the model cannot set one.
 
-Dropping non-food lines and leaving `count` as `null` when it is not visible are still only asked for in the prompts.
+Receipt prompts are backed by conservative non-food checks and numeric/default cleanup.
+Unrecognized non-food descriptions and OCR mistakes can still pass; measure these
+in evaluation. Typed lists and grocery photos still rely on prompts for food
+recognition and quantity evidence.
 
 ## Sharing the contract with the backend
 
 The backend owns the API contract: `docs/openapi.json` is exported from `backend/app/schemas/`, and the frontend's types are generated from that file. `app/schemas.py` and `app/errors.py` here are copies, so that each Lambda is packaged on its own.
 
-`tests/test_contract.py` checks that the `/ai` endpoints this app serves, and every schema they use, are identical to `docs/openapi.json`. To change the contract: agree it with Role 1, change the backend and re-export the contract (see `backend/README.md`), then copy the change here until the test passes.
+At the user's request, `DraftItem.ingredient_id` has been removed from both AI
+extraction routes, the fake provider, the school output schema and all extraction
+prompts. `confidence` now describes confidence in the food identification, not
+catalogue matching. This is a breaking response change relative to the current
+shared contract; frontend code must not assume this property exists.
+
+`tests/test_contract.py` compares the full AI contract while allowing precisely
+this one approved field removal. It does not claim exact shared-contract parity.
+Role 1 still needs to remove the field from the backend schema, re-export
+`docs/openapi.json`, regenerate frontend types and adapt review/confirmation logic.
+Those files are outside the `ai/`-only edit scope. All other contract differences
+remain test failures. Normal future changes follow the shared export workflow.
 
 `backend/app/services/ai_stub.py` answers `/ai/*` with the same fixed items when the backend runs on its own without this service.
 
 ## The ingredient catalogue
 
-`backend/seed/ingredients.csv` is written by Role 2, in the format in [backend/seed/README.md](../backend/seed/README.md), and bundled read-only with this Lambda by Role 3. `app/matching.py` reads three of its columns: `id`, `canonical_name`, and `aliases` separated by `|`. Until the file exists, every item comes back unmatched.
-
-Local product names seen on receipts that do not match ("kangkong", "tau kwa") should go back to Role 2 as aliases.
+The extraction routes no longer load a catalogue or resolve IDs. The legacy
+`app/matching.py` utility and fixture CSV remain for reference, not live parsing.
+Coordinate any required name-to-inventory matching with the backend owner; this
+service still never writes inventory. Historical saved experimental outputs are
+not rewritten by code edits and may reflect the previous response contract.
 
 ## Tasks, in order
 
 1. **Measure.** Run about ten real receipts, including a long one, and five grocery photos through two or three candidate models. Record latency, accuracy and cost per call. The architecture assumes a synchronous call that returns in about 10 seconds at p95; if it does not, raise it with the group, because the fallback is a queue and a background worker.
 2. From that, choose the model and the image size.
 3. Add the model as a client in `app/model_client.py` (above), and improve the prompts in `app/prompts/`.
-4. Two rules are so far only asked for in the prompts: drop non-food lines, and leave `count` as `null` when it is not visible. Check them in the evaluation, and enforce them in code if the model does not follow them.
-5. With Role 3: model credentials, and bundling `ingredients.csv` into the Lambda package.
+4. Evaluate non-food exclusion, total-quantity arithmetic and unit extraction.
+   Unknown measured amounts stay null; receipts default to 1/`pcs` only for
+   unmeasured purchases. Text/photo unknown quantities remain null. Code guards
+   do not replace recognition evaluation.
+5. With Role 3: model credentials and deployment configuration. The AI extraction
+   pipeline no longer needs `ingredients.csv` bundled into its package.
 6. Collect the evaluation set in `eval/image_set/`: 50 images (about 30 receipts, 20 grocery photos) and 20 spoken descriptions, with hand labels. Report precision, recall, time and cost per image; if time allows, compare two model sizes.
 
 **Done when** a phone photo of a real receipt and a spoken description each become a reviewed inventory update on the deployed stack, and the accuracy table exists.

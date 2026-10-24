@@ -1,0 +1,16 @@
+# Production image: no uvicorn, tests, evaluation data, prototype or credentials.
+FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim AS requirements
+WORKDIR /build
+COPY pyproject.toml uv.lock .python-version ./
+RUN uv export --frozen --no-dev --no-emit-project --format requirements-txt \
+    --output-file /tmp/requirements.txt
+
+FROM public.ecr.aws/lambda/python:3.12
+COPY --from=requirements /tmp/requirements.txt /tmp/requirements.txt
+RUN pip install --no-cache-dir --require-hashes \
+    --target "${LAMBDA_TASK_ROOT}" -r /tmp/requirements.txt
+COPY app ${LAMBDA_TASK_ROOT}/app
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    AI_PROVIDER=soclaas \
+    AI_REQUEST_TIMEOUT_SECONDS=27
+CMD ["app.lambda_handler.handler"]

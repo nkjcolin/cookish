@@ -1,0 +1,289 @@
+{
+  "checked_on": "2026-10-24",
+  "currency": "SGD",
+  "synthetic": true,
+  "note": "Online reference prices, not an actual JEM checkout quote. Product descriptions are abbreviated for receipt realism.",
+  "drained_weight_source": "https://alivini.com/wp-content/uploads/product_pdf/F1400414-TS.pdf",
+  "products": [
+    {
+      "canonical_name": "egg",
+      "receipt_name": "PSR FRESH EGGS 10S",
+      "contents_per_package": 10,
+      "contents_unit": "pcs",
+      "unit_price_sgd": "2.85",
+      "price_source": "https://www.fairprice.com.sg/product/pasar-fresh-eggs-10-eggs-550g-451724",
+      "price_basis": "listed",
+      "notes": "10 eggs per purchased carton"
+    },
+    {
+      "canonical_name": "soy sauce",
+      "receipt_name": "FP LT SOYA SAUCE 660ML",
+      "contents_per_package": 660,
+      "contents_unit": "ml",
+      "unit_price_sgd": "2.42",
+      "price_source": "https://www.fairprice.com.sg/product-listing?tag=seafood-mala-xiang-guo---light-soya-sauce",
+      "price_basis": "listed regular price",
+      "notes": "regular price, without the listed promotion"
+    },
+    {
+      "canonical_name": "spring onion",
+      "receipt_name": "PSR SPRING ONION 100G",
+      "contents_per_package": 100,
+      "contents_unit": "g",
+      "unit_price_sgd": "1.25",
+      "price_source": "https://www.fairprice.com.sg/product/pasar-malaysia-spring-onion-100g-10344536",
+      "price_basis": "listed",
+      "notes": ""
+    },
+    {
+      "canonical_name": "uncooked rice",
+      "receipt_name": "FP THAI HOM MALI RICE 1KG",
+      "contents_per_package": 1000,
+      "contents_unit": "g",
+      "unit_price_sgd": "3.90",
+      "price_source": "https://www.fairprice.com.sg/product/fairprice-gold-thai-hom-mali-superior-rice-1kg-13097849",
+      "price_basis": "listed",
+      "notes": "dry rice; not cooked rice"
+    },
+    {
+      "canonical_name": "firm tofu",
+      "receipt_name": "FORTUNE TAU KWA 450G",
+      "contents_per_package": 450,
+      "contents_unit": "g",
+      "unit_price_sgd": "1.42",
+      "price_source": "https://www.fairprice.com.sg/en/fairprice/beancurd-tofu",
+      "price_basis": "listed",
+      "notes": "one 450 g retail pack, not two separate purchased packs"
+    },
+    {
+      "canonical_name": "coconut milk",
+      "receipt_name": "AYAM COCONUT MILK 200ML",
+      "contents_per_package": 200,
+      "contents_unit": "ml",
+      "unit_price_sgd": "1.40",
+      "price_source": "https://www.fairprice.com.sg/product/ayam-brand-coconut-milk-200ml-10725136",
+      "price_basis": "listed",
+      "notes": ""
+    },
+    {
+      "canonical_name": "carrot",
+      "receipt_name": "PSR CARROTS 500G",
+      "contents_per_package": 500,
+      "contents_unit": "g",
+      "unit_price_sgd": "1.10",
+      "price_source": "https://www.fairprice.com.sg/vegetables",
+      "price_basis": "listed",
+      "notes": "single-pack price; no multi-buy applied"
+    },
+    {
+      "canonical_name": "long bean",
+      "receipt_name": "SF LONG BEAN 200G",
+      "contents_per_package": 200,
+      "contents_unit": "g",
+      "unit_price_sgd": "1.65",
+      "price_source": "https://www.fairprice.com.sg/vegetables",
+      "price_basis": "listed",
+      "notes": ""
+    },
+    {
+      "canonical_name": "onion",
+      "receipt_name": "CHEF RED ONION 700G",
+      "contents_per_package": 700,
+      "contents_unit": "g",
+      "unit_price_sgd": "1.70",
+      "price_source": "https://www.fairprice.com.sg/vegetables",
+      "price_basis": "listed",
+      "notes": ""
+    },
+    {
+      "canonical_name": "garlic",
+      "receipt_name": "CHEF WHITE GARLIC 500G",
+      "contents_per_package": 500,
+      "contents_unit": "g",
+      "unit_price_sgd": "2.85",
+      "price_source": "https://www.fairprice.com.sg/vegetables",
+      "price_basis": "listed",
+      "notes": ""
+    },
+    {
+      "canonical_name": "ginger",
+      "receipt_name": "SF OLD GINGER 200G",
+      "contents_per_package": 200,
+      "contents_unit": "g",
+      "unit_price_sgd": "2.20",
+      "price_source": "https://www.fairprice.com.sg/vegetables",
+      "price_basis": "listed",
+      "notes": ""
+    },
+    {
+      "canonical_name": "turmeric powder",
+      "receipt_name": "BABAS TURMERIC PWDR 125G",
+      "contents_per_package": 125,
+      "contents_unit": "g",
+      "unit_price_sgd": "1.78",
+      "price_source": "https://www.fairprice.com.sg/en/fairprice/search/spices",
+      "price_basis": "listed",
+      "notes": "plain turmeric, not curry powder"
+    },
+    {
+      "canonical_name": "chilli paste",
+      "receipt_name": "SINGLONG CHILLI PASTE 500G",
+      "contents_per_package": 500,
+      "contents_unit": "g",
+      "unit_price_sgd": "1.73",
+      "price_source": "https://www.fairprice.com.sg/category/chili-paste---sambal",
+      "price_basis": "listed",
+      "notes": "plain chilli paste, not sambal belacan"
+    },
+    {
+      "canonical_name": "canola oil",
+      "receipt_name": "FP CANOLA OIL 500ML",
+      "contents_per_package": 500,
+      "contents_unit": "ml",
+      "unit_price_sgd": "2.90",
+      "price_source": "https://www.fairprice.com.sg/product-listing?category=canola-oil&pageType=category&url=canola-oil",
+      "price_basis": "listed",
+      "notes": ""
+    },
+    {
+      "canonical_name": "salt",
+      "receipt_name": "FP FINE SALT 500G",
+      "contents_per_package": 500,
+      "contents_unit": "g",
+      "unit_price_sgd": "0.45",
+      "price_source": "https://www.fairprice.com.sg/tag/recipe-easy-bean-stew",
+      "price_basis": "listed",
+      "notes": ""
+    },
+    {
+      "canonical_name": "cabbage",
+      "receipt_name": "MY ROUND CABBAGE 1KG",
+      "contents_per_package": 1000,
+      "contents_unit": "g",
+      "unit_price_sgd": "3.25",
+      "price_source": "https://www.fairprice.com.sg/product-listing?category=fresh-produce--1&pageType=category&url=fresh-produce--1",
+      "price_basis": "listed price; assumed pack weight",
+      "notes": "listing is one cabbage per pack; 1 kg is this synthetic fixture's chosen weight"
+    },
+    {
+      "canonical_name": "chicken thigh",
+      "receipt_name": "MG CHICK THIGH BNLS 330G",
+      "contents_per_package": 330,
+      "contents_unit": "g",
+      "unit_price_sgd": "9.40",
+      "price_source": "https://payment.fairprice.com.sg/product/master-grocer-fresh-chicken-thigh-boneless-and-skinless-330-g-90175209",
+      "price_basis": "listed",
+      "notes": "raw boneless skinless thigh; not marinated or bone-in"
+    },
+    {
+      "canonical_name": "potato",
+      "receipt_name": "HOLLAND POTATO 1KG",
+      "contents_per_package": 1000,
+      "contents_unit": "g",
+      "unit_price_sgd": "1.40",
+      "price_source": "https://www.fairprice.com.sg/vegetables",
+      "price_basis": "listed",
+      "notes": ""
+    },
+    {
+      "canonical_name": "lemon",
+      "receipt_name": "FRESH LEMON 1PC",
+      "contents_per_package": 1,
+      "contents_unit": "pcs",
+      "unit_price_sgd": "0.85",
+      "price_source": "",
+      "price_basis": "estimated",
+      "notes": "plausible loose-lemon price; no exact SKU price verified"
+    },
+    {
+      "canonical_name": "black pepper",
+      "receipt_name": "FP GROUND BLACK PEPPER 100G",
+      "contents_per_package": 100,
+      "contents_unit": "g",
+      "unit_price_sgd": "4.13",
+      "price_source": "https://www.fairprice.com.sg/tag/recipe-easy-bean-stew",
+      "price_basis": "listed",
+      "notes": ""
+    },
+    {
+      "canonical_name": "broccoli",
+      "receipt_name": "AGRO FRESH BROCCOLI 280G",
+      "contents_per_package": 280,
+      "contents_unit": "g",
+      "unit_price_sgd": "2.55",
+      "price_source": "https://omni.fairprice.com.sg/product/orgo-fresh-royal-broccoli-280-g-90153099",
+      "price_basis": "listed promotional price",
+      "notes": "two 280 g packs are needed for the recipe's 300 g"
+    },
+    {
+      "canonical_name": "rice vermicelli",
+      "receipt_name": "FP RICE VERMICELLI 400G",
+      "contents_per_package": 400,
+      "contents_unit": "g",
+      "unit_price_sgd": "1.16",
+      "price_source": "https://www.fairprice.com.sg/vermicelli",
+      "price_basis": "listed",
+      "notes": ""
+    },
+    {
+      "canonical_name": "cucumber",
+      "receipt_name": "MY JAPANESE CUCUMBER 400G",
+      "contents_per_package": 400,
+      "contents_unit": "g",
+      "unit_price_sgd": "2.40",
+      "price_source": "https://www.fairprice.com.sg/vegetables",
+      "price_basis": "listed regular price",
+      "notes": "regular price, without the listed promotion"
+    },
+    {
+      "canonical_name": "tomato",
+      "receipt_name": "FRESH TOMATOES 600G",
+      "contents_per_package": 600,
+      "contents_unit": "g",
+      "unit_price_sgd": "2.30",
+      "price_source": "https://www.fairprice.com.sg/vegetables",
+      "price_basis": "listed",
+      "notes": ""
+    },
+    {
+      "canonical_name": "canned chickpea",
+      "receipt_name": "CIRIO CHICK PEAS 400G",
+      "contents_per_package": 240,
+      "contents_unit": "g",
+      "unit_price_sgd": "3.23",
+      "price_source": "https://www.fairprice.com.sg/product/cirio-ceci-chick-peas-400g-12603933",
+      "price_basis": "listed",
+      "notes": "400 g net, 240 g drained edible contents; recipe comparison uses drained weight"
+    },
+    {
+      "canonical_name": "cooked rice",
+      "receipt_name": "CJ COOKED WHITE RICE 210G",
+      "contents_per_package": 210,
+      "contents_unit": "g",
+      "unit_price_sgd": "2.25",
+      "price_source": "https://www.fairprice.com.sg/category/supplier-2-off-cj-2",
+      "price_basis": "listed",
+      "notes": "two ready-cooked trays provide 420 g; not dry rice"
+    },
+    {
+      "canonical_name": "soba noodle",
+      "receipt_name": "HAKUBAKU ORG SOBA 270G",
+      "contents_per_package": 270,
+      "contents_unit": "g",
+      "unit_price_sgd": "4.28",
+      "price_source": "https://www.fairprice.com.sg/product-listing?personalisationType=SIMILAR_PRODUCT&title=Similar+Products&trackinfo=1304789",
+      "price_basis": "listed",
+      "notes": ""
+    },
+    {
+      "canonical_name": "sesame oil",
+      "receipt_name": "DBL PAGODA SESAME OIL 150ML",
+      "contents_per_package": 150,
+      "contents_unit": "ml",
+      "unit_price_sgd": "3.50",
+      "price_source": "https://www.fairprice.com.sg/sesame-oil",
+      "price_basis": "listed",
+      "notes": ""
+    }
+  ]
+}
