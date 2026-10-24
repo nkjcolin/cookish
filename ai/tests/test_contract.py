@@ -1,7 +1,8 @@
-"""This app serves exactly the /ai part of docs/openapi.json, which the backend exports.
+"""Check shared contract drift, allowing only the user's AI-only field removal.
 
-If this fails, the copies in app/schemas.py or app/errors.py have drifted from the
-backend. Change the backend first, re-export the contract, then copy the change here.
+Role 1 must remove DraftItem.ingredient_id from the shared schema/export/types.
+Until then, project precisely that removal onto the expected contract. Do not
+skip schema comparisons or permit any other differences.
 """
 
 import json
@@ -42,10 +43,20 @@ def test_paths_match_the_contract() -> None:
     assert actual == expected
 
 
-def test_schemas_match_the_contract() -> None:
+def test_schemas_match_contract_except_approved_identifier_removal() -> None:
     _, expected = _ai_part(json.loads(CONTRACT.read_text()))
     _, actual = _ai_part(app.openapi())
+
+    item = expected["DraftItem"]
+    item["properties"].pop("ingredient_id", None)
+    item["required"] = [field for field in item["required"] if field != "ingredient_id"]
 
     assert sorted(actual) == sorted(expected)
     for name in expected:
         assert actual[name] == expected[name], name
+
+
+def test_draft_item_openapi_has_no_ingredient_identifier() -> None:
+    item = app.openapi()["components"]["schemas"]["DraftItem"]
+    assert "ingredient_id" not in item["properties"]
+    assert "ingredient_id" not in item["required"]

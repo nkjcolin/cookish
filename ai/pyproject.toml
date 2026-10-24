@@ -4,14 +4,19 @@ version = "0.1.0"
 description = "Cookish assisted entry: receipts, photos and spoken lists to draft items"
 requires-python = ">=3.12,<3.13"
 dependencies = [
+    "anyio>=4.4,<5",
+    "boto3>=1.35,<2",
     "fastapi>=0.115",
+    "httpx>=0.27,<1",
     "mangum>=0.19",
+    "openai>=2,<4",
+    "pillow>=11,<14",
     "pydantic>=2.9",
+    "python-dotenv>=1,<2",
 ]
 
 [dependency-groups]
 dev = [
-    "httpx>=0.27",
     "pytest>=8",
     "ruff>=0.6",
     "uvicorn>=0.30",
@@ -23,9 +28,15 @@ package = false
 [tool.ruff]
 line-length = 100
 target-version = "py312"
+# Standalone user experiment; not imported or shipped by the application.
+extend-exclude = ["laas.py"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
+
+[tool.ruff.lint.isort]
+# laas.py is local source even when intentionally excluded from the service image.
+known-first-party = ["app", "laas"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

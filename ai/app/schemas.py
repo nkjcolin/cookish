@@ -1,9 +1,9 @@
 """Request and response shapes for /ai/* — the part of the API contract this Lambda serves.
 
 A copy of backend/app/schemas/ai.py and the few definitions it uses from the other backend
-schema files. The backend owns the contract: docs/openapi.json is exported from there and
-the frontend's types are generated from that. tests/test_contract.py fails if anything
-here differs from docs/openapi.json, so change the backend first, then copy the change.
+schema files. The backend owns the shared contract and generated frontend types.
+The user-requested removal of DraftItem.ingredient_id is an AI-only migration;
+tests/test_contract.py permits only that difference pending the shared update.
 
 These endpoints only return drafts. Nothing reaches the inventory until the user has
 reviewed the draft and the frontend posts it to POST /api/inventory/items.
@@ -11,7 +11,6 @@ reviewed the draft and the frontend posts it to POST /api/inventory/items.
 
 from enum import StrEnum
 from typing import Annotated, Literal, Self
-from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
@@ -94,7 +93,6 @@ class ParseItemsRequest(RequestModel):
 
 class DraftItem(ResponseModel):
     raw_text: str | None = Field(description="What was read or heard, before normalisation.")
-    ingredient_id: UUID | None = Field(description="null if no confident catalogue match.")
     display_name: str
     count: float | None = Field(description="null = not stated; never guessed.")
     unit: str | None

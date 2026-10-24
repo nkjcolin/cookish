@@ -13,6 +13,7 @@ from fastapi.routing import APIRoute
 from app import parse
 from app.errors import ErrorResponse, register_error_handlers
 from app.model_client import ModelClient, get_client
+from app.runtime import RequestMiddleware
 from app.schemas import (
     DraftResult,
     InterpretRequest,
@@ -33,18 +34,18 @@ router = APIRouter(tags=["ai"])
 
 
 @router.post("/parse-image")
-def parse_image(body: ParseImageRequest, client: Client) -> DraftResult:
-    return parse.parse_image(body, client)
+async def parse_image(body: ParseImageRequest, client: Client) -> DraftResult:
+    return await parse.parse_image(body, client)
 
 
 @router.post("/parse-items")
-def parse_items(body: ParseItemsRequest, client: Client) -> DraftResult:
-    return parse.parse_items(body, client)
+async def parse_items(body: ParseItemsRequest, client: Client) -> DraftResult:
+    return await parse.parse_items(body, client)
 
 
 @router.post("/interpret")
-def interpret(body: InterpretRequest, client: Client) -> InterpretResult:
-    return parse.interpret(body, client)
+async def interpret(body: InterpretRequest, client: Client) -> InterpretResult:
+    return await parse.interpret(body, client)
 
 
 def _operation_id(route: APIRoute) -> str:
@@ -63,6 +64,7 @@ def create_app() -> FastAPI:
         generate_unique_id_function=_operation_id,
     )
     register_error_handlers(app)
+    app.add_middleware(RequestMiddleware)
     app.include_router(router, prefix=AI_PREFIX)
     return app
 
