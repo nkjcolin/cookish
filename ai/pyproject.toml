@@ -38,6 +38,10 @@ select = ["E", "F", "I", "UP", "B"]
 # laas.py is local source even when intentionally excluded from the service image.
 known-first-party = ["app", "laas"]
 
+[tool.ruff.lint.per-file-ignores]
+# Dataset builders retain long receipt-text and source-URL fixture literals.
+"dataset/tools/*.py" = ["E501"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]
