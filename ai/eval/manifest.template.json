@@ -1,0 +1,9 @@
+{
+  "synthetic": false,
+  "note": "Replace image paths and add HUMAN labels before formal evaluation. null means unlabelled, not no food.",
+  "cases": [
+    {"id": "receipt-001", "kind": "receipt", "image": "../dataset/receipt/receipt-001.jpeg", "expected": null, "non_food_names": []},
+    {"id": "photo-001", "kind": "photo", "image": "../dataset/grocery/photo-001.jpeg", "expected": null},
+    {"id": "voice-001", "kind": "voice", "text": "replace with the actual browser transcript", "expected": null}
+  ]
+}

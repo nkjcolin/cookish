@@ -1,0 +1,24 @@
+{
+  "synthetic": true,
+  "note": "Small school-provider smoke test, not a benchmark. Receipt has no human labels; scripted text is not the formal voice/user dataset.",
+  "cases": [
+    {
+      "id": "typed-smoke",
+      "kind": "typed",
+      "text": "2 eggs",
+      "expected": [{"display_name": "Egg", "aliases": ["Eggs"], "count": 2, "unit": "pcs"}]
+    },
+    {
+      "id": "interpret-smoke",
+      "kind": "interpret",
+      "text": "something quicker",
+      "expected_adjust": {"tags": ["quicker"]}
+    },
+    {
+      "id": "receipt-smoke",
+      "kind": "receipt",
+      "image": "../dataset/receipt/fairprice-receipt.jpeg",
+      "expected": null
+    }
+  ]
+}

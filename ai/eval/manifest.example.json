@@ -1,0 +1,22 @@
+{
+  "synthetic": true,
+  "note": "Offline fake-provider plumbing example. Not recognition ground truth.",
+  "cases": [
+    {
+      "id": "fake-typed",
+      "kind": "typed",
+      "text": "exercise the fake provider",
+      "expected": [
+        {"display_name": "Egg", "count": 10, "unit": "pcs"},
+        {"display_name": "Cabbage", "count": null, "unit": null},
+        {"display_name": "Sambal", "count": 230, "unit": "g"}
+      ]
+    },
+    {
+      "id": "fake-interpret",
+      "kind": "interpret",
+      "text": "exercise the fake provider",
+      "expected_adjust": {"tags": ["quicker"], "max_minutes": 20}
+    }
+  ]
+}
