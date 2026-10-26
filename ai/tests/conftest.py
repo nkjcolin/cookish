@@ -1,5 +1,6 @@
 import base64
 import os
+import wave
 from collections.abc import Iterator
 from io import BytesIO
 from pathlib import Path
@@ -44,3 +45,17 @@ def catalogue(monkeypatch: pytest.MonkeyPatch) -> Iterator[None]:
     get_catalogue.cache_clear()
     yield
     get_catalogue.cache_clear()
+
+
+@pytest.fixture
+def audio_payload() -> dict[str, str]:
+    buffer = BytesIO()
+    with wave.open(buffer, "wb") as audio:
+        audio.setnchannels(1)
+        audio.setsampwidth(2)
+        audio.setframerate(16000)
+        audio.writeframes(b"\x00\x00" * 1600)
+    return {
+        "media_type": "audio/wav",
+        "audio_base64": base64.b64encode(buffer.getvalue()).decode("ascii"),
+    }

@@ -20,6 +20,8 @@ from app.schemas import (
     InterpretResult,
     ParseImageRequest,
     ParseItemsRequest,
+    TranscribeAudioRequest,
+    TranscriptionResult,
 )
 
 AI_PREFIX = "/ai"
@@ -46,6 +48,11 @@ async def parse_items(body: ParseItemsRequest, client: Client) -> DraftResult:
 @router.post("/interpret")
 async def interpret(body: InterpretRequest, client: Client) -> InterpretResult:
     return await parse.interpret(body, client)
+
+
+@router.post("/transcribe-audio")
+async def transcribe_audio(body: TranscribeAudioRequest, client: Client) -> TranscriptionResult:
+    return await parse.transcribe_audio(body, client)
 
 
 def _operation_id(route: APIRoute) -> str:

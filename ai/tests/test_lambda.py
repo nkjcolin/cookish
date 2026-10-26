@@ -41,3 +41,12 @@ def test_lambda_invalid_image_is_a_controlled_error():
         SimpleNamespace(get_remaining_time_in_millis=lambda: 29000),
     )
     assert result["statusCode"] == 422
+
+
+def test_lambda_audio_event(audio_payload):
+    result = handler(
+        gateway_event("/ai/transcribe-audio", audio_payload),
+        SimpleNamespace(get_remaining_time_in_millis=lambda: 29000),
+    )
+    assert result["statusCode"] == 200
+    assert json.loads(result["body"])["text"].startswith("Four eggs")

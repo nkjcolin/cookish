@@ -107,8 +107,13 @@ python3 ai/scripts/evaluate.py ai/eval/manifest.local.json \
 - Confidence bins and Brier score measure identification calibration on labelled
   predictions. They do not automatically rewrite the model's confidence values.
 - Usage is aggregated from API headers across attempts; unavailable usage remains
-  unknown. Known token totals are partial if any cases lack usage. Cost remains
-  null until school pricing or quota terms are supplied; do not present zero cost.
+  unknown. Known token totals are partial if any cases lack usage. Predictions
+  retain the service's estimated-cost headers. Reports include `estimated_cost`
+  only when every case is fully priced, `known_estimated_cost` for any known
+  subtotal, `cost_status` and `cases_with_unknown_cost`. Failed cases can still
+  contribute known costs. Fake calls and legacy predictions without pricing
+  metadata do not establish school spend. Actual billed `cost` remains null;
+  billing, quota, currency and rounding terms still need provider confirmation.
 - Interpretation accuracy is separate from food identification metrics.
 - `formal_dataset_complete` requires the full labelled set, non-synthetic input and
   the real school provider. It does not by itself mean the precision/latency targets
@@ -121,8 +126,11 @@ food labels and predictions. Keep real customer data private. `results/`, `data/
 
 Formal dataset collection/evaluation was deferred by the user on 2026-10-23.
 Current acceptance gap: no complete human-labelled dataset, model-quality
-comparison, calibrated-confidence acceptance or school pricing/quota terms have
-been provided. The runner is implemented; formal model acceptance is not complete.
+comparison or calibrated-confidence acceptance has been provided. Advertised
+rates were discovered in the school's `/v1/models` response on 2026-10-26; the
+service calculates estimates and the runner aggregates those response headers.
+Quota/billing terms remain unconfirmed. The runner is implemented; formal model
+acceptance is not complete. No formal dataset run was performed for this update.
 
 ## Ideas for when you resume
 

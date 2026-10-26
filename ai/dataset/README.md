@@ -9,10 +9,11 @@ The images and dataset metadata are excluded from Docker builds.
 | `receipt/` | Four reference receipt images |
 | `receipt/generated/` | Thirty synthetic receipts: ten recipes with three ingredient-coverage scenarios each |
 | `grocery/` | Two grocery photos |
+| `audio/` | Short synthetic ingredient-list audio for standalone transcription testing |
 | `recipe_receipts_20261024/` | Current scenario specifications, recipe snapshots, price references, generation records and gallery |
 | `tools/` | Synthetic-data preparation, publication and OCR helpers with their original scenario blueprint |
 
-The shared set contains 36 images. Generated receipts reuse the FairPrice
+The shared set contains 36 images and one synthetic audio clip. Generated receipts reuse the FairPrice
 reference's visual style; they are synthetic development fixtures, not actual
 store transactions. Existing reference images are included as provided for local
 testing. No school-model extraction outputs or API credentials are stored here.

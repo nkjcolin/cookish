@@ -1,14 +1,23 @@
-"""Manual script for testing the school's image-capable model API.
+"""Manual script for testing the school's image and audio model APIs.
 
 Setup (from the repository root): cd ai && uv sync
 Run: uv run python laas.py
-Edit main() to choose your own image, prompt file or inline prompt.
+Edit main() to choose your own image, prompt file, inline prompt or audio file.
+list_models() calls GET /v1/models using only the base URL and API key; no model
+setting is required. It preserves school-specific pricing/capability metadata.
+Use show_details=True on a single-image/audio helper to print response usage and
+safe billing/rate-limit headers. Missing usage or prices are unknown, not zero.
 
 Required settings in ai/.env (ignored by Git), or exported in your environment:
     SOCLAAS_BASE_URL=https://school-api.example/v1
     SOCLAAS_API_KEY=your-school-api-key
     SOCLAAS_MODEL=your-school-model-name
 Use the API base URL, not the full /chat/completions endpoint.
+
+For audio transcription, set SOCLAAS_AUDIO_MODEL to the school's speech-to-text
+model ID, or pass model= directly to transcribe_audio(). SOCLAAS_MODEL is only
+needed for the image/receipt helpers; it is not an audio-model fallback.
+With a base URL ending in /v1, audio uploads go to POST /v1/audio/transcriptions.
 
 Optional: SOCLAAS_IMAGE_MODEL overrides the default model for the single-image
 helpers. Their model= keyword takes priority over both model environment settings.
@@ -43,6 +52,52 @@ PROMPT_DIR = script_dir / "app/prompts"
 IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp", ".gif"}
 
 
+def list_models(*, timeout: float = 30) -> dict:
+    """Return the full school model catalogue, including any pricing metadata.
+
+    With SOCLAAS_BASE_URL ending in /v1 this sends GET /v1/models. Print the
+    returned dictionary as JSON in main(); school-specific `soclaas` fields are
+    retained rather than reducing each entry to just a model ID.
+    """
+    if not math.isfinite(timeout) or timeout <= 0:
+        raise ValueError("Timeout must be a positive, finite number of seconds.")
+    base_url = os.environ.get("SOCLAAS_BASE_URL", "").strip()
+    api_key = os.environ.get("SOCLAAS_API_KEY", "").strip()
+    if not base_url or not api_key:
+        raise RuntimeError("Set SOCLAAS_BASE_URL and SOCLAAS_API_KEY in ai/.env/environment.")
+    with OpenAI(base_url=base_url, api_key=api_key, timeout=timeout, max_retries=0) as client:
+        result = client.models.list().model_dump(mode="json")
+    if not isinstance(result.get("data"), list):
+        raise RuntimeError("The school API returned an unusable model list.")
+    return result
+
+
+def _print_call_details(raw_response, model: str) -> None:
+    """Show usage without printing credentials, the prompt, image or audio bytes."""
+    body = raw_response.http_response.json()
+    headers = {
+        name: value
+        for name, value in raw_response.headers.items()
+        if any(
+            part in name.lower()
+            for part in ("cost", "price", "usage", "token", "ratelimit", "request-id")
+        )
+    }
+    details = {
+        "endpoint": raw_response.http_request.url.path,
+        "requested_model": model,
+        "response_model": body.get("model"),
+        "usage": body.get("usage"),
+        "cost": body.get("cost"),
+        "pricing": body.get("pricing"),
+        "soclaas": body.get("soclaas"),
+        "duration": body.get("duration"),
+        "response_headers": headers,
+    }
+    print("API call details:")
+    print(json.dumps(details, indent=2, ensure_ascii=False))
+
+
 def load_prompt(prompt_name: str | Path) -> str:
     """Load a prompt from app/prompts by filename or stem, e.g. 'photo.md' or 'photo'."""
     if not str(prompt_name).strip():
@@ -69,9 +124,13 @@ def ask_image_with_prompt_file(
     *,
     model: str | None = None,
     timeout: float = 180,
+    show_details: bool = False,
 ) -> str:
     """Test an image using any prompt file in app/prompts, without a fixed output schema."""
-    return ask_image(image_path, load_prompt(prompt_name), model=model, timeout=timeout)
+    return ask_image(
+        image_path, load_prompt(prompt_name), model=model, timeout=timeout,
+        show_details=show_details,
+    )
 
 
 # Function to encode the image
@@ -86,12 +145,14 @@ def ask_image(
     *,
     model: str | None = None,
     timeout: float = 180,
+    show_details: bool = False,
 ) -> str:
     """Ask the school model about your image; return its answer as plain text.
 
     Example: ask_image("dataset/grocery/photo.jpg", "List the visible groceries.")
     Credentials come from ai/.env or the existing process environment. No Docker,
     receipt instructions, output schema, file saving or API cleanup is involved.
+    Set show_details=True to print the model, returned usage and billing headers.
     """
     image_path = Path(image_path).expanduser()
     if not image_path.is_file():
@@ -131,7 +192,11 @@ def ask_image(
         )
 
     with OpenAI(base_url=base_url, api_key=api_key, timeout=timeout, max_retries=0) as client:
-        response = client.chat.completions.create(
+        create = (
+            client.chat.completions.with_raw_response.create
+            if show_details else client.chat.completions.create
+        )
+        response = create(
             model=selected_model,
             messages=[
                 {
@@ -148,6 +213,9 @@ def ask_image(
                 }
             ],
         )
+        if show_details:
+            _print_call_details(response, selected_model)
+            response = response.parse()
     if not response.choices:
         raise RuntimeError("The model returned no answer choices.")
     choice = response.choices[0]
@@ -159,6 +227,78 @@ def ask_image(
     if not isinstance(answer, str) or not answer.strip():
         raise RuntimeError("The model returned an empty answer.")
     return answer
+
+
+def transcribe_audio(
+    audio_path: str | Path,
+    *,
+    model: str | None = None,
+    language: str | None = "en",
+    prompt: str | None = None,
+    timeout: float = 180,
+    show_details: bool = False,
+) -> str:
+    """Upload audio to the school transcription API and return its text.
+
+    Edit the audio block in main() to test your own file/model. The optional
+    prompt supplies transcription context, not ingredient-parsing instructions.
+    This helper does not call /ai/parse-items or save/modify the transcript.
+    Set show_details=True to inspect usage and any billing headers. Some audio
+    providers return only text, so usage and duration will remain unknown.
+    """
+    audio_path = Path(audio_path).expanduser()
+    if not audio_path.is_file():
+        raise FileNotFoundError(f"Audio file not found: {audio_path}")
+    if audio_path.stat().st_size == 0:
+        raise ValueError("Provide a nonempty audio file.")
+    if not math.isfinite(timeout) or timeout <= 0:
+        raise ValueError("Timeout must be a positive, finite number of seconds.")
+
+    base_url = os.environ.get("SOCLAAS_BASE_URL", "").strip()
+    api_key = os.environ.get("SOCLAAS_API_KEY", "").strip()
+    selected_model = (
+        model if model is not None else os.environ.get("SOCLAAS_AUDIO_MODEL", "")
+    ).strip()
+    missing = [
+        name
+        for name, value in (
+            ("SOCLAAS_BASE_URL", base_url),
+            ("SOCLAAS_API_KEY", api_key),
+            ("SOCLAAS_AUDIO_MODEL (or the model parameter)", selected_model),
+        )
+        if not value
+    ]
+    if missing:
+        raise RuntimeError(
+            "Missing school API settings in ai/.env/environment: " + ", ".join(missing)
+        )
+
+    options = {}
+    if language:
+        options["language"] = language
+    if prompt:
+        options["prompt"] = prompt
+    with (
+        OpenAI(base_url=base_url, api_key=api_key, timeout=timeout, max_retries=0) as client,
+        audio_path.open("rb") as audio_file,
+    ):
+        create = (
+            client.audio.transcriptions.with_raw_response.create
+            if show_details else client.audio.transcriptions.create
+        )
+        response = create(
+            model=selected_model,
+            file=audio_file,
+            response_format="json",
+            **options,
+        )
+        if show_details:
+            _print_call_details(response, selected_model)
+            response = response.parse()
+    transcript = response.text
+    if not isinstance(transcript, str) or not transcript.strip():
+        raise RuntimeError("The model returned an empty transcription.")
+    return transcript
 
 
 def extract_receipt(
@@ -333,7 +473,7 @@ def main() -> None:
     # image_path = script_dir / "dataset/grocery/grocery.jpeg"
     image_path = script_dir / "dataset/grocery/grocery-table.webp"
     prompt_name = "photo.md"
-    print(ask_image_with_prompt_file(image_path, prompt_name))
+    # print(ask_image_with_prompt_file(image_path, prompt_name, show_details=True))
 
     # 3. IMAGE + YOUR OWN INLINE PROMPT
     custom_prompt = """
@@ -341,6 +481,20 @@ def main() -> None:
                     """
 
     # print(ask_image(image_path, custom_prompt))
+
+    # 4. AUDIO -> TRANSCRIPT (POST /v1/audio/transcriptions)
+    # Set SOCLAAS_AUDIO_MODEL in ai/.env, or add model="your-speech-model" below.
+    # Comment out the enabled image test above before enabling this test.
+    audio_path = script_dir / "dataset/audio/ingredients.wav"
+    print(transcribe_audio(audio_path, show_details=True))
+
+    # 5. LIST MODELS + SCHOOL PRICING (GET /v1/models)
+    # Comment out the audio call above to run only this read-only catalogue request.
+    # print(json.dumps(list_models(), indent=2, ensure_ascii=False))
+
+    # To inspect usage on a POST, add show_details=True to the call you enable:
+    # print(ask_image_with_prompt_file(image_path, prompt_name, show_details=True))
+    # print(transcribe_audio(audio_path, show_details=True))
 
 
 if __name__ == "__main__":

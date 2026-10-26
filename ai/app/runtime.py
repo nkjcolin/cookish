@@ -7,12 +7,14 @@ import os
 import time
 from contextvars import ContextVar
 from dataclasses import dataclass
+from decimal import Decimal
 from uuid import UUID, uuid4
 
 import anyio
 from starlette.responses import JSONResponse
 
 from app.errors import ErrorBody, ErrorCode, ErrorResponse
+from app.pricing import COST_UNIT, cost_text
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -28,6 +30,14 @@ class RequestState:
     attempts: int = 0
     input_tokens: int | None = None
     output_tokens: int | None = None
+    completed_attempts: int = 0
+    known_input_tokens: int = 0
+    known_output_tokens: int = 0
+    estimated_cost: Decimal | None = None
+    known_estimated_cost: Decimal | None = None
+    priced_attempts: int = 0
+    cost_status: str = "unknown"
+    pricing_fetched_at: str | None = None
 
 
 current_request: ContextVar[RequestState | None] = ContextVar("ai_request", default=None)
@@ -106,6 +116,11 @@ class RequestMiddleware:
                     ("provider", state.provider),
                     ("input-tokens", state.input_tokens if state.attempts else None),
                     ("output-tokens", state.output_tokens if state.attempts else None),
+                    ("estimated-cost", cost_text(state.estimated_cost)),
+                    ("known-estimated-cost", cost_text(state.known_estimated_cost)),
+                    ("cost-status", state.cost_status if state.attempts else None),
+                    ("cost-unit", COST_UNIT if state.attempts else None),
+                    ("pricing-fetched-at", state.pricing_fetched_at),
                 ):
                     if value is not None:
                         headers.append((f"x-ai-{name}".encode(), str(value).encode("utf-8")))
@@ -118,7 +133,12 @@ class RequestMiddleware:
                     await self.app(scope, receive, buffered_send)
             except TimeoutError:
                 outcome = "deadline"
-                state.input_tokens = state.output_tokens = None
+                if state.completed_attempts < state.attempts:
+                    state.input_tokens = state.output_tokens = None
+                    state.estimated_cost = None
+                    state.cost_status = (
+                        "partial" if state.known_estimated_cost is not None else "unknown"
+                    )
                 messages.clear()
                 await _unavailable("The AI request exceeded its deadline")(
                     scope, receive, buffered_send
@@ -140,6 +160,13 @@ class RequestMiddleware:
                         "latency_ms": round((time.monotonic() - started) * 1000),
                         "input_tokens": state.input_tokens if state.attempts else None,
                         "output_tokens": state.output_tokens if state.attempts else None,
+                        "known_input_tokens": state.known_input_tokens,
+                        "known_output_tokens": state.known_output_tokens,
+                        "estimated_cost": cost_text(state.estimated_cost),
+                        "known_estimated_cost": cost_text(state.known_estimated_cost),
+                        "cost_status": state.cost_status,
+                        "cost_unit": COST_UNIT,
+                        "priced_attempts": state.priced_attempts,
                     }
                 )
             )

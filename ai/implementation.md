@@ -4,6 +4,44 @@ This plan has **12 sequential parts**. Each part can be requested and completed 
 its own, for example: "Implement Part 4 only." Add relevant tests and documentation
 as each part is implemented rather than deferring them to the end.
 
+Model accounting addition (2026-10-26): integrate school catalogue rates into
+the existing shared model pipeline. `app/pricing.py` caches rates per client,
+calculates Decimal estimates and records provenance. Every model attempt logs
+reported tokens and estimated cost; request headers/logs aggregate complete
+totals or explicit partial subtotals. PCM WAV frames can supply missing audio
+duration. Missing rates, missing usage and timeouts never become fabricated free
+calls. Fake costs are explicitly marked. Evaluation reports aggregate the service
+headers while actual billed cost stays unknown. AWS infrastructure costs are
+separate. This supersedes historical records that pricing is entirely unavailable;
+formal evaluation and school billing/quota confirmation remain pending.
+Verification: 323 AI tests and 29 standalone checks passed, plus lint/format.
+Both development and Lambda images were rebuilt. A live Llama 3.1 8B text call
+reported 707 input / 156 output tokens and an estimate of 0.00006602775 provider
+dollars. Whisper's sample WAV estimate was 0.0003856, measured from 3.856 seconds
+of PCM frames; token usage stayed unknown. Both reused the same pricing snapshot,
+and headers matched the rate/usage records exactly. Saved evidence:
+`output/accounting/live-check-20261026.json`. These were accounting smoke checks,
+not formal recognition evaluation. The text model still returned the literal
+unit string `null` for eggs; that model-quality issue is retained in the evidence.
+
+Audio transcription addition (2026-10-26): after the user verified the standalone
+school audio call, add `POST /ai/transcribe-audio` to the service. It accepts small
+base64 audio uploads and returns transcript text; `/ai/parse-items` with
+`source: voice` remains a separate step. Use the server-owned `SOCLAAS_AUDIO_MODEL`
+without falling back to the vision model. Production code sends multipart HTTPX
+requests directly and never imports `laas.py`. Existing credential sources,
+deadline clipping, request correlation and safe errors apply. Audio remains in
+memory, with a 3 MiB limit and container-signature checks; the school decodes it.
+This supersedes the original browser-only transcription scope where server audio
+was excluded. The shared contract/frontend recording flow still needs an owner
+handoff outside `ai/`. Formal evaluation remains deferred.
+Verification: 283 AI tests and 27 standalone checks pass, plus Ruff checks.
+The development Docker image was rebuilt. A real HTTP call with the bundled
+3.86-second WAV returned `4 eggs, 200 grams of rice, and 4 potatoes.` in 1.149
+seconds using the configured speech model. Evidence is saved locally under
+`output/audio/transcription-20261026T101256Z.json`; this single sample is not a
+formal speech/latency evaluation or proof of ingredient-parsing accuracy.
+
 Original-unit update (2026-10-24): preserve kg as kg and litres as l; normalize
 spelling without converting measurement scale. Python still multiplies extracted
 package factors once, so two 0.5 kg packs return 1 kg and two 280 g packs return
