@@ -20,6 +20,12 @@ def test_fake_needs_no_school_or_aws_settings() -> None:
     assert isinstance(get_client(), FakeModelClient)
 
 
+def test_audio_model_is_optional_and_never_uses_vision_default(school_env):
+    assert Settings.from_env(school_env).model_for_task("transcription") == ""
+    settings = Settings.from_env({**school_env, "SOCLAAS_AUDIO_MODEL": '"speech-model"'})
+    assert settings.model_for_task("transcription") == "speech-model"
+
+
 def test_task_overrides_and_default_fallback(school_env) -> None:
     settings = Settings.from_env(school_env)
     assert settings.base_url == "https://school.example/api/v1/"
@@ -105,11 +111,24 @@ def test_secret_reference_instead_of_a_local_key(school_env) -> None:
         ("SOCLAAS_TIMEOUT_SECONDS", "nan"),
         ("SOCLAAS_TIMEOUT_SECONDS", "inf"),
         ("SOCLAAS_TIMEOUT_SECONDS", "121"),
+        ("SOCLAAS_PRICING_CACHE_SECONDS", "0"),
+        ("SOCLAAS_PRICING_CACHE_SECONDS", "invalid"),
+        ("SOCLAAS_PRICING_CACHE_SECONDS", "86401"),
     ],
 )
 def test_invalid_settings_fail_locally(school_env, name, value) -> None:
     with pytest.raises(ConfigurationError):
         Settings.from_env({**school_env, name: value})
+
+
+def test_pricing_cache_lifetime_is_configurable(school_env):
+    assert Settings.from_env(school_env).pricing_cache_seconds == 3600
+    assert (
+        Settings.from_env(
+            {**school_env, "SOCLAAS_PRICING_CACHE_SECONDS": "60"}
+        ).pricing_cache_seconds
+        == 60
+    )
 
 
 def test_bad_runtime_configuration_is_a_safe_api_error(monkeypatch, caplog) -> None:

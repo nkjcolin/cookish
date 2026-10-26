@@ -86,6 +86,11 @@ real concurrency or end-to-end production latency. Those are deployment checks.
 4. Configure the school base URL, default/per-task models, output mode and token
    limit. Use `AI_PROVIDER=soclaas`, `AI_REQUEST_TIMEOUT_SECONDS=27`, and an HTTP
    timeout at most the overall budget. Never configure fake mode as a hidden fallback.
+   Set `SOCLAAS_AUDIO_MODEL` to the verified speech-to-text model ID to enable
+   `/ai/transcribe-audio`; it does not fall back to the default image/text model.
+   `SOCLAAS_PRICING_CACHE_SECONDS` defaults to 3600 for each warm runtime. The
+   service fetches rates from the school `/v1/models` using the same credential,
+   and reports unknown cost if pricing is unavailable; no extra Lambda is needed.
 5. Prefer `SOCLAAS_API_KEY_SECRET_ARN` rather than embedding a key in the image.
    Grant the execution role `secretsmanager:GetSecretValue` for that specific secret
    and any required customer-managed KMS key permission. Configure exactly one
@@ -94,9 +99,17 @@ real concurrency or end-to-end production latency. Those are deployment checks.
 6. Provide execution-role logging permissions scoped to this function's log group.
    Use the JSON `ai_request` and `model_call` events and their `request_id` for
    correlation, latency, usage and failure monitoring. Unknown usage is not zero.
+   Both event types include estimated model cost: aggregate one event type to
+   avoid double counting. `model_call` includes rate snapshots; `ai_request`
+   includes all-attempt totals and partial coverage. Keep model estimates separate
+   from actual school charges and AWS infrastructure billing.
 7. Route authenticated `/ai/*` API Gateway HTTP API requests to this Lambda using
    payload format 2.0. Cognito authorization is the gateway/platform's responsibility;
    the app assumes it has already run. Local test ports bind only to loopback.
+   If the frontend reads accounting headers across origins, expose `X-AI-Model`,
+   `X-AI-Input-Tokens`, `X-AI-Output-Tokens`, `X-AI-Estimated-Cost`,
+   `X-AI-Known-Estimated-Cost`, `X-AI-Cost-Status`, `X-AI-Cost-Unit`,
+   `X-AI-Pricing-Fetched-At` and correlation/attempt headers in gateway CORS.
 8. Keep this AI Lambda outside the project's database VPC as planned, with public
    HTTPS access to the school API. It has no database, inventory-write or S3-upload
    permissions requirement. Re-evaluate routing if the school endpoint changes.
@@ -109,6 +122,10 @@ real concurrency or end-to-end production latency. Those are deployment checks.
 - Role 1 must remove `DraftItem.ingredient_id` from the backend schema, shared
   OpenAPI export and generated frontend types, and adapt review/confirmation logic.
   AI tests permit precisely that one AI-only field-removal difference for now.
+  Export the added `/ai/transcribe-audio` contract and generated frontend types
+  too. AI tests separately allow this one route addition. The frontend can send
+  its returned text to `/ai/parse-items` with `source: "voice"`; both requests use
+  authenticated `/ai/*` routing. No audio is stored and no S3 permission is needed.
 - Role 2 must agree how food names become inventory entries and what count/unit
   pairs mean for package contents. The AI does not assign IDs or convert stock.
   Receipt defaults are count 1/unit pcs when missing; text/photo counts stay nullable.

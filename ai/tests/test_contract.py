@@ -1,8 +1,9 @@
-"""Check shared contract drift, allowing only the user's AI-only field removal.
+"""Check shared drift, allowing the approved identifier removal and audio route.
 
 Role 1 must remove DraftItem.ingredient_id from the shared schema/export/types.
 Until then, project precisely that removal onto the expected contract. Do not
 skip schema comparisons or permit any other differences.
+The separately tested audio route awaits export by the shared-contract owner.
 """
 
 import json
@@ -29,8 +30,14 @@ def _referenced_schemas(node: Any, components: dict[str, Any], found: dict[str, 
             _referenced_schemas(value, components, found)
 
 
-def _ai_part(spec: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
-    paths = {path: item for path, item in spec["paths"].items() if path.startswith("/ai/")}
+def _ai_part(
+    spec: dict[str, Any], *, shared_only: bool = False
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    paths = {
+        path: item
+        for path, item in spec["paths"].items()
+        if path.startswith("/ai/") and not (shared_only and path == "/ai/transcribe-audio")
+    }
     schemas: dict[str, Any] = {}
     _referenced_schemas(paths, spec["components"]["schemas"], schemas)
     return paths, schemas
@@ -40,12 +47,14 @@ def test_paths_match_the_contract() -> None:
     expected, _ = _ai_part(json.loads(CONTRACT.read_text()))
     actual, _ = _ai_part(app.openapi())
 
+    assert "/ai/transcribe-audio" in actual
+    actual.pop("/ai/transcribe-audio")
     assert actual == expected
 
 
 def test_schemas_match_contract_except_approved_identifier_removal() -> None:
     _, expected = _ai_part(json.loads(CONTRACT.read_text()))
-    _, actual = _ai_part(app.openapi())
+    _, actual = _ai_part(app.openapi(), shared_only=True)
 
     item = expected["DraftItem"]
     item["properties"].pop("ingredient_id", None)

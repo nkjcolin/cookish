@@ -247,7 +247,11 @@ class CustomImageTests(unittest.TestCase):
                 "Feature result",
             )
         ask.assert_called_once_with(
-            self.image, laas.load_prompt("photo.md"), model="another-model", timeout=45
+            self.image,
+            laas.load_prompt("photo.md"),
+            model="another-model",
+            timeout=45,
+            show_details=False,
         )
 
     def test_new_feature_prompt_files_need_no_code_changes(self):
@@ -312,6 +316,7 @@ class CustomImageTests(unittest.TestCase):
         with (
             patch.object(laas, "ask_image") as ask,
             patch.object(laas, "ask_image_with_prompt_file", return_value="Answer"),
+            patch.object(laas, "transcribe_audio", return_value="Answer"),
             patch.object(laas, "process_receipts_with_prompt") as receipt_test,
         ):
             with redirect_stdout(output):
@@ -339,6 +344,7 @@ class CustomImageTests(unittest.TestCase):
                     "object": "chat.completion",
                     "created": 1,
                     "model": "vision-model",
+                    "usage": {"prompt_tokens": 14, "completion_tokens": 2, "total_tokens": 16},
                     "choices": [
                         {
                             "index": 0,
@@ -347,6 +353,7 @@ class CustomImageTests(unittest.TestCase):
                         }
                     ],
                 },
+                headers={"x-request-id": "test-call", "set-cookie": "do-not-print"},
             )
 
         self.sdk.return_value = OpenAI(
@@ -354,7 +361,16 @@ class CustomImageTests(unittest.TestCase):
             base_url="https://school.example/v1",
             http_client=httpx.Client(transport=httpx.MockTransport(respond)),
         )
-        self.assertEqual(laas.ask_image(self.image, "My custom question"), "A custom answer")
+        output = StringIO()
+        with redirect_stdout(output):
+            answer = laas.ask_image(self.image, "My custom question", show_details=True)
+        self.assertEqual(answer, "A custom answer")
+        details = json.loads(output.getvalue().split("\n", 1)[1])
+        self.assertEqual(details["usage"]["total_tokens"], 16)
+        self.assertEqual(details["requested_model"], "vision-model")
+        self.assertEqual(details["response_headers"], {"x-request-id": "test-call"})
+        self.assertNotIn("test-only-key", output.getvalue())
+        self.assertNotIn("My custom question", output.getvalue())
         payload = json.loads(requests[0].content)
         self.assertEqual(str(requests[0].url), "https://school.example/v1/chat/completions")
         self.assertEqual(requests[0].headers["Authorization"], "Bearer test-only-key")
@@ -364,6 +380,152 @@ class CustomImageTests(unittest.TestCase):
             "data:image/jpeg;base64," + base64.b64encode(self.image.read_bytes()).decode(),
         )
         self.assertNotIn("response_format", payload)
+
+
+class ModelCatalogueTests(unittest.TestCase):
+    def test_real_sdk_get_models_preserves_pricing_without_default_model(self):
+        from importlib import import_module
+        from inspect import signature
+
+        from openai import OpenAI
+
+        httpx = import_module("httpx2" if "httpx2." in str(signature(OpenAI)) else "httpx")
+        requests = []
+        pricing = {
+            "input_microdollars_per_million_tokens": 104000,
+            "output_microdollars_per_million_tokens": 416000,
+            "capabilities": ["chat"],
+        }
+
+        def respond(request):
+            requests.append(request)
+            return httpx.Response(
+                200,
+                json={
+                    "object": "list",
+                    "data": [
+                        {
+                            "id": "vision-model",
+                            "created": 0,
+                            "object": "model",
+                            "owned_by": "school",
+                            "soclaas": pricing,
+                        }
+                    ],
+                },
+            )
+
+        client = OpenAI(
+            api_key="test-only-key",
+            base_url="https://school.example/v1",
+            http_client=httpx.Client(transport=httpx.MockTransport(respond)),
+        )
+        environment = {
+            "SOCLAAS_BASE_URL": "https://school.example/v1",
+            "SOCLAAS_API_KEY": "test-only-key",
+        }
+        with (
+            patch.dict(os.environ, environment, clear=True),
+            patch.object(laas, "OpenAI", return_value=client),
+        ):
+            result = laas.list_models()
+        self.assertEqual(result["data"][0]["soclaas"], pricing)
+        self.assertEqual(len(requests), 1)
+        self.assertEqual(requests[0].method, "GET")
+        self.assertEqual(str(requests[0].url), "https://school.example/v1/models")
+        self.assertEqual(requests[0].headers["Authorization"], "Bearer test-only-key")
+
+    def test_missing_settings_and_invalid_timeout_fail_before_call(self):
+        with patch.dict(os.environ, {}, clear=True), patch.object(laas, "OpenAI") as sdk:
+            with self.assertRaisesRegex(RuntimeError, "SOCLAAS_BASE_URL"):
+                laas.list_models()
+            for timeout in (0, -1, float("inf"), float("nan")):
+                with self.assertRaises(ValueError):
+                    laas.list_models(timeout=timeout)
+        sdk.assert_not_called()
+
+
+class AudioTranscriptionTests(unittest.TestCase):
+    def setUp(self):
+        environment = patch.dict(
+            os.environ,
+            {
+                "SOCLAAS_BASE_URL": "https://school.example/v1",
+                "SOCLAAS_API_KEY": "test-only-key",
+                "SOCLAAS_MODEL": "vision-model",
+                "SOCLAAS_AUDIO_MODEL": "speech-model",
+            },
+            clear=True,
+        )
+        environment.start()
+        self.addCleanup(environment.stop)
+        self.audio = AI_ROOT / "dataset/audio/ingredients.wav"
+
+    def test_real_sdk_posts_audio_as_multipart_to_transcriptions(self):
+        from importlib import import_module
+        from inspect import signature
+
+        from openai import OpenAI
+
+        httpx = import_module("httpx2" if "httpx2." in str(signature(OpenAI)) else "httpx")
+        requests = []
+
+        def respond(request):
+            requests.append(request)
+            return httpx.Response(200, json={"text": "Four eggs and four potatoes."})
+
+        client = OpenAI(
+            api_key="test-only-key",
+            base_url="https://school.example/v1",
+            http_client=httpx.Client(transport=httpx.MockTransport(respond)),
+        )
+        with patch.object(laas, "OpenAI", return_value=client) as sdk:
+            output = StringIO()
+            with redirect_stdout(output):
+                transcript = laas.transcribe_audio(
+                    self.audio,
+                    model="override-speech",
+                    prompt="A grocery shopping list.",
+                    timeout=30,
+                    show_details=True,
+                )
+        details = json.loads(output.getvalue().split("\n", 1)[1])
+        self.assertIsNone(details["usage"])
+        self.assertIsNone(details["cost"])
+        self.assertEqual(details["requested_model"], "override-speech")
+        self.assertEqual(transcript, "Four eggs and four potatoes.")
+        request = requests[0]
+        self.assertEqual(request.method, "POST")
+        self.assertEqual(str(request.url), "https://school.example/v1/audio/transcriptions")
+        self.assertEqual(request.headers["Authorization"], "Bearer test-only-key")
+        self.assertTrue(request.headers["Content-Type"].startswith("multipart/form-data;"))
+        self.assertIn(b'filename="ingredients.wav"', request.content)
+        self.assertIn(self.audio.read_bytes(), request.content)
+        self.assertIn(b"override-speech", request.content)
+        self.assertIn(b"A grocery shopping list.", request.content)
+        sdk.assert_called_once_with(
+            base_url="https://school.example/v1",
+            api_key="test-only-key",
+            timeout=30,
+            max_retries=0,
+        )
+
+    def test_missing_audio_model_never_falls_back_to_vision_model(self):
+        os.environ.pop("SOCLAAS_AUDIO_MODEL")
+        with patch.object(laas, "OpenAI") as sdk:
+            with self.assertRaisesRegex(RuntimeError, "SOCLAAS_AUDIO_MODEL"):
+                laas.transcribe_audio(self.audio)
+        sdk.assert_not_called()
+
+    def test_audio_model_setting_and_empty_transcript(self):
+        with patch.object(laas, "OpenAI") as sdk:
+            client = sdk.return_value.__enter__.return_value
+            client.audio.transcriptions.create.return_value = SimpleNamespace(text="   ")
+            with self.assertRaisesRegex(RuntimeError, "empty transcription"):
+                laas.transcribe_audio(self.audio)
+            self.assertEqual(
+                client.audio.transcriptions.create.call_args.kwargs["model"], "speech-model"
+            )
 
 
 if __name__ == "__main__":

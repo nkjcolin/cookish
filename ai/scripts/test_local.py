@@ -16,13 +16,42 @@ def main() -> int:
     inputs = parser.add_mutually_exclusive_group(required=True)
     inputs.add_argument("--text", help="Typed list or voice transcript")
     inputs.add_argument("--image", type=Path, help="A compressed JPEG, PNG or WebP image")
+    inputs.add_argument(
+        "--audio", type=Path, help="A short WAV, MP3, WebM, Ogg, M4A/MP4 or FLAC file"
+    )
     inputs.add_argument("--interpret", help="Cooking adjustment text")
     parser.add_argument("--source", choices=["typed", "voice"], default="typed")
     parser.add_argument("--kind", choices=["receipt", "photo"], default="receipt")
+    parser.add_argument("--language", default="en", help="Two-letter transcription language code")
     parser.add_argument("--url", default="http://127.0.0.1:8001", help="Your local AI service")
     parser.add_argument("--timeout", type=float, default=45)
     args = parser.parse_args()
-    if args.image:
+    if args.audio:
+        formats = {
+            ".wav": "audio/wav",
+            ".mp3": "audio/mpeg",
+            ".webm": "audio/webm",
+            ".ogg": "audio/ogg",
+            ".m4a": "audio/mp4",
+            ".mp4": "audio/mp4",
+            ".flac": "audio/flac",
+        }
+        media_type = formats.get(args.audio.suffix.lower())
+        if media_type is None:
+            parser.error("Use a WAV, MP3, WebM, Ogg, M4A/MP4 or FLAC audio file")
+        try:
+            if args.audio.stat().st_size > 3 * 1024 * 1024:
+                parser.error("Audio exceeds 3 MiB; use a shorter recording")
+            data = args.audio.read_bytes()
+        except OSError:
+            parser.error("Cannot read the specified audio file")
+        path = "/ai/transcribe-audio"
+        payload = {
+            "media_type": media_type,
+            "audio_base64": base64.b64encode(data).decode("ascii"),
+            "language": args.language,
+        }
+    elif args.image:
         try:
             if args.image.stat().st_size > 3 * 1024 * 1024:
                 parser.error("Image exceeds 3 MiB; compress it before sending")
@@ -53,9 +82,9 @@ def main() -> int:
     started = time.monotonic()
     try:
         with urlopen(request, timeout=args.timeout) as response:
-            status, body = response.status, response.read()
+            status, body, headers = response.status, response.read(), response.headers
     except HTTPError as exc:
-        status, body = exc.code, exc.read()
+        status, body, headers = exc.code, exc.read(), exc.headers
     except TimeoutError:
         print("The local API did not respond before --timeout expired.", file=sys.stderr)
         return 1
@@ -68,6 +97,13 @@ def main() -> int:
         print(message, file=sys.stderr)
         return 1
     print(f"HTTP {status} in {time.monotonic() - started:.2f}s")
+    metadata = {
+        name: value
+        for name, value in headers.items()
+        if name.lower().startswith("x-ai-") or name.lower() == "x-request-id"
+    }
+    if metadata:
+        print(json.dumps({"metadata": metadata}, indent=2))
     try:
         print(json.dumps(json.loads(body), indent=2, ensure_ascii=False))
     except ValueError:

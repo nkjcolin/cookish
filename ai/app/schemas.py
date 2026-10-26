@@ -3,7 +3,8 @@
 A copy of backend/app/schemas/ai.py and the few definitions it uses from the other backend
 schema files. The backend owns the shared contract and generated frontend types.
 The user-requested removal of DraftItem.ingredient_id is an AI-only migration;
-tests/test_contract.py permits only that difference pending the shared update.
+tests/test_contract.py permits that removal and the added audio transcription
+endpoint pending the shared export.
 
 These endpoints only return drafts. Nothing reaches the inventory until the user has
 reviewed the draft and the frontend posts it to POST /api/inventory/items.
@@ -112,3 +113,27 @@ class InterpretResult(ResponseModel):
     """Optional feature. The patch can only touch soft conditions (SPEC B4)."""
 
     adjust: CookAdjust
+
+
+class TranscribeAudioRequest(RequestModel):
+    media_type: Literal[
+        "audio/wav",
+        "audio/x-wav",
+        "audio/mpeg",
+        "audio/webm",
+        "audio/ogg",
+        "audio/mp4",
+        "audio/flac",
+    ]
+    audio_base64: Annotated[str, Field(min_length=1)]
+    language: Annotated[str, Field(pattern=r"^[a-z]{2}$")] | None = "en"
+
+
+class TranscriptionResult(ResponseModel):
+    text: Annotated[str, Field(min_length=1)]
+
+    @model_validator(mode="after")
+    def _nonempty_transcript(self) -> Self:
+        if not self.text.strip():
+            raise ValueError("The transcript must contain text")
+        return self

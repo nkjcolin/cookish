@@ -52,6 +52,8 @@ def school():
         remaining = iter(answers)
 
         def respond(request):
+            if request.method == "GET":
+                return httpx.Response(200, json={"data": []})
             requests.append(request)
             answer = next(remaining)
             if isinstance(answer, Exception):

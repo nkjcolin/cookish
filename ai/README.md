@@ -39,6 +39,7 @@ processed only in memory.
 | `POST /ai/parse-image` | `kind` (`receipt` or `photo`), `media_type`, `image_base64` | `DraftResult`: a list of `DraftItem` |
 | `POST /ai/parse-items` | `text`, `source` (`typed` or `voice`) | `DraftResult` |
 | `POST /ai/interpret` (optional) | `text`, such as "something lighter" | `InterpretResult`: a `CookAdjust` |
+| `POST /ai/transcribe-audio` | `media_type`, `audio_base64`, optional `language` | `TranscriptionResult`: `{"text": "..."}` |
 
 ## What you may change, and what you must keep
 
@@ -47,11 +48,16 @@ processed only in memory.
 **Keep:** request and error shapes and all response fields other than the
 user-requested removal of `DraftItem.ingredient_id`. That AI-only change is pending
 in the shared backend contract and frontend types (see below).
+The user-requested audio transcription route is also an AI-owned addition pending
+the shared OpenAPI export; the existing three route contracts remain checked.
 
 ## How the frontend uses you
 
 - **Images** are compressed in the browser to a 1500-pixel long edge (`MAX_IMAGE_EDGE` in `frontend/src/lib/image.ts`) and sent as base64 in the request. They are never stored. Tell Role 1 if a different size works better for the model.
-- **Voice** is transcribed in the browser with the Web Speech API; you receive the transcript as text with `source: "voice"`. Expect recognition errors, especially on local food names.
+- **Voice** can use the existing browser Web Speech API, or a recording uploaded to
+  `/ai/transcribe-audio`. Send either transcript to `/ai/parse-items` with
+  `source: "voice"`. Recording/upload integration still belongs to the frontend
+  owner. Expect recognition errors, especially on local food names.
 - **Typed text** is sent to `/ai/parse-items` while the user types, so keep it fast.
 - **Review.** Items with `confidence` under 0.6 are asked about individually in the review screen; the rest are shown as ready. Make the number honest.
 - **Failure.** On `UPSTREAM_UNAVAILABLE` the frontend offers to try again or enter items by hand.
@@ -91,6 +97,7 @@ python3 ai/scripts/test_local.py --source voice --text "some kang kong and eggs"
 python3 ai/scripts/test_local.py --image ai/dataset/receipt/fairprice-receipt.jpeg --kind receipt
 python3 ai/scripts/test_local.py --image YOUR_GROCERY_PHOTO.jpeg --kind photo
 python3 ai/scripts/test_local.py --interpret "less oily and ready in 20 minutes"
+python3 ai/scripts/test_local.py --audio ai/dataset/audio/ingredients.wav
 ```
 
 The image command uses a local sample if present; substitute your own compressed
@@ -165,10 +172,10 @@ and a final null-unit
 fallback to `pcs`. Generic `ask_image` helpers
 still return the model's raw text without changing its fields.
 
-`main()` at the bottom of `laas.py` has three numbered test blocks. Keep the call
+`main()` at the bottom of `laas.py` has five numbered test blocks. Keep the call
 for the one you want uncommented, comment out the others, then run the file. The
-prompt-file photo test is currently enabled, preserving your selected grocery
-image. No command-line arguments are used.
+audio test is currently enabled, preserving your latest selected test.
+No command-line arguments are used.
 
 1. **Receipt images + prompt file:** uncomment `process_receipts_with_prompt()`.
    This is the existing function: it reads `app/prompts/receipt.md`, processes every
@@ -183,6 +190,22 @@ image. No command-line arguments are used.
    `custom_prompt`, then uncomment `print(ask_image(image_path, custom_prompt))`.
    Both single-image helpers return plain model text without forcing receipt JSON,
    adding receipt instructions or applying app cleanup. They print but do not save.
+4. **Audio transcription:** set `SOCLAAS_AUDIO_MODEL` in `ai/.env` to the school's
+   speech-to-text model ID, comment out the enabled image call and uncomment
+   `print(transcribe_audio(audio_path))`. The supplied
+   `dataset/audio/ingredients.wav` is a 3.86-second synthetic English shopping list.
+   Edit `audio_path` to try your own recording. The helper uploads multipart audio
+   to `/v1/audio/transcriptions` when `SOCLAAS_BASE_URL` ends in `/v1`, and returns
+   transcript text. Optional keywords are `model`, `language`, `prompt` (transcription
+   context) and `timeout`. It does not send the transcript to `/ai/parse-items`.
+   The supplied WAV was verified against the configured school speech model;
+   other models/codecs still need verification. No speech-model ID is hardcoded.
+   The service now provides the separate `/ai/transcribe-audio` route
+   described below; it does not import this script.
+5. **Model catalogue and pricing:** comment out the active audio call and uncomment
+   `print(json.dumps(list_models(), indent=2, ensure_ascii=False))`. It sends
+   `GET /v1/models` with your base URL/key and retains the school's custom
+   `soclaas` pricing and capability fields. No `SOCLAAS_MODEL` is required.
 
 These functions read credentials from your private `ai/.env`; no Docker or running
 local API is needed.
@@ -196,6 +219,10 @@ conda run -n cookish python ai/laas.py
 Use `script_dir / "dataset/grocery/your-image.jpg"` for a path relative to `ai/`, or
 `Path("/absolute/path/to/image.jpg")` for any other location in the custom block.
 Calls consume school quota when you uncomment a test.
+Use `show_details=True` with `ask_image`, `ask_image_with_prompt_file` or
+`transcribe_audio` to print the requested/returned model, response usage and
+relevant billing/rate-limit headers before the answer. Missing usage/cost fields
+remain null. The helpers keep returning plain answer/transcript text.
 The default timeout is 180 seconds with no automatic retries. The helper still
 accepts optional Python keywords `model` and `timeout` if you need them. Otherwise
 `SOCLAAS_IMAGE_MODEL` takes precedence over `SOCLAAS_MODEL`. Supported formats are
@@ -283,6 +310,87 @@ The root Compose configuration still explicitly sets `AI_PROVIDER=fake`. Running
 Compose alone does not enable the school client. Use the standalone commands
 above for school testing; coordinate shared Compose changes with its owner.
 
+### Inspecting school usage and advertised rates
+
+A live check on 2026-10-26 found 19 entries (including aliases) in `/v1/models`.
+Each entry's `soclaas` metadata supplied:
+
+- `input_microdollars_per_million_tokens`
+- `output_microdollars_per_million_tokens`
+- `audio_microdollars_per_minute`
+
+Divide a rate by 1,000,000 to convert microdollars to advertised dollars. For
+example, the catalogue reported Qwen3-VL 32B rates of 0.104 dollars per million
+input tokens and 0.416 per million output tokens, and Whisper Large v3 at
+0.006 dollars per audio minute. Fetch current metadata with `list_models()`;
+these are school-advertised rates, not OpenAI prices or a confirmed invoice.
+
+Chat cost estimate in dollars:
+
+```text
+(input_tokens * input_microdollars_per_million_tokens
+ + output_tokens * output_microdollars_per_million_tokens) / 1_000_000_000_000
+```
+
+Audio cost estimate in dollars:
+
+```text
+audio_seconds / 60 * audio_microdollars_per_minute / 1_000_000
+```
+
+The live chat response contained `usage.prompt_tokens`, `completion_tokens` and
+`total_tokens`. The audio response contained only `text`, with no duration or
+usage. Neither sampled POST response supplied cost/pricing fields or relevant
+cost headers. A WAV's local duration can support an estimate (the 3.86-second
+sample is about 0.000386 advertised dollars); minimum charges, rounding, currency
+and whether rates represent billed spend or school quota need provider confirmation.
+Keep actual billed cost unknown unless the provider supplies it. Image token
+usage must come from the response, rather than counting just the text prompt.
+
+For manual tests, select the model with the helper's `model=` keyword and enable
+`show_details=True`. Capability metadata matters: speech models use the audio
+endpoint, and only models advertising vision should receive image inputs.
+The running app already exposes known chat counts in `X-AI-Input-Tokens` and
+`X-AI-Output-Tokens`, alongside `X-AI-Model`; missing usage stays absent.
+The service now calculates estimates automatically with `app/pricing.py`. Each
+school client/runtime caches `/v1/models` for `SOCLAAS_PRICING_CACHE_SECONDS`
+(default one hour). Pricing lookup uses the same credentials and HTTP operation
+timeouts of at most one second, clipped to the remaining budget with a 0.25-second
+reserve. Lookup time counts toward the shared request deadline. Short deadlines
+skip the optional lookup. Failed lookups back
+off for up to 30 seconds; expired rates are not reused. A concurrent refresh does
+not block another request. Unknown rates leave costs unknown while parsing proceeds.
+The reported model's rate is preferred; a requested alias can supply its own
+rate only when its `alias_of` explicitly matches the reported model.
+
+These response headers expose accounting without changing the result JSON:
+
+| Header | Meaning |
+|---|---|
+| `X-AI-Input-Tokens`, `X-AI-Output-Tokens` | Complete reported token totals across model attempts; omitted when incomplete |
+| `X-AI-Estimated-Cost` | Decimal estimated total across all attempts; omitted when any attempt is unpriced |
+| `X-AI-Known-Estimated-Cost` | Known priced subtotal, including when the total is incomplete |
+| `X-AI-Cost-Status` | `estimated`, `partial`, `unknown`, or explicit offline `fake` |
+| `X-AI-Cost-Unit` | `provider_dollars`; the school's currency/billing terms are unconfirmed |
+| `X-AI-Pricing-Fetched-At` | UTC timestamp of the last contributing rate snapshot |
+
+The estimate includes invalid-JSON repair calls and known usage from unusable
+provider answers. A timeout can hide consumption, so incomplete totals stay
+unknown and any previous priced subtotal is marked partial. Zero is reported only
+when the available usage/rates calculate zero, or for explicitly marked fake calls.
+
+`model_call` JSON logs contain each attempt's tokens, estimate, duration source and
+exact rate snapshot. `ai_request` logs contain request totals, known subtotals and
+coverage. Aggregate **one event type** to avoid counting the same call twice.
+The local test helper prints the accounting headers. Evaluation predictions retain
+them; reports sum school estimates and show incomplete cost coverage separately.
+Actual billed `cost` remains null. AWS Lambda, gateway and logging costs belong
+to AWS billing and are excluded from these model estimates.
+
+The gateway/platform owner must expose these headers through CORS when the
+frontend reads responses across origins. No new database or AWS permission is
+needed by this accounting code; use the normal public school API connection.
+
 ### Configuration
 
 The app reads **process environment variables**, not `.env` files implicitly. Use
@@ -306,17 +414,69 @@ Use a base URL such as `https://school-api.example/v1`, not a full
 | `SOCLAAS_IMAGE_MODEL` | Default model | Optional override for receipt/photo tasks |
 | `SOCLAAS_TEXT_MODEL` | Default model | Optional override for typed/voice lists |
 | `SOCLAAS_INTERPRET_MODEL` | Default model | Optional override for interpretation; final choice awaits testing |
+| `SOCLAAS_AUDIO_MODEL` | None | Required for real transcription; no fallback to the image/text default |
 | `SOCLAAS_API_KEY` | None | Local school credential; keep it outside code and images |
 | `SOCLAAS_API_KEY_SECRET_ARN` | None | AWS alternative to a local key; set exactly one credential source |
 | `SOCLAAS_OUTPUT_MODE` | `json_schema` | Structured output; explicitly choose `json_object` if the school endpoint lacks schema support |
 | `SOCLAAS_MAX_OUTPUT_TOKENS` | `4096` | Output limit, from 1 to 16384; tune for long receipts during evaluation |
 | `SOCLAAS_TIMEOUT_SECONDS` | `20` | HTTP read/write timeout; 60 can help slow local experiments, but does not fit the AWS budget; maximum 120 |
+| `SOCLAAS_PRICING_CACHE_SECONDS` | `3600` | Model-rate cache lifetime per runtime; integer from 1 to 86400 |
 | `AI_REQUEST_TIMEOUT_SECONDS` | `27` | Overall deadline across preparation, calls and validation retry; local maximum 120; Lambda cap 27 and remaining invocation time minus 1 second |
 
 In AWS, grant the Lambda role read access to the specific Secrets Manager secret.
 The secret can contain the raw API key or JSON with `SOCLAAS_API_KEY` or `api_key`.
 AWS keys are retrieved lazily and cached for five minutes, then refreshed. Local
 key and fake configurations do not contact AWS.
+
+### Audio transcription
+
+`POST /ai/transcribe-audio` accepts JSON, keeping uploads compatible with the
+existing API Gateway/Lambda flow:
+
+```json
+{
+  "media_type": "audio/wav",
+  "audio_base64": "BASE64_FILE_BYTES_WITHOUT_A_DATA_URL_PREFIX",
+  "language": "en"
+}
+```
+
+It uploads multipart data to the school's `/audio/transcriptions` endpoint under
+`SOCLAAS_BASE_URL` (normally ending in `/v1`), using `SOCLAAS_AUDIO_MODEL`,
+`response_format=json` and the configured credential source. Model choice is
+server-owned. `language` defaults to `en`; use another two-letter language code,
+or `null` to omit it and let the provider detect the language. No prompt is sent.
+
+The response is the provider's nonempty transcript, for example:
+
+```json
+{"text": "Four eggs, two hundred grams of rice, and four potatoes."}
+```
+
+The complete flow is recording → transcription → `/ai/parse-items` with
+`{"source": "voice", "text": "..."}` → user review → backend inventory confirmation.
+Transcription does not parse ingredients or change inventory. The text route's
+existing 2000-character limit still applies; split longer transcripts before
+submitting them there. Browser transcription remains supported as an alternative.
+
+Audio bytes are limited to **3 MiB** and processed only in memory. Supported media
+types are `audio/wav` (also `audio/x-wav`), `audio/mpeg`, `audio/webm`, `audio/ogg`,
+`audio/mp4` (M4A/MP4) and `audio/flac`. Send the media type without codec parameters.
+Base64 and container signatures are checked locally; full codec decoding is left
+to the school provider. For cost estimation, provider-reported duration takes
+priority; complete supported PCM WAV files can also be measured from their frames.
+Other formats without provider duration retain unknown cost. Accepted codecs
+depend on the provider. The bundled WAV sample is about 3.86 seconds; this is not
+a duration limit. Client-supplied durations are not accepted for accounting.
+
+Transcription uses the same overall deadline and clipped provider timeout as the
+other routes. Empty/malformed responses, missing speech-model configuration and
+provider failures return `503 UPSTREAM_UNAVAILABLE`, without an automatic retry.
+Malformed uploads return `422 VALIDATION` before a school call. Logs contain
+request/model/latency metadata, not audio bytes or transcript text. Missing speech
+token usage remains unknown, even when a duration-based cost is available.
+Explicit `AI_PROVIDER=fake` returns a fixed
+sample transcript for offline testing; it is never a real-provider fallback.
 
 ### Image input and current limits
 
@@ -380,7 +540,7 @@ the AI now preserves the receipt's original measurement scale.
 
 | Path | Contents |
 |---|---|
-| `app/main.py` | The three routes; no logic |
+| `app/main.py` | The four routes; no business logic |
 | `app/lambda_handler.py` | Lambda entry point (`app.lambda_handler.handler`) |
 | `app/parse.py` | The pipeline: prompt → model → validate (one retry) → receipt checks → draft |
 | `app/model_client.py` | School API transport, model selection, usage extraction and offline fake |
@@ -391,6 +551,8 @@ the AI now preserves the receipt's original measurement scale.
 | `app/quantities.py` | Private quantity evidence and deterministic factor multiplication |
 | `app/drafts.py` | Unit spelling and numeric consistency, without catalogue matching |
 | `app/runtime.py` | Shared deadlines, correlation headers and content-free request logs |
+| `app/audio.py` | In-memory base64, size and audio-container validation |
+| `app/pricing.py` | Cached model rates, decimal estimates and rate provenance |
 | `app/matching.py` | Legacy catalogue utility; no longer called by the AI routes |
 | `app/prompts/` | One prompt per task: `receipt`, `photo`, `items`, `interpret`. First drafts |
 | `app/schemas.py` | Request and response shapes, copied from the backend |
@@ -401,7 +563,7 @@ the AI now preserves the receipt's original measurement scale.
 | `scripts/test_lambda.py` | API Gateway-shaped local emulator invocations |
 | `eval/` | AI-owned evaluation runner and example manifests; not production assets |
 | `dataset/tools/` | Published dataset preparation, validation and macOS OCR helpers |
-| `dataset/` | Shared receipt/grocery images and current synthetic-scenario metadata |
+| `dataset/` | Shared receipt/grocery images, sample audio and synthetic-scenario metadata |
 
 Evaluation tooling lives in `ai/eval/`. Shared images in `ai/dataset/receipt/`
 and `ai/dataset/grocery/` are intended for Git; local working copies under
@@ -475,11 +637,15 @@ catalogue matching. This is a breaking response change relative to the current
 shared contract; frontend code must not assume this property exists.
 
 `tests/test_contract.py` compares the full AI contract while allowing precisely
-this one approved field removal. It does not claim exact shared-contract parity.
+this approved field removal and the added `/ai/transcribe-audio` route. The original
+three routes still undergo full comparison. It does not claim exact shared-contract parity.
 Role 1 still needs to remove the field from the backend schema, re-export
 `docs/openapi.json`, regenerate frontend types and adapt review/confirmation logic.
 Those files are outside the `ai/`-only edit scope. All other contract differences
 remain test failures. Normal future changes follow the shared export workflow.
+The shared-contract owner also needs to export `TranscribeAudioRequest`,
+`TranscriptionResult` and the new audio route, regenerate frontend types, and wire
+recording/upload → transcription → voice parsing if server transcription is used.
 
 `backend/app/services/ai_stub.py` answers `/ai/*` with the same fixed items when the backend runs on its own without this service.
 

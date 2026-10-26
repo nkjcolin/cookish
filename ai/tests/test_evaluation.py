@@ -89,6 +89,34 @@ def test_token_usage_zero_is_known_not_missing():
     assert "Synthetic/plumbing only: True" in markdown_report(result)
 
 
+@pytest.mark.parametrize(
+    "status,cost,subtotal,expected_status",
+    [
+        ("estimated", "0.0001872", "0.0001872", "estimated"),
+        ("partial", None, "0.0001872", "partial"),
+        ("fake", "0", "0", "unknown"),
+        ("estimated", "NaN", None, "unknown"),
+    ],
+)
+def test_estimated_cost_is_separate_from_actual_billing(status, cost, subtotal, expected_status):
+    result = evaluate(
+        {"synthetic": True, "cases": [case([])]},
+        prediction(
+            [],
+            cost_status=status,
+            estimated_cost=cost,
+            known_estimated_cost=subtotal,
+            cost_unit="provider_dollars",
+        ),
+    )
+    assert result["cost"] is None
+    assert result["cost_status"] == expected_status
+    assert result["estimated_cost"] == (cost if expected_status == "estimated" else None)
+    assert result["known_estimated_cost"] == (
+        subtotal if expected_status in {"estimated", "partial"} else None
+    )
+
+
 def test_confidence_bin_boundaries_are_not_double_counted():
     result = score(
         [{"display_name": "Egg"}],

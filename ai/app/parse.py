@@ -13,10 +13,12 @@ from pathlib import Path
 import anyio
 from pydantic import BaseModel, ValidationError
 
+from app.audio import validate_audio
 from app.drafts import normalize_draft
 from app.errors import ApiError, ErrorCode
 from app.images import validate_image
 from app.model_client import (
+    Audio,
     Image,
     ModelClient,
     ModelReply,
@@ -24,6 +26,7 @@ from app.model_client import (
     ModelUnavailable,
     model_id_for_task,
 )
+from app.pricing import COST_UNIT, cost_text
 from app.quantities import ExtractionResult, resolve_quantities
 from app.receipts import clean_receipt
 from app.runtime import current_request, remaining_seconds
@@ -35,6 +38,8 @@ from app.schemas import (
     InterpretResult,
     ParseImageRequest,
     ParseItemsRequest,
+    TranscribeAudioRequest,
+    TranscriptionResult,
 )
 
 logger = logging.getLogger(__name__)
@@ -83,6 +88,20 @@ async def interpret(body: InterpretRequest, client: ModelClient) -> InterpretRes
     return InterpretResult(adjust=await _call(client, request, CookAdjust))
 
 
+async def transcribe_audio(
+    body: TranscribeAudioRequest, client: ModelClient
+) -> TranscriptionResult:
+    data = await anyio.to_thread.run_sync(
+        validate_audio, body.media_type, body.audio_base64, abandon_on_cancel=True
+    )
+    request = ModelRequest(
+        task="transcription",
+        system="",
+        audio=Audio(media_type=body.media_type, data=data, language=body.language),
+    )
+    return await _call(client, request, TranscriptionResult)
+
+
 def _prompt(name: str) -> str:
     return (PROMPTS / f"{name}.md").read_text(encoding="utf-8")
 
@@ -99,7 +118,8 @@ async def _call[T: BaseModel](client: ModelClient, request: ModelRequest, schema
             if state.model == "fake"
             else "scripted"
         )
-    for attempt in range(1, ATTEMPTS + 1):
+    attempts = 1 if request.task == "transcription" else ATTEMPTS
+    for attempt in range(1, attempts + 1):
         started = time.perf_counter()
         try:
             remaining = remaining_seconds()
@@ -109,7 +129,7 @@ async def _call[T: BaseModel](client: ModelClient, request: ModelRequest, schema
                 state.attempts = attempt
             reply = await anyio.to_thread.run_sync(client.generate, request, abandon_on_cancel=True)
         except ModelUnavailable as exc:
-            _log(client, request, attempt, started, "unavailable")
+            _log(client, request, attempt, started, "unavailable", exc.reply)
             raise ApiError(ErrorCode.UPSTREAM_UNAVAILABLE, "The model is not available") from exc
         try:
             result = schema.model_validate_json(reply.text)
@@ -123,7 +143,7 @@ async def _call[T: BaseModel](client: ModelClient, request: ModelRequest, schema
                 raise ValueError("An adjustment must change a supported field")
         except (ValidationError, ValueError):
             _log(client, request, attempt, started, "invalid", reply)
-            if attempt < ATTEMPTS:
+            if attempt < attempts:
                 request = replace(
                     request,
                     system=request.system
@@ -149,12 +169,38 @@ def _log(
     # One JSON line per model call; Role 3 builds the cost model from these (SPEC A6).
     state = current_request.get()
     if state:
+        state.completed_attempts = attempt
+        if reply and reply.model_id:
+            state.model = reply.model_id
         for field in ("input_tokens", "output_tokens"):
             value = getattr(reply, field) if reply else None
             total = 0 if attempt == 1 else getattr(state, field)
             setattr(
                 state, field, total + value if total is not None and value is not None else None
             )
+            if value is not None:
+                setattr(state, f"known_{field}", getattr(state, f"known_{field}") + value)
+        if reply and reply.estimated_cost is not None:
+            state.known_estimated_cost = (
+                reply.estimated_cost
+                if state.known_estimated_cost is None
+                else state.known_estimated_cost + reply.estimated_cost
+            )
+            state.priced_attempts += 1
+        state.estimated_cost = (
+            state.known_estimated_cost if state.priced_attempts == attempt else None
+        )
+        state.cost_status = (
+            "fake"
+            if state.provider == "fake" and state.estimated_cost is not None
+            else "estimated"
+            if state.estimated_cost is not None
+            else "partial"
+            if state.known_estimated_cost is not None
+            else "unknown"
+        )
+        if reply and reply.pricing:
+            state.pricing_fetched_at = reply.pricing.fetched_at
     logger.info(
         json.dumps(
             {
@@ -171,6 +217,18 @@ def _log(
                 "latency_ms": round((time.perf_counter() - started) * 1000),
                 "input_tokens": reply.input_tokens if reply else None,
                 "output_tokens": reply.output_tokens if reply else None,
+                "estimated_cost": cost_text(reply.estimated_cost) if reply else None,
+                "cost_status": (
+                    "fake"
+                    if state and state.provider == "fake" and reply
+                    else "estimated"
+                    if reply and reply.estimated_cost is not None
+                    else "unknown"
+                ),
+                "cost_unit": COST_UNIT,
+                "pricing": reply.pricing.metadata() if reply and reply.pricing else None,
+                "audio_seconds": cost_text(reply.audio_seconds) if reply else None,
+                "duration_source": reply.duration_source if reply else None,
             }
         )
     )

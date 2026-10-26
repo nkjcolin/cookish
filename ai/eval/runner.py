@@ -7,9 +7,12 @@ import mimetypes
 import re
 import time
 from collections import Counter
+from decimal import Decimal
 from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
+
+from app.pricing import COST_UNIT, cost_text, nonnegative_decimal
 
 KINDS = {"receipt", "photo", "typed", "voice", "interpret"}
 
@@ -95,6 +98,8 @@ def evaluate(manifest: dict, predictions: dict) -> dict:
     latencies, success_latencies, calibration, corrections = [], [], [], []
     labelled_kinds = Counter()
     known_input = known_output = unknown_usage = 0
+    known_cost = Decimal(0)
+    priced_cases = unknown_cost = 0
     providers, models = set(), set()
     details = []
     for case in manifest["cases"]:
@@ -109,11 +114,31 @@ def evaluate(manifest: dict, predictions: dict) -> dict:
         providers.add(prediction.get("provider") or "unknown")
         models.add(prediction.get("model") or "unknown")
         usage = [prediction.get("input_tokens"), prediction.get("output_tokens")]
-        if all(type(value) is int and value >= 0 for value in usage):
+        if type(usage[0]) is int and usage[0] >= 0:
             known_input += usage[0]
+        if type(usage[1]) is int and usage[1] >= 0:
             known_output += usage[1]
-        else:
+        if not all(type(value) is int and value >= 0 for value in usage):
             unknown_usage += 1
+        status = prediction.get("cost_status")
+        value = nonnegative_decimal(
+            prediction.get("estimated_cost")
+            if status == "estimated"
+            else prediction.get("known_estimated_cost")
+            if status == "partial"
+            else None
+        )
+        if (
+            prediction.get("provider") == "soclaas"
+            and prediction.get("cost_unit") == COST_UNIT
+            and value is not None
+        ):
+            known_cost += value
+            priced_cases += 1
+            if status != "estimated":
+                unknown_cost += 1
+        else:
+            unknown_cost += 1
         if (
             isinstance(case.get("correction_seconds"), (int, float))
             and math.isfinite(case["correction_seconds"])
@@ -218,7 +243,18 @@ def evaluate(manifest: dict, predictions: dict) -> dict:
         "known_output_tokens": known_output,
         "cases_with_unknown_usage": unknown_usage,
         "cost": None,
-        "cost_note": "School pricing/quota terms have not been supplied.",
+        "estimated_cost": cost_text(known_cost) if not unknown_cost else None,
+        "known_estimated_cost": cost_text(known_cost) if priced_cases else None,
+        "cost_status": "estimated"
+        if not unknown_cost
+        else "partial"
+        if priced_cases
+        else "unknown",
+        "cost_unit": COST_UNIT,
+        "cases_with_unknown_cost": unknown_cost,
+        "cost_note": (
+            "School-advertised model estimates only; actual billed cost and AWS cost are unknown."
+        ),
         "confidence_brier_score": sum((p - y) ** 2 for p, y in calibration) / len(calibration)
         if calibration
         else None,
@@ -306,6 +342,11 @@ def run_cases(manifest: dict, directory: Path, url: str, timeout: float = 35) ->
             "output_tokens": header_int("x-ai-output-tokens"),
             "attempts": header_int("x-ai-attempts"),
             "request_id": headers.get("x-request-id"),
+            "estimated_cost": headers.get("x-ai-estimated-cost"),
+            "known_estimated_cost": headers.get("x-ai-known-estimated-cost"),
+            "cost_status": headers.get("x-ai-cost-status"),
+            "cost_unit": headers.get("x-ai-cost-unit"),
+            "pricing_fetched_at": headers.get("x-ai-pricing-fetched-at"),
         }
     return predictions
 
@@ -333,12 +374,18 @@ def markdown_report(summary: dict) -> str:
         "known_input_tokens",
         "known_output_tokens",
         "cases_with_unknown_usage",
+        "estimated_cost",
+        "known_estimated_cost",
+        "cost_status",
+        "cost_unit",
+        "cases_with_unknown_cost",
         "formal_dataset_complete",
     ):
         lines.append(f"| {name} | {summary[name]} |")
     lines += [
         "",
-        "Cost is unknown until school pricing/quota terms are supplied.",
+        "Model costs are estimates; known subtotals exclude unpriced attempts/cases. "
+        "Actual billing and AWS cost remain unknown.",
         "Missing labels, synthetic data or fake providers cannot establish formal accuracy.",
         "See the JSON report for per-case errors and confidence calibration.",
         "",

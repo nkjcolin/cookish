@@ -24,9 +24,11 @@ class Settings:
     image_model: str | None = None
     text_model: str | None = None
     interpret_model: str | None = None
+    audio_model: str | None = None
     output_mode: str = "json_schema"
     max_output_tokens: int = 4096
     timeout_seconds: float = TIMEOUT_SECONDS
+    pricing_cache_seconds: int = 3600
 
     @classmethod
     def from_env(cls, environ: Mapping[str, str] | None = None) -> Self:
@@ -97,6 +99,12 @@ class Settings:
             raise ConfigurationError(
                 "SOCLAAS_TIMEOUT_SECONDS must be greater than 0 and at most 120"
             )
+        try:
+            pricing_cache_seconds = int(read("SOCLAAS_PRICING_CACHE_SECONDS") or "3600")
+        except ValueError:
+            raise ConfigurationError("SOCLAAS_PRICING_CACHE_SECONDS must be an integer") from None
+        if not 1 <= pricing_cache_seconds <= 86400:
+            raise ConfigurationError("SOCLAAS_PRICING_CACHE_SECONDS must be between 1 and 86400")
         return cls(
             provider=provider,
             base_url=base_url.rstrip("/") + "/",
@@ -106,9 +114,11 @@ class Settings:
             image_model=read("SOCLAAS_IMAGE_MODEL") or None,
             text_model=read("SOCLAAS_TEXT_MODEL") or None,
             interpret_model=read("SOCLAAS_INTERPRET_MODEL") or None,
+            audio_model=read("SOCLAAS_AUDIO_MODEL") or None,
             output_mode=output_mode,
             max_output_tokens=max_output_tokens,
             timeout_seconds=timeout_seconds,
+            pricing_cache_seconds=pricing_cache_seconds,
         )
 
     def model_for_task(self, task: str) -> str:
@@ -118,4 +128,6 @@ class Settings:
             return self.text_model or self.model
         if task == "interpret":
             return self.interpret_model or self.model
+        if task == "transcription":
+            return self.audio_model or ""
         raise ValueError("Unknown model task")
