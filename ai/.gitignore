@@ -5,7 +5,7 @@
 __pycache__/
 .pytest_cache/
 .ruff_cache/
-# Local working inputs and outputs only; shared dataset/ and its tools are published.
+# Curated dataset/receipt images and manifest are published; all generation runs stay local.
 /output/
 /dataset/work/
 eval/results/

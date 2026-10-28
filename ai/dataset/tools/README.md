@@ -1,62 +1,70 @@
-# Synthetic receipt dataset tools
+# Dataset preparation and local batch tools
 
-These tools belong to dataset creation. The evaluator and future test-set
-manifests remain in `ai/eval/`. All required existing inputs are included in this
-repository: the shared images, current scenario metadata, original scenario
-blueprint in `specs/original_cases.json`, and backend recipe files.
+Curated inputs are published in `../receipt/`. All generated batches, galleries,
+price snapshots, OCR reports and historical scenario blueprints belong in the
+ignored `../work/receipts/` area. Evaluation tooling remains in `ai/eval/`.
 
-| Tool | Purpose |
+| Tool | Current purpose |
 |---|---|
-| `prepare.py` | Reconstruct the fixed ten-recipe baseline using seed 20261024; writes a new draft under `dataset/work/draft_20261024/` |
-| `prepare_realistic.py` | Use the bundled original blueprint to prepare retail-pack scenarios, prices and image-generation prompts under `dataset/work/realistic_v2/` |
-| `promote_realistic.py` | Validate a rendered revision and publish it to `dataset/receipt/generated/` and `dataset/recipe_receipts_20261024/` |
-| `finish.py` | Validate published image/source hashes and rebuild the current gallery and manifests |
-| `check_text.py` | Run macOS Vision OCR on the published images and update `ocr_review.json` |
-| `inspect_text.swift` | OCR helper used by `check_text.py` |
+| `prepare.py` | Historical ten-recipe baseline; outputs `work/receipts/draft_20261024/` |
+| `prepare_realistic.py` | Historical retail revision; outputs `work/receipts/realistic_v2/` and needs the local original blueprint |
+| `promote_realistic.py` | Validate/finalise that revision into an ignored batch; never automatically publish all images |
+| `finish.py` | Validate a local batch and rebuild its gallery and manifests |
+| `check_text.py` | Run macOS Vision OCR and save the report in a local batch |
+| `inspect_text.swift` | macOS OCR helper |
+| `validate_ingredient_catalog.py` | Offline validation of retail facts, ingredient coverage and unchanged recipe hashes |
 
-## Preparation and rendering
+The receipt-generation helpers remain historical. Their fixed scenario/product
+logic is not yet wired to the new shared catalogue. The separate catalogue
+validator reads `../catalogs/ingridients.json` without scraping or writing files:
 
-From the repository root:
+```bash
+python3 ai/dataset/tools/validate_ingredient_catalog.py
+```
+
+Run from the repository root; the full checkout supplies the source recipe files
+for hash verification. Catalogue details and quantity caveats are documented in
+[the catalogue guide](../catalogs/README.md).
+
+## Preserved local inputs
+
+The original batch records, rendered images and blueprint are retained under
+`work/receipts/20261024/`. They are not available after a fresh clone. The curated
+images and their provenance index remain available without those local records.
+
+To validate/rebuild the existing local gallery, from the repository root:
+
+```bash
+python3 ai/dataset/tools/finish.py
+python3 ai/dataset/tools/check_text.py
+```
+
+Both tools accept `--batch ai/dataset/work/receipts/<batch-id>`. OCR requires the
+macOS Swift toolchain. Its compiler cache remains under ignored `ai/output/`.
+
+## Historical revision workflow
 
 ```bash
 python3 ai/dataset/tools/prepare_realistic.py
 ```
 
-The tool writes cases and prompts into `ai/dataset/work/realistic_v2/`. It refuses
-to overwrite an existing revision. `prepare.py` is the separate baseline-recipe
-selection step, retained for reproducibility; the retail revision already has
-its required original blueprint bundled in `specs/`.
+This needs `work/receipts/20261024/original_cases.json` and refuses to reset an
+existing prepared revision. Render its prompts with an image-generation tool,
+saving images and actual generation records in that revision. Python does not
+render receipt pixels.
 
-Python does not generate the receipt pixels. Render the prepared prompts with
-an image-generation tool, saving the 30 PNGs at the paths specified by the
-revision's `cases.json`. Record the actual calls in its `generation.json`, using
-the current published `generation.json` as a format reference. Generation
-records need matching case IDs, prompts and visual-review notes; do not reuse
-historical generation records as evidence for newly generated images.
-
-After rendering, publish the completed revision explicitly:
+Finalise a rendered revision into another ignored local batch:
 
 ```bash
-python3 ai/dataset/tools/promote_realistic.py
+python3 ai/dataset/tools/promote_realistic.py \
+  --revision ai/dataset/work/receipts/realistic_v2 \
+  --output ai/dataset/work/receipts/realistic_v2_final
 ```
 
-This replaces the shared current images and metadata and rebuilds the gallery.
-It validates against the bundled blueprint rather than requiring ignored image
-archives. `dataset/work/` is ignored by Git and Docker; the previous local
-generation archive is retained there as `archive_20261024/`.
+An existing destination is rejected. Finalisation copies images and batch
+records only into `work/`, then builds that local gallery. Select images for
+`receipt/generated/` explicitly; full batch records stay local. Selection automation
+and configuration-driven generation using the shared catalogue remain future work.
 
-## Review the existing shared snapshot
-
-```bash
-python3 ai/dataset/tools/finish.py
-# macOS with the Swift toolchain:
-python3 ai/dataset/tools/check_text.py
-```
-
-`finish.py` checks existing assets and regenerates metadata; it makes no model
-calls. The OCR helper uses the shared metadata/images directly, so no private
-working-data copy is required after cloning. Its compiler cache is kept under
-the ignored `ai/output/dataset/` folder.
-
-These scripts reproduce the historical synthetic scenarios and do not create
-human-reviewed extraction labels or choose the formal evaluation dataset.
+The tools do not create human-reviewed extraction labels or choose the formal
+evaluation dataset. They make no school model or AWS calls.

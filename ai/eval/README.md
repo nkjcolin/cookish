@@ -22,12 +22,14 @@ ai/eval/
 Image paths in manifests are relative to their manifest. The shared
 repository-root `eval/` folder is separate from this AI-local folder.
 
-Shared development inputs and synthetic-scenario metadata are published in
+Curated development inputs and their selected-image provenance index are published in
 [dataset/](../dataset/README.md). The smoke/template manifests point there to
 exercise the tooling after a fresh clone; those examples do not select the
 formal test dataset. Local working data and run reports remain ignored.
 Synthetic-data preparation and OCR scripts live separately in
-[dataset/tools](../dataset/tools/README.md), alongside their required blueprint.
+[dataset/tools](../dataset/tools/README.md). Historical blueprints and generated
+batch records stay local under ignored `dataset/work/receipts/`; the curated
+receipt index is not a formal evaluation manifest or reviewed ground truth.
 
 The provided example is **synthetic fake-provider plumbing**, not receipt accuracy.
 The template has `expected: null` deliberately: unlabelled does not mean no food.

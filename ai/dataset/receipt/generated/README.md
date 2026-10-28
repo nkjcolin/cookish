@@ -1,23 +1,20 @@
-# Generated receipt test images
+# Selected generated receipt images
 
-The 30 PNGs are synthetic, realistic-looking test receipts based on the existing
-FairPrice reference: `FAIRPRICE XTRA / JEM HYPERMART`. They are not actual store
-transactions. Prices use online product references where available, with estimates
-identified in the supporting data.
+All 30 existing synthetic receipt PNGs are retained in this directory with their
+original filenames and bytes. The four provided reference photos remain one
+directory above, at the `receipt/` root.
 
-Each of 10 selected backend recipes has `enough`, `missing_some` and `below_half`
-variants. Below half means fewer than half the required ingredients are present.
-All recipes use two servings and assume only tap water is initially available.
+The set covers ten recipes with three scenarios each: enough ingredients, some
+missing, and fewer than half present. These are generated FairPrice-style
+development fixtures, not actual store transactions or human-labelled evaluation
+data. Package counts and package contents are separate; measured extraction
+quantities and backend inventory conversion still require review.
 
-Package counts and package contents are different: `2X$2.55/Unit` means two
-packages, while `280G` in a product name is the size of one package. The scenario
-comparison records the total usable contents separately. The current AI prompt
-returns total contents in the receipt's original unit (including kg/g/l/ml/pcs), multiplying
-package count by readable contents once. Unknown measured amounts remain null;
-no drained yields or typical sizes are inferred. Recipe matching and inventory
-writes still belong to the backend.
+The published [curated manifest](../manifest.json) records selected-image hashes,
+synthetic status and recipe/scenario provenance. Detailed historical batch
+records and the gallery remain local under ignored
+`../../work/receipts/20261024/`, with their own `images/` archive.
 
-Use any PNG with `receipt.md` in the existing `ai/laas.py` prompt-file test block.
-For the gallery, recipe requirements, missing ingredients, actual generation
-prompts and price sources, see
-[the dataset documentation](../../recipe_receipts_20261024/README.md).
+Future generation runs stay under `dataset/work/receipts/<batch-id>/`. Copy only
+chosen receipt images into this directory and record them in the curated manifest.
+See [receipt testing instructions](../README.md).

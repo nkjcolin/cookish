@@ -1,12 +1,13 @@
 """Read-only macOS OCR aid, separate from the school model under test."""
 
+import argparse
 import json
 import re
 import subprocess
 from pathlib import Path
 
 TOOL_DIR = Path(__file__).resolve().parent
-HERE = TOOL_DIR.parent / "recipe_receipts_20261024"
+HERE = TOOL_DIR.parent / "work/receipts/20261024"
 CACHE = TOOL_DIR.parent.parent / "output/dataset/.swift-cache"
 
 
@@ -15,16 +16,23 @@ def normalized(value):
 
 
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--batch", type=Path, default=HERE, help="Local batch directory")
+    batch = parser.parse_args().batch.resolve()
+    if not batch.is_relative_to((TOOL_DIR.parent / "work").resolve()):
+        parser.error("Batch records must stay inside the ignored dataset/work/ directory")
+    if not (batch / "cases.json").is_file():
+        parser.error("Local cases.json is required; batches are not stored in Git")
     CACHE.mkdir(parents=True, exist_ok=True)
-    cases = json.loads((HERE / "cases.json").read_text())["cases"]
-    present = [case for case in cases if (HERE / case["image"]).is_file()]
+    cases = json.loads((batch / "cases.json").read_text())["cases"]
+    present = [case for case in cases if (batch / case["image"]).is_file()]
     result = subprocess.run(
         [
             "swift",
             "-module-cache-path",
             str(CACHE),
             str(TOOL_DIR / "inspect_text.swift"),
-            *[str(HERE / case["image"]) for case in present],
+            *[str(batch / case["image"]) for case in present],
         ],
         check=True,
         capture_output=True,
@@ -56,7 +64,7 @@ def main():
                 "note": "OCR is an aid, not proof of exact item/quantity association or human labels.",
             }
         )
-    (HERE / "ocr_review.json").write_text(json.dumps(reports, indent=2) + "\n")
+    (batch / "ocr_review.json").write_text(json.dumps(reports, indent=2) + "\n")
     print(
         json.dumps(
             {

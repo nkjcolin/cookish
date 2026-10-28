@@ -1,0 +1,2177 @@
+{
+  "schema_version": 1,
+  "snapshot_id": "fairprice-20261028",
+  "checked_on": "2026-10-28",
+  "currency": "SGD",
+  "purpose": "synthetic_receipt_generation",
+  "note": "One-time public online price snapshot, not an actual transaction or a physical-store checkout quote. Values remain frozen for reproducible synthetic generation.",
+  "collection": {
+    "method": "Unauthenticated HTTPS GET of public search and product pages; one selected retail SKU per purchasable recipe ingredient, manually reviewed.",
+    "online_store_context": "Fairprice PFC",
+    "price_fields": [
+      "ProductDetail.storeSpecificData[0].mrp minus discount, calculated with Decimal",
+      "Cross-checked against rounded Product JSON-LD offers.price and priceCurrency"
+    ],
+    "quantity_field": "Product entity metaData.DisplayUnit; conflicting hidden mass fields are not substituted for the displayed pack.",
+    "receipt_name_field": "Product entity metaData.SAP Product Name; not verified against a printed point-of-sale receipt.",
+    "local_evidence_directory": "ai/dataset/work/catalogue/20261028",
+    "local_evidence_git_status": "ignored; extracted facts, URLs and source hashes are published here"
+  },
+  "source_recipe_directory": "backend/seed/recipes",
+  "source_recipe_count": 48,
+  "recipe_ingredient_count": 42,
+  "retail_product_count": 41,
+  "recipe_ingredients": [
+    "black pepper",
+    "bok choy",
+    "broccoli",
+    "cabbage",
+    "canned chickpea",
+    "canola oil",
+    "carrot",
+    "cauliflower",
+    "chicken thigh",
+    "chilli paste",
+    "chye sim",
+    "coconut milk",
+    "cod fillet",
+    "cooked rice",
+    "cucumber",
+    "cumin powder",
+    "egg",
+    "firm tofu",
+    "fresh shiitake mushroom",
+    "frozen pea",
+    "garlic",
+    "ginger",
+    "lemon",
+    "long bean",
+    "onion",
+    "potato",
+    "prawn",
+    "pumpkin",
+    "red lentil",
+    "rice vermicelli",
+    "salt",
+    "sesame oil",
+    "soba noodle",
+    "soy sauce",
+    "spinach",
+    "spring onion",
+    "tempeh",
+    "tomato",
+    "turmeric powder",
+    "uncooked rice",
+    "water",
+    "water spinach"
+  ],
+  "products": [
+    {
+      "canonical_name": "black pepper",
+      "retailer": "FairPrice",
+      "retailer_product_id": "11046813",
+      "marketplace_listing": false,
+      "product_name": "FairPrice Black Pepper - Ground",
+      "brand": "Fairprice",
+      "receipt_name": "FAIRPRICE GROUND BLACK PEPPER (B) 100G",
+      "receipt_name_source": "retailer_sap_product_name",
+      "receipt_name_verified_on_receipt": false,
+      "pack_description": "100g",
+      "contents_per_package": 100,
+      "contents_unit": "g",
+      "purchase_unit": "pack",
+      "quantity_basis": "as_sold",
+      "quantity_evidence": {
+        "field": "entity.metaData.DisplayUnit",
+        "value": "100g"
+      },
+      "recipe_units": [
+        "g"
+      ],
+      "recipe_quantity_conversion": "same_dimension_as_sold_only",
+      "unit_price_sgd": "4.13",
+      "regular_price_sgd": "4.13",
+      "price_basis": "listed_single_package",
+      "promotion": null,
+      "price_source": "https://www.fairprice.com.sg/product/fairprice-ground-black-pepper-100g-11046813",
+      "checked_on": "2026-10-28",
+      "retrieved_at": "2026-10-28T10:07:16.270012+00:00",
+      "source_html_sha256": "6554afd032d8b5a8bdf3b4ef33d3d1fee97b279a0f895b24a827d28267ac474c",
+      "notes": ""
+    },
+    {
+      "canonical_name": "bok choy",
+      "retailer": "FairPrice",
+      "retailer_product_id": "13167889",
+      "marketplace_listing": false,
+      "product_name": "Simply Finest Xiao Bai Cai",
+      "brand": "Simply Finest",
+      "receipt_name": "SIMPLY FINEST XIAO BAI CAI 300G",
+      "receipt_name_source": "retailer_sap_product_name",
+      "receipt_name_verified_on_receipt": false,
+      "pack_description": "300g",
+      "contents_per_package": 300,
+      "contents_unit": "g",
+      "purchase_unit": "pack",
+      "quantity_basis": "as_sold",
+      "quantity_evidence": {
+        "field": "entity.metaData.DisplayUnit",
+        "value": "300g"
+      },
+      "recipe_units": [
+        "g"
+      ],
+      "recipe_quantity_conversion": "same_dimension_as_sold_only",
+      "unit_price_sgd": "1.95",
+      "regular_price_sgd": "1.95",
+      "price_basis": "listed_single_package",
+      "promotion": null,
+      "price_source": "https://www.fairprice.com.sg/product/simply-finest-xiao-bai-cai-300g-13167889",
+      "checked_on": "2026-10-28",
+      "retrieved_at": "2026-10-28T10:07:16.101123+00:00",
+      "source_html_sha256": "9082ce141ed27665429215586777ae47e3872265f8ff23acec9f8a0a8dab5bf5",
+      "notes": ""
+    },
+    {
+      "canonical_name": "broccoli",
+      "retailer": "FairPrice",
+      "retailer_product_id": "90153099",
+      "marketplace_listing": true,
+      "product_name": "Agro Fresh Broccoli",
+      "brand": "Agro Fresh",
+      "receipt_name": "Agro Fresh Broccoli",
+      "receipt_name_source": "retailer_sap_product_name",
+      "receipt_name_verified_on_receipt": false,
+      "pack_description": "280 G",
+      "contents_per_package": 280,
+      "contents_unit": "g",
+      "purchase_unit": "pack",
+      "quantity_basis": "as_sold",
+      "quantity_evidence": {
+        "field": "entity.metaData.DisplayUnit",
+        "value": "280 G"
+      },
+      "recipe_units": [
+        "g"
+      ],
+      "recipe_quantity_conversion": "same_dimension_as_sold_only",
+      "unit_price_sgd": "2.55",
+      "regular_price_sgd": "3.65",
+      "price_basis": "listed_single_package_promotion",
+      "promotion": {
+        "description": "Buy 1 Agro Fresh Broccoli @ $1.10 Off",
+        "minimum_packages": 1,
+        "discount_per_package_sgd": "1.10",
+        "valid_from_as_listed": "2026-06-01 00:00:00",
+        "valid_until_as_listed": "2027-06-01 23:59:00",
+        "time_zone": "unspecified_by_source",
+        "order_types": [
+          "DELIVERY"
+        ]
+      },
+      "price_source": "https://www.fairprice.com.sg/product/orgo-fresh-royal-broccoli-280-g-90153099",
+      "checked_on": "2026-10-28",
+      "retrieved_at": "2026-10-28T10:07:16.095137+00:00",
+      "source_html_sha256": "51884bbfe194ed9559af05b7931adf69f54bf559e739b1e455bf7c9e68b9a392",
+      "notes": ""
+    },
+    {
+      "canonical_name": "cabbage",
+      "retailer": "FairPrice",
+      "retailer_product_id": "13097801",
+      "marketplace_listing": false,
+      "product_name": "Malaysia Round Cabbage",
+      "brand": "Malaysia",
+      "receipt_name": "MALAYSIA ROUND CABBAGE 1.2KG",
+      "receipt_name_source": "retailer_sap_product_name",
+      "receipt_name_verified_on_receipt": false,
+      "pack_description": "1 per pack",
+      "contents_per_package": 1,
+      "contents_unit": "pcs",
+      "purchase_unit": "pack",
+      "quantity_basis": "as_sold",
+      "quantity_evidence": {
+        "field": "entity.metaData.DisplayUnit",
+        "value": "1 per pack"
+      },
+      "recipe_units": [
+        "g"
+      ],
+      "recipe_quantity_conversion": "requires_measured_head_weight",
+      "unit_price_sgd": "3.25",
+      "regular_price_sgd": "3.25",
+      "price_basis": "listed_single_package",
+      "promotion": null,
+      "price_source": "https://www.fairprice.com.sg/product/gold-round-cabbage-1-5kg-13097801",
+      "checked_on": "2026-10-28",
+      "retrieved_at": "2026-10-28T10:07:16.972139+00:00",
+      "source_html_sha256": "bef5bfcdf59fd75735950dba7b3b1e69e4bf60682103ad8a86dd5086cd78d28b",
+      "notes": "One head per purchased pack. SAP name says 1.2KG but Unit Of Weight says 1.5KG; neither is treated as a verified head weight.",
+      "weight_evidence_conflict": {
+        "SAP Product Name": "MALAYSIA ROUND CABBAGE 1.2KG",
+        "Unit Of Weight": "1.5KG",
+        "verified_weight": null
+      }
+    },
+    {
+      "canonical_name": "canned chickpea",
+      "retailer": "FairPrice",
+      "retailer_product_id": "12603933",
+      "marketplace_listing": false,
+      "product_name": "Cirio Ceci (Chick Peas)",
+      "brand": "Cirio",
+      "receipt_name": "CIRIO CHICK PEAS 400G",
+      "receipt_name_source": "retailer_sap_product_name",
+      "receipt_name_verified_on_receipt": false,
+      "pack_description": "400g",
+      "contents_per_package": 400,
+      "contents_unit": "g",
+      "purchase_unit": "pack",
+      "quantity_basis": "as_sold_net_contents",
+      "quantity_evidence": {
+        "field": "entity.metaData.DisplayUnit",
+        "value": "400g"
+      },
+      "recipe_units": [
+        "g"
+      ],
+      "recipe_quantity_conversion": "requires_verified_drained_weight",
+      "unit_price_sgd": "3.23",
+      "regular_price_sgd": "3.23",
+      "price_basis": "listed_single_package",
+      "promotion": null,
+      "price_source": "https://www.fairprice.com.sg/product/cirio-ceci-chick-peas-400g-12603933",
+      "checked_on": "2026-10-28",
+      "retrieved_at": "2026-10-28T10:07:18.282011+00:00",
+      "source_html_sha256": "3fb7a5d67080997425bb18057551046648607252e5135648e7fe29dcb197ccdd",
+      "notes": "400 g is total net contents including liquid, not verified drained chickpea mass. Do not assume 400 g usable chickpeas or reuse an unverified 240 g yield.",
+      "drained_contents_per_package": null,
+      "drained_contents_unit": "g"
+    },
+    {
+      "canonical_name": "canola oil",
+      "retailer": "FairPrice",
+      "retailer_product_id": "13241557",
+      "marketplace_listing": false,
+      "product_name": "FairPrice Canola Oil",
+      "brand": "Fairprice",
+      "receipt_name": "FAIRPRICE CANOLA OIL 500ML",
+      "receipt_name_source": "retailer_sap_product_name",
+      "receipt_name_verified_on_receipt": false,
+      "pack_description": "500ml",
+      "contents_per_package": 500,
+      "contents_unit": "ml",
+      "purchase_unit": "pack",
+      "quantity_basis": "as_sold",
+      "quantity_evidence": {
+        "field": "entity.metaData.DisplayUnit",
+        "value": "500ml"
+      },
+      "recipe_units": [
+        "ml"
+      ],
+      "recipe_quantity_conversion": "same_dimension_as_sold_only",
+      "unit_price_sgd": "2.90",
+      "regular_price_sgd": "2.90",
+      "price_basis": "listed_single_package",
+      "promotion": null,
+      "price_source": "https://www.fairprice.com.sg/product/fairprice-canola-oil-500ml-13241557",
+      "checked_on": "2026-10-28",
+      "retrieved_at": "2026-10-28T10:07:17.092997+00:00",
+      "source_html_sha256": "833e610eef15bd4df1b0612856bfd7247063e4c6df4643d8bad31c43e6575883",
+      "notes": ""
+    },
+    {
+      "canonical_name": "carrot",
+      "retailer": "FairPrice",
+      "retailer_product_id": "13000321",
+      "marketplace_listing": false,
+      "product_name": "Pasar Prepacked Carrots",
+      "brand": "Pasar",
+      "receipt_name": "PASAR PREPACKED CARROTS 500G",
+      "receipt_name_source": "retailer_sap_product_name",
+      "receipt_name_verified_on_receipt": false,
+      "pack_description": "500g",
+      "contents_per_package": 500,
+      "contents_unit": "g",
+      "purchase_unit": "pack",
+      "quantity_basis": "as_sold",
+      "quantity_evidence": {
+        "field": "entity.metaData.DisplayUnit",
+        "value": "500g"
+      },
+      "recipe_units": [
+        "g"
+      ],
+      "recipe_quantity_conversion": "same_dimension_as_sold_only",
+      "unit_price_sgd": "1.10",
+      "regular_price_sgd": "1.10",
+      "price_basis": "listed_single_package",
+      "promotion": null,
+      "price_source": "https://www.fairprice.com.sg/product/pasar-prepacked-carrots-500g-13000321",
+      "checked_on": "2026-10-28",
+      "retrieved_at": "2026-10-28T10:07:18.279281+00:00",
+      "source_html_sha256": "b22c0ee12fbde21877ba541823d7c64ba5b7462f53590253606a5f2da7abbee2",
+      "notes": ""
+    },
+    {
+      "canonical_name": "cauliflower",
+      "retailer": "FairPrice",
+      "retailer_product_id": "90187036",
+      "marketplace_listing": true,
+      "product_name": "Yuan Zhen Yuan Cauliflower China",
+      "brand": "Yuan Zhen Yuan",
+      "receipt_name": "Yuan Zhen Yuan Cauliflower China",
+      "receipt_name_source": "retailer_sap_product_name",
+      "receipt_name_verified_on_receipt": false,
+      "pack_description": "500 G",
+      "contents_per_package": 500,
+      "contents_unit": "g",
+      "purchase_unit": "pack",
+      "quantity_basis": "as_sold",
+      "quantity_evidence": {
+        "field": "entity.metaData.DisplayUnit",
+        "value": "500 G"
+      },
+      "recipe_units": [
+        "g"
+      ],
+      "recipe_quantity_conversion": "same_dimension_as_sold_only",
+      "unit_price_sgd": "3.30",
+      "regular_price_sgd": "3.30",
+      "price_basis": "listed_single_package",
+      "promotion": null,
+      "price_source": "https://www.fairprice.com.sg/product/yuan-zhen-yuan-cauliflower-china-500-g-90187036",
+      "checked_on": "2026-10-28",
+      "retrieved_at": "2026-10-28T10:07:17.812835+00:00",
+      "source_html_sha256": "54336ba6a3bed1f31e215b784767847752017df5c553ab89c54eb372bf392cc4",
+      "notes": ""
+    },
+    {
+      "canonical_name": "chicken thigh",
+      "retailer": "FairPrice",
+      "retailer_product_id": "90175209",
+      "marketplace_listing": true,
+      "product_name": "Master Grocer Fresh Chicken Thigh Boneless and Skinless",
+      "brand": "Master Grocer",
+      "receipt_name": "Master Grocer Fresh Chicken Thigh Boneless and Skinless",
+      "receipt_name_source": "retailer_sap_product_name",
+      "receipt_name_verified_on_receipt": false,
+      "pack_description": "330 G",
+      "contents_per_package": 330,
+      "contents_unit": "g",
+      "purchase_unit": "pack",
+      "quantity_basis": "as_sold",
+      "quantity_evidence": {
+        "field": "entity.metaData.DisplayUnit",
+        "value": "330 G"
+      },
+      "recipe_units": [
+        "g"
+      ],
+      "recipe_quantity_conversion": "same_dimension_as_sold_only",
+      "unit_price_sgd": "6.95",
+      "regular_price_sgd": "6.95",
+      "price_basis": "listed_single_package",
+      "promotion": null,
+      "price_source": "https://www.fairprice.com.sg/product/master-grocer-fresh-chicken-thigh-boneless-and-skinless-330-g-90175209",
+      "checked_on": "2026-10-28",
+      "retrieved_at": "2026-10-28T10:07:18.619699+00:00",
+      "source_html_sha256": "e727878c8c8003466a6aa32876d40bad9f1a28e78bfada5d3c9ccb84525ca567",
+      "notes": "Boneless, skinless chicken thigh; not a whole bone-in thigh."
+    },
+    {
+      "canonical_name": "chilli paste",
+      "retailer": "FairPrice",
+      "retailer_product_id": "13025201",
+      "marketplace_listing": false,
+      "product_name": "Singlong Chilli Paste",
+      "brand": "Sing Long",
+      "receipt_name": "SING LONG CHILLI PASTE",
+      "receipt_name_source": "retailer_sap_product_name",
+      "receipt_name_verified_on_receipt": false,
+      "pack_description": "500g",
+      "contents_per_package": 500,
+      "contents_unit": "g",
+      "purchase_unit": "pack",
+      "quantity_basis": "as_sold",
+      "quantity_evidence": {
+        "field": "entity.metaData.DisplayUnit",
+        "value": "500g"
+      },
+      "recipe_units": [
+        "g"
+      ],
+      "recipe_quantity_conversion": "same_dimension_as_sold_only",
+      "unit_price_sgd": "1.73",
+      "regular_price_sgd": "1.73",
+      "price_basis": "listed_single_package",
+      "promotion": null,
+      "price_source": "https://www.fairprice.com.sg/product/13025201",
+      "checked_on": "2026-10-28",
+      "retrieved_at": "2026-10-28T10:07:19.079677+00:00",
+      "source_html_sha256": "04320ba23cb53b21409920af060cbe2dd10b4802872ee7121de5b2b4d918fce3",
+      "notes": "Plain ground chilli paste, not belacan or another prepared sambal."
+    },
+    {
+      "canonical_name": "chye sim",
+      "retailer": "FairPrice",
+      "retailer_product_id": "13236465",
+      "marketplace_listing": false,
+      "product_name": "Chef Hong Kong Chye Sim",
+      "brand": "Chef",
+      "receipt_name": "CHEF HONG KONG CHYE SIM 200G",
+      "receipt_name_source": "retailer_sap_product_name",
+      "receipt_name_verified_on_receipt": false,
+      "pack_description": "200g",
+      "contents_per_package": 200,
+      "contents_unit": "g",
+      "purchase_unit": "pack",
+      "quantity_basis": "as_sold",
+      "quantity_evidence": {
+        "field": "entity.metaData.DisplayUnit",
+        "value": "200g"
+      },
+      "recipe_units": [
+        "g"
+      ],
+      "recipe_quantity_conversion": "same_dimension_as_sold_only",
+      "unit_price_sgd": "1.16",
+      "regular_price_sgd": "1.16",
+      "price_basis": "listed_single_package",
+      "promotion": null,
+      "price_source": "https://www.fairprice.com.sg/product/chef-hong-kong-chye-sim-200g-13236465",
+      "checked_on": "2026-10-28",
+      "retrieved_at": "2026-10-28T10:07:18.923633+00:00",
+      "source_html_sha256": "fd323cbf0febdc3bbdde6274159e6f19b93a73e0c23201a55c8e3bafc554753f",
+      "notes": ""
+    },
+    {
+      "canonical_name": "coconut milk",
+      "retailer": "FairPrice",
+      "retailer_product_id": "10725136",
+      "marketplace_listing": false,
+      "product_name": "Ayam Brand Coconut Milk",
+      "brand": "Ayam Brand",
+      "receipt_name": "AYAM BRAND COCONUT MILK 200ML",
+      "receipt_name_source": "retailer_sap_product_name",
+      "receipt_name_verified_on_receipt": false,
+      "pack_description": "200ml",
+      "contents_per_package": 200,
+      "contents_unit": "ml",
+      "purchase_unit": "pack",
+      "quantity_basis": "as_sold",
+      "quantity_evidence": {
+        "field": "entity.metaData.DisplayUnit",
+        "value": "200ml"
+      },
+      "recipe_units": [
+        "ml"
+      ],
+      "recipe_quantity_conversion": "same_dimension_as_sold_only",
+      "unit_price_sgd": "1.40",
+      "regular_price_sgd": "1.40",
+      "price_basis": "listed_single_package",
+      "promotion": null,
+      "price_source": "https://www.fairprice.com.sg/product/ayam-brand-coconut-milk-200ml-10725136",
+      "checked_on": "2026-10-28",
+      "retrieved_at": "2026-10-28T10:07:19.408941+00:00",
+      "source_html_sha256": "4041d0717092af94ecd157ed47a30eb0745af6aaa5a2b721b6fe5b562d21bd02",
+      "notes": ""
+    },
+    {
+      "canonical_name": "cod fillet",
+      "retailer": "FairPrice",
+      "retailer_product_id": "90007374",
+      "marketplace_listing": true,
+      "product_name": "Catch Seafood Wild Atlantic Cod Loin",
+      "brand": "Catch Seafood",
+      "receipt_name": "Catch Seafood Wild Atlantic Cod Loin",
+      "receipt_name_source": "retailer_sap_product_name",
+      "receipt_name_verified_on_receipt": false,
+      "pack_description": "300 G",
+      "contents_per_package": 300,
+      "contents_unit": "g",
+      "purchase_unit": "pack",
+      "quantity_basis": "as_sold",
+      "quantity_evidence": {
+        "field": "entity.metaData.DisplayUnit",
+        "value": "300 G"
+      },
+      "recipe_units": [
+        "g"
+      ],
+      "recipe_quantity_conversion": "same_dimension_as_sold_only",
+      "unit_price_sgd": "11.00",
+      "regular_price_sgd": "14.80",
+      "price_basis": "listed_single_package_promotion",
+      "promotion": {
+        "description": "Buy 1 Catch Seafood Wild Atlantic Cod Loin @ $3.80 Off",
+        "minimum_packages": 1,
+        "discount_per_package_sgd": "3.80",
+        "valid_from_as_listed": "2026-09-28 00:00:00",
+        "valid_until_as_listed": "2026-11-30 23:59:00",
+        "time_zone": "unspecified_by_source",
+        "order_types": [
+          "DELIVERY"
+        ]
+      },
+      "price_source": "https://www.fairprice.com.sg/product/catch-seafood-wild-atlantic-cod-loin-300-g-90007374",
+      "checked_on": "2026-10-28",
+      "retrieved_at": "2026-10-28T10:07:19.798671+00:00",
+      "source_html_sha256": "907f895721775a92214209ed94fc2320bf4495e87bf76baec63f2f4db5a3fa2a",
+      "notes": "Wild Atlantic cod loin; not sablefish marketed as black cod. Frozen portion."
+    },
+    {
+      "canonical_name": "cooked rice",
+      "retailer": "FairPrice",
+      "retailer_product_id": "13129843",
+      "marketplace_listing": false,
+      "product_name": "CJ Fresh Cooked Instant Rice - White",
+      "brand": "Cj",
+      "receipt_name": "CJ COOKED RICE 210G",
+      "receipt_name_source": "retailer_sap_product_name",
+      "receipt_name_verified_on_receipt": false,
+      "pack_description": "210g",
+      "contents_per_package": 210,
+      "contents_unit": "g",
+      "purchase_unit": "pack",
+      "quantity_basis": "as_sold",
+      "quantity_evidence": {
+        "field": "entity.metaData.DisplayUnit",
+        "value": "210g"
+      },
+      "recipe_units": [
+        "g"
+      ],
+      "recipe_quantity_conversion": "same_dimension_as_sold_only",
+      "unit_price_sgd": "2.25",
+      "regular_price_sgd": "2.25",
+      "price_basis": "listed_single_package",
+      "promotion": null,
+      "price_source": "https://www.fairprice.com.sg/product/cj-fresh-cooked-instant-rice-white-210g-13129843",
+      "checked_on": "2026-10-28",
+      "retrieved_at": "2026-10-28T10:07:19.852151+00:00",
+      "source_html_sha256": "b5d43e9e185cdc1d8ea3f4f1b83f7dd115dddcdc900de84e58a8e5647c7776f8",
+      "notes": "Ready-cooked white rice. Do not substitute the uncooked-rice entry or infer a cooking yield."
+    },
+    {
+      "canonical_name": "cucumber",
+      "retailer": "FairPrice",
+      "retailer_product_id": "13097478",
+      "marketplace_listing": false,
+      "product_name": "Malaysia Natural Fresh Japanese Cucumber",
+      "brand": "Natural Fresh",
+      "receipt_name": "NATURAL FRESH JAPANESE CUCUMBER 400G",
+      "receipt_name_source": "retailer_sap_product_name",
+      "receipt_name_verified_on_receipt": false,
+      "pack_description": "400g",
+      "contents_per_package": 400,
+      "contents_unit": "g",
+      "purchase_unit": "pack",
+      "quantity_basis": "as_sold",
+      "quantity_evidence": {
+        "field": "entity.metaData.DisplayUnit",
+        "value": "400g"
+      },
+      "recipe_units": [
+        "g"
+      ],
+      "recipe_quantity_conversion": "same_dimension_as_sold_only",
+      "unit_price_sgd": "1.80",
+      "regular_price_sgd": "2.40",
+      "price_basis": "listed_single_package_promotion",
+      "promotion": {
+        "description": "Buy 1 Malaysia Natural Fresh Japanese Cucumber @ $1.80",
+        "minimum_packages": 1,
+        "discount_per_package_sgd": "0.60",
+        "valid_from_as_listed": "2026-10-02 04:01:00",
+        "valid_until_as_listed": "2027-01-01 04:00:00",
+        "time_zone": "unspecified_by_source",
+        "order_types": [
+          "DELIVERY"
+        ]
+      },
+      "price_source": "https://www.fairprice.com.sg/product/malaysia-naturally-fresh-japanese-cucumber-400g-13097478",
+      "checked_on": "2026-10-28",
+      "retrieved_at": "2026-10-28T10:07:20.138060+00:00",
+      "source_html_sha256": "ba899d3ab744e08957f7608cd779f4b4aad22121274571898afe908cee5689e8",
+      "notes": ""
+    },
+    {
+      "canonical_name": "cumin powder",
+      "retailer": "FairPrice",
+      "retailer_product_id": "90246431",
+      "marketplace_listing": true,
+      "product_name": "Wang Shou Yi Cumin Powder",
+      "brand": "Wang shou yi",
+      "receipt_name": "Wang Shou Yi Cumin Powder",
+      "receipt_name_source": "retailer_sap_product_name",
+      "receipt_name_verified_on_receipt": false,
+      "pack_description": "40 G",
+      "contents_per_package": 40,
+      "contents_unit": "g",
+      "purchase_unit": "pack",
+      "quantity_basis": "as_sold",
+      "quantity_evidence": {
+        "field": "entity.metaData.DisplayUnit",
+        "value": "40 G"
+      },
+      "recipe_units": [
+        "g"
+      ],
+      "recipe_quantity_conversion": "same_dimension_as_sold_only",
+      "unit_price_sgd": "2.49",
+      "regular_price_sgd": "2.49",
+      "price_basis": "listed_single_package",
+      "promotion": null,
+      "price_source": "https://www.fairprice.com.sg/product/wang-shou-yi-cumin-powder",
+      "checked_on": "2026-10-28",
+      "retrieved_at": "2026-10-28T10:07:20.534050+00:00",
+      "source_html_sha256": "a1fbef44f19ca2dcde5cb2e351dbd23a13bc5041cd33e3e389b6b4882bda5d6b",
+      "notes": ""
+    },
+    {
+      "canonical_name": "egg",
+      "retailer": "FairPrice",
+      "retailer_product_id": "451724",
+      "marketplace_listing": false,
+      "product_name": "Pasar Fresh Eggs",
+      "brand": "Pasar",
+      "receipt_name": "PASAR FRESH EGGS (MY) 10S 550G",
+      "receipt_name_source": "retailer_sap_product_name",
+      "receipt_name_verified_on_receipt": false,
+      "pack_description": "550g (10 per pack)",
+      "contents_per_package": 10,
+      "contents_unit": "pcs",
+      "purchase_unit": "pack",
+      "quantity_basis": "as_sold",
+      "quantity_evidence": {
+        "field": "entity.metaData.DisplayUnit",
+        "value": "550g (10 per pack)"
+      },
+      "recipe_units": [
+        "pcs"
+      ],
+      "recipe_quantity_conversion": "same_dimension_as_sold_only",
+      "unit_price_sgd": "2.85",
+      "regular_price_sgd": "2.85",
+      "price_basis": "listed_single_package",
+      "promotion": null,
+      "price_source": "https://www.fairprice.com.sg/product/pasar-fresh-eggs-10-eggs-550g-451724",
+      "checked_on": "2026-10-28",
+      "retrieved_at": "2026-10-28T10:07:19.861870+00:00",
+      "source_html_sha256": "3399fdcf0671bdf9586a7bfa5f86538e883ff8f7be3dbf1a0c588091323998d2",
+      "notes": "One carton contains 10 eggs; 550 g is the carton's labelled egg mass, not 550 eggs.",
+      "labelled_package_mass": {
+        "count": 550,
+        "unit": "g"
+      }
+    },
+    {
+      "canonical_name": "firm tofu",
+      "retailer": "FairPrice",
+      "retailer_product_id": "157819",
+      "marketplace_listing": false,
+      "product_name": "Fortune Tau Kwa - Original",
+      "brand": "Fortune",
+      "receipt_name": "FORTUNE TAU KWA 2S 450G",
+      "receipt_name_source": "retailer_sap_product_name",
+      "receipt_name_verified_on_receipt": false,
+      "pack_description": "450g (2 per pack)",
+      "contents_per_package": 450,
+      "contents_unit": "g",
+      "purchase_unit": "pack",
+      "quantity_basis": "as_sold",
+      "quantity_evidence": {
+        "field": "entity.metaData.DisplayUnit",
+        "value": "450g (2 per pack)"
+      },
+      "recipe_units": [
+        "g"
+      ],
+      "recipe_quantity_conversion": "same_dimension_as_sold_only",
+      "unit_price_sgd": "1.42",
+      "regular_price_sgd": "1.42",
+      "price_basis": "listed_single_package",
+      "promotion": null,
+      "price_source": "https://www.fairprice.com.sg/product/fortune-tau-kwa-400g-157819",
+      "checked_on": "2026-10-28",
+      "retrieved_at": "2026-10-28T10:07:20.548684+00:00",
+      "source_html_sha256": "d88a3d1a4b5c2abb8d29e3de937999cd3fa133bc566324b33bd36f38ffa22c9d",
+      "notes": "450 g is the total for both blocks in one purchased pack; do not multiply it by two again.",
+      "items_per_package": 2
+    },
+    {
+      "canonical_name": "fresh shiitake mushroom",
+      "retailer": "FairPrice",
+      "retailer_product_id": "13016308",
+      "marketplace_listing": false,
+      "product_name": "Chef Shiitake Mushroom",
+      "brand": "Chef",
+      "receipt_name": "CHEF SHITAKE MUSHROOM 250G",
+      "receipt_name_source": "retailer_sap_product_name",
+      "receipt_name_verified_on_receipt": false,
+      "pack_description": "250g",
+      "contents_per_package": 250,
+      "contents_unit": "g",
+      "purchase_unit": "pack",
+      "quantity_basis": "as_sold",
+      "quantity_evidence": {
+        "field": "entity.metaData.DisplayUnit",
+        "value": "250g"
+      },
+      "recipe_units": [
+        "g"
+      ],
+      "recipe_quantity_conversion": "same_dimension_as_sold_only",
+      "unit_price_sgd": "2.60",
+      "regular_price_sgd": "2.60",
+      "price_basis": "listed_single_package",
+      "promotion": null,
+      "price_source": "https://www.fairprice.com.sg/product/chef-shiitake-mushroom-250g-13016308",
+      "checked_on": "2026-10-28",
+      "retrieved_at": "2026-10-28T10:07:21.040224+00:00",
+      "source_html_sha256": "cb777b2d3c16828057303d9fd9ff73e8574b3620d09ed6fa7ed8d136b7631b35",
+      "notes": "Fresh shiitake, not dried. The retailer stock name's SHITAKE spelling is preserved."
+    },
+    {
+      "canonical_name": "frozen pea",
+      "retailer": "FairPrice",
+      "retailer_product_id": "11475968",
+      "marketplace_listing": false,
+      "product_name": "FairPrice Frozen Fresh Garden Peas",
+      "brand": "Fairprice",
+      "receipt_name": "FAIRPRICE GREEN PEAS 1KG",
+      "receipt_name_source": "retailer_sap_product_name",
+      "receipt_name_verified_on_receipt": false,
+      "pack_description": "1kg",
+      "contents_per_package": 1,
+      "contents_unit": "kg",
+      "purchase_unit": "pack",
+      "quantity_basis": "as_sold",
+      "quantity_evidence": {
+        "field": "entity.metaData.DisplayUnit",
+        "value": "1kg"
+      },
+      "recipe_units": [
+        "g"
+      ],
+      "recipe_quantity_conversion": "same_dimension_as_sold_only",
+      "unit_price_sgd": "5.15",
+      "regular_price_sgd": "5.15",
+      "price_basis": "listed_single_package",
+      "promotion": null,
+      "price_source": "https://www.fairprice.com.sg/product/fairprice-green-peas-1kg-11475968",
+      "checked_on": "2026-10-28",
+      "retrieved_at": "2026-10-28T10:07:21.364862+00:00",
+      "source_html_sha256": "a6db7ba9cf5dbb2d0d37cd7c93e504d3e0fbb7797ea749d8758852695f87052a",
+      "notes": ""
+    },
+    {
+      "canonical_name": "garlic",
+      "retailer": "FairPrice",
+      "retailer_product_id": "10734550",
+      "marketplace_listing": false,
+      "product_name": "Chef China Garlic - Pure White",
+      "brand": "Chef",
+      "receipt_name": "CHEF CHINA GARLIC ~ 500G",
+      "receipt_name_source": "retailer_sap_product_name",
+      "receipt_name_verified_on_receipt": false,
+      "pack_description": "500g",
+      "contents_per_package": 500,
+      "contents_unit": "g",
+      "purchase_unit": "pack",
+      "quantity_basis": "as_sold",
+      "quantity_evidence": {
+        "field": "entity.metaData.DisplayUnit",
+        "value": "500g"
+      },
+      "recipe_units": [
+        "g"
+      ],
+      "recipe_quantity_conversion": "same_dimension_as_sold_only",
+      "unit_price_sgd": "2.85",
+      "regular_price_sgd": "2.85",
+      "price_basis": "listed_single_package",
+      "promotion": null,
+      "price_source": "https://www.fairprice.com.sg/product/chef-china-garlic-pure-white-500g-10734550",
+      "checked_on": "2026-10-28",
+      "retrieved_at": "2026-10-28T10:07:21.488478+00:00",
+      "source_html_sha256": "bd5edfe87852f9e09febe5f1035cb14fd8e6cfb15cabe06aa363f9cd36d2feee",
+      "notes": ""
+    },
+    {
+      "canonical_name": "ginger",
+      "retailer": "FairPrice",
+      "retailer_product_id": "11664574",
+      "marketplace_listing": false,
+      "product_name": "Simply Finest Old Ginger",
+      "brand": "Simply Finest",
+      "receipt_name": "S FINEST OLD GINGER",
+      "receipt_name_source": "retailer_sap_product_name",
+      "receipt_name_verified_on_receipt": false,
+      "pack_description": "200g",
+      "contents_per_package": 200,
+      "contents_unit": "g",
+      "purchase_unit": "pack",
+      "quantity_basis": "as_sold",
+      "quantity_evidence": {
+        "field": "entity.metaData.DisplayUnit",
+        "value": "200g"
+      },
+      "recipe_units": [
+        "g"
+      ],
+      "recipe_quantity_conversion": "same_dimension_as_sold_only",
+      "unit_price_sgd": "2.20",
+      "regular_price_sgd": "2.20",
+      "price_basis": "listed_single_package",
+      "promotion": null,
+      "price_source": "https://www.fairprice.com.sg/product/simply-finest-old-ginger-200g-11664574",
+      "checked_on": "2026-10-28",
+      "retrieved_at": "2026-10-28T10:07:22.006659+00:00",
+      "source_html_sha256": "8fa1f4603e1930b3faf5c4fdc57a19281b1695125e16b270f33650098d0f314a",
+      "notes": ""
+    },
+    {
+      "canonical_name": "lemon",
+      "retailer": "FairPrice",
+      "retailer_product_id": "90144359",
+      "marketplace_listing": true,
+      "product_name": "Agro Fresh Jumbo Yellow Lemon",
+      "brand": "Agro Fresh",
+      "receipt_name": "Agro Fresh Jumbo Yellow Lemon",
+      "receipt_name_source": "retailer_sap_product_name",
+      "receipt_name_verified_on_receipt": false,
+      "pack_description": "3 S",
+      "contents_per_package": 3,
+      "contents_unit": "pcs",
+      "purchase_unit": "pack",
+      "quantity_basis": "as_sold",
+      "quantity_evidence": {
+        "field": "entity.metaData.DisplayUnit",
+        "value": "3 S"
+      },
+      "recipe_units": [
+        "pcs"
+      ],
+      "recipe_quantity_conversion": "same_dimension_as_sold_only",
+      "unit_price_sgd": "3.45",
+      "regular_price_sgd": "4.90",
+      "price_basis": "listed_single_package_promotion",
+      "promotion": {
+        "description": "Buy 1 Agro Fresh Jumbo Yellow Lemon @ $1.45 Off",
+        "minimum_packages": 1,
+        "discount_per_package_sgd": "1.45",
+        "valid_from_as_listed": "2026-04-11 00:00:00",
+        "valid_until_as_listed": "2027-04-11 23:59:00",
+        "time_zone": "unspecified_by_source",
+        "order_types": [
+          "DELIVERY"
+        ]
+      },
+      "price_source": "https://www.fairprice.com.sg/product/orgo-fresh-large-yellow-lemon-300-g-90144359",
+      "checked_on": "2026-10-28",
+      "retrieved_at": "2026-10-28T10:07:22.095562+00:00",
+      "source_html_sha256": "4d19207d0f8940ed7625667fb61c42df178f0fad7546c0de0a7725565cd632f3",
+      "notes": "Three fruits per pack; no fruit-to-gram conversion is assumed."
+    },
+    {
+      "canonical_name": "long bean",
+      "retailer": "FairPrice",
+      "retailer_product_id": "11629365",
+      "marketplace_listing": false,
+      "product_name": "Simply Finest Long Bean",
+      "brand": "Simply Finest",
+      "receipt_name": "S FINEST LONG BEAN",
+      "receipt_name_source": "retailer_sap_product_name",
+      "receipt_name_verified_on_receipt": false,
+      "pack_description": "200g",
+      "contents_per_package": 200,
+      "contents_unit": "g",
+      "purchase_unit": "pack",
+      "quantity_basis": "as_sold",
+      "quantity_evidence": {
+        "field": "entity.metaData.DisplayUnit",
+        "value": "200g"
+      },
+      "recipe_units": [
+        "g"
+      ],
+      "recipe_quantity_conversion": "same_dimension_as_sold_only",
+      "unit_price_sgd": "1.65",
+      "regular_price_sgd": "1.65",
+      "price_basis": "listed_single_package",
+      "promotion": null,
+      "price_source": "https://www.fairprice.com.sg/product/simply-finest-long-bean-200g-11629365",
+      "checked_on": "2026-10-28",
+      "retrieved_at": "2026-10-28T10:07:22.165669+00:00",
+      "source_html_sha256": "3baa42390536ddb72ecb0442f06a46f469c5f10c964196af5bc3797e1e1ebed3",
+      "notes": ""
+    },
+    {
+      "canonical_name": "onion",
+      "retailer": "FairPrice",
+      "retailer_product_id": "10736396",
+      "marketplace_listing": false,
+      "product_name": "Chef Red Onion - Large",
+      "brand": "Chef",
+      "receipt_name": "CHEF LARGE RED ONION ~ 700G",
+      "receipt_name_source": "retailer_sap_product_name",
+      "receipt_name_verified_on_receipt": false,
+      "pack_description": "700g",
+      "contents_per_package": 700,
+      "contents_unit": "g",
+      "purchase_unit": "pack",
+      "quantity_basis": "as_sold",
+      "quantity_evidence": {
+        "field": "entity.metaData.DisplayUnit",
+        "value": "700g"
+      },
+      "recipe_units": [
+        "g"
+      ],
+      "recipe_quantity_conversion": "same_dimension_as_sold_only",
+      "unit_price_sgd": "1.70",
+      "regular_price_sgd": "1.70",
+      "price_basis": "listed_single_package",
+      "promotion": null,
+      "price_source": "https://www.fairprice.com.sg/product/chef-red-onion-large-700g-10736396",
+      "checked_on": "2026-10-28",
+      "retrieved_at": "2026-10-28T10:07:22.953494+00:00",
+      "source_html_sha256": "9cf994a5364556b8f44b5ff02d20fe171677b1f1f99c45a8e70c2fb8fea2c455",
+      "notes": ""
+    },
+    {
+      "canonical_name": "potato",
+      "retailer": "FairPrice",
+      "retailer_product_id": "13057650",
+      "marketplace_listing": false,
+      "product_name": "Holland Potato (China)",
+      "brand": "Pasar",
+      "receipt_name": "HOLLAND POTATO 1KG",
+      "receipt_name_source": "retailer_sap_product_name",
+      "receipt_name_verified_on_receipt": false,
+      "pack_description": "1kg",
+      "contents_per_package": 1,
+      "contents_unit": "kg",
+      "purchase_unit": "pack",
+      "quantity_basis": "as_sold",
+      "quantity_evidence": {
+        "field": "entity.metaData.DisplayUnit",
+        "value": "1kg"
+      },
+      "recipe_units": [
+        "g"
+      ],
+      "recipe_quantity_conversion": "same_dimension_as_sold_only",
+      "unit_price_sgd": "1.20",
+      "regular_price_sgd": "1.50",
+      "price_basis": "listed_single_package_promotion",
+      "promotion": {
+        "description": "Buy 1 Holland Potato (China) @ $1.20",
+        "minimum_packages": 1,
+        "discount_per_package_sgd": "0.30",
+        "valid_from_as_listed": "2026-10-22 04:01:00",
+        "valid_until_as_listed": "2026-10-29 04:00:00",
+        "time_zone": "unspecified_by_source",
+        "order_types": [
+          "DELIVERY"
+        ]
+      },
+      "price_source": "https://www.fairprice.com.sg/product/holland-potato-china-1kg-13057650",
+      "checked_on": "2026-10-28",
+      "retrieved_at": "2026-10-28T10:07:22.925911+00:00",
+      "source_html_sha256": "5f155a9a1f480904f6c5dae92ed6ce6551ac4f4dd93517bc6d4651a5cfe01c1f",
+      "notes": ""
+    },
+    {
+      "canonical_name": "prawn",
+      "retailer": "FairPrice",
+      "retailer_product_id": "13047093",
+      "marketplace_listing": false,
+      "product_name": "Okeanoss Frozen IQF Shrimp Meat (Tail Off)",
+      "brand": "Okeanoss",
+      "receipt_name": "OKEANOSS IQF SHRIMP MEAT TAIL OFF 400G",
+      "receipt_name_source": "retailer_sap_product_name",
+      "receipt_name_verified_on_receipt": false,
+      "pack_description": "400g",
+      "contents_per_package": 400,
+      "contents_unit": "g",
+      "purchase_unit": "pack",
+      "quantity_basis": "as_sold",
+      "quantity_evidence": {
+        "field": "entity.metaData.DisplayUnit",
+        "value": "400g"
+      },
+      "recipe_units": [
+        "g"
+      ],
+      "recipe_quantity_conversion": "same_dimension_as_sold_only",
+      "unit_price_sgd": "11.00",
+      "regular_price_sgd": "11.00",
+      "price_basis": "listed_single_package",
+      "promotion": null,
+      "price_source": "https://www.fairprice.com.sg/product/okeanoss-iqf-shrimp-meat-tail-off-400g-13047093",
+      "checked_on": "2026-10-28",
+      "retrieved_at": "2026-10-28T10:07:23.142365+00:00",
+      "source_html_sha256": "3524e9e4ad81f371e7a0379e9d0a60e4edac62ced2edf6466b2cbe711e699d02",
+      "notes": "Raw frozen peeled shrimp meat, tail off; not whole shell-on prawns."
+    },
+    {
+      "canonical_name": "pumpkin",
+      "retailer": "FairPrice",
+      "retailer_product_id": "90169109",
+      "marketplace_listing": true,
+      "product_name": "Yuan Zhen Yuan Japanese Pumpkin Seg Cut",
+      "brand": "Yuan Zhen Yuan",
+      "receipt_name": "Yuan Zhen Yuan Japanese Pumpkin Seg Cut",
+      "receipt_name_source": "retailer_sap_product_name",
+      "receipt_name_verified_on_receipt": false,
+      "pack_description": "1 KG",
+      "contents_per_package": 1,
+      "contents_unit": "kg",
+      "purchase_unit": "pack",
+      "quantity_basis": "as_sold",
+      "quantity_evidence": {
+        "field": "entity.metaData.DisplayUnit",
+        "value": "1 KG"
+      },
+      "recipe_units": [
+        "g"
+      ],
+      "recipe_quantity_conversion": "same_dimension_as_sold_only",
+      "unit_price_sgd": "5.95",
+      "regular_price_sgd": "5.95",
+      "price_basis": "listed_single_package",
+      "promotion": null,
+      "price_source": "https://www.fairprice.com.sg/product/yuan-zhen-yuan-japanese-pumpkin-seg-cut-1-kg-90169109",
+      "checked_on": "2026-10-28",
+      "retrieved_at": "2026-10-28T10:07:23.963335+00:00",
+      "source_html_sha256": "9487289a128b7ddf5240ec3865a0116987c7eaf0bf95a7ee312aee772fb246bd",
+      "notes": "Cut pumpkin; no peeled/seeded yield is inferred."
+    },
+    {
+      "canonical_name": "red lentil",
+      "retailer": "FairPrice",
+      "retailer_product_id": "90014866",
+      "marketplace_listing": true,
+      "product_name": "Shahi Golden Masoor Dhal Split (Red Lentils)",
+      "brand": "Shahi Golden",
+      "receipt_name": "Shahi Golden Masoor Dhal Split (Red Lentils)",
+      "receipt_name_source": "retailer_sap_product_name",
+      "receipt_name_verified_on_receipt": false,
+      "pack_description": "500 G",
+      "contents_per_package": 500,
+      "contents_unit": "g",
+      "purchase_unit": "pack",
+      "quantity_basis": "as_sold",
+      "quantity_evidence": {
+        "field": "entity.metaData.DisplayUnit",
+        "value": "500 G"
+      },
+      "recipe_units": [
+        "g"
+      ],
+      "recipe_quantity_conversion": "same_dimension_as_sold_only",
+      "unit_price_sgd": "1.90",
+      "regular_price_sgd": "1.90",
+      "price_basis": "listed_single_package",
+      "promotion": null,
+      "price_source": "https://www.fairprice.com.sg/product/shahi-golden-shahi-golden-masoor-dhal-split-red-lentils-2-x-500g-90014866",
+      "checked_on": "2026-10-28",
+      "retrieved_at": "2026-10-28T10:07:23.847601+00:00",
+      "source_html_sha256": "8eae54ce213106bbc6d9a9bb2bdaecf22ebd72f5f297c866c734a5350e49f28a",
+      "notes": "Dry split red lentils, not cooked lentils."
+    },
+    {
+      "canonical_name": "rice vermicelli",
+      "retailer": "FairPrice",
+      "retailer_product_id": "10459245",
+      "marketplace_listing": false,
+      "product_name": "FairPrice Rice Vermicelli (Bee Hoon)",
+      "brand": "Fairprice",
+      "receipt_name": "FAIRPRICE RICE VERMICELLI 400G",
+      "receipt_name_source": "retailer_sap_product_name",
+      "receipt_name_verified_on_receipt": false,
+      "pack_description": "400g",
+      "contents_per_package": 400,
+      "contents_unit": "g",
+      "purchase_unit": "pack",
+      "quantity_basis": "as_sold",
+      "quantity_evidence": {
+        "field": "entity.metaData.DisplayUnit",
+        "value": "400g"
+      },
+      "recipe_units": [
+        "g"
+      ],
+      "recipe_quantity_conversion": "same_dimension_as_sold_only",
+      "unit_price_sgd": "1.16",
+      "regular_price_sgd": "1.16",
+      "price_basis": "listed_single_package",
+      "promotion": null,
+      "price_source": "https://www.fairprice.com.sg/product/fairprice-rice-vermicelli-400g-10459245",
+      "checked_on": "2026-10-28",
+      "retrieved_at": "2026-10-28T10:07:23.943854+00:00",
+      "source_html_sha256": "4f7ffe053a99b5ba9860261fa5ee0be850ac1c6b3035e5972e2d080bae4b2ffa",
+      "notes": "Dry rice vermicelli, not cooked noodles."
+    },
+    {
+      "canonical_name": "salt",
+      "retailer": "FairPrice",
+      "retailer_product_id": "432823",
+      "marketplace_listing": false,
+      "product_name": "FairPrice Premium Quality Fine Salt",
+      "brand": "Fairprice",
+      "receipt_name": "FAIRPRICE PREMIUM FINE SALT 500G",
+      "receipt_name_source": "retailer_sap_product_name",
+      "receipt_name_verified_on_receipt": false,
+      "pack_description": "500g",
+      "contents_per_package": 500,
+      "contents_unit": "g",
+      "purchase_unit": "pack",
+      "quantity_basis": "as_sold",
+      "quantity_evidence": {
+        "field": "entity.metaData.DisplayUnit",
+        "value": "500g"
+      },
+      "recipe_units": [
+        "g"
+      ],
+      "recipe_quantity_conversion": "same_dimension_as_sold_only",
+      "unit_price_sgd": "0.45",
+      "regular_price_sgd": "0.45",
+      "price_basis": "listed_single_package",
+      "promotion": null,
+      "price_source": "https://www.fairprice.com.sg/product/fairprice-premium-fine-salt-500g-432823",
+      "checked_on": "2026-10-28",
+      "retrieved_at": "2026-10-28T10:07:25.200725+00:00",
+      "source_html_sha256": "318cdaac28aee8be7bcf460384b72d51a7a3c6884df5f9e0b0bcf95d577d4e21",
+      "notes": ""
+    },
+    {
+      "canonical_name": "sesame oil",
+      "retailer": "FairPrice",
+      "retailer_product_id": "278590",
+      "marketplace_listing": false,
+      "product_name": "Double Pagoda Sesame Oil - Pure",
+      "brand": "Double Pagoda",
+      "receipt_name": "DOUBLE PAGODA 100% PURE SESAME OIL 150ML",
+      "receipt_name_source": "retailer_sap_product_name",
+      "receipt_name_verified_on_receipt": false,
+      "pack_description": "150ml",
+      "contents_per_package": 150,
+      "contents_unit": "ml",
+      "purchase_unit": "pack",
+      "quantity_basis": "as_sold",
+      "quantity_evidence": {
+        "field": "entity.metaData.DisplayUnit",
+        "value": "150ml"
+      },
+      "recipe_units": [
+        "ml"
+      ],
+      "recipe_quantity_conversion": "same_dimension_as_sold_only",
+      "unit_price_sgd": "3.50",
+      "regular_price_sgd": "3.50",
+      "price_basis": "listed_single_package",
+      "promotion": null,
+      "price_source": "https://www.fairprice.com.sg/product/278590",
+      "checked_on": "2026-10-28",
+      "retrieved_at": "2026-10-28T10:07:24.777590+00:00",
+      "source_html_sha256": "2b5b420ffe95104ed51ca7e114cee65e8c97c9ce4c5ee0f881117c7178a86f1a",
+      "notes": ""
+    },
+    {
+      "canonical_name": "soba noodle",
+      "retailer": "FairPrice",
+      "retailer_product_id": "12604178",
+      "marketplace_listing": false,
+      "product_name": "Hakubaku Organic Soba",
+      "brand": "Hakubaku",
+      "receipt_name": "HAKUBAKU ORGANIC NOODLE-SOBA 270G",
+      "receipt_name_source": "retailer_sap_product_name",
+      "receipt_name_verified_on_receipt": false,
+      "pack_description": "270g",
+      "contents_per_package": 270,
+      "contents_unit": "g",
+      "purchase_unit": "pack",
+      "quantity_basis": "as_sold",
+      "quantity_evidence": {
+        "field": "entity.metaData.DisplayUnit",
+        "value": "270g"
+      },
+      "recipe_units": [
+        "g"
+      ],
+      "recipe_quantity_conversion": "same_dimension_as_sold_only",
+      "unit_price_sgd": "4.28",
+      "regular_price_sgd": "4.28",
+      "price_basis": "listed_single_package",
+      "promotion": null,
+      "price_source": "https://www.fairprice.com.sg/product/hakubaku-organic-soba-270g-12604178",
+      "checked_on": "2026-10-28",
+      "retrieved_at": "2026-10-28T10:07:25.022584+00:00",
+      "source_html_sha256": "2bef9143d57f18ce2f5f9d14eec5ec3bdcf1b2d6aeb0751169602c7a35cda5ee",
+      "notes": "Dry soba noodles; no cooked-weight multiplier is inferred."
+    },
+    {
+      "canonical_name": "soy sauce",
+      "retailer": "FairPrice",
+      "retailer_product_id": "11845228",
+      "marketplace_listing": false,
+      "product_name": "FairPrice Soya Sauce - Light",
+      "brand": "Fairprice",
+      "receipt_name": "FAIRPRICE SOY SAUCE - LIGHT 660ML",
+      "receipt_name_source": "retailer_sap_product_name",
+      "receipt_name_verified_on_receipt": false,
+      "pack_description": "660ml",
+      "contents_per_package": 660,
+      "contents_unit": "ml",
+      "purchase_unit": "pack",
+      "quantity_basis": "as_sold",
+      "quantity_evidence": {
+        "field": "entity.metaData.DisplayUnit",
+        "value": "660ml"
+      },
+      "recipe_units": [
+        "ml"
+      ],
+      "recipe_quantity_conversion": "same_dimension_as_sold_only",
+      "unit_price_sgd": "2.42",
+      "regular_price_sgd": "2.42",
+      "price_basis": "listed_single_package",
+      "promotion": null,
+      "price_source": "https://www.fairprice.com.sg/product/fairprice-light-soya-sauce-660g-11845228",
+      "checked_on": "2026-10-28",
+      "retrieved_at": "2026-10-28T10:07:25.714199+00:00",
+      "source_html_sha256": "739b399f873f73ad608f2577eca05fe64ae3cad8757865ee707b37313efb9ada",
+      "notes": ""
+    },
+    {
+      "canonical_name": "spinach",
+      "retailer": "FairPrice",
+      "retailer_product_id": "13236468",
+      "marketplace_listing": false,
+      "product_name": "Chef Chinese Spinach (Phuay Leng)",
+      "brand": "Chef",
+      "receipt_name": "CHEF SPINACH 200G",
+      "receipt_name_source": "retailer_sap_product_name",
+      "receipt_name_verified_on_receipt": false,
+      "pack_description": "200g",
+      "contents_per_package": 200,
+      "contents_unit": "g",
+      "purchase_unit": "pack",
+      "quantity_basis": "as_sold",
+      "quantity_evidence": {
+        "field": "entity.metaData.DisplayUnit",
+        "value": "200g"
+      },
+      "recipe_units": [
+        "g"
+      ],
+      "recipe_quantity_conversion": "same_dimension_as_sold_only",
+      "unit_price_sgd": "1.50",
+      "regular_price_sgd": "1.50",
+      "price_basis": "listed_single_package",
+      "promotion": null,
+      "price_source": "https://www.fairprice.com.sg/product/chef-chinese-spinach-phuay-leng-200g-13236468",
+      "checked_on": "2026-10-28",
+      "retrieved_at": "2026-10-28T10:07:25.449874+00:00",
+      "source_html_sha256": "1373482d91e82fafa75bc8bae57358ab71e36d79a342826357b2d7658eb0b3b3",
+      "notes": ""
+    },
+    {
+      "canonical_name": "spring onion",
+      "retailer": "FairPrice",
+      "retailer_product_id": "10344536",
+      "marketplace_listing": false,
+      "product_name": "Pasar Malaysia Spring Onion",
+      "brand": "Pasar",
+      "receipt_name": "PASAR SPRING ONION",
+      "receipt_name_source": "retailer_sap_product_name",
+      "receipt_name_verified_on_receipt": false,
+      "pack_description": "100g",
+      "contents_per_package": 100,
+      "contents_unit": "g",
+      "purchase_unit": "pack",
+      "quantity_basis": "as_sold",
+      "quantity_evidence": {
+        "field": "entity.metaData.DisplayUnit",
+        "value": "100g"
+      },
+      "recipe_units": [
+        "g"
+      ],
+      "recipe_quantity_conversion": "same_dimension_as_sold_only",
+      "unit_price_sgd": "1.35",
+      "regular_price_sgd": "1.35",
+      "price_basis": "listed_single_package",
+      "promotion": null,
+      "price_source": "https://www.fairprice.com.sg/product/pasar-malaysia-spring-onion-100g-10344536",
+      "checked_on": "2026-10-28",
+      "retrieved_at": "2026-10-28T10:07:25.982395+00:00",
+      "source_html_sha256": "03794ba3d03e7c57e512a402a0fc4f1821cd613fb6214262d5fed61cb3698ef7",
+      "notes": ""
+    },
+    {
+      "canonical_name": "tempeh",
+      "retailer": "FairPrice",
+      "retailer_product_id": "13231130",
+      "marketplace_listing": false,
+      "product_name": "Botak Farmer Tempeh",
+      "brand": "BOTAK FARMER",
+      "receipt_name": "BOTAK FARMER TEMPEH 170G",
+      "receipt_name_source": "retailer_sap_product_name",
+      "receipt_name_verified_on_receipt": false,
+      "pack_description": "170g",
+      "contents_per_package": 170,
+      "contents_unit": "g",
+      "purchase_unit": "pack",
+      "quantity_basis": "as_sold",
+      "quantity_evidence": {
+        "field": "entity.metaData.DisplayUnit",
+        "value": "170g"
+      },
+      "recipe_units": [
+        "g"
+      ],
+      "recipe_quantity_conversion": "same_dimension_as_sold_only",
+      "unit_price_sgd": "1.60",
+      "regular_price_sgd": "1.60",
+      "price_basis": "listed_single_package",
+      "promotion": null,
+      "price_source": "https://www.fairprice.com.sg/product/botak-farmer-tempeh-170g-13231130",
+      "checked_on": "2026-10-28",
+      "retrieved_at": "2026-10-28T10:07:26.315321+00:00",
+      "source_html_sha256": "91ba8cee6716817a5cfce6f96aace47a55c56150b05b1ec66acbbf7a6620ad69",
+      "notes": ""
+    },
+    {
+      "canonical_name": "tomato",
+      "retailer": "FairPrice",
+      "retailer_product_id": "12228635",
+      "marketplace_listing": false,
+      "product_name": "Fresh Tomatoes",
+      "brand": "Fresh",
+      "receipt_name": "FRESH TOMATOES 600G",
+      "receipt_name_source": "retailer_sap_product_name",
+      "receipt_name_verified_on_receipt": false,
+      "pack_description": "600g",
+      "contents_per_package": 600,
+      "contents_unit": "g",
+      "purchase_unit": "pack",
+      "quantity_basis": "as_sold",
+      "quantity_evidence": {
+        "field": "entity.metaData.DisplayUnit",
+        "value": "600g"
+      },
+      "recipe_units": [
+        "g"
+      ],
+      "recipe_quantity_conversion": "same_dimension_as_sold_only",
+      "unit_price_sgd": "2.35",
+      "regular_price_sgd": "2.35",
+      "price_basis": "listed_single_package",
+      "promotion": null,
+      "price_source": "https://www.fairprice.com.sg/product/fresh-tomatoes-600g-12228635",
+      "checked_on": "2026-10-28",
+      "retrieved_at": "2026-10-28T10:07:26.449691+00:00",
+      "source_html_sha256": "4e2f6dc41e838dda7430e0a3d02964cb831c28fb115d16af0f56e3c0c76f41ba",
+      "notes": ""
+    },
+    {
+      "canonical_name": "turmeric powder",
+      "retailer": "FairPrice",
+      "retailer_product_id": "12109513",
+      "marketplace_listing": false,
+      "product_name": "Baba's Packet Powder - Turmeric",
+      "brand": "Baba'S",
+      "receipt_name": "BABA'S TURMERIC POWDER",
+      "receipt_name_source": "retailer_sap_product_name",
+      "receipt_name_verified_on_receipt": false,
+      "pack_description": "125g",
+      "contents_per_package": 125,
+      "contents_unit": "g",
+      "purchase_unit": "pack",
+      "quantity_basis": "as_sold",
+      "quantity_evidence": {
+        "field": "entity.metaData.DisplayUnit",
+        "value": "125g"
+      },
+      "recipe_units": [
+        "g"
+      ],
+      "recipe_quantity_conversion": "same_dimension_as_sold_only",
+      "unit_price_sgd": "1.78",
+      "regular_price_sgd": "1.78",
+      "price_basis": "listed_single_package",
+      "promotion": null,
+      "price_source": "https://www.fairprice.com.sg/product/12109513",
+      "checked_on": "2026-10-28",
+      "retrieved_at": "2026-10-28T10:07:27.029697+00:00",
+      "source_html_sha256": "eaf742da1ae1d8699d2ed684135fb045bc560720c8bbd63659d0772452900e00",
+      "notes": ""
+    },
+    {
+      "canonical_name": "uncooked rice",
+      "retailer": "FairPrice",
+      "retailer_product_id": "13097849",
+      "marketplace_listing": false,
+      "product_name": "FairPrice Thai Hom Mali Superior Fragrant Rice",
+      "brand": "Fairprice",
+      "receipt_name": "FAIRPRICE SUPERIOR FRAGRANT RICE 1KG",
+      "receipt_name_source": "retailer_sap_product_name",
+      "receipt_name_verified_on_receipt": false,
+      "pack_description": "1kg",
+      "contents_per_package": 1,
+      "contents_unit": "kg",
+      "purchase_unit": "pack",
+      "quantity_basis": "as_sold",
+      "quantity_evidence": {
+        "field": "entity.metaData.DisplayUnit",
+        "value": "1kg"
+      },
+      "recipe_units": [
+        "g"
+      ],
+      "recipe_quantity_conversion": "same_dimension_as_sold_only",
+      "unit_price_sgd": "3.90",
+      "regular_price_sgd": "3.90",
+      "price_basis": "listed_single_package",
+      "promotion": null,
+      "price_source": "https://www.fairprice.com.sg/product/fairprice-gold-thai-hom-mali-superior-rice-1kg-13097849",
+      "checked_on": "2026-10-28",
+      "retrieved_at": "2026-10-28T10:07:27.234580+00:00",
+      "source_html_sha256": "2156f065a1c59e825b245edef3b53b24150f9fb665ac0ea3bd2cf3b8b8eb859e",
+      "notes": "Dry rice. Preserve the listed 1 kg package; convert kg to g only for explicit recipe arithmetic."
+    },
+    {
+      "canonical_name": "water spinach",
+      "retailer": "FairPrice",
+      "retailer_product_id": "13167828",
+      "marketplace_listing": false,
+      "product_name": "Simply Finest Kang Kong",
+      "brand": "Simply Finest",
+      "receipt_name": "SIMPLY FINEST KANG KONG 300G",
+      "receipt_name_source": "retailer_sap_product_name",
+      "receipt_name_verified_on_receipt": false,
+      "pack_description": "300g",
+      "contents_per_package": 300,
+      "contents_unit": "g",
+      "purchase_unit": "pack",
+      "quantity_basis": "as_sold",
+      "quantity_evidence": {
+        "field": "entity.metaData.DisplayUnit",
+        "value": "300g"
+      },
+      "recipe_units": [
+        "g"
+      ],
+      "recipe_quantity_conversion": "same_dimension_as_sold_only",
+      "unit_price_sgd": "1.95",
+      "regular_price_sgd": "1.95",
+      "price_basis": "listed_single_package",
+      "promotion": null,
+      "price_source": "https://www.fairprice.com.sg/product/simply-finest-kang-kong-300g-13167828",
+      "checked_on": "2026-10-28",
+      "retrieved_at": "2026-10-28T10:07:27.079124+00:00",
+      "source_html_sha256": "9b24a5c25b0662e32939cc37559852e1595d4521918b561865ab4416101d9e80",
+      "notes": ""
+    }
+  ],
+  "excluded_ingredients": [
+    {
+      "canonical_name": "water",
+      "reason": "Tap water is assumed available; no bottled-water purchase or invented zero-price receipt line is generated."
+    }
+  ],
+  "unresolved_ingredients": [],
+  "generation_rules": [
+    "Look up products by canonical_name. This file contains retailer SKUs, not backend ingredient IDs, and is not loaded by AI extraction routes.",
+    "One purchased package costs unit_price_sgd. Multiply whole purchased packages by that price with Decimal; do not multiply package price by grams or millilitres.",
+    "Total as-sold contents equals purchased packages times contents_per_package. For example, two 1 kg packs provide 2 kg, not 2000 kg.",
+    "Preserve contents_unit in receipt text. For comparison only, 1 kg equals 1000 g and 1 l equals 1000 ml. Never invent piece-to-mass, mass-to-volume, cooked-yield or trim-yield conversions.",
+    "Do not multiply firm tofu's total pack mass by items_per_package. For eggs the primary contents already count individual eggs.",
+    "Cabbage needs measured head weight and canned chickpeas need verified drained weight before claiming recipe quantities are sufficient.",
+    "Promotional prices apply to one package at this snapshot date; their conditions and dates are recorded. For a later synthetic receipt date, use regular_price_sgd when the recorded promotion is inapplicable; do not claim it is a fresh live quote.",
+    "Retailer stock names can be used for synthetic receipt lines but are not claimed to be exact printed receipt descriptions. Any later abbreviation must be identified as derived in the generated batch records.",
+    "Ignore tap water for shopping coverage, but do not silently ignore other missing ingredients or assume pantry items are present without scenario configuration.",
+    "Save new receipt runs under ignored dataset/work/; explicitly select wanted images for dataset/receipt/generated/ and update receipt/manifest.json."
+  ],
+  "source_recipes": [
+    {
+      "path": "backend/seed/recipes/bee-hoon-cabbage.yaml",
+      "sha256": "70dc7793bb0c9d19b6a2c136e1e48164de830809a6b230bf51db9e5b9024345f",
+      "canonical_names": [
+        "cabbage",
+        "canola oil",
+        "carrot",
+        "garlic",
+        "rice vermicelli",
+        "soy sauce",
+        "water"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/bee-hoon-egg.yaml",
+      "sha256": "dc39ea79004362696b938ea75a7633a599c8f8abf71e5771dc4b6a24153cda07",
+      "canonical_names": [
+        "cabbage",
+        "canola oil",
+        "carrot",
+        "egg",
+        "garlic",
+        "rice vermicelli",
+        "soy sauce",
+        "water"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/cabbage-carrot-egg-fried-rice.yaml",
+      "sha256": "567f592e1bd74e2778134a4a287b1f2aaf94fe47502a0e130715f80aba88b6a3",
+      "canonical_names": [
+        "cabbage",
+        "canola oil",
+        "carrot",
+        "cooked rice",
+        "egg",
+        "frozen pea",
+        "garlic",
+        "soy sauce",
+        "spring onion"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/cabbage-tofu-stir-fry-less-oil.yaml",
+      "sha256": "71a3c8ebc952dcd03defeb40b0252db16f8d1f88a7f6dbf8e0bc106c98be99ea",
+      "canonical_names": [
+        "cabbage",
+        "canola oil",
+        "firm tofu",
+        "garlic",
+        "soy sauce",
+        "uncooked rice",
+        "water"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/cabbage-tofu-stir-fry.yaml",
+      "sha256": "b72b57896491c737f0b425076491d154d1a39c97c8e8bef4968382029371e31b",
+      "canonical_names": [
+        "cabbage",
+        "canola oil",
+        "firm tofu",
+        "garlic",
+        "soy sauce",
+        "uncooked rice",
+        "water"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/chicken-broccoli-stir-fry.yaml",
+      "sha256": "fa89b6dd9c67b2783222ecfa48384d8cb345e6d48333c677c9af9001f97a5751",
+      "canonical_names": [
+        "broccoli",
+        "canola oil",
+        "chicken thigh",
+        "garlic",
+        "ginger",
+        "soy sauce",
+        "uncooked rice",
+        "water"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/chicken-rice-porridge.yaml",
+      "sha256": "b98267ba8139080ccdfe2f46dca9a112ebe8c78840049afe1355731d71412f78",
+      "canonical_names": [
+        "chicken thigh",
+        "ginger",
+        "salt",
+        "spring onion",
+        "uncooked rice",
+        "water"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/chicken-vegetable-fried-rice.yaml",
+      "sha256": "fb5814275f4e7012967e863fad935712c6a9c799072a13007d860459c6536dde",
+      "canonical_names": [
+        "canola oil",
+        "carrot",
+        "chicken thigh",
+        "cooked rice",
+        "egg",
+        "frozen pea",
+        "garlic",
+        "soy sauce",
+        "spring onion"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/chickpea-tomato-curry.yaml",
+      "sha256": "e83aa430fd756e3accfdff81650bab2572cbc7b0578725b29f29fbadfc64796a",
+      "canonical_names": [
+        "canned chickpea",
+        "canola oil",
+        "cumin powder",
+        "garlic",
+        "onion",
+        "salt",
+        "tomato",
+        "turmeric powder",
+        "uncooked rice",
+        "water"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/chye-sim-egg-bee-hoon.yaml",
+      "sha256": "71f16194a07cf8bc7f3403fdbd7bbcd578c21a4956553441b19374c8601e19cb",
+      "canonical_names": [
+        "black pepper",
+        "chye sim",
+        "egg",
+        "garlic",
+        "ginger",
+        "rice vermicelli",
+        "salt",
+        "water"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/coconut-chicken-curry.yaml",
+      "sha256": "d5df181a0e8ac43f4bbd2264d25093a2ed52808dfe733f3663e05b628ba0a6d5",
+      "canonical_names": [
+        "canola oil",
+        "carrot",
+        "chicken thigh",
+        "chilli paste",
+        "coconut milk",
+        "garlic",
+        "ginger",
+        "long bean",
+        "onion",
+        "salt",
+        "turmeric powder",
+        "uncooked rice",
+        "water"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/coconut-tofu-curry.yaml",
+      "sha256": "d4dc54f5d7e1848e8361b2768b7caaea457dfb6bc98f3aebfc989ef0337e9f7f",
+      "canonical_names": [
+        "canola oil",
+        "carrot",
+        "chilli paste",
+        "coconut milk",
+        "firm tofu",
+        "garlic",
+        "ginger",
+        "long bean",
+        "onion",
+        "salt",
+        "turmeric powder",
+        "uncooked rice",
+        "water"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/cucumber-tomato-chickpea-salad.yaml",
+      "sha256": "c5f8efecdcadfa9d67751c71b56697d623c0b73acad11843d3e671710b512555",
+      "canonical_names": [
+        "black pepper",
+        "canned chickpea",
+        "canola oil",
+        "cooked rice",
+        "cucumber",
+        "lemon",
+        "salt",
+        "tomato"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/egg-fried-rice.yaml",
+      "sha256": "9e0e4006293e2a490cd2d7d9540e643b07948bf2238a8a9d68cc8c62b84ee3bb",
+      "canonical_names": [
+        "canola oil",
+        "carrot",
+        "cooked rice",
+        "egg",
+        "frozen pea",
+        "garlic",
+        "soy sauce",
+        "spring onion"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/fish-tomato-soup.yaml",
+      "sha256": "8aa8d644dc320ef8a9f1f632ac3c2cfc9cd92c9a10a90c1705ef71124c96f9ee",
+      "canonical_names": [
+        "cod fillet",
+        "ginger",
+        "rice vermicelli",
+        "salt",
+        "spring onion",
+        "tomato",
+        "water"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/garlic-water-spinach.yaml",
+      "sha256": "b4acf3a7c5f14d63716cd0532ff498c42b72dffbc3c97ba059b5cfcfaf113ee3",
+      "canonical_names": [
+        "canola oil",
+        "firm tofu",
+        "garlic",
+        "soy sauce",
+        "uncooked rice",
+        "water",
+        "water spinach"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/ginger-chicken-rice-less-oil.yaml",
+      "sha256": "335aaa0a375847d30d791472e2f3c854c82e223cc68f9733cf50b17448e24cdf",
+      "canonical_names": [
+        "bok choy",
+        "chicken thigh",
+        "garlic",
+        "ginger",
+        "soy sauce",
+        "spring onion",
+        "uncooked rice",
+        "water"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/ginger-chicken-rice.yaml",
+      "sha256": "7887575a757156f271ce161dd67d6b0d79b4beced8dcf4ab794bfb564119b110",
+      "canonical_names": [
+        "bok choy",
+        "canola oil",
+        "chicken thigh",
+        "garlic",
+        "ginger",
+        "soy sauce",
+        "spring onion",
+        "uncooked rice",
+        "water"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/ginger-chicken-soup.yaml",
+      "sha256": "547e136cb2ad046b52ec84a91dabed6059c06316d5b12bebedddc599b1611bea",
+      "canonical_names": [
+        "carrot",
+        "chicken thigh",
+        "ginger",
+        "potato",
+        "salt",
+        "spring onion",
+        "water"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/lemon-pepper-chicken.yaml",
+      "sha256": "fcb5563b99945bc3f6389380225a0f9ec1cc9b24c2bc9619386f922d4d4814bf",
+      "canonical_names": [
+        "black pepper",
+        "canola oil",
+        "carrot",
+        "chicken thigh",
+        "lemon",
+        "potato",
+        "salt",
+        "water"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/lemon-pepper-fish.yaml",
+      "sha256": "556f5cffc165524618048fdb3a4f183afb139184289bd8ede7f3ada8ff3b4f0a",
+      "canonical_names": [
+        "black pepper",
+        "canola oil",
+        "carrot",
+        "cod fillet",
+        "lemon",
+        "potato",
+        "salt",
+        "water"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/lentil-spinach-dhal.yaml",
+      "sha256": "51055840c70374db4e129b90a20a0529cf224b00ccbd2c8343638fd37d0a51b2",
+      "canonical_names": [
+        "canola oil",
+        "cumin powder",
+        "garlic",
+        "onion",
+        "red lentil",
+        "salt",
+        "spinach",
+        "tomato",
+        "turmeric powder",
+        "uncooked rice",
+        "water"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/microwave-broccoli-chickpea-rice.yaml",
+      "sha256": "768244b629cf246620f1177cef61738af429f49b01d11825d86f9cb9d8355f1a",
+      "canonical_names": [
+        "broccoli",
+        "canned chickpea",
+        "canola oil",
+        "cooked rice",
+        "garlic",
+        "lemon",
+        "salt",
+        "water"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/mushroom-omelette.yaml",
+      "sha256": "e131ff8d56f296c9a836e5fb9f1134db12d7bff8bab71ea93e7999fd6bd1fba9",
+      "canonical_names": [
+        "canola oil",
+        "egg",
+        "fresh shiitake mushroom",
+        "salt",
+        "spring onion",
+        "uncooked rice",
+        "water"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/mushroom-rice-porridge.yaml",
+      "sha256": "8b7c667fd514beb2db19168c97d9ada309aff2a874703c4ee927ab9a3a1871b8",
+      "canonical_names": [
+        "firm tofu",
+        "fresh shiitake mushroom",
+        "ginger",
+        "soy sauce",
+        "spring onion",
+        "uncooked rice",
+        "water"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/potato-cauliflower-curry.yaml",
+      "sha256": "62d2af44bc246b62efbec64ead3699f030b012bd378377c2176824a762f9270c",
+      "canonical_names": [
+        "canola oil",
+        "cauliflower",
+        "cumin powder",
+        "garlic",
+        "onion",
+        "potato",
+        "salt",
+        "tomato",
+        "turmeric powder",
+        "uncooked rice",
+        "water"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/pumpkin-lentil-soup.yaml",
+      "sha256": "7f44a2045bb568240a82b7d6254a9c60d778455c635b70b669092760be04d000",
+      "canonical_names": [
+        "canola oil",
+        "cumin powder",
+        "garlic",
+        "onion",
+        "potato",
+        "pumpkin",
+        "red lentil",
+        "salt",
+        "water"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/quicker-tomato-egg-rice.yaml",
+      "sha256": "c2c88bfefe4eb8af2c84924a9f1d34a0cb885e5067a2b3cf542d2754e161bf71",
+      "canonical_names": [
+        "canola oil",
+        "cooked rice",
+        "egg",
+        "salt",
+        "spring onion",
+        "tomato",
+        "water"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/red-lentil-dhal.yaml",
+      "sha256": "5b1684b6000379d52a1c312753bf22509bd27a2c2ad091e17db57452214800ee",
+      "canonical_names": [
+        "canola oil",
+        "cumin powder",
+        "garlic",
+        "onion",
+        "red lentil",
+        "salt",
+        "tomato",
+        "turmeric powder",
+        "uncooked rice",
+        "water"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/rice-cooker-bok-choy-tofu-rice.yaml",
+      "sha256": "7e762f4ca3de9d24b2b01c92c10cb3593b22e4502334bc22f7d65a5d815c6fe2",
+      "canonical_names": [
+        "bok choy",
+        "firm tofu",
+        "garlic",
+        "ginger",
+        "soy sauce",
+        "uncooked rice",
+        "water"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/rice-vermicelli-chicken-soup.yaml",
+      "sha256": "214867afc28f463fd8392caabce6940214b1f72d0cc05aa347ebffe6b3ab35e1",
+      "canonical_names": [
+        "bok choy",
+        "chicken thigh",
+        "ginger",
+        "rice vermicelli",
+        "soy sauce",
+        "water"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/rice-vermicelli-tofu-soup.yaml",
+      "sha256": "9cb5879622ea8e5939f23fd3fbb4b141d51a2ac31a2114cb5aa1e7477954bd38",
+      "canonical_names": [
+        "bok choy",
+        "firm tofu",
+        "ginger",
+        "rice vermicelli",
+        "soy sauce",
+        "water"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/sambal-prawn.yaml",
+      "sha256": "b8153c3bf1eccd35e8c3f23215c83fdde99c15539ce9e3de445d0fc68bbb02fa",
+      "canonical_names": [
+        "canola oil",
+        "chilli paste",
+        "garlic",
+        "onion",
+        "prawn",
+        "salt",
+        "tomato",
+        "uncooked rice",
+        "water"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/sambal-tofu.yaml",
+      "sha256": "2216629f24f2b6e1dca04d90d0aa37dbfb2e5a5238efc5db835b954594a1f2d7",
+      "canonical_names": [
+        "canola oil",
+        "chilli paste",
+        "firm tofu",
+        "garlic",
+        "onion",
+        "salt",
+        "tomato",
+        "uncooked rice",
+        "water"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/sesame-soba-egg.yaml",
+      "sha256": "35cb2fd455b3eee93d264324ca6de8f175e69e8f7a99e990f3871ad19dbf2475",
+      "canonical_names": [
+        "carrot",
+        "cucumber",
+        "egg",
+        "sesame oil",
+        "soba noodle",
+        "soy sauce",
+        "water"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/sesame-soba-tofu.yaml",
+      "sha256": "9cd6d7704cd13c34edb34df06b954f477d7e0c91c9fb08f1d48f9aa9aee34dac",
+      "canonical_names": [
+        "carrot",
+        "cucumber",
+        "firm tofu",
+        "sesame oil",
+        "soba noodle",
+        "soy sauce",
+        "water"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/steamed-egg-tofu.yaml",
+      "sha256": "0f77d98e0108ef928b486915069c612ef8cb859519ac315958134ad32f102d34",
+      "canonical_names": [
+        "egg",
+        "firm tofu",
+        "soy sauce",
+        "spring onion",
+        "uncooked rice",
+        "water"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/steamed-egg.yaml",
+      "sha256": "bfff46cdabc87dbd0846d87947f7840ec313607c04221ebf98b5f2c78517cb62",
+      "canonical_names": [
+        "egg",
+        "soy sauce",
+        "spring onion",
+        "uncooked rice",
+        "water"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/steamed-ginger-fish.yaml",
+      "sha256": "54f796000ab8ec2979d4e7302364d7c768bf0c5007b92c7dfcc9aaff1df1c3d5",
+      "canonical_names": [
+        "black pepper",
+        "broccoli",
+        "cod fillet",
+        "ginger",
+        "soy sauce",
+        "spring onion",
+        "uncooked rice",
+        "water"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/tempeh-cabbage-stir-fry.yaml",
+      "sha256": "f3bda80e1dcb705c6aa22f38c0953fca8d4f94d9a9afea6d6e3f384e72a0c016",
+      "canonical_names": [
+        "cabbage",
+        "canola oil",
+        "garlic",
+        "soy sauce",
+        "tempeh",
+        "uncooked rice",
+        "water"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/tempeh-long-bean-stir-fry.yaml",
+      "sha256": "24d28446acf1b06c4b897bac1ee0a0dfecaf08c0e439e1fcab40febbb8183101",
+      "canonical_names": [
+        "canola oil",
+        "garlic",
+        "long bean",
+        "soy sauce",
+        "tempeh",
+        "uncooked rice",
+        "water"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/tofu-broccoli-stir-fry.yaml",
+      "sha256": "1669bd3a413f8560dfbbe8ce43f20c8189ae2e80abd5428690474f9347e8006e",
+      "canonical_names": [
+        "broccoli",
+        "canola oil",
+        "firm tofu",
+        "garlic",
+        "ginger",
+        "soy sauce",
+        "uncooked rice",
+        "water"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/tofu-mushroom-rice.yaml",
+      "sha256": "9ec6c47fe68b3198e8b431fbf918d514f7068fde4a0267907dabfd737c8847bc",
+      "canonical_names": [
+        "canola oil",
+        "firm tofu",
+        "fresh shiitake mushroom",
+        "garlic",
+        "ginger",
+        "soy sauce",
+        "spring onion",
+        "uncooked rice",
+        "water"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/tofu-mushroom-soup.yaml",
+      "sha256": "59352d7903c3d2eaf0d4990acf1e8cd048e414c74327f734d2b42565347599ad",
+      "canonical_names": [
+        "cabbage",
+        "firm tofu",
+        "fresh shiitake mushroom",
+        "ginger",
+        "rice vermicelli",
+        "soy sauce",
+        "spring onion",
+        "water"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/tofu-vegetable-fried-rice.yaml",
+      "sha256": "dbe12cfb72bd588e2c02abe181abeb76306ad0632c77ecb8b091c5dc0c5d682f",
+      "canonical_names": [
+        "canola oil",
+        "carrot",
+        "cooked rice",
+        "firm tofu",
+        "frozen pea",
+        "garlic",
+        "soy sauce",
+        "spring onion"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/tomato-egg-stir-fry-less-oil.yaml",
+      "sha256": "b0d6c730a2f17931cb184d708e5b6a3d4f63074357c57c869423bb43c8217a57",
+      "canonical_names": [
+        "canola oil",
+        "egg",
+        "salt",
+        "spring onion",
+        "tomato",
+        "uncooked rice",
+        "water"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/tomato-egg-stir-fry.yaml",
+      "sha256": "ac08c47bf677aa8e21778e50e7618d9437c779357c9b8e46562494127936d510",
+      "canonical_names": [
+        "canola oil",
+        "egg",
+        "salt",
+        "spring onion",
+        "tomato",
+        "uncooked rice",
+        "water"
+      ]
+    },
+    {
+      "path": "backend/seed/recipes/tomato-onion-omelette.yaml",
+      "sha256": "3691d41b8732e13965d2a1de8bb5dd534e3503c12428f04cb629c65443ca0e64",
+      "canonical_names": [
+        "canola oil",
+        "egg",
+        "onion",
+        "salt",
+        "tomato",
+        "uncooked rice",
+        "water"
+      ]
+    }
+  ]
+}

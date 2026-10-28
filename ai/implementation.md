@@ -4,6 +4,46 @@ This plan has **12 sequential parts**. Each part can be requested and completed 
 its own, for example: "Implement Part 4 only." Add relevant tests and documentation
 as each part is implemented rather than deferring them to the end.
 
+Retail receipt catalogue addition (2026-10-28): collect public FairPrice pages once
+and publish `dataset/catalogs/ingridients.json`, with 41 retail products covering
+the 42 ingredient names in all 48 backend recipes; tap water is explicitly
+excluded from purchases. Record retailer stock-name provenance, displayed pack
+quantities, Decimal prices cross-checked against Product JSON-LD, five single-pack
+promotions, source URLs/page hashes, retrieval dates and source recipe hashes.
+No stock description is claimed to be verified printed receipt text. Cabbage head
+weight has conflicting source metadata; chickpea drained weight is unverified.
+Both remain explicit quantity-conversion caveats. An offline catalogue validator
+checks coverage and detects changed recipes without fetching or updating prices.
+This is synthetic-generation data, separate from backend ID matching and model
+API rates. Historical generation helpers are not yet wired to the catalogue;
+configuration-driven generation/selection remains future work. No new receipt
+images, model calls, AWS resources or extraction-route changes were made.
+Verification: all 41 saved product pages match the published SKUs, names, stock
+descriptions, package labels, prices and page hashes; all 48 recipe ingredient
+lists match the snapshot. Offline validation and focused Ruff checks passed.
+Negative checks reject incomplete coverage, invalid prices, unsupported receipt
+verification claims, changed recipe hashes, duplicate SKUs and incorrect package
+scaling. Raw collection evidence remains ignored; all changes stay within `ai/`.
+
+Dataset layout update (2026-10-27): preserve the existing receipt layout, with
+selected synthetic images under `dataset/receipt/generated/` and reference photos
+at the `dataset/receipt/` root. All 30 generated images and four reference images were retained
+without changing their bytes. `receipt/manifest.json` records hashes, synthetic
+status and selected recipe/scenario provenance, with no reviewed extraction labels.
+The original batch records, original scenario blueprint and local image archive
+were moved under ignored `dataset/work/receipts/20261024/`. Historical generation
+paths are preserved as provenance; active gallery paths use its local `images/`.
+Path-dependent tools were updated; finalisation writes only ignored batch output,
+and the generated-receipt runner retains its original `receipt/generated/` path
+and 30-image scope. Catalogue/config folders are reserved with documentation only. No retailer
+scrape, ingredient catalogue, new image generation or model/AWS call was performed.
+Catalogue-driven generation and selection automation remain separate future work.
+Verification: all 34 curated image hashes and the generated runner's original
+30-image fingerprint match. Local gallery/finalisation and ignored-output guards
+passed; temporary validation copies were removed. Sixteen evaluation tests,
+29 standalone checks and full AI Ruff checks passed. The catalogue file remains
+absent; only reserved directory documentation was added.
+
 Model accounting addition (2026-10-26): integrate school catalogue rates into
 the existing shared model pipeline. `app/pricing.py` caches rates per client,
 calculates Decimal estimates and records provenance. Every model attempt logs
