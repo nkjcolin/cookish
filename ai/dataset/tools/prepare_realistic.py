@@ -7,8 +7,8 @@ from decimal import Decimal
 from pathlib import Path
 
 DATASET = Path(__file__).resolve().parents[1]
-BASELINE = Path(__file__).resolve().parent / "specs/original_cases.json"
-REVISION = DATASET / "work/realistic_v2"
+BASELINE = DATASET / "work/receipts/20261024/original_cases.json"
+REVISION = DATASET / "work/receipts/realistic_v2"
 VEGETABLES = "https://www.fairprice.com.sg/vegetables"
 
 # Content is usable inventory quantity per purchased retail package, not AI count.
@@ -244,6 +244,10 @@ PRODUCTS = [
 
 
 def main():
+    if not BASELINE.is_file():
+        raise SystemExit(
+            "Historical local baseline is missing; batch archives are not stored in Git"
+        )
     if (REVISION / "cases.json").exists():
         raise FileExistsError("Revision already prepared; refusing to reset it")
     REVISION.mkdir(parents=True, exist_ok=True)

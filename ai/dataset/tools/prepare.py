@@ -8,7 +8,7 @@ import re
 from pathlib import Path
 
 DATASET = Path(__file__).resolve().parents[1]
-HERE = DATASET / "work/draft_20261024"
+HERE = DATASET / "work/receipts/draft_20261024"
 ROOT = DATASET.parent.parent
 SEED = 20261024
 SCENARIOS = ("enough", "missing_some", "below_half")

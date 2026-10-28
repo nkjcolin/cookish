@@ -563,12 +563,19 @@ the AI now preserves the receipt's original measurement scale.
 | `scripts/test_lambda.py` | API Gateway-shaped local emulator invocations |
 | `eval/` | AI-owned evaluation runner and example manifests; not production assets |
 | `dataset/tools/` | Published dataset preparation, validation and macOS OCR helpers |
-| `dataset/` | Shared receipt/grocery images, sample audio and synthetic-scenario metadata |
+| `dataset/` | Curated receipts and provenance index, grocery images, sample audio, retail catalogue and reserved generation config folder |
 
 Evaluation tooling lives in `ai/eval/`. Shared images in `ai/dataset/receipt/`
 and `ai/dataset/grocery/` are intended for Git; local working copies under
-`ai/eval/data/`, result folders and `ai/output/` remain ignored. All dataset
-inputs and local outputs are excluded from Docker builds. The project specification's
+`ai/eval/data/`, result folders, `ai/output/` and `ai/dataset/work/` remain ignored.
+The four reference photos stay at the `dataset/receipt/` root, and all 30 selected
+synthetic receipts remain in `dataset/receipt/generated/`. The curated index is
+`dataset/receipt/manifest.json`. Batch records/galleries stay locally
+under `dataset/work/receipts/20261024/`. The one-time
+[retail catalogue](dataset/catalogs/README.md) covers all recipe ingredient names;
+its prices were collected on 2026-10-28. Historical generation helpers are not yet
+wired to this catalogue.
+All dataset inputs and local outputs are excluded from Docker builds. The project specification's
 root-level `eval/image_set/` remains a separate formal-dataset handoff location.
 
 ### Lambda image and evaluation
@@ -650,6 +657,15 @@ recording/upload → transcription → voice parsing if server transcription is 
 `backend/app/services/ai_stub.py` answers `/ai/*` with the same fixed items when the backend runs on its own without this service.
 
 ## The ingredient catalogue
+
+For synthetic receipt generation, `dataset/catalogs/ingridients.json` contains a
+frozen 2026-10-28 FairPrice snapshot: 41 products covering all 42 ingredient names
+from 48 backend recipes, with tap water excluded. It records real product names,
+retailer stock descriptions, pack quantities, prices, source URLs and source
+recipe hashes. Cabbage head mass and chickpea drained mass remain explicitly
+unverified. See the [catalogue guide](dataset/catalogs/README.md) and validate
+offline with `python3 ai/dataset/tools/validate_ingredient_catalog.py` from the
+repository root. Reusable generation/selection integration remains future work.
 
 The extraction routes no longer load a catalogue or resolve IDs. The legacy
 `app/matching.py` utility and fixture CSV remain for reference, not live parsing.

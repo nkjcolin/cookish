@@ -1,5 +1,6 @@
 """Validate local artifacts and build a gallery; no network or school calls."""
 
+import argparse
 import hashlib
 import html
 import json
@@ -8,7 +9,7 @@ from collections import Counter
 from pathlib import Path
 
 DATASET = Path(__file__).resolve().parents[1]
-HERE = DATASET / "recipe_receipts_20261024"
+HERE = DATASET / "work/receipts/20261024"
 ROOT = DATASET.parent.parent
 TITLES = {
     "enough": "1. Enough to cook",
@@ -18,8 +19,17 @@ TITLES = {
 
 
 def main():
-    data = json.loads((HERE / "cases.json").read_text())
-    records = json.loads((HERE / "generation.json").read_text())
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--batch", type=Path, default=HERE, help="Local batch directory")
+    batch = parser.parse_args().batch.resolve()
+    if not batch.is_relative_to((DATASET / "work").resolve()):
+        parser.error("Batch records must stay inside the ignored dataset/work/ directory")
+    if not (batch / "cases.json").is_file() or not (batch / "generation.json").is_file():
+        parser.error(
+            "Local cases.json and generation.json are required; batches are not stored in Git"
+        )
+    data = json.loads((batch / "cases.json").read_text())
+    records = json.loads((batch / "generation.json").read_text())
     assert len(data["recipes"]) == 10 and len(data["cases"]) == 30
     assert len(records) == 30 and len({r["id"] for r in records}) == 30
     record_by_id = {record["id"]: record for record in records}
@@ -36,7 +46,7 @@ def main():
     for case in data["cases"]:
         case["image_review"] = record_by_id[case["id"]]["visual_review"]
         case["generation_prompt"] = record_by_id[case["id"]]["prompt"]
-        content = (HERE / case["image"]).read_bytes()
+        content = (batch / case["image"]).read_bytes()
         assert content[:8] == b"\x89PNG\r\n\x1a\n"
         width, height = struct.unpack(">II", content[16:24])
         assert width <= 8192 and height <= 8192 and width * height <= 16_000_000
@@ -45,8 +55,8 @@ def main():
         case["within_api_3_mib_limit"] = len(content) <= 3 * 1024 * 1024
         case["image_sha256"] = hashlib.sha256(content).hexdigest()
     assert len({c["image_sha256"] for c in data["cases"]}) == 30
-    (HERE / "cases.json").write_text(json.dumps(data, indent=2) + "\n")
-    (HERE / "prompts.md").write_text(
+    (batch / "cases.json").write_text(json.dumps(data, indent=2) + "\n")
+    (batch / "prompts.md").write_text(
         "# Actual built-in image generation prompts\n\n"
         + "\n\n".join(
             f"## {case['id']}\n\n```text\n{case['generation_prompt']}\n```"
@@ -82,8 +92,8 @@ def main():
             for c in data["cases"]
         ],
     }
-    (HERE / "intended_labels.json").write_text(json.dumps(intended, indent=2) + "\n")
-    (HERE / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
+    (batch / "intended_labels.json").write_text(json.dumps(intended, indent=2) + "\n")
+    (batch / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
     esc = html.escape
     sections = []
     summary = [
@@ -156,8 +166,8 @@ article[hidden]{display:none}@media(max-width:800px){main{padding:18px}.cards{gr
         + "".join(sections)
         + """</main><script>document.getElementById('filter').addEventListener('change',e=>document.querySelectorAll('[data-scenario]').forEach(card=>{card.hidden=e.target.value!=='all'&&card.dataset.scenario!==e.target.value}));</script></html>"""
     )
-    (HERE / "index.html").write_text(page)
-    (HERE / "summary.md").write_text("\n".join(summary) + "\n")
+    (batch / "index.html").write_text(page)
+    (batch / "summary.md").write_text("\n".join(summary) + "\n")
     print(
         json.dumps(
             {
