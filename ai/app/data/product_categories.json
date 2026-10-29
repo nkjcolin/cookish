@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "reviewed_on": "2026-10-29",
+  "purpose": "Conservative receipt-category checks; not an ingredient whitelist or inventory-ID catalogue.",
+  "normalization": "NFKC, casefold, split compact letter/digit boundaries, punctuation to spaces. Original raw_text is never changed.",
+  "unmatched_policy": "Unclassified is not non-food. Retain unmatched model candidates for the existing draft-review flow; do not silently reject groceries outside these rules.",
+  "sources": {
+    "policy": "ai/app/prompts/receipt.md: include human food/drink and exclude household, personal care, animal-consumption products and receipt metadata.",
+    "reference_receipt": "ai/dataset/receipt/fairprice-receipt.jpeg",
+    "oral_care_listing": "https://www.redtomatoes.com.sg/Colgate-Pro-Gum-Health-110g",
+    "laundry_listing": "https://www.fairprice.com.sg/product/fairprice-laundry-liquid-detergent-colour-care-4-4l-13198790",
+    "abbreviation_review": "Compound abbreviations were reviewed using the provided real receipt and retail product categories. These are not claimed to be universal retailer codes or exact online SAP aliases. No online lookup occurs during a request."
+  },
+  "non_food_rules": [
+    {
+      "id": "oral_care",
+      "scope": "both",
+      "all_of": ["\\b(?:tooth\\s*paste|tooth\\s*brush(?:es)?|dental\\s+floss|mouth\\s*wash)\\b"],
+      "reason": "Explicit oral-care product"
+    },
+    {
+      "id": "personal_care",
+      "scope": "both",
+      "all_of": ["\\b(?:shampoo|hair\\s+conditioner|shaving\\s+cream|deodorant|sunscreen|body\\s+wash|hand\\s+wash)\\b"],
+      "reason": "Explicit personal-care product"
+    },
+    {
+      "id": "cleaning",
+      "scope": "both",
+      "all_of": ["\\b(?:detergents?|dishwashing|laundry|bleach|disinfectant)\\b"],
+      "reason": "Explicit household-cleaning product"
+    },
+    {
+      "id": "household_supplies",
+      "scope": "both",
+      "all_of": ["\\b(?:batter(?:y|ies)|hangers?|table\\s*ware|toilet\\s+paper|paper\\s+towels?|cling\\s+wrap|baking\\s+paper|alumini?um\\s+foil)\\b"],
+      "reason": "Household, storage or serving product"
+    },
+    {
+      "id": "animal_food",
+      "scope": "both",
+      "all_of": ["\\b(?:pet|dog|cat|bird|hamster)\\s+food\\b"],
+      "reason": "Intended for animal consumption"
+    },
+    {
+      "id": "alkaline_batteries",
+      "scope": "both",
+      "all_of": ["\\balkaline\\s+a{1,3}\\b"],
+      "reason": "Battery size designation; does not match alkaline water"
+    },
+    {
+      "id": "grooming_blades",
+      "scope": "both",
+      "all_of": ["\\b(?:razor\\s+blades?|disposable\\s+razors?)\\b"],
+      "reason": "Explicit grooming product"
+    },
+    {
+      "id": "retail_oral_health_abbreviation",
+      "scope": "raw",
+      "all_of": ["\\b(?:tt|colgate)\\b", "\\b(?:p|pro)\\s+gum\\s+(?:hlth|health)\\b"],
+      "reason": "Reviewed oral-care description; gum alone is insufficient evidence"
+    },
+    {
+      "id": "retail_laundry_liquid_abbreviation",
+      "scope": "raw",
+      "all_of": ["\\b(?:dtg|dtrg)\\b", "\\b(?:l\\s+(?:lq|liq)|laundry|fabric)\\b"],
+      "reason": "Detergent abbreviation with laundry/liquid context; DTG alone is insufficient evidence"
+    }
+  ],
+  "food_exceptions": [
+    {
+      "id": "razor_clams",
+      "all_of": ["\\brazor\\s+clams?\\b"],
+      "reason": "Edible shellfish; protect from the generic razor rule"
+    },
+    {
+      "id": "chewing_gum",
+      "all_of": ["\\bchewing\\s+gum\\b"],
+      "reason": "Human-consumption product; gum alone must not trigger oral-care exclusion"
+    },
+    {
+      "id": "alkaline_water",
+      "all_of": ["\\balkaline\\s+water\\b"],
+      "reason": "Drinking water, not an alkaline battery"
+    }
+  ],
+  "generic_grooming_rule": {
+    "id": "generic_razor",
+    "all_of": ["\\brazors?\\b"],
+    "unless": ["\\bclams?\\b"]
+  },
+  "metadata_names": ["total", "subtotal", "sub total", "tax", "gst", "payment", "discount", "coupon", "deposit", "change", "plastic bag", "carrier bag", "shopping bag", "paper bag"]
+}

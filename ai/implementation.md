@@ -4,6 +4,78 @@ This plan has **12 sequential parts**. Each part can be requested and completed 
 its own, for example: "Implement Part 4 only." Add relevant tests and documentation
 as each part is implemented rather than deferring them to the end.
 
+Curated selection update (2026-10-29, explicitly requested): move the previous
+30 recipe/scenario PNGs unchanged from `dataset/receipt/generated/` to
+`dataset/receipt/old/`, preserving their provenance in an archive manifest.
+Copy the newer 10 short, 10 medium and 10 long tested JPEGs into
+`dataset/receipt/generated/` and update the active manifest and documentation.
+All 60 synthetic image hashes and the four reference-image hashes were verified;
+working originals and frozen evaluation reports remain intact. This is selection
+for development use, not formal evaluation acceptance or a change to the failed
+frozen gate. No model calls, Docker rebuilds, commits or deployment were required.
+
+Completed receipt-filter checkpoint (2026-10-29): conservative category filtering
+in `app/food_filter.py`, with static reviewed rules in
+`app/data/product_categories.json` and integration through `app/receipts.py`.
+Compound oral-care and laundry abbreviations are checked against a normalized
+copy of original `raw_text`, overriding invented edible names. Unclassified
+candidates are retained; rules load once and require no additional model call.
+Content-free logs record aggregate removal counts and static rule IDs only.
+Verification: **394 application tests**, **29 standalone checks**, lint and format
+passed. Packaged-image targeted tests: 104 passed without mounting source.
+
+Offline replay of all 30 frozen provider replies removed the six known leaks,
+changing 334 final entries to 328, with no food removed and every retained item
+unchanged. A warmed 500-iteration, 30-item filter-only benchmark recorded p95
+0.629 ms with logging disabled. Fresh school-model tests through the actual
+FastAPI receipt route succeeded for `short-03`, `short-04`, `medium-02`,
+`medium-03`, `long-02` and `long-05`: all 58 food entries retained, seven upstream
+non-food entries removed, no non-food left. Six model POSTs, no repair attempts.
+The red-lentil brand typo `SHAMI`/`SHAHI` received a separate assistant source
+review; comparable ingredient descriptions count as equivalent names.
+
+Results and raw replies are saved separately under
+`output/eval/non_food_filter_20261029/`, with a readable `report.md`, source and
+image hashes, per-image before/after decisions, usage/cost headers and packaging
+verification. Original frozen evaluation files and thresholds are unchanged.
+This development regression is not fresh held-out or human-labelled acceptance.
+Both Docker images were rebuilt and their source hashes/filter behavior verified
+without source mounts. Nothing was committed, pushed, deployed or promoted to
+the evaluation dataset. Two actual quantity errors remain in the fresh subset:
+salt loses a model-omitted continuation count, and the separate `2 S FINEST`
+quantity parser still halves the correct ginger total. Printed egg mass is a
+supported alternative to piece count. The long images took about 37 seconds with
+110-second provider / 120-second local testing budgets; Lambda's 27-second budget
+is unchanged and remains a deployment acceptance issue.
+
+Receipt raw-text quantity reconciliation (2026-10-29): add
+`app/receipt_evidence.py` after factor multiplication and numeric normalization,
+shared by receipt API cleanup and structured LAAS receipt helpers. Rebuild clear
+totals from copied numeric contents and explicit purchase evidence, retaining
+printed units, without multiplying an existing total again. Recognise labelled
+counts, supported continuation lines, inline chains, printed totals and drained
+amounts. Count repeated evidence once; conflicting sizes/counts, unsupported
+outer/inner multiplier combinations and unlabelled numeric ambiguity stay unknown.
+Where both pieces and mass are printed, retain a supported model dimension rather
+than imposing a product-specific unit policy. Source text is unchanged, and text
+and grocery-photo routes do not acquire receipt reconciliation or defaults.
+This supersedes earlier notes that positive model quantities always survive and
+copied text is checked only for measurement scale. Batch resume fingerprints use
+`extracted-factors-original-units-raw-text-v4` to reject stale processed outputs.
+Verification: 356 AI tests, 29 standalone checks and AI lint/format passed.
+Offline replay of the three saved preview API responses improved exact synthetic
+plan quantity matches from 6/29 to 27/29 (short 2/3, medium 8/8, long 17/18).
+The remaining piece/mass unit choices are documented, not silently forced.
+Before/after files are in
+`output/generated/preview_lengths_20261029/reconciled_v4/`; original provider
+responses and original comparisons remain unchanged. No new school API calls or
+formal evaluation were performed for this replay.
+Both `cookish-ai:local` and `cookish-ai:lambda` were rebuilt locally and verified
+to contain the matching reconciliation source hash. The development image
+reproduced all three saved replays without source mounting; the Lambda image
+passed direct checks for correction, valid multiplication, kg preservation and
+conflicting-amount handling. Nothing was deployed to AWS.
+
 Retail receipt catalogue addition (2026-10-28): collect public FairPrice pages once
 and publish `dataset/catalogs/ingridients.json`, with 41 retail products covering
 the 42 ingredient names in all 48 backend recipes; tap water is explicitly
@@ -24,6 +96,22 @@ lists match the snapshot. Offline validation and focused Ruff checks passed.
 Negative checks reject incomplete coverage, invalid prices, unsupported receipt
 verification claims, changed recipe hashes, duplicate SKUs and incorrect package
 scaling. Raw collection evidence remains ignored; all changes stay within `ai/`.
+
+Dataset receipt benchmark (2026-10-29): delete the three preview images and their
+test outputs from today, preserving the 20261024 curated dataset and archives.
+Generate and verify 30 new receipts: 10 short, 10 medium and 10 long. Medium
+receipts cover one complete target recipe; long receipts cover two distinct
+target recipe families with summed stock requirements for their stated servings.
+Only tap water is assumed available. All 41 catalogue products occur across
+328 food entries and 48 non-food entries. Source plans/aliases, application
+code/prompts and quality thresholds were fixed before school calls. All images
+passed local OCR checks or documented assistant visual review. These labels
+are synthetic and assistant-reviewed, not independent human ground truth.
+Precision 91.02%; recall 92.68%; exact name/count/unit 294/328 (89.63%); non-food inclusions 6/48; failed requests 0.
+Failed the frozen gate; retained only in ignored `dataset/work/receipts/eval_lengths_20261029/`, with no publication.
+Reports: `output/eval/receipt_lengths_20261029/`. No inference tuning or model-call
+retries were used to improve this score. Old preview/replay paths in historical
+records below were explicitly deleted at the user's request.
 
 Dataset layout update (2026-10-27): preserve the existing receipt layout, with
 selected synthetic images under `dataset/receipt/generated/` and reference photos

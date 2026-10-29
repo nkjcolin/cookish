@@ -1,6 +1,8 @@
 {
   "schema_version": 1,
-  "note": "Curated receipt index. All current generated receipts were selected. Selection is not human-labelled ground truth; expected remains null.",
+  "note": "Active curated receipt index: four reference images and 30 user-selected 2026-10-29 synthetic receipts. The older 30 images are archived in old/ with their own manifest. Selection is for development use, not formal evaluation acceptance; expected remains null.",
+  "selection_date": "2026-10-29",
+  "archive_manifest": "old/manifest.json",
   "receipts": [
     {
       "id": "reference-fairprice-receipt",
@@ -35,393 +37,863 @@
       "expected": null
     },
     {
-      "id": "R01-ENOUGH",
-      "image": "generated/01_steamed-egg__enough.png",
+      "id": "lengths-20261029-short-01",
+      "image": "generated/short-01.jpg",
       "synthetic": true,
-      "source_batch": "20261024",
-      "scenario": "enough",
-      "recipe_id": "9d5276e3-b3c1-4fb0-8825-7334f1b5dba8",
-      "recipe_title": "Steamed egg with rice",
-      "recipe_source": "backend/seed/recipes/steamed-egg.yaml",
-      "recipe_source_sha256": "bfff46cdabc87dbd0846d87947f7840ec313607c04221ebf98b5f2c78517cb62",
-      "sha256": "8d7ce304ded8db3a3874659074a7292e6a1642c253defb4073ab261f2b557eb4",
+      "source_batch": "eval_lengths_20261029",
+      "source_case_id": "short-01",
+      "length": "short",
+      "layout": "multiplier",
+      "receipt_date": "14/10/2026 14:08",
+      "food_entries": 4,
+      "non_food_entries": 2,
+      "target_recipes": [],
+      "recipe_stock_basis": "as_sold; summed requirements of every target recipe; stated servings; tap water only assumed available",
+      "sha256": "e7c5d284adf3c66cf2fdc88f5f60068c6daa306df05b2138d789018311fc7c36",
+      "image_review": {
+        "verified": true,
+        "method": "local Vision OCR versus frozen generation plan; flagged images require assistant visual review",
+        "human_labelled": false
+      },
       "expected": null
     },
     {
-      "id": "R01-MISSING",
-      "image": "generated/01_steamed-egg__missing_some.png",
+      "id": "lengths-20261029-short-02",
+      "image": "generated/short-02.jpg",
       "synthetic": true,
-      "source_batch": "20261024",
-      "scenario": "missing_some",
-      "recipe_id": "9d5276e3-b3c1-4fb0-8825-7334f1b5dba8",
-      "recipe_title": "Steamed egg with rice",
-      "recipe_source": "backend/seed/recipes/steamed-egg.yaml",
-      "recipe_source_sha256": "bfff46cdabc87dbd0846d87947f7840ec313607c04221ebf98b5f2c78517cb62",
-      "sha256": "cb193565c50137fed9a0cf0ff9a07d550253e7a50ee6599b4c426d2db9deff39",
+      "source_batch": "eval_lengths_20261029",
+      "source_case_id": "short-02",
+      "length": "short",
+      "layout": "leading",
+      "receipt_date": "03/10/2026 12:12",
+      "food_entries": 3,
+      "non_food_entries": 2,
+      "target_recipes": [],
+      "recipe_stock_basis": "as_sold; summed requirements of every target recipe; stated servings; tap water only assumed available",
+      "sha256": "11bce69dd93aeb14edf1cf9faad7921c2ed9b4bc9f610aa4b369df89aea03eb5",
+      "image_review": {
+        "verified": true,
+        "method": "local Vision OCR versus frozen generation plan; flagged images require assistant visual review",
+        "human_labelled": false
+      },
       "expected": null
     },
     {
-      "id": "R01-BELOW-HALF",
-      "image": "generated/01_steamed-egg__below_half.png",
+      "id": "lengths-20261029-short-03",
+      "image": "generated/short-03.jpg",
       "synthetic": true,
-      "source_batch": "20261024",
-      "scenario": "below_half",
-      "recipe_id": "9d5276e3-b3c1-4fb0-8825-7334f1b5dba8",
-      "recipe_title": "Steamed egg with rice",
-      "recipe_source": "backend/seed/recipes/steamed-egg.yaml",
-      "recipe_source_sha256": "bfff46cdabc87dbd0846d87947f7840ec313607c04221ebf98b5f2c78517cb62",
-      "sha256": "2ec46bc4183a4615d64bd7bee7f437c3321a4f768cd0b2a020679951a091cbad",
+      "source_batch": "eval_lengths_20261029",
+      "source_case_id": "short-03",
+      "length": "short",
+      "layout": "labelled",
+      "receipt_date": "14/10/2026 21:35",
+      "food_entries": 1,
+      "non_food_entries": 2,
+      "target_recipes": [],
+      "recipe_stock_basis": "as_sold; summed requirements of every target recipe; stated servings; tap water only assumed available",
+      "sha256": "04224fbe8425b79abb5d4b8c3ede0b3c9c43f8e24e6b8e8787860bcbbfa79347",
+      "image_review": {
+        "verified": true,
+        "method": "local Vision OCR versus frozen generation plan; flagged images require assistant visual review",
+        "human_labelled": false
+      },
       "expected": null
     },
     {
-      "id": "R02-ENOUGH",
-      "image": "generated/02_coconut-tofu-curry__enough.png",
+      "id": "lengths-20261029-short-04",
+      "image": "generated/short-04.jpg",
       "synthetic": true,
-      "source_batch": "20261024",
-      "scenario": "enough",
-      "recipe_id": "5bd66173-7561-4c71-965d-ee17a8c8ebed",
-      "recipe_title": "Coconut tofu and vegetable curry with rice",
-      "recipe_source": "backend/seed/recipes/coconut-tofu-curry.yaml",
-      "recipe_source_sha256": "d4dc54f5d7e1848e8361b2768b7caaea457dfb6bc98f3aebfc989ef0337e9f7f",
-      "sha256": "a009c0054d9590068ff7f73e96077b85deb83f78e7c9001e9baffa16340f786b",
+      "source_batch": "eval_lengths_20261029",
+      "source_case_id": "short-04",
+      "length": "short",
+      "layout": "trailing",
+      "receipt_date": "27/10/2026 14:13",
+      "food_entries": 2,
+      "non_food_entries": 2,
+      "target_recipes": [],
+      "recipe_stock_basis": "as_sold; summed requirements of every target recipe; stated servings; tap water only assumed available",
+      "sha256": "795e222873fe304332007728d7b0a83a282e7cb5ffde282ba7e2b3c6146afd0c",
+      "image_review": {
+        "verified": true,
+        "method": "local Vision OCR versus frozen generation plan; flagged images require assistant visual review",
+        "human_labelled": false
+      },
       "expected": null
     },
     {
-      "id": "R02-MISSING",
-      "image": "generated/02_coconut-tofu-curry__missing_some.png",
+      "id": "lengths-20261029-short-05",
+      "image": "generated/short-05.jpg",
       "synthetic": true,
-      "source_batch": "20261024",
-      "scenario": "missing_some",
-      "recipe_id": "5bd66173-7561-4c71-965d-ee17a8c8ebed",
-      "recipe_title": "Coconut tofu and vegetable curry with rice",
-      "recipe_source": "backend/seed/recipes/coconut-tofu-curry.yaml",
-      "recipe_source_sha256": "d4dc54f5d7e1848e8361b2768b7caaea457dfb6bc98f3aebfc989ef0337e9f7f",
-      "sha256": "1c754eda28ed6ce570aecb0a60b9f76e26649a4a9fa6bcc7056b2363d4c3d90e",
+      "source_batch": "eval_lengths_20261029",
+      "source_case_id": "short-05",
+      "length": "short",
+      "layout": "column",
+      "receipt_date": "11/10/2026 11:17",
+      "food_entries": 1,
+      "non_food_entries": 2,
+      "target_recipes": [],
+      "recipe_stock_basis": "as_sold; summed requirements of every target recipe; stated servings; tap water only assumed available",
+      "sha256": "6e45e77323dbb8f77bb0eb6eca34877169a1d2f8cac5d5678b48620d398c3036",
+      "image_review": {
+        "verified": true,
+        "method": "local Vision OCR versus frozen generation plan; flagged images require assistant visual review",
+        "human_labelled": false
+      },
       "expected": null
     },
     {
-      "id": "R02-BELOW-HALF",
-      "image": "generated/02_coconut-tofu-curry__below_half.png",
+      "id": "lengths-20261029-short-06",
+      "image": "generated/short-06.jpg",
       "synthetic": true,
-      "source_batch": "20261024",
-      "scenario": "below_half",
-      "recipe_id": "5bd66173-7561-4c71-965d-ee17a8c8ebed",
-      "recipe_title": "Coconut tofu and vegetable curry with rice",
-      "recipe_source": "backend/seed/recipes/coconut-tofu-curry.yaml",
-      "recipe_source_sha256": "d4dc54f5d7e1848e8361b2768b7caaea457dfb6bc98f3aebfc989ef0337e9f7f",
-      "sha256": "42c147ca65c18208f42bfb1cc5b8b490e4a9f01654ab4a48450055079c0dcbaf",
+      "source_batch": "eval_lengths_20261029",
+      "source_case_id": "short-06",
+      "length": "short",
+      "layout": "multiplier",
+      "receipt_date": "09/10/2026 19:22",
+      "food_entries": 1,
+      "non_food_entries": 2,
+      "target_recipes": [],
+      "recipe_stock_basis": "as_sold; summed requirements of every target recipe; stated servings; tap water only assumed available",
+      "sha256": "808daee0e46aa97cafd0050bfe2a562531270ccdbc8981231e8f7ef75f61bfbc",
+      "image_review": {
+        "verified": true,
+        "method": "local Vision OCR versus frozen generation plan; flagged images require assistant visual review",
+        "human_labelled": false
+      },
       "expected": null
     },
     {
-      "id": "R03-ENOUGH",
-      "image": "generated/03_cabbage-tofu-stir-fry__enough.png",
+      "id": "lengths-20261029-short-07",
+      "image": "generated/short-07.jpg",
       "synthetic": true,
-      "source_batch": "20261024",
-      "scenario": "enough",
-      "recipe_id": "2173bce1-8bbd-40ee-be78-e80627d8ba07",
-      "recipe_title": "Cabbage and tofu rice bowls",
-      "recipe_source": "backend/seed/recipes/cabbage-tofu-stir-fry.yaml",
-      "recipe_source_sha256": "b72b57896491c737f0b425076491d154d1a39c97c8e8bef4968382029371e31b",
-      "sha256": "67cac74002a4f9bf74932a98d56d052528935783556caf2ef6379696a2adaa81",
+      "source_batch": "eval_lengths_20261029",
+      "source_case_id": "short-07",
+      "length": "short",
+      "layout": "leading",
+      "receipt_date": "19/10/2026 19:31",
+      "food_entries": 5,
+      "non_food_entries": 0,
+      "target_recipes": [],
+      "recipe_stock_basis": "as_sold; summed requirements of every target recipe; stated servings; tap water only assumed available",
+      "sha256": "b6fb64de7d3bf5879f7be6bee6681c5144adda27d460f35d84efc5b0b7d329e4",
+      "image_review": {
+        "verified": true,
+        "method": "local Vision OCR versus frozen generation plan; flagged images require assistant visual review",
+        "human_labelled": false
+      },
       "expected": null
     },
     {
-      "id": "R03-MISSING",
-      "image": "generated/03_cabbage-tofu-stir-fry__missing_some.png",
+      "id": "lengths-20261029-short-08",
+      "image": "generated/short-08.jpg",
       "synthetic": true,
-      "source_batch": "20261024",
-      "scenario": "missing_some",
-      "recipe_id": "2173bce1-8bbd-40ee-be78-e80627d8ba07",
-      "recipe_title": "Cabbage and tofu rice bowls",
-      "recipe_source": "backend/seed/recipes/cabbage-tofu-stir-fry.yaml",
-      "recipe_source_sha256": "b72b57896491c737f0b425076491d154d1a39c97c8e8bef4968382029371e31b",
-      "sha256": "0028133d0c6464c394adf9202a75440e248ee111ee4b8a199ce4faee2dda896d",
+      "source_batch": "eval_lengths_20261029",
+      "source_case_id": "short-08",
+      "length": "short",
+      "layout": "labelled",
+      "receipt_date": "13/10/2026 17:40",
+      "food_entries": 4,
+      "non_food_entries": 0,
+      "target_recipes": [],
+      "recipe_stock_basis": "as_sold; summed requirements of every target recipe; stated servings; tap water only assumed available",
+      "sha256": "2e7b1de9c59441eb1e5bd2d452a3b2c2cf13e772708b476ad4d07cc03e685480",
+      "image_review": {
+        "verified": true,
+        "method": "local Vision OCR versus frozen generation plan; flagged images require assistant visual review",
+        "human_labelled": false
+      },
       "expected": null
     },
     {
-      "id": "R03-BELOW-HALF",
-      "image": "generated/03_cabbage-tofu-stir-fry__below_half.png",
+      "id": "lengths-20261029-short-09",
+      "image": "generated/short-09.jpg",
       "synthetic": true,
-      "source_batch": "20261024",
-      "scenario": "below_half",
-      "recipe_id": "2173bce1-8bbd-40ee-be78-e80627d8ba07",
-      "recipe_title": "Cabbage and tofu rice bowls",
-      "recipe_source": "backend/seed/recipes/cabbage-tofu-stir-fry.yaml",
-      "recipe_source_sha256": "b72b57896491c737f0b425076491d154d1a39c97c8e8bef4968382029371e31b",
-      "sha256": "5ef0ac7e7bc77be3366568491d7e40af2ac67b10ef5a5a72435c07fa9fffa874",
+      "source_batch": "eval_lengths_20261029",
+      "source_case_id": "short-09",
+      "length": "short",
+      "layout": "trailing",
+      "receipt_date": "11/10/2026 21:34",
+      "food_entries": 4,
+      "non_food_entries": 0,
+      "target_recipes": [],
+      "recipe_stock_basis": "as_sold; summed requirements of every target recipe; stated servings; tap water only assumed available",
+      "sha256": "55e2f346d8421987235be49bb82c4694c4b072028a604836788eb55c304ff45d",
+      "image_review": {
+        "verified": true,
+        "method": "local Vision OCR versus frozen generation plan; flagged images require assistant visual review",
+        "human_labelled": false
+      },
       "expected": null
     },
     {
-      "id": "R04-ENOUGH",
-      "image": "generated/04_lemon-pepper-chicken__enough.png",
+      "id": "lengths-20261029-short-10",
+      "image": "generated/short-10.jpg",
       "synthetic": true,
-      "source_batch": "20261024",
-      "scenario": "enough",
-      "recipe_id": "f81dd997-b06c-48ce-87ec-43727f62e023",
-      "recipe_title": "Lemon pepper chicken with potatoes and carrots",
-      "recipe_source": "backend/seed/recipes/lemon-pepper-chicken.yaml",
-      "recipe_source_sha256": "fcb5563b99945bc3f6389380225a0f9ec1cc9b24c2bc9619386f922d4d4814bf",
-      "sha256": "d34ec009401c7417ee1c4866a06f56f0812aef8ce7a549a357328d3b9facfe2f",
+      "source_batch": "eval_lengths_20261029",
+      "source_case_id": "short-10",
+      "length": "short",
+      "layout": "column",
+      "receipt_date": "19/10/2026 15:01",
+      "food_entries": 4,
+      "non_food_entries": 0,
+      "target_recipes": [],
+      "recipe_stock_basis": "as_sold; summed requirements of every target recipe; stated servings; tap water only assumed available",
+      "sha256": "1082b8e14a8ee9594f051d8bfdd92dddaf021f9ce0d6c5385b7166fb0279204b",
+      "image_review": {
+        "verified": true,
+        "method": "local Vision OCR versus frozen generation plan; flagged images require assistant visual review",
+        "human_labelled": false
+      },
       "expected": null
     },
     {
-      "id": "R04-MISSING",
-      "image": "generated/04_lemon-pepper-chicken__missing_some.png",
+      "id": "lengths-20261029-medium-01",
+      "image": "generated/medium-01.jpg",
       "synthetic": true,
-      "source_batch": "20261024",
-      "scenario": "missing_some",
-      "recipe_id": "f81dd997-b06c-48ce-87ec-43727f62e023",
-      "recipe_title": "Lemon pepper chicken with potatoes and carrots",
-      "recipe_source": "backend/seed/recipes/lemon-pepper-chicken.yaml",
-      "recipe_source_sha256": "fcb5563b99945bc3f6389380225a0f9ec1cc9b24c2bc9619386f922d4d4814bf",
-      "sha256": "50bacc7bb07427bf098ba6bd07bf8b559efb490669a99db2004bc46cc5475e1a",
+      "source_batch": "eval_lengths_20261029",
+      "source_case_id": "medium-01",
+      "length": "medium",
+      "layout": "multiplier",
+      "receipt_date": "24/10/2026 19:47",
+      "food_entries": 8,
+      "non_food_entries": 2,
+      "target_recipes": [
+        {
+          "recipe_id": "23c3cd8d-ad33-4891-b2ec-6c10a93a43cb",
+          "title": "Tofu and vegetable fried rice",
+          "servings": 2,
+          "source": "backend/seed/recipes/tofu-vegetable-fried-rice.yaml",
+          "source_sha256": "dbe12cfb72bd588e2c02abe181abeb76306ad0632c77ecb8b091c5dc0c5d682f"
+        }
+      ],
+      "recipe_stock_basis": "as_sold; summed requirements of every target recipe; stated servings; tap water only assumed available",
+      "sha256": "b626a8d879910503a1a11e232b6df6cee4050064bb215741597eeb8857b2e064",
+      "image_review": {
+        "verified": true,
+        "method": "local Vision OCR versus frozen generation plan; flagged images require assistant visual review",
+        "human_labelled": false
+      },
       "expected": null
     },
     {
-      "id": "R04-BELOW-HALF",
-      "image": "generated/04_lemon-pepper-chicken__below_half.png",
+      "id": "lengths-20261029-medium-02",
+      "image": "generated/medium-02.jpg",
       "synthetic": true,
-      "source_batch": "20261024",
-      "scenario": "below_half",
-      "recipe_id": "f81dd997-b06c-48ce-87ec-43727f62e023",
-      "recipe_title": "Lemon pepper chicken with potatoes and carrots",
-      "recipe_source": "backend/seed/recipes/lemon-pepper-chicken.yaml",
-      "recipe_source_sha256": "fcb5563b99945bc3f6389380225a0f9ec1cc9b24c2bc9619386f922d4d4814bf",
-      "sha256": "b09c3fd8f090cb91518f21ea0257ef77d11dcbcfc7a0f592238933d13af392fc",
+      "source_batch": "eval_lengths_20261029",
+      "source_case_id": "medium-02",
+      "length": "medium",
+      "layout": "leading",
+      "receipt_date": "13/10/2026 10:37",
+      "food_entries": 8,
+      "non_food_entries": 2,
+      "target_recipes": [
+        {
+          "recipe_id": "d3f3cc29-e09a-4f90-938f-21526f114c44",
+          "title": "Steamed egg and tofu with rice",
+          "servings": 2,
+          "source": "backend/seed/recipes/steamed-egg-tofu.yaml",
+          "source_sha256": "0f77d98e0108ef928b486915069c612ef8cb859519ac315958134ad32f102d34"
+        }
+      ],
+      "recipe_stock_basis": "as_sold; summed requirements of every target recipe; stated servings; tap water only assumed available",
+      "sha256": "81a1ce461d9fecef45ad1f3b07e81ca80da8fe235b1e6f6ccc0766a5cad936cc",
+      "image_review": {
+        "verified": true,
+        "method": "local Vision OCR versus frozen generation plan; flagged images require assistant visual review",
+        "human_labelled": false
+      },
       "expected": null
     },
     {
-      "id": "R05-ENOUGH",
-      "image": "generated/05_tofu-broccoli-stir-fry__enough.png",
+      "id": "lengths-20261029-medium-03",
+      "image": "generated/medium-03.jpg",
       "synthetic": true,
-      "source_batch": "20261024",
-      "scenario": "enough",
-      "recipe_id": "66ee604f-e55c-46a3-8d5f-a64e5e58085d",
-      "recipe_title": "Tofu and broccoli stir-fry with rice",
-      "recipe_source": "backend/seed/recipes/tofu-broccoli-stir-fry.yaml",
-      "recipe_source_sha256": "1669bd3a413f8560dfbbe8ce43f20c8189ae2e80abd5428690474f9347e8006e",
-      "sha256": "35611045e4faf0114b791b193f5460db51700d8c8e672207ed942a6ceaa0ad6b",
+      "source_batch": "eval_lengths_20261029",
+      "source_case_id": "medium-03",
+      "length": "medium",
+      "layout": "labelled",
+      "receipt_date": "12/10/2026 12:08",
+      "food_entries": 10,
+      "non_food_entries": 2,
+      "target_recipes": [
+        {
+          "recipe_id": "445528bb-43c7-432d-a06f-859645a43ab0",
+          "title": "Red lentil and spinach dhal with rice",
+          "servings": 2,
+          "source": "backend/seed/recipes/lentil-spinach-dhal.yaml",
+          "source_sha256": "51055840c70374db4e129b90a20a0529cf224b00ccbd2c8343638fd37d0a51b2"
+        }
+      ],
+      "recipe_stock_basis": "as_sold; summed requirements of every target recipe; stated servings; tap water only assumed available",
+      "sha256": "7606dcafbf58db0feff260aef4517db6520e9cb5aebf53a8184ff77b4593794d",
+      "image_review": {
+        "verified": true,
+        "method": "local Vision OCR versus frozen generation plan; flagged images require assistant visual review",
+        "human_labelled": false
+      },
       "expected": null
     },
     {
-      "id": "R05-MISSING",
-      "image": "generated/05_tofu-broccoli-stir-fry__missing_some.png",
+      "id": "lengths-20261029-medium-04",
+      "image": "generated/medium-04.jpg",
       "synthetic": true,
-      "source_batch": "20261024",
-      "scenario": "missing_some",
-      "recipe_id": "66ee604f-e55c-46a3-8d5f-a64e5e58085d",
-      "recipe_title": "Tofu and broccoli stir-fry with rice",
-      "recipe_source": "backend/seed/recipes/tofu-broccoli-stir-fry.yaml",
-      "recipe_source_sha256": "1669bd3a413f8560dfbbe8ce43f20c8189ae2e80abd5428690474f9347e8006e",
-      "sha256": "7212f34acdb74394622c9e081911d60d2c34c350a692b121b25ae8afe105ad7e",
+      "source_batch": "eval_lengths_20261029",
+      "source_case_id": "medium-04",
+      "length": "medium",
+      "layout": "trailing",
+      "receipt_date": "03/10/2026 09:15",
+      "food_entries": 10,
+      "non_food_entries": 2,
+      "target_recipes": [
+        {
+          "recipe_id": "c3954096-77f8-49a4-a0c3-519390c4477d",
+          "title": "Bok choy and chicken bee hoon soup",
+          "servings": 2,
+          "source": "backend/seed/recipes/rice-vermicelli-chicken-soup.yaml",
+          "source_sha256": "214867afc28f463fd8392caabce6940214b1f72d0cc05aa347ebffe6b3ab35e1"
+        }
+      ],
+      "recipe_stock_basis": "as_sold; summed requirements of every target recipe; stated servings; tap water only assumed available",
+      "sha256": "36e5f82c69c30cb8c4a6f74436db2ccf92a0919a9af6d7b565af88bd553d9cf3",
+      "image_review": {
+        "verified": true,
+        "method": "local Vision OCR versus frozen generation plan; flagged images require assistant visual review",
+        "human_labelled": false
+      },
       "expected": null
     },
     {
-      "id": "R05-BELOW-HALF",
-      "image": "generated/05_tofu-broccoli-stir-fry__below_half.png",
+      "id": "lengths-20261029-medium-05",
+      "image": "generated/medium-05.jpg",
       "synthetic": true,
-      "source_batch": "20261024",
-      "scenario": "below_half",
-      "recipe_id": "66ee604f-e55c-46a3-8d5f-a64e5e58085d",
-      "recipe_title": "Tofu and broccoli stir-fry with rice",
-      "recipe_source": "backend/seed/recipes/tofu-broccoli-stir-fry.yaml",
-      "recipe_source_sha256": "1669bd3a413f8560dfbbe8ce43f20c8189ae2e80abd5428690474f9347e8006e",
-      "sha256": "806cacd800cd9570abe43e12b535e1391c7ef5177a2ffe6f90599f322b03f7b0",
+      "source_batch": "eval_lengths_20261029",
+      "source_case_id": "medium-05",
+      "length": "medium",
+      "layout": "column",
+      "receipt_date": "20/10/2026 10:38",
+      "food_entries": 11,
+      "non_food_entries": 2,
+      "target_recipes": [
+        {
+          "recipe_id": "9d5276e3-b3c1-4fb0-8825-7334f1b5dba8",
+          "title": "Steamed egg with rice",
+          "servings": 2,
+          "source": "backend/seed/recipes/steamed-egg.yaml",
+          "source_sha256": "bfff46cdabc87dbd0846d87947f7840ec313607c04221ebf98b5f2c78517cb62"
+        }
+      ],
+      "recipe_stock_basis": "as_sold; summed requirements of every target recipe; stated servings; tap water only assumed available",
+      "sha256": "41c5a0e3d820a9e14b5d98ded74d61e2f0fdf153467acc587c762c7d3fa25adc",
+      "image_review": {
+        "verified": true,
+        "method": "local Vision OCR versus frozen generation plan; flagged images require assistant visual review",
+        "human_labelled": false
+      },
       "expected": null
     },
     {
-      "id": "R06-ENOUGH",
-      "image": "generated/06_bee-hoon-egg__enough.png",
+      "id": "lengths-20261029-medium-06",
+      "image": "generated/medium-06.jpg",
       "synthetic": true,
-      "source_batch": "20261024",
-      "scenario": "enough",
-      "recipe_id": "88e3e915-9e9a-4d66-8520-90c4efb34f8a",
-      "recipe_title": "Egg, cabbage and carrot bee hoon",
-      "recipe_source": "backend/seed/recipes/bee-hoon-egg.yaml",
-      "recipe_source_sha256": "dc39ea79004362696b938ea75a7633a599c8f8abf71e5771dc4b6a24153cda07",
-      "sha256": "c62c13d6e79b5b6b621a73ec6605d7de6ab83b6ce49125c98a7abb4446d5f523",
+      "source_batch": "eval_lengths_20261029",
+      "source_case_id": "medium-06",
+      "length": "medium",
+      "layout": "multiplier",
+      "receipt_date": "03/10/2026 09:35",
+      "food_entries": 9,
+      "non_food_entries": 2,
+      "target_recipes": [
+        {
+          "recipe_id": "5e1d2eab-44fb-4882-bd2e-577b6e186a26",
+          "title": "Pumpkin, potato and red lentil soup",
+          "servings": 2,
+          "source": "backend/seed/recipes/pumpkin-lentil-soup.yaml",
+          "source_sha256": "7f44a2045bb568240a82b7d6254a9c60d778455c635b70b669092760be04d000"
+        }
+      ],
+      "recipe_stock_basis": "as_sold; summed requirements of every target recipe; stated servings; tap water only assumed available",
+      "sha256": "a94fa483f73dd91820728705af4d92e27d7a8a465c50327b8f485284d4116bb2",
+      "image_review": {
+        "verified": true,
+        "method": "local Vision OCR versus frozen generation plan; flagged images require assistant visual review",
+        "human_labelled": false
+      },
       "expected": null
     },
     {
-      "id": "R06-MISSING",
-      "image": "generated/06_bee-hoon-egg__missing_some.png",
+      "id": "lengths-20261029-medium-07",
+      "image": "generated/medium-07.jpg",
       "synthetic": true,
-      "source_batch": "20261024",
-      "scenario": "missing_some",
-      "recipe_id": "88e3e915-9e9a-4d66-8520-90c4efb34f8a",
-      "recipe_title": "Egg, cabbage and carrot bee hoon",
-      "recipe_source": "backend/seed/recipes/bee-hoon-egg.yaml",
-      "recipe_source_sha256": "dc39ea79004362696b938ea75a7633a599c8f8abf71e5771dc4b6a24153cda07",
-      "sha256": "c81560a241b6f9cdb9e8e195083dab86da834a5b0c217084a3881faaecf89016",
+      "source_batch": "eval_lengths_20261029",
+      "source_case_id": "medium-07",
+      "length": "medium",
+      "layout": "leading",
+      "receipt_date": "26/10/2026 12:30",
+      "food_entries": 12,
+      "non_food_entries": 0,
+      "target_recipes": [
+        {
+          "recipe_id": "c67a5a88-4c59-4498-a8c6-b76b4e30257e",
+          "title": "Ginger chicken and potato soup",
+          "servings": 2,
+          "source": "backend/seed/recipes/ginger-chicken-soup.yaml",
+          "source_sha256": "547e136cb2ad046b52ec84a91dabed6059c06316d5b12bebedddc599b1611bea"
+        }
+      ],
+      "recipe_stock_basis": "as_sold; summed requirements of every target recipe; stated servings; tap water only assumed available",
+      "sha256": "1cc78ea1da8548aa6afd74b22a43e34ff0cdc56ffe7e470c10b7bb13b95724bc",
+      "image_review": {
+        "verified": true,
+        "method": "local Vision OCR versus frozen generation plan; flagged images require assistant visual review",
+        "human_labelled": false
+      },
       "expected": null
     },
     {
-      "id": "R06-BELOW-HALF",
-      "image": "generated/06_bee-hoon-egg__below_half.png",
+      "id": "lengths-20261029-medium-08",
+      "image": "generated/medium-08.jpg",
       "synthetic": true,
-      "source_batch": "20261024",
-      "scenario": "below_half",
-      "recipe_id": "88e3e915-9e9a-4d66-8520-90c4efb34f8a",
-      "recipe_title": "Egg, cabbage and carrot bee hoon",
-      "recipe_source": "backend/seed/recipes/bee-hoon-egg.yaml",
-      "recipe_source_sha256": "dc39ea79004362696b938ea75a7633a599c8f8abf71e5771dc4b6a24153cda07",
-      "sha256": "73d40ee1dc3b19b3c049a73bfa155879fb312510c3f35fbd3a8145907c4f723c",
+      "source_batch": "eval_lengths_20261029",
+      "source_case_id": "medium-08",
+      "length": "medium",
+      "layout": "labelled",
+      "receipt_date": "15/10/2026 19:54",
+      "food_entries": 11,
+      "non_food_entries": 0,
+      "target_recipes": [
+        {
+          "recipe_id": "202bfb57-26ca-4201-b935-7a7ea4db9785",
+          "title": "Bok choy and tofu bee hoon soup",
+          "servings": 2,
+          "source": "backend/seed/recipes/rice-vermicelli-tofu-soup.yaml",
+          "source_sha256": "9cb5879622ea8e5939f23fd3fbb4b141d51a2ac31a2114cb5aa1e7477954bd38"
+        }
+      ],
+      "recipe_stock_basis": "as_sold; summed requirements of every target recipe; stated servings; tap water only assumed available",
+      "sha256": "4f0d8c3fe8396c45964f90de00a8a5b8f28e3adddbf8e285ad8d76a5595d33b3",
+      "image_review": {
+        "verified": true,
+        "method": "local Vision OCR versus frozen generation plan; flagged images require assistant visual review",
+        "human_labelled": false
+      },
       "expected": null
     },
     {
-      "id": "R07-ENOUGH",
-      "image": "generated/07_cucumber-tomato-chickpea-salad__enough.png",
+      "id": "lengths-20261029-medium-09",
+      "image": "generated/medium-09.jpg",
       "synthetic": true,
-      "source_batch": "20261024",
-      "scenario": "enough",
-      "recipe_id": "719b4fca-2889-4389-a4f7-8605dee34c48",
-      "recipe_title": "Cucumber, tomato and chickpea rice salad",
-      "recipe_source": "backend/seed/recipes/cucumber-tomato-chickpea-salad.yaml",
-      "recipe_source_sha256": "c5f8efecdcadfa9d67751c71b56697d623c0b73acad11843d3e671710b512555",
-      "sha256": "f57ddbc6f1ffdce3272ba9e3a4199fa07da0a94547d4cdd647ceb29a2b79be6e",
+      "source_batch": "eval_lengths_20261029",
+      "source_case_id": "medium-09",
+      "length": "medium",
+      "layout": "trailing",
+      "receipt_date": "26/10/2026 11:15",
+      "food_entries": 12,
+      "non_food_entries": 0,
+      "target_recipes": [
+        {
+          "recipe_id": "a8fadb00-3dba-48b3-b7a8-5f9dc87f4a7e",
+          "title": "Rice-cooker bok choy and tofu rice",
+          "servings": 2,
+          "source": "backend/seed/recipes/rice-cooker-bok-choy-tofu-rice.yaml",
+          "source_sha256": "7e762f4ca3de9d24b2b01c92c10cb3593b22e4502334bc22f7d65a5d815c6fe2"
+        }
+      ],
+      "recipe_stock_basis": "as_sold; summed requirements of every target recipe; stated servings; tap water only assumed available",
+      "sha256": "f4672781baec294d0f654ceb7b15392fe9cf5b5ee356cab2b4abf7f1faa4f70e",
+      "image_review": {
+        "verified": true,
+        "method": "local Vision OCR versus frozen generation plan; flagged images require assistant visual review",
+        "human_labelled": false
+      },
       "expected": null
     },
     {
-      "id": "R07-MISSING",
-      "image": "generated/07_cucumber-tomato-chickpea-salad__missing_some.png",
+      "id": "lengths-20261029-medium-10",
+      "image": "generated/medium-10.jpg",
       "synthetic": true,
-      "source_batch": "20261024",
-      "scenario": "missing_some",
-      "recipe_id": "719b4fca-2889-4389-a4f7-8605dee34c48",
-      "recipe_title": "Cucumber, tomato and chickpea rice salad",
-      "recipe_source": "backend/seed/recipes/cucumber-tomato-chickpea-salad.yaml",
-      "recipe_source_sha256": "c5f8efecdcadfa9d67751c71b56697d623c0b73acad11843d3e671710b512555",
-      "sha256": "b581c53194b9b7b2627ea2de87e0b620f689d7cf6059114e40bf99e04d285c3c",
+      "source_batch": "eval_lengths_20261029",
+      "source_case_id": "medium-10",
+      "length": "medium",
+      "layout": "column",
+      "receipt_date": "04/10/2026 11:47",
+      "food_entries": 11,
+      "non_food_entries": 0,
+      "target_recipes": [
+        {
+          "recipe_id": "45045a12-f142-4125-b594-34f486c75032",
+          "title": "Tomato and egg rice bowls with less oil",
+          "servings": 2,
+          "source": "backend/seed/recipes/tomato-egg-stir-fry-less-oil.yaml",
+          "source_sha256": "b0d6c730a2f17931cb184d708e5b6a3d4f63074357c57c869423bb43c8217a57"
+        }
+      ],
+      "recipe_stock_basis": "as_sold; summed requirements of every target recipe; stated servings; tap water only assumed available",
+      "sha256": "acb476d3b057146e96b509d333cd6e5a137e23c219fa9cff355d050315857dfd",
+      "image_review": {
+        "verified": true,
+        "method": "local Vision OCR versus frozen generation plan; flagged images require assistant visual review",
+        "human_labelled": false
+      },
       "expected": null
     },
     {
-      "id": "R07-BELOW-HALF",
-      "image": "generated/07_cucumber-tomato-chickpea-salad__below_half.png",
+      "id": "lengths-20261029-long-01",
+      "image": "generated/long-01.jpg",
       "synthetic": true,
-      "source_batch": "20261024",
-      "scenario": "below_half",
-      "recipe_id": "719b4fca-2889-4389-a4f7-8605dee34c48",
-      "recipe_title": "Cucumber, tomato and chickpea rice salad",
-      "recipe_source": "backend/seed/recipes/cucumber-tomato-chickpea-salad.yaml",
-      "recipe_source_sha256": "c5f8efecdcadfa9d67751c71b56697d623c0b73acad11843d3e671710b512555",
-      "sha256": "b564c433b46179dba6742e192dc9e8ec184b716d1489a5ff4d99d1b64f3b0250",
+      "source_batch": "eval_lengths_20261029",
+      "source_case_id": "long-01",
+      "length": "long",
+      "layout": "multiplier",
+      "receipt_date": "19/10/2026 20:06",
+      "food_entries": 20,
+      "non_food_entries": 4,
+      "target_recipes": [
+        {
+          "recipe_id": "eaacfdcd-aa3e-4fd9-9252-7602e8fedc65",
+          "title": "Quick tomato and egg rice",
+          "servings": 2,
+          "source": "backend/seed/recipes/quicker-tomato-egg-rice.yaml",
+          "source_sha256": "c2c88bfefe4eb8af2c84924a9f1d34a0cb885e5067a2b3cf542d2754e161bf71"
+        },
+        {
+          "recipe_id": "61456d3b-fc96-4bef-91b5-f54dce95fed7",
+          "title": "Fish and tomato vermicelli soup",
+          "servings": 2,
+          "source": "backend/seed/recipes/fish-tomato-soup.yaml",
+          "source_sha256": "8aa8d644dc320ef8a9f1f632ac3c2cfc9cd92c9a10a90c1705ef71124c96f9ee"
+        }
+      ],
+      "recipe_stock_basis": "as_sold; summed requirements of every target recipe; stated servings; tap water only assumed available",
+      "sha256": "247e30b6c66335f5fa7646358e4f9afc014976d6651ba9e6372fa5f8fa6a1851",
+      "image_review": {
+        "verified": true,
+        "method": "local Vision OCR versus frozen generation plan; flagged images require assistant visual review",
+        "human_labelled": false
+      },
       "expected": null
     },
     {
-      "id": "R08-ENOUGH",
-      "image": "generated/08_sambal-tofu__enough.png",
+      "id": "lengths-20261029-long-02",
+      "image": "generated/long-02.jpg",
       "synthetic": true,
-      "source_batch": "20261024",
-      "scenario": "enough",
-      "recipe_id": "c3729c50-e498-4026-94d0-a35154738ed9",
-      "recipe_title": "Chilli tofu with rice",
-      "recipe_source": "backend/seed/recipes/sambal-tofu.yaml",
-      "recipe_source_sha256": "2216629f24f2b6e1dca04d90d0aa37dbfb2e5a5238efc5db835b954594a1f2d7",
-      "sha256": "69046a8602440ec4d333a88472d76daef27bc783283dd71db26c39ab059689c9",
+      "source_batch": "eval_lengths_20261029",
+      "source_case_id": "long-02",
+      "length": "long",
+      "layout": "leading",
+      "receipt_date": "27/10/2026 09:51",
+      "food_entries": 18,
+      "non_food_entries": 4,
+      "target_recipes": [
+        {
+          "recipe_id": "ab302fa5-3663-4431-b28c-f380b5b9b1f7",
+          "title": "Steamed ginger cod with broccoli and rice",
+          "servings": 2,
+          "source": "backend/seed/recipes/steamed-ginger-fish.yaml",
+          "source_sha256": "54f796000ab8ec2979d4e7302364d7c768bf0c5007b92c7dfcc9aaff1df1c3d5"
+        },
+        {
+          "recipe_id": "1d920435-f931-4d7b-91d2-86d184e31e3b",
+          "title": "Ginger chicken rice porridge",
+          "servings": 2,
+          "source": "backend/seed/recipes/chicken-rice-porridge.yaml",
+          "source_sha256": "b98267ba8139080ccdfe2f46dca9a112ebe8c78840049afe1355731d71412f78"
+        }
+      ],
+      "recipe_stock_basis": "as_sold; summed requirements of every target recipe; stated servings; tap water only assumed available",
+      "sha256": "1f166a4b4a73dfdc08aabb0e9957449f940ee9ef4fe937ac8322f7e3d553477f",
+      "image_review": {
+        "verified": true,
+        "method": "local Vision OCR versus frozen generation plan; flagged images require assistant visual review",
+        "human_labelled": false
+      },
       "expected": null
     },
     {
-      "id": "R08-MISSING",
-      "image": "generated/08_sambal-tofu__missing_some.png",
+      "id": "lengths-20261029-long-03",
+      "image": "generated/long-03.jpg",
       "synthetic": true,
-      "source_batch": "20261024",
-      "scenario": "missing_some",
-      "recipe_id": "c3729c50-e498-4026-94d0-a35154738ed9",
-      "recipe_title": "Chilli tofu with rice",
-      "recipe_source": "backend/seed/recipes/sambal-tofu.yaml",
-      "recipe_source_sha256": "2216629f24f2b6e1dca04d90d0aa37dbfb2e5a5238efc5db835b954594a1f2d7",
-      "sha256": "f634e3a7ed1c8f8c8bd4d84082c08208c1eabdf5774a8d2330f15a09ced4e734",
+      "source_batch": "eval_lengths_20261029",
+      "source_case_id": "long-03",
+      "length": "long",
+      "layout": "labelled",
+      "receipt_date": "22/10/2026 21:47",
+      "food_entries": 17,
+      "non_food_entries": 4,
+      "target_recipes": [
+        {
+          "recipe_id": "61456d3b-fc96-4bef-91b5-f54dce95fed7",
+          "title": "Fish and tomato vermicelli soup",
+          "servings": 2,
+          "source": "backend/seed/recipes/fish-tomato-soup.yaml",
+          "source_sha256": "8aa8d644dc320ef8a9f1f632ac3c2cfc9cd92c9a10a90c1705ef71124c96f9ee"
+        },
+        {
+          "recipe_id": "ab302fa5-3663-4431-b28c-f380b5b9b1f7",
+          "title": "Steamed ginger cod with broccoli and rice",
+          "servings": 2,
+          "source": "backend/seed/recipes/steamed-ginger-fish.yaml",
+          "source_sha256": "54f796000ab8ec2979d4e7302364d7c768bf0c5007b92c7dfcc9aaff1df1c3d5"
+        }
+      ],
+      "recipe_stock_basis": "as_sold; summed requirements of every target recipe; stated servings; tap water only assumed available",
+      "sha256": "afac8e2bb288ab23010f5d338e5de9a555791fb2711fe27902102d2538194257",
+      "image_review": {
+        "verified": true,
+        "method": "local Vision OCR versus frozen generation plan; flagged images require assistant visual review",
+        "human_labelled": false
+      },
       "expected": null
     },
     {
-      "id": "R08-BELOW-HALF",
-      "image": "generated/08_sambal-tofu__below_half.png",
+      "id": "lengths-20261029-long-04",
+      "image": "generated/long-04.jpg",
       "synthetic": true,
-      "source_batch": "20261024",
-      "scenario": "below_half",
-      "recipe_id": "c3729c50-e498-4026-94d0-a35154738ed9",
-      "recipe_title": "Chilli tofu with rice",
-      "recipe_source": "backend/seed/recipes/sambal-tofu.yaml",
-      "recipe_source_sha256": "2216629f24f2b6e1dca04d90d0aa37dbfb2e5a5238efc5db835b954594a1f2d7",
-      "sha256": "e28cc3565e7c6fe6594eab44c2fcd4d30edb8782d8afdba01f50377a50c103ba",
+      "source_batch": "eval_lengths_20261029",
+      "source_case_id": "long-04",
+      "length": "long",
+      "layout": "trailing",
+      "receipt_date": "13/10/2026 10:09",
+      "food_entries": 18,
+      "non_food_entries": 4,
+      "target_recipes": [
+        {
+          "recipe_id": "5380fd71-a373-4bed-8474-7f0d8e46cb43",
+          "title": "Chicken and broccoli stir-fry with rice",
+          "servings": 2,
+          "source": "backend/seed/recipes/chicken-broccoli-stir-fry.yaml",
+          "source_sha256": "fa89b6dd9c67b2783222ecfa48384d8cb345e6d48333c677c9af9001f97a5751"
+        },
+        {
+          "recipe_id": "bd2118d6-393b-413f-b7e6-b3116b108437",
+          "title": "Ginger chicken and bok choy rice with less oil",
+          "servings": 2,
+          "source": "backend/seed/recipes/ginger-chicken-rice-less-oil.yaml",
+          "source_sha256": "335aaa0a375847d30d791472e2f3c854c82e223cc68f9733cf50b17448e24cdf"
+        }
+      ],
+      "recipe_stock_basis": "as_sold; summed requirements of every target recipe; stated servings; tap water only assumed available",
+      "sha256": "fd9063627e575763a0136f6624684c15ab2e0b478f9d48c97dedfe23afeccc03",
+      "image_review": {
+        "verified": true,
+        "method": "local Vision OCR versus frozen generation plan; flagged images require assistant visual review",
+        "human_labelled": false
+      },
       "expected": null
     },
     {
-      "id": "R09-ENOUGH",
-      "image": "generated/09_cabbage-tofu-stir-fry-less-oil__enough.png",
+      "id": "lengths-20261029-long-05",
+      "image": "generated/long-05.jpg",
       "synthetic": true,
-      "source_batch": "20261024",
-      "scenario": "enough",
-      "recipe_id": "79093e58-6ac3-46ab-adee-c948efc5b880",
-      "recipe_title": "Cabbage and tofu rice bowls with less oil",
-      "recipe_source": "backend/seed/recipes/cabbage-tofu-stir-fry-less-oil.yaml",
-      "recipe_source_sha256": "71a3c8ebc952dcd03defeb40b0252db16f8d1f88a7f6dbf8e0bc106c98be99ea",
-      "sha256": "9e4a95f8d36dfb033d20442ce800fba4435d5ec8b58567dc19e5d99b08961948",
+      "source_batch": "eval_lengths_20261029",
+      "source_case_id": "long-05",
+      "length": "long",
+      "layout": "column",
+      "receipt_date": "14/10/2026 21:25",
+      "food_entries": 19,
+      "non_food_entries": 4,
+      "target_recipes": [
+        {
+          "recipe_id": "bb825baf-2b21-466f-8709-03d9b8a3abcf",
+          "title": "Sesame soba with egg and vegetables",
+          "servings": 2,
+          "source": "backend/seed/recipes/sesame-soba-egg.yaml",
+          "source_sha256": "35cb2fd455b3eee93d264324ca6de8f175e69e8f7a99e990f3871ad19dbf2475"
+        },
+        {
+          "recipe_id": "cd823518-b570-4185-ba71-b1d0cdde2adf",
+          "title": "Potato and cauliflower curry with rice",
+          "servings": 2,
+          "source": "backend/seed/recipes/potato-cauliflower-curry.yaml",
+          "source_sha256": "62d2af44bc246b62efbec64ead3699f030b012bd378377c2176824a762f9270c"
+        }
+      ],
+      "recipe_stock_basis": "as_sold; summed requirements of every target recipe; stated servings; tap water only assumed available",
+      "sha256": "1d8dad7b538c5a1f13faf0e262a2b04eb83355cf36a92ac5b97c438b14dcb169",
+      "image_review": {
+        "verified": true,
+        "method": "local Vision OCR versus frozen generation plan; flagged images require assistant visual review",
+        "human_labelled": false
+      },
       "expected": null
     },
     {
-      "id": "R09-MISSING",
-      "image": "generated/09_cabbage-tofu-stir-fry-less-oil__missing_some.png",
+      "id": "lengths-20261029-long-06",
+      "image": "generated/long-06.jpg",
       "synthetic": true,
-      "source_batch": "20261024",
-      "scenario": "missing_some",
-      "recipe_id": "79093e58-6ac3-46ab-adee-c948efc5b880",
-      "recipe_title": "Cabbage and tofu rice bowls with less oil",
-      "recipe_source": "backend/seed/recipes/cabbage-tofu-stir-fry-less-oil.yaml",
-      "recipe_source_sha256": "71a3c8ebc952dcd03defeb40b0252db16f8d1f88a7f6dbf8e0bc106c98be99ea",
-      "sha256": "4f5b37a542e8022d84193b2a8fd818eac49c4d58188f0872f9036649f1200f66",
+      "source_batch": "eval_lengths_20261029",
+      "source_case_id": "long-06",
+      "length": "long",
+      "layout": "multiplier",
+      "receipt_date": "27/10/2026 18:53",
+      "food_entries": 16,
+      "non_food_entries": 4,
+      "target_recipes": [
+        {
+          "recipe_id": "ab302fa5-3663-4431-b28c-f380b5b9b1f7",
+          "title": "Steamed ginger cod with broccoli and rice",
+          "servings": 2,
+          "source": "backend/seed/recipes/steamed-ginger-fish.yaml",
+          "source_sha256": "54f796000ab8ec2979d4e7302364d7c768bf0c5007b92c7dfcc9aaff1df1c3d5"
+        },
+        {
+          "recipe_id": "eaacfdcd-aa3e-4fd9-9252-7602e8fedc65",
+          "title": "Quick tomato and egg rice",
+          "servings": 2,
+          "source": "backend/seed/recipes/quicker-tomato-egg-rice.yaml",
+          "source_sha256": "c2c88bfefe4eb8af2c84924a9f1d34a0cb885e5067a2b3cf542d2754e161bf71"
+        }
+      ],
+      "recipe_stock_basis": "as_sold; summed requirements of every target recipe; stated servings; tap water only assumed available",
+      "sha256": "c995ac54615c263a67ebc2b28087b683ea4d56cd7579a65d0802e0f3a2b40056",
+      "image_review": {
+        "verified": true,
+        "method": "local Vision OCR versus frozen generation plan; flagged images require assistant visual review",
+        "human_labelled": false
+      },
       "expected": null
     },
     {
-      "id": "R09-BELOW-HALF",
-      "image": "generated/09_cabbage-tofu-stir-fry-less-oil__below_half.png",
+      "id": "lengths-20261029-long-07",
+      "image": "generated/long-07.jpg",
       "synthetic": true,
-      "source_batch": "20261024",
-      "scenario": "below_half",
-      "recipe_id": "79093e58-6ac3-46ab-adee-c948efc5b880",
-      "recipe_title": "Cabbage and tofu rice bowls with less oil",
-      "recipe_source": "backend/seed/recipes/cabbage-tofu-stir-fry-less-oil.yaml",
-      "recipe_source_sha256": "71a3c8ebc952dcd03defeb40b0252db16f8d1f88a7f6dbf8e0bc106c98be99ea",
-      "sha256": "7a14fe8ac75453720003bc0df57e70792a14ba42ffd6c534241b601dddda0f64",
+      "source_batch": "eval_lengths_20261029",
+      "source_case_id": "long-07",
+      "length": "long",
+      "layout": "leading",
+      "receipt_date": "26/10/2026 14:38",
+      "food_entries": 22,
+      "non_food_entries": 0,
+      "target_recipes": [
+        {
+          "recipe_id": "82837c0b-d649-4fe6-aa5b-196c64459b28",
+          "title": "Egg fried rice with vegetables",
+          "servings": 2,
+          "source": "backend/seed/recipes/egg-fried-rice.yaml",
+          "source_sha256": "9e0e4006293e2a490cd2d7d9540e643b07948bf2238a8a9d68cc8c62b84ee3bb"
+        },
+        {
+          "recipe_id": "66ee604f-e55c-46a3-8d5f-a64e5e58085d",
+          "title": "Tofu and broccoli stir-fry with rice",
+          "servings": 2,
+          "source": "backend/seed/recipes/tofu-broccoli-stir-fry.yaml",
+          "source_sha256": "1669bd3a413f8560dfbbe8ce43f20c8189ae2e80abd5428690474f9347e8006e"
+        }
+      ],
+      "recipe_stock_basis": "as_sold; summed requirements of every target recipe; stated servings; tap water only assumed available",
+      "sha256": "c038749be051d7f6a5389fffb4f10eb0cf2a30f58b2b3a84edd7c6f0d82acb10",
+      "image_review": {
+        "verified": true,
+        "method": "local Vision OCR versus frozen generation plan; flagged images require assistant visual review",
+        "human_labelled": false
+      },
       "expected": null
     },
     {
-      "id": "R10-ENOUGH",
-      "image": "generated/10_sesame-soba-tofu__enough.png",
+      "id": "lengths-20261029-long-08",
+      "image": "generated/long-08.jpg",
       "synthetic": true,
-      "source_batch": "20261024",
-      "scenario": "enough",
-      "recipe_id": "4a8e2e32-267d-4c29-a05c-179aa9f0ce24",
-      "recipe_title": "Sesame soba with tofu and vegetables",
-      "recipe_source": "backend/seed/recipes/sesame-soba-tofu.yaml",
-      "recipe_source_sha256": "9cd6d7704cd13c34edb34df06b954f477d7e0c91c9fb08f1d48f9aa9aee34dac",
-      "sha256": "90bc74828c3138c430a9b6c3afc1f457fa415094f802515f6483ceb9cf45f1de",
+      "source_batch": "eval_lengths_20261029",
+      "source_case_id": "long-08",
+      "length": "long",
+      "layout": "labelled",
+      "receipt_date": "07/10/2026 17:54",
+      "food_entries": 22,
+      "non_food_entries": 0,
+      "target_recipes": [
+        {
+          "recipe_id": "645a8d38-bfae-47f2-b00e-3ca6828a964e",
+          "title": "Tomato and egg rice bowls",
+          "servings": 2,
+          "source": "backend/seed/recipes/tomato-egg-stir-fry.yaml",
+          "source_sha256": "ac08c47bf677aa8e21778e50e7618d9437c779357c9b8e46562494127936d510"
+        },
+        {
+          "recipe_id": "bf7c533d-ae14-4e97-b0a5-fa05ef11a822",
+          "title": "Chilli prawns with rice",
+          "servings": 2,
+          "source": "backend/seed/recipes/sambal-prawn.yaml",
+          "source_sha256": "b8153c3bf1eccd35e8c3f23215c83fdde99c15539ce9e3de445d0fc68bbb02fa"
+        }
+      ],
+      "recipe_stock_basis": "as_sold; summed requirements of every target recipe; stated servings; tap water only assumed available",
+      "sha256": "e0e2ea8cc2f884f3de2ab19918fde5bb376024c4fb3e03f9c4fec90558bf60e5",
+      "image_review": {
+        "verified": true,
+        "method": "local Vision OCR versus frozen generation plan; flagged images require assistant visual review",
+        "human_labelled": false
+      },
       "expected": null
     },
     {
-      "id": "R10-MISSING",
-      "image": "generated/10_sesame-soba-tofu__missing_some.png",
+      "id": "lengths-20261029-long-09",
+      "image": "generated/long-09.jpg",
       "synthetic": true,
-      "source_batch": "20261024",
-      "scenario": "missing_some",
-      "recipe_id": "4a8e2e32-267d-4c29-a05c-179aa9f0ce24",
-      "recipe_title": "Sesame soba with tofu and vegetables",
-      "recipe_source": "backend/seed/recipes/sesame-soba-tofu.yaml",
-      "recipe_source_sha256": "9cd6d7704cd13c34edb34df06b954f477d7e0c91c9fb08f1d48f9aa9aee34dac",
-      "sha256": "aa8d4efe8c85909c76a90d368eeaafa8fe8271ce127c2c5ff28ef42e3c4be1e7",
+      "source_batch": "eval_lengths_20261029",
+      "source_case_id": "long-09",
+      "length": "long",
+      "layout": "trailing",
+      "receipt_date": "22/10/2026 21:47",
+      "food_entries": 22,
+      "non_food_entries": 0,
+      "target_recipes": [
+        {
+          "recipe_id": "97f2ee52-db16-4544-80ba-11b117dcd4b0",
+          "title": "Tomato and red lentil dhal with rice",
+          "servings": 2,
+          "source": "backend/seed/recipes/red-lentil-dhal.yaml",
+          "source_sha256": "5b1684b6000379d52a1c312753bf22509bd27a2c2ad091e17db57452214800ee"
+        },
+        {
+          "recipe_id": "9d5276e3-b3c1-4fb0-8825-7334f1b5dba8",
+          "title": "Steamed egg with rice",
+          "servings": 2,
+          "source": "backend/seed/recipes/steamed-egg.yaml",
+          "source_sha256": "bfff46cdabc87dbd0846d87947f7840ec313607c04221ebf98b5f2c78517cb62"
+        }
+      ],
+      "recipe_stock_basis": "as_sold; summed requirements of every target recipe; stated servings; tap water only assumed available",
+      "sha256": "29f3447a95e141f94aa2314b57a17c5611f940e56329b258deb6dac406016c72",
+      "image_review": {
+        "verified": true,
+        "method": "local Vision OCR versus frozen generation plan; flagged images require assistant visual review",
+        "human_labelled": false
+      },
       "expected": null
     },
     {
-      "id": "R10-BELOW-HALF",
-      "image": "generated/10_sesame-soba-tofu__below_half.png",
+      "id": "lengths-20261029-long-10",
+      "image": "generated/long-10.jpg",
       "synthetic": true,
-      "source_batch": "20261024",
-      "scenario": "below_half",
-      "recipe_id": "4a8e2e32-267d-4c29-a05c-179aa9f0ce24",
-      "recipe_title": "Sesame soba with tofu and vegetables",
-      "recipe_source": "backend/seed/recipes/sesame-soba-tofu.yaml",
-      "recipe_source_sha256": "9cd6d7704cd13c34edb34df06b954f477d7e0c91c9fb08f1d48f9aa9aee34dac",
-      "sha256": "48bb0d6ca33966414ace748264939bd88b0b8fbd09d93e6a72831eabe73f0df2",
+      "source_batch": "eval_lengths_20261029",
+      "source_case_id": "long-10",
+      "length": "long",
+      "layout": "column",
+      "receipt_date": "10/10/2026 21:56",
+      "food_entries": 23,
+      "non_food_entries": 0,
+      "target_recipes": [
+        {
+          "recipe_id": "ab302fa5-3663-4431-b28c-f380b5b9b1f7",
+          "title": "Steamed ginger cod with broccoli and rice",
+          "servings": 2,
+          "source": "backend/seed/recipes/steamed-ginger-fish.yaml",
+          "source_sha256": "54f796000ab8ec2979d4e7302364d7c768bf0c5007b92c7dfcc9aaff1df1c3d5"
+        },
+        {
+          "recipe_id": "d3f3cc29-e09a-4f90-938f-21526f114c44",
+          "title": "Steamed egg and tofu with rice",
+          "servings": 2,
+          "source": "backend/seed/recipes/steamed-egg-tofu.yaml",
+          "source_sha256": "0f77d98e0108ef928b486915069c612ef8cb859519ac315958134ad32f102d34"
+        }
+      ],
+      "recipe_stock_basis": "as_sold; summed requirements of every target recipe; stated servings; tap water only assumed available",
+      "sha256": "ddde0625d963e891928d2c3f694b8ee7aa83ead86b02e8cff91181dc76a6eb42",
+      "image_review": {
+        "verified": true,
+        "method": "local Vision OCR versus frozen generation plan; flagged images require assistant visual review",
+        "human_labelled": false
+      },
       "expected": null
     }
   ]
