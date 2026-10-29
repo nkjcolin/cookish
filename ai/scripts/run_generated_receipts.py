@@ -5,7 +5,8 @@ Run from the repository root with:
 
 Completed matching results are reused on restart. Each unfinished image gets one
 request, without automatic provider retries or the application's non-food filter.
-Structured receipt quantity normalization/defaults are shared with the API.
+Structured receipt quantity checks against copied raw text, normalization and
+defaults are shared with the API.
 """
 
 import hashlib
@@ -50,7 +51,7 @@ def main():
         )
     fingerprint = {
         "model": model,
-        "quantity_processing": "extracted-factors-original-units-v3",
+        "quantity_processing": "extracted-factors-original-units-raw-text-v4",
         "prompt_sha256": hashlib.sha256(prompt.encode()).hexdigest(),
         "image_sha256": {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in images},
     }
@@ -76,7 +77,9 @@ def main():
             "quantity_processing": {
                 "count": "total amount in unit, extracted factors multiplied in Python",
                 "normalization": (
-                    "unit spellings, restore unambiguous source scale; invalid counts to null"
+                    "unit spellings, restore source scale, "
+                    "reconcile explicit raw-text sizes/counts; "
+                    "conflicting amounts to null"
                 ),
                 "defaults": "missing unmeasured purchase count to 1; null unit to pcs",
             },

@@ -113,7 +113,7 @@ class ReceiptPromptTests(unittest.TestCase):
                 self.assertEqual((result.items[0].count, result.items[0].unit), (expected, unit))
                 self.assertNotIn("quantity", result.model_dump()["items"][0])
 
-    def test_printed_unit_is_preserved_without_purchase_count(self):
+    def test_printed_contents_are_recovered_without_purchase_count(self):
         self.message.parsed = DraftResult(
             items=[
                 self.draft.items[0].model_copy(
@@ -122,7 +122,7 @@ class ReceiptPromptTests(unittest.TestCase):
             ]
         )
         result = laas.extract_receipt(self.image, self.client, "test-model")
-        self.assertIsNone(result.items[0].count)
+        self.assertEqual(result.items[0].count, 250)
         self.assertEqual(result.items[0].unit, "ml")
 
     def test_receipt_unit_fallback_only_replaces_null(self):

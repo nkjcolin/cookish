@@ -27,6 +27,30 @@ quantities even when the unit was preserved. Draft quantities require review;
 passing software tests does not establish extraction accuracy. The formal
 evaluation dataset and labels are still to be selected.
 
+Latest receipt benchmark (2026-10-29): all 30 new synthetic receipts were verified
+and tested against the school model using the updated quantity checks. Strict
+alias-based food precision was 91.02%, recall 92.68%, and joint exact
+name/count/unit accuracy 294/328 (89.63%). Six of 48 non-food entries were included.
+The preset gate failed, so nothing was published to `dataset/generated/eval/`.
+The local [report](output/eval/receipt_lengths_20261029/report.md) documents
+descriptive-name matching limitations and actual extraction errors. It also found
+a guard regression: `2 S FINEST ...` can consume the purchase count as a piece
+token and halve a valid amount. This remains a known issue for the next correction;
+no inference or label tuning was performed during this benchmark. These are
+synthetic assistant/OCR-verified labels, not formal human-labelled acceptance.
+
+Receipt-category fix (2026-10-29): a separate regression replay of those 30 saved
+responses removed all six known non-food leaks, retained all food entries and
+left every retained item's fields unchanged. Fresh school-API tests of the six
+affected images through `/ai/parse-image` returned all 58 expected food entries
+and no non-food; the filter removed seven upstream non-food entries. All 394
+application tests and 29 standalone checks passed, and both Docker images were
+rebuilt and checked without source mounts. See the local
+[before/after report](output/eval/non_food_filter_20261029/report.md).
+The original failed benchmark is preserved. These are development regression
+results; salt/ginger quantity errors and long-image Lambda latency remain
+unresolved, and no evaluation dataset was promoted.
+
 `laas.py` is a standalone script for testing the school model API. It
 is never imported by the service and is excluded from Docker images. Local
 `eval/data/` and `output/` folders are ignored by Git. Shared input copies are
@@ -251,15 +275,24 @@ For example, two 280 g packs return
 one 1 L bottle returns `count: 1, unit: "l"`.
 An explicitly printed total measured amount is used directly, without multiplying
 it again. Code normalizes spelling (such as kilograms to `kg`) without rescaling
-quantities. It does not derive quantities
-from prices or re-parse `raw_text` with quantity regexes. Live tests found model
-arithmetic unreliable even with a final prompt check.
+quantities. A receipt-only reconciliation step checks the calculated result
+against explicit sizes and purchase counts in the copied `raw_text`. It rebuilds
+the supported total instead of multiplying an already-totalled model amount again.
+Prices never establish contents; an explicit quantity on a unit-price line can
+establish purchased packages. Live tests found model factors unreliable even
+when the printed evidence was copied correctly.
 
 If the model rescaled a measured amount despite the prompt, a narrow source-unit
 check restores the single unambiguous measurement scale in `raw_text`, adjusting
-the amount to that scale. It does not infer package counts or contents from text.
-When several scales are printed, or no source measurement is available (including
-food-photo drafts with null `raw_text`), it retains the extracted unit.
+the amount to that scale. Receipt reconciliation then checks explicit numeric
+contents, labelled purchase counts, supported continuation lines and inline
+multipliers. Repeated labels/counts are counted once. Printed totals take precedence
+over pack arithmetic; a printed drained amount is preferred to net contents.
+Equivalent metric labels can retain a supported extracted scale. Conflicting
+sizes/counts and ambiguous nested packaging return an unknown count for review.
+When both piece counts and mass are printed, a supported model-selected dimension
+is retained; the code does not impose an ingredient-specific preferred unit.
+Unrecognised layouts retain the model result and still need evaluation.
 
 The school model's private `ExtractionResult` schema adds a `quantity` object
 containing `factors` and their original `unit`. `app/quantities.py` calculates the
@@ -274,15 +307,17 @@ weights, densities or drained yields are guessed. Printed net contents remain
 net contents; they do not establish a drained or cooked yield. Prefer a printed
 drained amount for solids in liquid when available, and preserve that evidence.
 When neither amount nor unit is identifiable, receipts keep the `1 pcs` fallback.
-Unknown measured quantities stay null, rather than becoming 1 g or 1 ml. Invalid
-non-positive/non-finite counts also stay null. Identifiable units survive; only
+An unknown model amount can be recovered from clear copied quantity evidence.
+Otherwise unknown measured quantities stay null, rather than becoming 1 g or 1 ml.
+Invalid counts without clear corrective evidence also stay null. Identifiable units survive; only
 a null unit defaults to `pcs` after spelling normalization.
 
 Quantities may precede or follow the description, appear in a quantity column,
 or on associated continuation lines without a price or literal Qty label. The
 prompt preserves all supporting evidence in `raw_text`, without adding calculated
-totals. Layout interpretation and selecting the correct factors remain model
-responsibilities and need evaluation. Text/photo prompts use the same convention when
+totals. Associating receipt lines with the right product remains a model
+responsibility; the code checks only the supported copied-text patterns and cannot
+verify OCR against the image. Both stages need evaluation. Text/photo prompts use the same convention when
 evidence is available, with no receipt-specific missing-count or unit defaults.
 Backend ingredient matching, countable batch creation and exact unit agreement
 are still integration responsibilities; this service never writes stock.
@@ -514,10 +549,31 @@ timeouts are returned as the documented 503 error rather than hidden with fake
 results. Model choice and latency remain evaluation work.
 
 Receipt cleanup removes clear non-food categories and grooming razors that the
-model might mislabel as razor clams. It no longer re-parses `raw_text` with a
-narrow quantity regex: positive finite counts and units from the model survive
-cleanup, including leading, trailing, column and continuation-line quantities.
-Python calculates totals from the model's private numeric factors. Missing unmeasured
+model might mislabel as razor clams. The local classifier in
+`app/food_filter.py` loads reviewed category rules from
+[`app/data/product_categories.json`](app/data/product_categories.json) once on
+import. It checks a normalized copy of `raw_text` before the returned food name;
+strong source evidence overrides a hallucinated edible name, even at high model
+confidence. Compound oral-care and laundry abbreviations require contextual
+evidence; a word such as `gum` alone is insufficient. Explicit edible descriptions
+such as chewing gum, razor clams and alkaline water remain supported.
+
+These rules are conservative exclusions, not an ingredient whitelist. Unclassified
+candidates stay in the draft for review; groceries outside the recipe catalogue
+are not automatically rejected. Add reviewed product-category patterns to the
+data file and test food descriptions sharing those words before rebuilding the
+image. There is no request-time retailer lookup, database access, additional model
+call or cache of customer descriptions. Filter logs contain only removed counts
+and static rule IDs; original text is never logged or modified. This filter
+applies only to receipt image requests; text and grocery-photo behavior and the
+public response fields are unchanged.
+
+Python calculates totals from the model's
+private numeric factors, then receipt-only checks reconcile explicit contents and
+purchase counts in copied `raw_text`. Clear mismatches are corrected in their
+printed units; conflicting or ambiguous evidence leaves the count unknown.
+This supersedes the earlier rule that all positive model quantities survived.
+Missing unmeasured
 purchase counts default to 1; unknown measured and invalid numeric counts remain
 null. After unit spelling normalization, only a null unit defaults to `pcs`.
 The prompt distinguishes package contents and prices from purchase quantity and
@@ -547,7 +603,9 @@ the AI now preserves the receipt's original measurement scale.
 | `app/config.py` | Validated server-side provider and model configuration |
 | `app/credentials.py` | Local credentials or cached Secrets Manager retrieval |
 | `app/images.py` | In-memory image validation before provider calls |
-| `app/receipts.py` | Conservative non-food checks and receipt count/unit defaults |
+| `app/receipts.py` | Receipt filtering, quantity reconciliation and count/unit defaults |
+| `app/food_filter.py`, `app/data/product_categories.json` | Local category exclusions and reviewed rules; no additional model calls |
+| `app/receipt_evidence.py` | Explicit copied receipt sizes/counts, conflict handling and total reconstruction |
 | `app/quantities.py` | Private quantity evidence and deterministic factor multiplication |
 | `app/drafts.py` | Unit spelling and numeric consistency, without catalogue matching |
 | `app/runtime.py` | Shared deadlines, correlation headers and content-free request logs |
@@ -568,10 +626,14 @@ the AI now preserves the receipt's original measurement scale.
 Evaluation tooling lives in `ai/eval/`. Shared images in `ai/dataset/receipt/`
 and `ai/dataset/grocery/` are intended for Git; local working copies under
 `ai/eval/data/`, result folders, `ai/output/` and `ai/dataset/work/` remain ignored.
-The four reference photos stay at the `dataset/receipt/` root, and all 30 selected
-synthetic receipts remain in `dataset/receipt/generated/`. The curated index is
-`dataset/receipt/manifest.json`. Batch records/galleries stay locally
-under `dataset/work/receipts/20261024/`. The one-time
+The four reference photos stay at the `dataset/receipt/` root. The active 30
+synthetic JPEGs in `dataset/receipt/generated/` are the 2026-10-29 batch: 10 short,
+10 medium and 10 long. The previous 30 recipe/scenario PNGs are preserved in
+`dataset/receipt/old/` with their own manifest. The active curated index is
+`dataset/receipt/manifest.json`. Batch records/galleries stay locally under
+`dataset/work/receipts/eval_lengths_20261029/` and `dataset/work/receipts/20261024/`.
+This user-selected development set does not mark the failed frozen evaluation
+gate as passed. The one-time
 [retail catalogue](dataset/catalogs/README.md) covers all recipe ingredient names;
 its prices were collected on 2026-10-28. Historical generation helpers are not yet
 wired to this catalogue.

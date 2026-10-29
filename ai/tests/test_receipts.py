@@ -79,13 +79,14 @@ def test_model_counts_and_units_survive_all_receipt_layouts(raw, count, unit) ->
 
 @pytest.mark.parametrize("count", [None, 1])
 @pytest.mark.parametrize(
-    "raw,unit",
-    [("FOOD", None), ("FOOD 500G", "g"), ("FOOD 1L", "l"), ("FOOD 10S", "pcs")],
+    "raw,unit,expected_count",
+    [("FOOD", None, 1), ("FOOD 500G", "g", 500), ("FOOD 1L", "l", 1), ("FOOD 10S", "pcs", 10)],
 )
-def test_default_count_and_name_units_are_preserved(raw, unit, count) -> None:
+def test_printed_contents_override_missing_or_incorrect_model_counts(
+    raw, unit, expected_count, count
+) -> None:
     original = draft_item(raw, "Food", count, unit)
     result = clean_receipt(DraftResult(items=[original]))
-    expected_count = 1 if count is not None else (None if unit in {"g", "l"} else 1)
     assert result.items[0].count == expected_count
     assert result.items[0].unit == (unit or "pcs")
     assert result.items[0].raw_text == raw
@@ -101,8 +102,8 @@ def test_null_receipt_unit_defaults_to_pcs(count) -> None:
 
 @pytest.mark.parametrize("count", [None, 1, 2])
 @pytest.mark.parametrize("unit", ["g", "kg", "ml", "l", "pack", "bottle", "oz"])
-def test_total_receipt_unit_is_canonical_and_unknown_measured_amount_stays_null(count, unit):
-    original = DraftResult(items=[draft_item("FOOD 500G\n2X$1.50/Unit", "Food", count, unit)])
+def test_without_printed_contents_unknown_measured_amount_stays_null(count, unit):
+    original = DraftResult(items=[draft_item("FOOD\n2X$1.50/Unit", "Food", count, unit)])
     result = clean_receipt(original)
     assert result.items[0].unit == unit
     if count is None:
@@ -151,6 +152,8 @@ def test_receipt_checks_apply_to_real_provider_route_only_for_receipts(image_pay
             draft_item("FOOD 250ML", "Food", None, "ml"),
             draft_item("3 APPLES", "Apple", 3, "pcs"),
             draft_item("PEARS\n4", "Pear", 4, None),
+            draft_item("FP L/LQ DTG-C.C 4.4L", "Coconut milk", None, None),
+            draft_item("TT P-GUM HLTH 110G", "Chewing gum", None, None),
         ]
     )
 
@@ -173,9 +176,9 @@ def test_receipt_checks_apply_to_real_provider_route_only_for_receipts(image_pay
         assert [
             (item["display_name"], item["count"], item["unit"]) for item in receipt.json()["items"]
         ] == [
-            ("Milk", 1, "carton"),
+            ("Milk", 1, "l"),
             ("Tofu", 2, "pack"),
-            ("Food", None, "ml"),
+            ("Food", 250, "ml"),
             ("Apple", 3, "pcs"),
             ("Pear", 4, "pcs"),
         ]
@@ -184,10 +187,12 @@ def test_receipt_checks_apply_to_real_provider_route_only_for_receipts(image_pay
         assert json.loads(text.content)["items"][1]["count"] == 1
         assert json.loads(text.content)["items"][3]["count"] is None
         assert text.json()["items"][-1]["unit"] is None
+        assert len(text.json()["items"]) == 8
         photo = TestClient(app).post("/ai/parse-image", json={**image_payload, "kind": "photo"})
         assert photo.status_code == 200
         assert photo.json()["items"][3]["count"] is None
         assert photo.json()["items"][-1]["unit"] is None
+        assert len(photo.json()["items"]) == 8
     finally:
         app.dependency_overrides.clear()
         model.close()

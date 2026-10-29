@@ -163,3 +163,45 @@ Two supplementary public sources, not downloaded here:
 
 Review the dataset licences and attribution instructions before reuse. Own local
 examples are still needed for the app's receipt layouts, food names and voice flow.
+
+## Synthetic receipt length benchmark (2026-10-29)
+
+A separate school-model run tested 30 newly generated receipt images with the
+updated copied-text quantity checks, without changing inference code, labels or
+thresholds during the test. Every medium receipt covers one target recipe and
+every long receipt covers two different target recipe families using combined
+as-sold stock. Labels were frozen and checked with local OCR and assistant review;
+these are not independent human labels or real transactions.
+
+Precision 91.02%; recall 92.68%; exact name/count/unit 294/328 (89.63%); non-food inclusions 6/48; failed requests 0.
+
+Failed the frozen gate; retained only in ignored `dataset/work/receipts/eval_lengths_20261029/`, with no publication. Local reports and raw responses are under
+`ai/output/eval/receipt_lengths_20261029/`. The gate requires at least 90% precision,
+recall and joint exact item accuracy and at most 5% non-food inclusion, overall
+and per length, with all requests/images verified. No model/prompt tuning was
+performed on this run. Passing the synthetic accuracy gate does not establish
+the real 30-receipt / 20-photo / 20-voice formal evaluation, production latency
+or deployed inventory integration.
+
+Follow-up receipt-category regression (same day): reviewed local rules in
+`app/data/product_categories.json` now reject contextual oral-care/laundry
+abbreviations using copied source text even when the model invents a food name.
+Offline replay of all 30 original provider replies removes the six known leaks
+without removing foods or altering retained fields. Fresh tests of the six
+affected images through the real FastAPI receipt route with school upstream
+retain all 58 expected food entries and return no non-food. One brand typo was
+reviewed as the same red-lentil product; two genuine quantity errors persist.
+Local report, raw replies, per-item decisions and provenance are in
+`ai/output/eval/non_food_filter_20261029/`.
+
+This is a fix validated on known development examples, not a held-out accuracy
+estimate or independent human-labelled acceptance. Original benchmark reports,
+labels and thresholds remain frozen and failed; the regression does not promote
+any data to `dataset/generated/eval/`. Long-image response times still exceed the
+Lambda request budget. A fresh representative evaluation is needed for a new
+acceptance decision.
+
+The user subsequently selected the 30 length-batch JPEGs as the active curated
+development inputs in `ai/dataset/receipt/generated/`. The previous 30 PNGs are
+preserved under `ai/dataset/receipt/old/`. That explicit selection updates the
+development dataset only; the frozen acceptance result above remains unchanged.
