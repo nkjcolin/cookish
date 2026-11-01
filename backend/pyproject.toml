@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "Cookish API: inventory, Cook and Shop"
 requires-python = ">=3.12,<3.13"
 dependencies = [
+    "alembic>=1.20.1",
     "fastapi>=0.115",
     "mangum>=0.19",
     "psycopg[binary]>=3.2",
@@ -27,6 +28,7 @@ package = false
 [tool.ruff]
 line-length = 100
 target-version = "py312"
+extend-exclude = ["migrations/versions"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
