@@ -13,4 +13,5 @@ RUN uv sync --frozen
 COPY . .
 
 EXPOSE 8000
-CMD ["uv", "run", "--frozen", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+# Apply database migrations, then start the API. If the migration fails, the API does not start.
+CMD ["sh", "-c", "uv run --frozen alembic upgrade head && exec uv run --frozen uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"]
