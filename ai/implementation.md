@@ -4,6 +4,31 @@ This plan has **12 sequential parts**. Each part can be requested and completed 
 its own, for example: "Implement Part 4 only." Add relevant tests and documentation
 as each part is implemented rather than deferring them to the end.
 
+Grocery-photo default update (2026-11-01, explicitly requested): school-backed
+`kind: "photo"` requests now default to `photo_instances.md` and the private
+`PhotoExtractionResult` schema. `app/photos.py` aggregates per-package/object
+evidence in Python and preserves the public `DraftResult` contract. Missing
+`SOCLAAS_PHOTO_QUANTITY_MODE` selects `instances`; an explicit `factors` selects
+the previous `photo.md` prompt/schema. Receipt, typed-list, interpretation and
+audio behavior remains as before. The ten-image development comparison improved
+the fixed readable quantity checks from 36/40 to 40/40 when first saved school
+replies were replayed through the corrected parser. This is not formal acceptance;
+the carrot miscount, non-food inclusion and longer model latency remain known
+limitations. Original trial outputs are preserved under
+`output/eval/grocery_instances_20261101/`.
+
+Default promotion verification: 451 application tests, lint and formatting passed.
+Both local and Lambda Docker images were rebuilt; packaged source/prompt hashes
+match the workspace. The running local school-backed service uses `instances`
+without an environment override; the local Lambda emulator retains its fake
+provider for offline testing. The packaged local image passed 205 targeted tests,
+and the Lambda emulator returned HTTP 200 for a photo-shaped event. A fresh live
+check of `01_meal_egg_rice` returned HTTP 200 in 12.518 seconds with one model call,
+but counted 5 eggs against the frozen comparison label of 4. This demonstrates
+model variability; it does not reproduce or replace the earlier 40/40 replay.
+Fresh results and packaging checks are separate under
+`output/eval/grocery_default_20261101/`. Nothing was deployed to AWS.
+
 Curated selection update (2026-10-29, explicitly requested): move the previous
 30 recipe/scenario PNGs unchanged from `dataset/receipt/generated/` to
 `dataset/receipt/old/`, preserving their provenance in an archive manifest.
@@ -439,7 +464,7 @@ established by these checks.
 | Route | Input distinction | Prompt | Result |
 |---|---|---|---|
 | `POST /ai/parse-image` | `kind: "receipt"` | `app/prompts/receipt.md` | `DraftResult` |
-| `POST /ai/parse-image` | `kind: "photo"` | `app/prompts/photo.md` | `DraftResult` |
+| `POST /ai/parse-image` | `kind: "photo"` | `app/prompts/photo_instances.md` by default; `photo.md` with explicit `factors` | `DraftResult` |
 | `POST /ai/parse-items` | `source: "typed"` or `"voice"` | `app/prompts/items.md` | `DraftResult` |
 | `POST /ai/interpret` | Cooking-adjustment text | `app/prompts/interpret.md` | `InterpretResult` |
 

@@ -51,6 +51,51 @@ The original failed benchmark is preserved. These are development regression
 results; salt/ginger quantity errors and long-image Lambda latency remain
 unresolved, and no evaluation dataset was promoted.
 
+Baseline grocery-photo check (2026-11-01): ten selected synthetic scenes were tested through
+the actual photo route using `qwen3-vl:32b`, without changing the inference code
+or prompt. Nine first-pass calls succeeded; one upstream HTTP 503 succeeded on
+one separately recorded recovery call. All 101/101 broad food-category instances
+matched the assistant-reviewed observations with similar names accepted; 36/40
+predeclared readable quantity totals were correct. Four primary quantity errors
+and two additional loose-count errors remain; obscured totals are unscored.
+Successful calls took 7.81–29.57 seconds, median 13.33 seconds. See the local
+[comparison report](output/eval/grocery_realistic_20261101/report.html).
+These are development measurements, not independent human-labelled acceptance
+or proof that grocery requests meet the Lambda latency budget.
+
+Current grocery-photo method (updated 2026-11-02): school-backed requests default
+to per-package/object extraction with Python aggregation (`instances`). The
+previous `factors` method remains an explicit configuration option. On the same
+ten synthetic images, replaying each first saved model reply through the corrected
+parser produced the following development results:
+
+| Measure | Result |
+|---|---|
+| Predeclared readable quantity totals | 40/40 (100%), versus 36/40 with the previous method |
+| Two additional loose-count checks | 1/2; garlic corrected, carrots still 3 instead of 2 |
+| Combined checked quantities | 41/42 (97.6%); not accuracy over every returned quantity |
+| Expected broad food categories found | 101/101 (100% recall) |
+| Broad food-category precision | 101/102 (99.02%); one kitchen towel incorrectly included |
+
+These are saved-reply replay results, not a fresh full-dataset run or independent
+human-labelled acceptance. Similar food names are accepted; exact product subtypes
+and obscured/unlabelled quantities are not fully scored. The subsequent fresh
+live check of image 01 returned three of four checked quantities correctly (75%):
+5 eggs against the comparison label of 4. It succeeded in 12.518 seconds with
+one model call, confirming that counts can vary across calls. One image is too
+small to estimate current overall accuracy.
+
+Across the original paired live runs, mean model-call time excluding validation
+retries increased from 16.0 to 22.8 seconds (about 43%); the previous image 10
+timing uses its successful recovery call. The corrected parser accepted all ten
+saved first replies, but full live timing after correction has not been measured.
+The known non-food leak and Lambda latency acceptance remain unresolved.
+The local [paired report](output/eval/grocery_instances_20261101/final_report.html)
+and [fresh live check](output/eval/grocery_default_20261101/live_smoke.json) stay
+under ignored `output/`; those links require the local run files. The selected
+input images, gallery, manifest and review notes are shared in
+[dataset/grocery/](dataset/grocery/README.md).
+
 `laas.py` is a standalone script for testing the school model API. It
 is never imported by the service and is excluded from Docker images. Local
 `eval/data/` and `output/` folders are ignored by Git. Shared input copies are
@@ -300,6 +345,39 @@ product, then removes that object. The app still exposes only `DraftResult` and
 the same six public item fields. Generic LAAS helpers return raw model text;
 use the structured receipt helpers or the API to test the calculated public result.
 
+School-backed grocery photos use **per-package/object extraction by default**:
+`SOCLAAS_PHOTO_QUANTITY_MODE=instances`. A missing setting also selects this mode.
+Set `SOCLAAS_PHOTO_QUANTITY_MODE=factors` to select the previous prompt/schema.
+Rebuild the image and restart the service after changing code or configuration.
+`photo_instances.md` asks for each visible package or loose object separately;
+`app/photos.py` calculates totals in Python. The public response is unchanged.
+Labelled contents retain their printed scale. Unreadable contents can retain a
+purchase unit, while uncertain or contradictory quantities become null. Duplicate
+locations and partly unknown groups do not produce misleading partial totals.
+Receipts, typed lists and interpretation retain their existing behavior.
+
+The 2026-11-01 trial used the same ten synthetic grocery JPEGs and model. The
+initial live implementation returned 7/10 usable responses because its private
+validator rejected quantity sentinels and units such as `loaf`. After general
+parser corrections, replaying each **first saved school reply** through the API
+route yielded **40/40 fixed readable quantity checks**, versus baseline **36/40**.
+Including the two supplemental loose-count checks gives **41/42 (97.6%)**;
+they remain separate from the original fixed denominator.
+The prompt and JSON schema were unchanged during replay; it made no new model
+calls and is not a fresh live test of the corrected app. One supplemental carrot
+count still returned 3 instead of 2; a kitchen towel was newly included as food.
+All 101 expected broad food categories were found, plus that one non-food extra.
+Broad food-category recall was 100% and precision was 101/102 (99.02%). A later
+fresh check of image 01 returned 5 eggs rather than the comparison label of 4
+(3/4 checked quantities correct); the replay score does not guarantee repeated
+live-call accuracy.
+The actual trial used 14 model POSTs including repair attempts and had a 16.84 s
+successful-call median / 58.95 s nearest-rank p95, versus 13.33 s / 29.57 s in the
+baseline. On 2026-11-01, per-instance extraction was selected as the application
+default at the user's request. Fresh live and unseen-photo acceptance remains
+outstanding; the known carrot and non-food errors remain.
+See the local ignored [paired experiment report](output/eval/grocery_instances_20261101/final_report.html).
+
 If no purchase count is printed, the prompt assumes one package internally and
 uses its readable contents amount. Unknown contents retain a known package count
 and explicit purchase unit, or a null measured amount for review. No pack sizes,
@@ -447,6 +525,7 @@ Use a base URL such as `https://school-api.example/v1`, not a full
 | `SOCLAAS_BASE_URL` | Required for school | API base URL, without credentials or query parameters |
 | `SOCLAAS_MODEL` | Required for school | Default hosted model |
 | `SOCLAAS_IMAGE_MODEL` | Default model | Optional override for receipt/photo tasks |
+| `SOCLAAS_PHOTO_QUANTITY_MODE` | `instances` | Grocery-photo package/object extraction with Python aggregation; `factors` selects the previous prompt/schema |
 | `SOCLAAS_TEXT_MODEL` | Default model | Optional override for typed/voice lists |
 | `SOCLAAS_INTERPRET_MODEL` | Default model | Optional override for interpretation; final choice awaits testing |
 | `SOCLAAS_AUDIO_MODEL` | None | Required for real transcription; no fallback to the image/text default |
@@ -607,12 +686,13 @@ the AI now preserves the receipt's original measurement scale.
 | `app/food_filter.py`, `app/data/product_categories.json` | Local category exclusions and reviewed rules; no additional model calls |
 | `app/receipt_evidence.py` | Explicit copied receipt sizes/counts, conflict handling and total reconstruction |
 | `app/quantities.py` | Private quantity evidence and deterministic factor multiplication |
+| `app/photos.py` | Default per-package grocery-photo evidence, unit preservation and aggregation |
 | `app/drafts.py` | Unit spelling and numeric consistency, without catalogue matching |
 | `app/runtime.py` | Shared deadlines, correlation headers and content-free request logs |
 | `app/audio.py` | In-memory base64, size and audio-container validation |
 | `app/pricing.py` | Cached model rates, decimal estimates and rate provenance |
 | `app/matching.py` | Legacy catalogue utility; no longer called by the AI routes |
-| `app/prompts/` | One prompt per task: `receipt`, `photo`, `items`, `interpret`. First drafts |
+| `app/prompts/` | Task prompts: `receipt`, `photo_instances` (default grocery photos), `photo` (previous method), `items`, `interpret` |
 | `app/schemas.py` | Request and response shapes, copied from the backend |
 | `app/errors.py` | The shared error format, copied from the backend |
 | `tests/` | Contract check and pipeline tests with a scripted model |

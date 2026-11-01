@@ -29,6 +29,7 @@ class Settings:
     max_output_tokens: int = 4096
     timeout_seconds: float = TIMEOUT_SECONDS
     pricing_cache_seconds: int = 3600
+    photo_quantity_mode: str = "instances"
 
     @classmethod
     def from_env(cls, environ: Mapping[str, str] | None = None) -> Self:
@@ -105,6 +106,9 @@ class Settings:
             raise ConfigurationError("SOCLAAS_PRICING_CACHE_SECONDS must be an integer") from None
         if not 1 <= pricing_cache_seconds <= 86400:
             raise ConfigurationError("SOCLAAS_PRICING_CACHE_SECONDS must be between 1 and 86400")
+        photo_quantity_mode = read("SOCLAAS_PHOTO_QUANTITY_MODE") or "instances"
+        if photo_quantity_mode not in {"factors", "instances"}:
+            raise ConfigurationError("SOCLAAS_PHOTO_QUANTITY_MODE must be factors or instances")
         return cls(
             provider=provider,
             base_url=base_url.rstrip("/") + "/",
@@ -119,6 +123,7 @@ class Settings:
             max_output_tokens=max_output_tokens,
             timeout_seconds=timeout_seconds,
             pricing_cache_seconds=pricing_cache_seconds,
+            photo_quantity_mode=photo_quantity_mode,
         )
 
     def model_for_task(self, task: str) -> str:

@@ -26,6 +26,35 @@ def test_audio_model_is_optional_and_never_uses_vision_default(school_env):
     assert settings.model_for_task("transcription") == "speech-model"
 
 
+def test_photo_instances_are_the_server_owned_default(school_env):
+    assert Settings().photo_quantity_mode == "instances"
+    assert Settings.from_env(school_env).photo_quantity_mode == "instances"
+    assert (
+        Settings.from_env({**school_env, "SOCLAAS_PHOTO_QUANTITY_MODE": ""}).photo_quantity_mode
+        == "instances"
+    )
+    assert (
+        Settings.from_env(
+            {
+                **school_env,
+                "SOCLAAS_PHOTO_QUANTITY_MODE": "instances",
+            }
+        ).photo_quantity_mode
+        == "instances"
+    )
+    with pytest.raises(ConfigurationError, match="SOCLAAS_PHOTO_QUANTITY_MODE"):
+        Settings.from_env({**school_env, "SOCLAAS_PHOTO_QUANTITY_MODE": "other"})
+
+
+def test_previous_photo_factors_mode_can_be_selected_explicitly(school_env):
+    assert (
+        Settings.from_env(
+            {**school_env, "SOCLAAS_PHOTO_QUANTITY_MODE": "factors"}
+        ).photo_quantity_mode
+        == "factors"
+    )
+
+
 def test_task_overrides_and_default_fallback(school_env) -> None:
     settings = Settings.from_env(school_env)
     assert settings.base_url == "https://school.example/api/v1/"
