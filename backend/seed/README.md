@@ -6,7 +6,7 @@ The catalogue that every database starts with: ingredients (Role 2) and recipes 
 |---|---|---|
 | `ingredients.csv` | Role 2 | One row per ingredient. Also bundled into the `ai` Lambda |
 | `recipes/<slug>.yaml` | Role 5 | 48 recipes with human content approval, one per file |
-| `seed.py` | Role 2 | Planned loader for ingredients and recipes; must be safe to run again |
+| `seed.py` | Role 2 | Loader for ingredients and recipes: `uv run python -m seed.seed`. Safe to run again; runs on every container start |
 | `recipe_plan.yaml` | Role 5 | Index of the 48 reviewed files and their ingredient/variant relationships |
 | `ingredient_requests.yaml` | Role 5 / Role 2 review | 42 proposed canonical names and aliases |
 | `recipe_review.yaml` | Role 5 / human reviewer | Review coordination metadata; not a runtime seed format |
@@ -48,7 +48,7 @@ uv run python scripts/render_recipe_review.py --check
 After editing recipe content or `recipe_review.yaml`, refresh the review guide
 with `uv run python scripts/render_recipe_review.py`.
 
-Add `--ingredients-csv seed/ingredients.csv` when Role 2's CSV is available.
+Add `--ingredients-csv seed/ingredients.csv` to check the recipes against the catalogue (the CSV now exists).
 Add `--require-reviewed` to require the human-review flags; all 48 approved
 recipes now pass that check. It does not certify cooking trials or nutrition.
 
@@ -118,6 +118,25 @@ reviewed: false
   specifies the counted ingredients and other transparent tag heuristics;
   these are culinary ranking features, not nutrition claims.
 
-Role 2 still needs to resolve water's proposed assumed-available/no-purchase
-treatment and conversions between recipe amounts, inventory counts and pack
-sizes. See the [ingredient handoff details](../../docs/role5-handoff.md#ingredient-details-to-settle-during-catalogue-review).
+## Loading (seed.py)
+
+`uv run python -m seed.seed` checks every file first and reports all problems together; if there is
+any, nothing is written. Otherwise it writes in one transaction, matching rows by their fixed UUID, so
+running it again updates changes and never duplicates or deletes. It also works out each recipe's
+`diet_flags` (diets that every ingredient suits) and `allergens` (every allergen in any ingredient,
+optional ones included).
+
+## Catalogue decisions (Role 2)
+
+- **Water:** a staple with no purchase unit, so it never blocks a recipe or appears on a shopping list.
+- **Not buyable:** an empty `purchase_unit` means the ingredient is not bought (water, cooked rice).
+  Proposed with Role 5; there is no separate "buyable" column.
+- **Staples:** salt, black pepper, canola oil, sesame oil, soy sauce, water.
+- **Tracked by count:** egg, tomato, carrot, cucumber, lemon, onion, potato, firm tofu (packs). All others by state.
+- **Allergens and diets:** chicken carries no `halal` flag (it depends on how the product was slaughtered);
+  coconut milk is not tagged `tree_nut`; soba is tagged `gluten`.
+- **Estimates:** shelf-life days and pack sizes are provisional, not yet checked against USDA FoodKeeper.
+  The canned chickpea size (240 g) is the drained weight.
+- **Still open:** converting recipe grams to inventory counts or packs (for example 300 g of tomato against
+  a count of tomatoes). Until agreed, these cases use the "check at home" flow. See the
+  [ingredient handoff details](../../docs/role5-handoff.md#ingredient-details-to-settle-during-catalogue-review).

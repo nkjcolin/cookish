@@ -13,4 +13,4 @@ RUN uv sync --frozen
 COPY . .
 
 EXPOSE 8000
-CMD ["uv", "run", "--frozen", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+CMD ["sh", "-c", "uv run --frozen alembic upgrade head && uv run --frozen python -m seed.seed && exec uv run --frozen uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"]
