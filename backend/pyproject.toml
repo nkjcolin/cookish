@@ -9,6 +9,7 @@ dependencies = [
     "mangum>=0.19",
     "psycopg[binary]>=3.2",
     "pydantic>=2.9",
+    "pyyaml>=6.0.3",
     "sqlalchemy>=2.0",
 ]
 
