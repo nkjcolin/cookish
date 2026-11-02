@@ -1,5 +1,26 @@
 # AI service implementation plan
 
+Photo contents-consistency update (2026-11-02): add a conservative per-instance
+check in `app/photos.py` for label-based model amounts of 1. Only a whole,
+positive, same-unit metric contents label can replace that amount. Ambiguous
+labels, multipacks, prices, nutrition, other numeric amounts and non-label
+observations retain existing behavior. The prompt, schemas, receipt and text
+paths are unchanged. All 490 application tests, lint and formatting passed.
+Paired route replay of 20 saved first school replies changed exactly the two
+targeted count fields; all other public fields were identical. Evidence and the
+separate fresh live run are under ignored
+`output/eval/grocery_postprocess_20261102/`.
+
+The separate fresh ten-image run passed 40/40 primary quantities and 41/42
+combined checks (97.6%), all first-attempt HTTP 200. The model supplied correct
+labelled amounts on its own in this run, so no additional guard corrections were
+needed; only the paired replay isolates the code change. Carrots (3 vs 2) and
+kitchen-towel inclusion remain. Fresh median latency was 17.888 seconds, range
+8.930–30.195, with three calls over 27 seconds. Both Docker images were rebuilt
+and their running containers' source hashes and guard behavior verified. The
+packaged local image passed 244 focused tests; 29 standalone checks also passed.
+No prompt, dataset, scoring-target or schema changes were made.
+
 This plan has **12 sequential parts**. Each part can be requested and completed on
 its own, for example: "Implement Part 4 only." Add relevant tests and documentation
 as each part is implemented rather than deferring them to the end.

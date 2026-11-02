@@ -229,6 +229,99 @@ def test_photo_labels_restore_original_printed_scale(
     ]
 
 
+@pytest.mark.parametrize(
+    "label,unit,expected",
+    [
+        ("725 ml", "ml", 725),
+        ("NET WEIGHT: 235 g", "g", 235),
+        ("Net Wt. 0.75 kg", "kg", 0.75),
+        (" CONTENTS = 1.8 L ", "l", 1.8),
+        ("750 millilitres", "ml", 750),
+        ("NET CONTENT 235 grams.", "g", 235),
+    ],
+)
+def test_one_package_amount_uses_unambiguous_same_unit_contents(label, unit, expected):
+    assert resolve(food([instance("front", 1, unit, label_text=label)])) == [
+        ("Food", expected, unit)
+    ]
+
+
+@pytest.mark.parametrize(
+    "label",
+    [
+        "2 x 235 g",
+        "235 g x 2",
+        "235g+25g free",
+        "2 packs 235 g",
+        "NET 400 g / DRAINED 240 g",
+        "235 g (250 ml)",
+        "1 kg (1000 g)",
+        "nutrition per 100 g",
+        "per 235 g",
+        "serving size 235 g",
+        "$1 per 235 g",
+        "SGD 235 g",
+        "235 g $4.20",
+        "235 g / $4.20",
+        "235 g sugar",
+        "approximately 235 g",
+        "~235 g",
+        "-235 g",
+        "0 g",
+        "1,000 g",
+        "1e3 g",
+        "10 pcs",
+        "235 mg",
+        "235 kcal",
+        "Product 235 g",
+        "235 g\nother text",
+        "9" * 400 + " g",
+        "0." + "0" * 400 + "1 g",
+    ],
+)
+def test_one_package_guard_skips_ambiguous_or_unsupported_labels(label):
+    source = PhotoExtractionResult.model_validate(
+        {"items": [food([instance("front", 1, "g", label_text=label)])]}
+    )
+    # Compare to the previous scale-only behavior: the new guard must be a no-op.
+    from app.quantities import _restore_source_scale
+    from app.schemas import DraftItem
+
+    old = _restore_source_scale(
+        DraftItem(
+            display_name="Food", raw_text=label, count=1, unit="g", storage=None, confidence=0.9
+        )
+    )
+    result = resolve_photo_instances(source).items[0]
+    assert (result.count, result.unit) == (old.count, old.unit)
+
+
+def test_package_correction_happens_before_aggregation_without_double_counting():
+    assert resolve(
+        food(
+            [
+                instance("left", 1, "g", label_text="235 g"),
+                instance("right", 1, "g", label_text="235 g"),
+            ]
+        )
+    ) == [("Food", 470, "g")]
+
+
+@pytest.mark.parametrize("amount", [2, 235, None])
+def test_other_amounts_are_not_replaced_by_contents_guard(amount):
+    assert resolve(food([instance("front", amount, "g", label_text="235 g")])) == [
+        ("Food", amount, "g")
+    ]
+
+
+def test_contents_guard_keeps_other_dimensions_pieces_and_unknowns():
+    assert resolve(food([instance("front", 1, "g", label_text="725 ml")])) == [("Food", 1, "g")]
+    assert resolve(food([instance("front", 1, "pcs", label_text="10 pcs")])) == [("Food", 1, "pcs")]
+    assert resolve(food([instance("front", None, "g", "unknown", "235 g")])) == [
+        ("Food", None, "g")
+    ]
+
+
 def test_empty_list_and_missing_instance_evidence_are_different():
     assert resolve_photo_instances(PhotoExtractionResult(items=[])).items == []
     with pytest.raises(ValidationError):

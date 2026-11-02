@@ -63,7 +63,7 @@ Successful calls took 7.81–29.57 seconds, median 13.33 seconds. See the local
 These are development measurements, not independent human-labelled acceptance
 or proof that grocery requests meet the Lambda latency budget.
 
-Current grocery-photo method (updated 2026-11-02): school-backed requests default
+Earlier updated-method comparison (2026-11-02): school-backed requests default
 to per-package/object extraction with Python aggregation (`instances`). The
 previous `factors` method remains an explicit configuration option. On the same
 ten synthetic images, replaying each first saved model reply through the corrected
@@ -95,6 +95,26 @@ and [fresh live check](output/eval/grocery_default_20261101/live_smoke.json) sta
 under ignored `output/`; those links require the local run files. The selected
 input images, gallery, manifest and review notes are shared in
 [dataset/grocery/](dataset/grocery/README.md).
+
+Latest photo post-processing check (2026-11-02): the narrow contents-label guard
+described below was tested with an unchanged prompt and schema. Paired replay of
+20 saved first replies corrected only the two image-01 count fields and left
+every other public field identical. A separate fresh run of all ten images then
+passed **40/40 primary quantity checks** and **41/42 combined checks (97.6%)**,
+compared with the preceding fresh run's 38/40 and 38/42 (90.5%). Broad category
+recall was 101/101 (100%); precision was 101/102 (99.02%). Carrots still returned
+3 instead of 2, and the kitchen towel was still included. All ten requests
+succeeded on the first attempt; median latency was 17.888 seconds, range
+8.930–30.195 seconds, with three requests over 27 seconds.
+
+In this new live run the model itself supplied correct labelled amounts, so the
+guard made no further corrections; the paired replay isolates its actual effect.
+Fresh-call differences also include model variability. The local
+[label-check report](output/eval/grocery_postprocess_20261102/report.html) and
+original raw replies are ignored output artifacts. Both Docker images were
+rebuilt and the local containers restarted with the guard. All 490 application
+tests, 29 standalone checks and 244 packaged focused tests passed; no AWS
+deployment or formal human-labelled acceptance was performed.
 
 `laas.py` is a standalone script for testing the school model API. It
 is never imported by the service and is excluded from Docker images. Local
@@ -355,6 +375,17 @@ Labelled contents retain their printed scale. Unreadable contents can retain a
 purchase unit, while uncertain or contradictory quantities become null. Duplicate
 locations and partly unknown groups do not produce misleading partial totals.
 Receipts, typed lists and interpretation retain their existing behavior.
+
+A photo-only label check repairs a model amount of `1` when the entire copied
+label is one positive metric contents quantity in the same unit. Optional
+net-weight/contents prefixes are supported; prices, nutrition text, multipacks,
+competing quantities and product descriptions are deliberately excluded. The
+check runs per package before aggregation. Other amounts, loose-object counts,
+unknown quantities and existing unit-scale handling retain their prior paths.
+The prompt and private/public schemas are unchanged. A paired replay of 20 saved
+school replies changed only the two targeted count fields (soy sauce and spring
+onions in image 01); every other public field was identical. This checks numeric
+consistency with copied text, not the correctness of the model's visual reading.
 
 The 2026-11-01 trial used the same ten synthetic grocery JPEGs and model. The
 initial live implementation returned 7/10 usable responses because its private

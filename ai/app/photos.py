@@ -1,6 +1,7 @@
 """Per-instance photo evidence; only public draft totals leave the app."""
 
 import math
+import re
 from collections import defaultdict
 from decimal import Decimal
 from typing import Literal, Self
@@ -14,11 +15,36 @@ from app.schemas import DraftItem, DraftResult, Storage
 _PURCHASE_UNITS = {"pack", "bottle", "can", "jar", "bag", "box", "tray", "carton", "bunch", "loaf"}
 _PURCHASE_ALIASES = {"net bag": "bag", "net": "bag", "packet": "pack", "bundle": "bunch"}
 _OBJECT_UNITS = {"pcs", "head", "heads", "bulb", "bulbs", "root", "roots"}
+_METRIC_UNITS = {"g", "kg", "ml", "l"}
+_CONTENTS_LABEL = re.compile(
+    r"(?:(?:net(?:\s*(?:weight|wt\.?|contents?|volume))?|contents?|weight|volume)"
+    r"\s*[:=]?\s*)?"
+    r"(?P<amount>[0-9]+(?:\.[0-9]+)?)\s*"
+    r"(?P<unit>kilograms?|kg|grams?|g|millilit(?:er|re)s?|ml|lit(?:er|re)s?|l)\.?",
+    re.IGNORECASE,
+)
 
 
 def uses_photo_instances(client: object) -> bool:
     """Server-owned capability; callers cannot select it in the request body."""
     return getattr(client, "photo_quantity_mode", "factors") == "instances"
+
+
+def _reconcile_one_package_amount(amount: float, unit: str, label: str) -> float:
+    """Repair a one-package sentinel from a whole, unambiguous contents label.
+
+    This is a consistency check on copied text, not independent OCR. Full matching
+    deliberately excludes prices, nutrition, serving sizes, multipacks, additional
+    quantities and product descriptions. Other numeric amounts and units retain
+    their existing handling; metric scale restoration happens separately.
+    """
+    if amount != 1 or unit not in _METRIC_UNITS:
+        return amount
+    match = _CONTENTS_LABEL.fullmatch(label.strip())
+    if match is None or normalize_unit(match["unit"]) != unit:
+        return amount
+    contents = float(match["amount"])
+    return contents if math.isfinite(contents) and contents > 0 else amount
 
 
 class PhotoInstance(BaseModel):
@@ -109,6 +135,7 @@ class PhotoInstance(BaseModel):
         if self.basis == "label":
             if not (self.label_text or "").strip() or self.amount is None or unit is None:
                 raise ValueError("Label evidence requires visible text, amount and unit")
+            self.amount = _reconcile_one_package_amount(self.amount, unit, self.label_text)
             restored = _restore_source_scale(
                 DraftItem(
                     display_name="Package",
