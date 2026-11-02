@@ -143,7 +143,10 @@ def test_invalid_counts_do_not_become_one_purchase_unit(count, unit):
     assert result.items[0].count is None
 
 
-def test_receipt_checks_apply_to_real_provider_route_only_for_receipts(image_payload) -> None:
+@pytest.mark.parametrize("photo_mode", ["instances", "factors"])
+def test_receipt_checks_apply_to_real_provider_route_only_for_receipts(
+    image_payload, photo_mode
+) -> None:
     answer = DraftResult(
         items=[
             draft_item("TOOTHPASTE", "Toothpaste", 1, "pack"),
@@ -158,15 +161,47 @@ def test_receipt_checks_apply_to_real_provider_route_only_for_receipts(image_pay
     )
 
     def respond(request):
+        if request.method == "GET":
+            return httpx.Response(200, json={"data": []})
+        payload = json.loads(request.content)
+        content = answer.model_dump_json()
+        if payload["response_format"]["json_schema"]["name"] == "PhotoExtractionResult":
+            # Photo evidence can be unknown; receipt text must not fill it in.
+            content = json.dumps(
+                {
+                    "items": [
+                        {
+                            "display_name": item.display_name,
+                            "storage": item.storage,
+                            "confidence": item.confidence,
+                            "instances": [
+                                {
+                                    "position": "front",
+                                    "basis": "unknown",
+                                    "amount": None,
+                                    "unit": item.unit,
+                                    "label_text": None,
+                                }
+                            ],
+                        }
+                        for item in answer.items
+                    ]
+                }
+            )
         return httpx.Response(
             200,
             json={
-                "choices": [{"message": {"content": answer.model_dump_json()}}],
+                "choices": [{"message": {"content": content}}],
             },
         )
 
     model = SchoolModelClient(
-        Settings(base_url="https://school.example/v1/", model="vision", api_key="test-key"),
+        Settings(
+            base_url="https://school.example/v1/",
+            model="vision",
+            api_key="test-key",
+            photo_quantity_mode=photo_mode,
+        ),
         http_client=httpx.Client(transport=httpx.MockTransport(respond)),
     )
     app.dependency_overrides[get_client] = lambda: model

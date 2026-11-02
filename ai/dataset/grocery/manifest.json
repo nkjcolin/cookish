@@ -1,0 +1,726 @@
+{
+  "schema_version": 1,
+  "note": "Actual curated grocery dataset: two provided reference photos and ten selected realistic synthetic grocery photos. The previous three clean preview images are excluded and removed. Assistant review notes are not independent human labels; expected stays null until formal labels are reviewed.",
+  "selection_status": "included in the actual curated dataset at user request",
+  "synthetic_batch": "realistic_20261101",
+  "counts": {
+    "provided_references": 2,
+    "selected_synthetic_images": 10,
+    "one_meal": 3,
+    "one_to_two_days": 3,
+    "weekly_restock": 4
+  },
+  "annotation_policy": [
+    "Generation prompts describe intentions, not rendered ground truth.",
+    "List only exposed food identities supported by the image; do not invent wholly hidden food.",
+    "Do not infer unlabelled produce masses, unreadable rear-pack contents or hidden egg counts.",
+    "A readable pack-total label can establish a count larger than the visible contents.",
+    "Different milk types and sizes stay separate evidence; do not multiply a single size across mixed packages.",
+    "Canned net contents do not imply drained contents. Rendered labels take precedence over planned sizes.",
+    "Single-meal/day/week labels describe the shopping-scene context, not verified nutritional sufficiency.",
+    "Synthetic retailer-style designs are not verified authentic SKU packaging or dated product availability."
+  ],
+  "gallery": "index.html",
+  "school_model_test_status": "Completed all 10 selected images; initial 9/10 success, then one successful separate recovery call.",
+  "images": [
+    {
+      "id": "reference-grocery",
+      "image": "grocery.jpeg",
+      "synthetic": false,
+      "origin": "provided grocery reference image",
+      "sha256": "0b3bcb7e7eb97ac39a970ed8ecf2cb84e501043f70f2f13e343b1e8f556aa25a",
+      "expected": null
+    },
+    {
+      "id": "reference-grocery-table",
+      "image": "grocery-table.webp",
+      "synthetic": false,
+      "origin": "provided grocery reference image",
+      "sha256": "17d7ec645482c2a77d6670ad24678a00654ebd54792b265abad7dacf6db15e11",
+      "expected": null
+    },
+    {
+      "id": "01_meal_egg_rice",
+      "image": "generated/01_meal_egg_rice.jpg",
+      "synthetic": true,
+      "selected_for_dataset": true,
+      "selected_on": "2026-11-01",
+      "generation_tool": "built-in image_gen",
+      "source_batch": "realistic_20261101",
+      "title": "Egg-and-rice dinner ingredients",
+      "shopping_context": "one_meal",
+      "overlap_level": "light overlap",
+      "observed_food_candidates": [
+        "egg",
+        "uncooked rice",
+        "soy sauce",
+        "spring onion"
+      ],
+      "occlusion_notes": "Carton is partly cropped; rice, bottle and spring onions touch/overlap at their edges.",
+      "visible_quantity_notes": [
+        "Four eggs are visible in the open carton.",
+        "Rice label: 1 kg.",
+        "Soy sauce label: 660 ml.",
+        "Spring-onion band: 100 g."
+      ],
+      "unknown_quantity_notes": [],
+      "non_food_items": [],
+      "rendered_deviations": [],
+      "recipe_context": {
+        "recipe_source": "backend/seed/recipes/steamed-egg.yaml",
+        "recipe_sha256": "bfff46cdabc87dbd0846d87947f7840ec313607c04221ebf98b5f2c78517cb62",
+        "title": "Steamed egg with rice",
+        "standard_servings": 2,
+        "intended_servings": 2,
+        "required_foods": [
+          {
+            "canonical_name": "egg",
+            "count": 4.0,
+            "unit": "pcs"
+          },
+          {
+            "canonical_name": "soy sauce",
+            "count": 10.0,
+            "unit": "ml"
+          },
+          {
+            "canonical_name": "spring onion",
+            "count": 15.0,
+            "unit": "g"
+          },
+          {
+            "canonical_name": "uncooked rice",
+            "count": 150.0,
+            "unit": "g"
+          }
+        ],
+        "coverage_verified_from_assistant_read_labels": true,
+        "food_quantities_not_proven": [],
+        "assumptions": [
+          "Kitchen tap water is available.",
+          "Coverage compares visible labelled as-sold amounts, not inferred loose-food mass or cooking yields."
+        ]
+      },
+      "review": {
+        "status": "assistant visually reviewed; local OCR used as supporting evidence",
+        "independently_human_labelled": false,
+        "quantity_notes_are_formal_ground_truth": false
+      },
+      "sha256": "f2d4eff44957d3d87721269db43969fea6b53168402d1986e95a5caf3f835c9f",
+      "bytes": 504232,
+      "width": 1312,
+      "height": 1199,
+      "format": "JPEG",
+      "jpeg_quality": 85,
+      "source_png_sha256": "1d1a9b660fb715040ca611f6e5fc6e57f0ba25c1b91cf47acd1dad4168d0177e",
+      "prompt_sha256": "2ea8c2fd8c71c58bfde6c2db64bdd68ba1084f82461d10fb41c0c8c1a0300a61",
+      "generation_revisions": 0,
+      "expected": null
+    },
+    {
+      "id": "02_meal_soba_overlap",
+      "image": "generated/02_meal_soba_overlap.jpg",
+      "synthetic": true,
+      "selected_for_dataset": true,
+      "selected_on": "2026-11-01",
+      "generation_tool": "built-in image_gen",
+      "source_batch": "realistic_20261101",
+      "title": "Soba ingredients with a partial vegetable view",
+      "shopping_context": "one_meal",
+      "overlap_level": "moderate overlap",
+      "observed_food_candidates": [
+        "soba noodle",
+        "firm tofu",
+        "cucumber",
+        "carrot",
+        "sesame oil",
+        "soy sauce"
+      ],
+      "occlusion_notes": "Tofu overlaps noodles; carrots overlap cucumber bodies and one another. A partly visible carrot section makes exact carrot count uncertain.",
+      "visible_quantity_notes": [
+        "Soba sleeve: 270 g.",
+        "One tofu retail tray: 450 g total, not per inner block.",
+        "Soy sauce: 660 ml."
+      ],
+      "unknown_quantity_notes": [
+        "Loose cucumber/carrot weights are not printed.",
+        "Sesame-oil net volume is not confidently readable.",
+        "Do not copy three carrots from the generation prompt into labels; exact visible count needs review."
+      ],
+      "non_food_items": [],
+      "rendered_deviations": [],
+      "recipe_context": {
+        "recipe_source": "backend/seed/recipes/sesame-soba-tofu.yaml",
+        "recipe_sha256": "9cd6d7704cd13c34edb34df06b954f477d7e0c91c9fb08f1d48f9aa9aee34dac",
+        "title": "Sesame soba with tofu and vegetables",
+        "standard_servings": 2,
+        "intended_servings": 2,
+        "required_foods": [
+          {
+            "canonical_name": "soba noodle",
+            "count": 180.0,
+            "unit": "g"
+          },
+          {
+            "canonical_name": "firm tofu",
+            "count": 300.0,
+            "unit": "g"
+          },
+          {
+            "canonical_name": "cucumber",
+            "count": 200.0,
+            "unit": "g"
+          },
+          {
+            "canonical_name": "carrot",
+            "count": 150.0,
+            "unit": "g"
+          },
+          {
+            "canonical_name": "sesame oil",
+            "count": 10.0,
+            "unit": "ml"
+          },
+          {
+            "canonical_name": "soy sauce",
+            "count": 20.0,
+            "unit": "ml"
+          }
+        ],
+        "coverage_verified_from_assistant_read_labels": false,
+        "food_quantities_not_proven": [
+          "cucumber",
+          "carrot",
+          "sesame oil"
+        ],
+        "assumptions": [
+          "Kitchen tap water is available.",
+          "Coverage compares visible labelled as-sold amounts, not inferred loose-food mass or cooking yields."
+        ]
+      },
+      "review": {
+        "status": "assistant visually reviewed; local OCR used as supporting evidence",
+        "independently_human_labelled": false,
+        "quantity_notes_are_formal_ground_truth": false
+      },
+      "sha256": "fc0012373267308e8a9b7776989144d427d0339c81e92509eced973e1d758472",
+      "bytes": 553730,
+      "width": 1312,
+      "height": 1199,
+      "format": "JPEG",
+      "jpeg_quality": 85,
+      "source_png_sha256": "3793ebe33b3b85399e01d0e9d1cd7e3e93a3bba52250a384b1ff80c3393f60e4",
+      "prompt_sha256": "aded9d9873e5fac01384d71b5043e251a262c91bc2e50272d92262bfb1f9c91d",
+      "generation_revisions": 0,
+      "expected": null
+    },
+    {
+      "id": "03_meal_family_four",
+      "image": "generated/03_meal_family_four.jpg",
+      "synthetic": true,
+      "selected_for_dataset": true,
+      "selected_on": "2026-11-01",
+      "generation_tool": "built-in image_gen",
+      "source_batch": "realistic_20261101",
+      "title": "Larger tofu-and-broccoli family dinner",
+      "shopping_context": "one_meal",
+      "overlap_level": "moderate overlap",
+      "observed_food_candidates": [
+        "firm tofu",
+        "broccoli",
+        "garlic",
+        "ginger",
+        "soy sauce",
+        "canola oil",
+        "uncooked rice"
+      ],
+      "occlusion_notes": "Broccoli overlaps the left tofu tray and lower rice bag; garlic/ginger sit in front of the rice.",
+      "visible_quantity_notes": [
+        "Two distinct firm-tofu retail trays each say 450 g; total 900 g.",
+        "Pretrimmed broccoli florets: 600 g.",
+        "Garlic and ginger each have a 100 g sticker.",
+        "Rice: 1 kg; soy sauce: 660 ml; canola oil: 500 ml."
+      ],
+      "unknown_quantity_notes": [],
+      "non_food_items": [],
+      "rendered_deviations": [],
+      "recipe_context": {
+        "recipe_source": "backend/seed/recipes/tofu-broccoli-stir-fry.yaml",
+        "recipe_sha256": "1669bd3a413f8560dfbbe8ce43f20c8189ae2e80abd5428690474f9347e8006e",
+        "title": "Tofu and broccoli stir-fry with rice",
+        "standard_servings": 2,
+        "intended_servings": 4,
+        "required_foods": [
+          {
+            "canonical_name": "firm tofu",
+            "count": 600.0,
+            "unit": "g"
+          },
+          {
+            "canonical_name": "broccoli",
+            "count": 600.0,
+            "unit": "g"
+          },
+          {
+            "canonical_name": "garlic",
+            "count": 16.0,
+            "unit": "g"
+          },
+          {
+            "canonical_name": "ginger",
+            "count": 16.0,
+            "unit": "g"
+          },
+          {
+            "canonical_name": "soy sauce",
+            "count": 40.0,
+            "unit": "ml"
+          },
+          {
+            "canonical_name": "canola oil",
+            "count": 20.0,
+            "unit": "ml"
+          },
+          {
+            "canonical_name": "uncooked rice",
+            "count": 300.0,
+            "unit": "g"
+          }
+        ],
+        "coverage_verified_from_assistant_read_labels": true,
+        "food_quantities_not_proven": [],
+        "assumptions": [
+          "Kitchen tap water is available.",
+          "Coverage compares visible labelled as-sold amounts, not inferred loose-food mass or cooking yields."
+        ]
+      },
+      "review": {
+        "status": "assistant visually reviewed; local OCR used as supporting evidence",
+        "independently_human_labelled": false,
+        "quantity_notes_are_formal_ground_truth": false
+      },
+      "sha256": "6f9eff92005051d80bb9b0ab09235620c2add32bfa96cf7a4a5da43678d59546",
+      "bytes": 579945,
+      "width": 1448,
+      "height": 1086,
+      "format": "JPEG",
+      "jpeg_quality": 85,
+      "source_png_sha256": "611b42f333436e55f2553a98a450a6586209d77b9b3df2b1213e497075bab864",
+      "prompt_sha256": "9d2bd7400fbb5f3fd9efbf030adb5d261e98ace7e2be9b12e2fe1a1a4da70cc9",
+      "generation_revisions": 1,
+      "expected": null
+    },
+    {
+      "id": "04_two_days_fish_greens",
+      "image": "generated/04_two_days_fish_greens.jpg",
+      "synthetic": true,
+      "selected_for_dataset": true,
+      "selected_on": "2026-11-01",
+      "generation_tool": "built-in image_gen",
+      "source_batch": "realistic_20261101",
+      "title": "Fish, eggs, noodles and greens top-up",
+      "shopping_context": "one_to_two_days",
+      "overlap_level": "moderate overlap",
+      "observed_food_candidates": [
+        "cod fillet",
+        "egg",
+        "rice vermicelli",
+        "leafy greens",
+        "tomato",
+        "ginger",
+        "garlic",
+        "lemon"
+      ],
+      "occlusion_notes": "Leafy greens sit partly in a shopping bag; one lemon is behind its lip; fish tray and noodles overlap.",
+      "visible_quantity_notes": [
+        "Cod label: 300 g.",
+        "Rice-vermicelli label: 400 g.",
+        "Six eggs are visible in the open carton."
+      ],
+      "unknown_quantity_notes": [
+        "Greens' exact species and net weight are not established by a readable label.",
+        "Loose tomatoes, lemons, garlic and ginger have no printed mass."
+      ],
+      "non_food_items": [],
+      "rendered_deviations": [],
+      "recipe_context": null,
+      "review": {
+        "status": "assistant visually reviewed; local OCR used as supporting evidence",
+        "independently_human_labelled": false,
+        "quantity_notes_are_formal_ground_truth": false
+      },
+      "sha256": "2d2c64693918479bb025db3ebaab0f0bd33169d35fa258b57fcf77bef5351632",
+      "bytes": 549380,
+      "width": 1448,
+      "height": 1086,
+      "format": "JPEG",
+      "jpeg_quality": 85,
+      "source_png_sha256": "ca0847e2209cedf5d350913c41139c786eacbf6b9e0edd840760edbde2f47d8d",
+      "prompt_sha256": "7791be6e45cbeb98f24fe196c2973b083feb927a6c1a319d6c2ba9c4202241ff",
+      "generation_revisions": 0,
+      "expected": null
+    },
+    {
+      "id": "05_two_days_vegetarian",
+      "image": "generated/05_two_days_vegetarian.jpg",
+      "synthetic": true,
+      "selected_for_dataset": true,
+      "selected_on": "2026-11-01",
+      "generation_tool": "built-in image_gen",
+      "source_batch": "realistic_20261101",
+      "title": "Vegetarian groceries with stacked packages",
+      "shopping_context": "one_to_two_days",
+      "overlap_level": "strong overlap",
+      "observed_food_candidates": [
+        "silken tofu",
+        "tempeh",
+        "broccoli",
+        "bok choy",
+        "carrot",
+        "onion",
+        "garlic",
+        "ginger",
+        "fresh shiitake mushroom",
+        "soy sauce"
+      ],
+      "occlusion_notes": "Tote covers tofu corner; tempeh packs overlap; bok choy partly hides broccoli; carrots cross onions and mushroom-tray edge.",
+      "visible_quantity_notes": [
+        "Top tempeh pack: 170 g; do not assume the obscured lower label is identical.",
+        "Mushroom-tray sticker: 250 g."
+      ],
+      "unknown_quantity_notes": [
+        "Tofu mass, lower tempeh mass and soy-sauce volume are not confidently readable.",
+        "Loose produce has no printed gram weights."
+      ],
+      "non_food_items": [],
+      "rendered_deviations": [
+        "Rendered tofu says Silken Tofu, not the planned firm tofu; manifest uses the observed subtype and does not claim recipe coverage."
+      ],
+      "recipe_context": null,
+      "review": {
+        "status": "assistant visually reviewed; local OCR used as supporting evidence",
+        "independently_human_labelled": false,
+        "quantity_notes_are_formal_ground_truth": false
+      },
+      "sha256": "4f47142577d3424e6ed21041daa83642239e8705140f6b86cb69c9f8b280fa1d",
+      "bytes": 583494,
+      "width": 1086,
+      "height": 1448,
+      "format": "JPEG",
+      "jpeg_quality": 85,
+      "source_png_sha256": "d1221d45dd40656e97dc14e72cf1069d347b1c22f3c4f1f8c30369da4ff59bd4",
+      "prompt_sha256": "b39921abc8f98750b87ccde42e56159c3d30cae0e078b83fbd25694b84d4dd69",
+      "generation_revisions": 0,
+      "expected": null
+    },
+    {
+      "id": "06_two_days_breakfast_dinner",
+      "image": "generated/06_two_days_breakfast_dinner.jpg",
+      "synthetic": true,
+      "selected_for_dataset": true,
+      "selected_on": "2026-11-01",
+      "generation_tool": "built-in image_gen",
+      "source_batch": "realistic_20261101",
+      "title": "Breakfast and dinner supplies with hidden eggs",
+      "shopping_context": "one_to_two_days",
+      "overlap_level": "moderate overlap",
+      "observed_food_candidates": [
+        "egg",
+        "potato",
+        "spinach",
+        "tomato",
+        "uncooked rice",
+        "milk",
+        "bread",
+        "banana",
+        "coconut milk"
+      ],
+      "occlusion_notes": "Bread covers rear of egg carton; spinach covers part of coconut can and a tomato; potatoes cover lower rice bag.",
+      "visible_quantity_notes": [
+        "Egg-carton label says 10 EGGS despite fewer visible egg shapes.",
+        "Potato bag: 1 kg.",
+        "Milk carton: 1 L.",
+        "Coconut-milk can: 200 ml."
+      ],
+      "unknown_quantity_notes": [
+        "Rice, spinach and bread quantities are not confidently readable.",
+        "No gram weights can be inferred for loose fruit/vegetables."
+      ],
+      "non_food_items": [],
+      "rendered_deviations": [],
+      "recipe_context": null,
+      "review": {
+        "status": "assistant visually reviewed; local OCR used as supporting evidence",
+        "independently_human_labelled": false,
+        "quantity_notes_are_formal_ground_truth": false
+      },
+      "sha256": "ce492b556a3f878102cc9c3824ce32d7e3f444a0e98309e35f95179f75477806",
+      "bytes": 611149,
+      "width": 1312,
+      "height": 1199,
+      "format": "JPEG",
+      "jpeg_quality": 85,
+      "source_png_sha256": "a66c13fffa93c80292b84e034522802a3c4633fb75d225364b06c8e317aadb7e",
+      "prompt_sha256": "ccbc6e4dfd44fd6f2e5b4dc903badbce87eaa5f7f449f5ccd43c26ded6d00369",
+      "generation_revisions": 0,
+      "expected": null
+    },
+    {
+      "id": "07_weekly_family",
+      "image": "generated/07_weekly_family.jpg",
+      "synthetic": true,
+      "selected_for_dataset": true,
+      "selected_on": "2026-11-01",
+      "generation_tool": "built-in image_gen",
+      "source_batch": "realistic_20261101",
+      "title": "Larger family haul with mixed food and household goods",
+      "shopping_context": "weekly_restock",
+      "overlap_level": "strong overlap",
+      "observed_food_candidates": [
+        "uncooked rice",
+        "egg",
+        "chicken thigh",
+        "frozen pea",
+        "potato",
+        "carrot",
+        "broccoli",
+        "tomato",
+        "cucumber",
+        "onion",
+        "garlic",
+        "fresh shiitake mushroom",
+        "milk",
+        "bread",
+        "apple",
+        "banana"
+      ],
+      "occlusion_notes": "Stacked egg cartons and chicken trays, overlapping carrot bags, bag partly covering banana bunch, mushroom-tray label turned away.",
+      "visible_quantity_notes": [
+        "Rice: 2 kg; peas: 1 kg; potatoes: 2 kg.",
+        "Two milk cartons each show 1 L.",
+        "Both chicken trays have readable 700 g labels.",
+        "Front carrot bag: 500 g; rear carrot weight is hidden.",
+        "Tomatoes: 600 g; front egg carton: 10 EGGS."
+      ],
+      "unknown_quantity_notes": [
+        "Rear egg count and rear carrot contents must not be inferred from front packages.",
+        "Banana total and onion-net count are uncertain; mushroom mass is not confidently readable."
+      ],
+      "non_food_items": [
+        "wrapped kitchen towel"
+      ],
+      "rendered_deviations": [],
+      "recipe_context": null,
+      "review": {
+        "status": "assistant visually reviewed; local OCR used as supporting evidence",
+        "independently_human_labelled": false,
+        "quantity_notes_are_formal_ground_truth": false
+      },
+      "sha256": "aea0f72e85400beac3609aafacfe81df1f2aa170a8b6167a4c9ca95335100bd2",
+      "bytes": 688804,
+      "width": 1448,
+      "height": 1086,
+      "format": "JPEG",
+      "jpeg_quality": 85,
+      "source_png_sha256": "8c28384655ebbd8512a0ed9288f629c47a5ca924ff83f43f00302a59aa5ed148",
+      "prompt_sha256": "e4b362926e938f63de7628acc97d663ea1146c738bb421eff8277a10ed70c83e",
+      "generation_revisions": 0,
+      "expected": null
+    },
+    {
+      "id": "08_weekly_vegetarian_bulk",
+      "image": "generated/08_weekly_vegetarian_bulk.jpg",
+      "synthetic": true,
+      "selected_for_dataset": true,
+      "selected_on": "2026-11-01",
+      "generation_tool": "built-in image_gen",
+      "source_batch": "realistic_20261101",
+      "title": "Vegetarian pantry and produce restock",
+      "shopping_context": "weekly_restock",
+      "overlap_level": "strong overlap",
+      "observed_food_candidates": [
+        "uncooked rice",
+        "red lentil",
+        "canned chickpea",
+        "coconut milk",
+        "tempeh",
+        "silken tofu",
+        "cauliflower",
+        "cabbage",
+        "pumpkin",
+        "spinach",
+        "long bean",
+        "tomato",
+        "chilli paste",
+        "canola oil",
+        "garlic",
+        "onion"
+      ],
+      "occlusion_notes": "Can cluster hides several labels and makes exact totals uncertain; lentil bags and tofu trays overlap; paper bag covers part of cauliflower.",
+      "visible_quantity_notes": [
+        "Rice: 5 kg; front lentil bag: 500 g.",
+        "Visible tempeh labels: 170 g each.",
+        "Top silken-tofu tray: 450 g; lower tray contents unknown.",
+        "Front chickpea can: 400 g NET; drained mass is not supplied.",
+        "Canola oil: 1 L; chilli paste: 500 g.",
+        "Rendered coconut-milk labels include 100 ml and 200 ml; treat the readable cans separately, not all as the planned 200 ml size."
+      ],
+      "unknown_quantity_notes": [
+        "Do not use planned can counts or 200 ml coconut-can sizes without checking the rendered labels.",
+        "Rear lentil mass and lower tofu mass are hidden.",
+        "No gram weights for cabbage/pumpkin wedges, cauliflower or other loose produce."
+      ],
+      "non_food_items": [],
+      "rendered_deviations": [
+        "Tofu is visibly labelled Silken Tofu.",
+        "Rendered can cluster differs from planned package counts; full counts and coconut-can volumes remain for human review."
+      ],
+      "recipe_context": null,
+      "review": {
+        "status": "assistant visually reviewed; local OCR used as supporting evidence",
+        "independently_human_labelled": false,
+        "quantity_notes_are_formal_ground_truth": false
+      },
+      "sha256": "b4d710d0f40854ff34ad223bee50e898ba6ab95d94d10e37fcd7e9591c7ef4c1",
+      "bytes": 634279,
+      "width": 1312,
+      "height": 1199,
+      "format": "JPEG",
+      "jpeg_quality": 85,
+      "source_png_sha256": "c317404d1abd7ab194b7d28cbc04fbafc7b758e7c929ecc60b0b3a5b269b1199",
+      "prompt_sha256": "fb6e4c5ee63b4020c937393204b568368374c304a1f6d1e3010ad54a193dd903",
+      "generation_revisions": 0,
+      "expected": null
+    },
+    {
+      "id": "09_weekly_mixed_chilled",
+      "image": "generated/09_weekly_mixed_chilled.jpg",
+      "synthetic": true,
+      "selected_for_dataset": true,
+      "selected_on": "2026-11-01",
+      "generation_tool": "built-in image_gen",
+      "source_batch": "realistic_20261101",
+      "title": "Mixed chilled and frozen groceries in bags",
+      "shopping_context": "weekly_restock",
+      "overlap_level": "strong overlap",
+      "observed_food_candidates": [
+        "prawn",
+        "white fish fillet",
+        "chicken thigh",
+        "egg",
+        "rice vermicelli",
+        "soba noodle",
+        "bok choy",
+        "carrot",
+        "cucumber",
+        "soy sauce",
+        "orange",
+        "bread"
+      ],
+      "occlusion_notes": "Prawn bag hides fish label; chicken trays overlap; bag handle hides rear eggs and count label; bread and greens partly inside bags.",
+      "visible_quantity_notes": [
+        "Prawn bag: 400 g.",
+        "Rice vermicelli: 400 g; soba: 270 g.",
+        "Front chicken-thigh tray: 500 g; rear weight incomplete."
+      ],
+      "unknown_quantity_notes": [
+        "Unlabelled fish cannot be asserted to be cod solely from appearance.",
+        "Full egg count, rear chicken mass, fish mass and soy-sauce volume are not established.",
+        "Loose produce mass is unknown."
+      ],
+      "non_food_items": [],
+      "rendered_deviations": [],
+      "recipe_context": null,
+      "review": {
+        "status": "assistant visually reviewed; local OCR used as supporting evidence",
+        "independently_human_labelled": false,
+        "quantity_notes_are_formal_ground_truth": false
+      },
+      "sha256": "69269cedc0ac28ecf0839193c2d092401e261e5fc7232f6303fc1016abe1f47c",
+      "bytes": 675916,
+      "width": 1448,
+      "height": 1086,
+      "format": "JPEG",
+      "jpeg_quality": 85,
+      "source_png_sha256": "d0e0fb28e68e7bd3b72a3ab925426db244ccee0617eb8faec399dee8f91b30af",
+      "prompt_sha256": "906a693f050669b52ba47142776292c7ad4b471fb038b95e9a82b4e258b88261",
+      "generation_revisions": 0,
+      "expected": null
+    },
+    {
+      "id": "10_weekly_small_household",
+      "image": "generated/10_weekly_small_household.jpg",
+      "synthetic": true,
+      "selected_for_dataset": true,
+      "selected_on": "2026-11-01",
+      "generation_tool": "built-in image_gen",
+      "source_batch": "realistic_20261101",
+      "title": "Small-household restock with different package sizes",
+      "shopping_context": "weekly_restock",
+      "overlap_level": "moderate overlap",
+      "observed_food_candidates": [
+        "whole milk",
+        "low-fat milk",
+        "egg",
+        "firm tofu",
+        "red lentil",
+        "rice vermicelli",
+        "canned chickpea",
+        "salt",
+        "apple",
+        "banana",
+        "carrot",
+        "spring onion",
+        "garlic",
+        "lemon"
+      ],
+      "occlusion_notes": "Green tote hides salt weight and part of banana bunch; milk cartons and spring onions overlap; chickpea-can picture panels overlap.",
+      "visible_quantity_notes": [
+        "Whole-milk carton: 1 L. The smaller low-fat carton is a different size; its small net-volume text needs human review (OCR is inconsistent), so do not force the planned 500 ml.",
+        "Egg carton: 6 EGGS; tofu: 300 g.",
+        "Red lentils: 1 kg; rice vermicelli: 200 g.",
+        "Two chickpea cans each visibly say 400 g; NET contents do not establish drained mass."
+      ],
+      "unknown_quantity_notes": [
+        "Salt mass, full banana count, loose-produce weights, spring-onion mass and the smaller milk carton's precise volume require review.",
+        "Do not add sesame oil just because the prompt requested it."
+      ],
+      "non_food_items": [],
+      "rendered_deviations": [
+        "No sesame-oil bottle is visible; it is excluded from observed food candidates.",
+        "Smaller milk-carton volume text is ambiguous after export; the planned 500 ml is not treated as verified ground truth."
+      ],
+      "recipe_context": null,
+      "review": {
+        "status": "assistant visually reviewed; local OCR used as supporting evidence",
+        "independently_human_labelled": false,
+        "quantity_notes_are_formal_ground_truth": false
+      },
+      "sha256": "d472de3e1d202df8b831cad99b567f36572843d4a726e7b1cf1b44a3ad0bf1ff",
+      "bytes": 591679,
+      "width": 1312,
+      "height": 1199,
+      "format": "JPEG",
+      "jpeg_quality": 85,
+      "source_png_sha256": "1237456aa09e3e9c3a22ef621a41de6c18355f92cad31bc158b6c2776ca213d4",
+      "prompt_sha256": "27c516aa6e8842f86c7418e757ec87476ac198d074ec81944207dd8106048cf0",
+      "generation_revisions": 0,
+      "expected": null
+    }
+  ],
+  "model_test": {
+    "date": "2026-11-01",
+    "model": "qwen3-vl:32b",
+    "first_pass_successful_images": 9,
+    "successful_images_after_recovery": 10,
+    "provider_post_requests": 11,
+    "broad_food_categories_matched": 101,
+    "broad_food_category_targets": 101,
+    "correct_predeclared_quantity_totals": 36,
+    "predeclared_quantity_targets": 40,
+    "additional_post_call_clear_count_errors": 2,
+    "independent_human_labels": false,
+    "method_note": "Broad food-category comparison with similar names accepted. Quantity accuracy is only on the readable predeclared subset; obscured amounts and supplemental loose counts are excluded.",
+    "local_report": "ai/output/eval/grocery_realistic_20261101/report.html"
+  }
+}

@@ -21,6 +21,9 @@ SETTINGS = Settings(
     api_key="private-test-key",
     image_model="vision-model",
     text_model="list-model",
+    # Retain coverage for the previous prompt/schema as an explicit fallback.
+    # Default and explicit per-instance photo routes are covered in test_photos.py.
+    photo_quantity_mode="factors",
 )
 
 

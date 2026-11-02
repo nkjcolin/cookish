@@ -12,17 +12,36 @@ root. New generation runs belong in the ignored `work/` directory.
 | `receipt/generated/` | Thirty active synthetic JPEGs: 10 short, 10 medium, 10 long | Included |
 | `receipt/manifest.json` | Active filenames, hashes, synthetic status, lengths and recipe provenance | Included |
 | `receipt/old/` | Thirty previous recipe/scenario PNGs and their archive manifest | Included |
-| `grocery/` | Two grocery photos | Included |
+| `grocery/` | Two reference photos, ten selected realistic grocery JPEGs, manifest and gallery | Included |
 | `audio/` | Short synthetic ingredient-list recording | Included |
 | `catalogs/` | Frozen one-time retail catalogue covering all recipe ingredient names | Included |
 | `configs/` | Reserved for reusable generation configuration | Included |
 | `tools/` | Existing preparation, batch validation and OCR helpers | Included |
 | `work/receipts/<batch-id>/` | Generated images, prompts, price snapshots, cases, galleries and review records | Ignored |
+| `work/groceries/<batch-id>/` | Grocery generation prompts, quantity plans and local provenance | Ignored |
 
-The active shared set contains 36 images and one synthetic audio clip, plus 30
+The active shared set contains 46 images and one synthetic audio clip, plus 30
 archived receipt images. Selection for publication is not a human-reviewed
 extraction label. Both receipt indexes keep `expected: null`; they are not formal
 evaluation manifests.
+
+The [actual curated grocery dataset](grocery/README.md) added on 2026-11-01 has
+ten selected synthetic photos: three meal scenes, three one-to-two-day hauls and
+four weekly/restock scenes. These replace the three clean previews, which were
+removed. View them in the [gallery](grocery/index.html). Bags, overlapping packs,
+partly hidden food, unreadable labels and different quantities make the set more
+representative of casual household photos. The manifest records rendered-image
+observations rather than treating prompt intentions as ground truth. All ten
+images are included as curated dataset inputs. The baseline live school-model comparison
+matched 101/101 broad food-category instances, with 36/40 predeclared readable
+quantity totals correct; additional loose-count errors and occluded amounts are
+documented separately. One initial HTTP 503 succeeded on a separate recovery
+call. Independent human-reviewed labels and formal acceptance remain pending.
+The default per-package method subsequently scored 41/42 checked quantities
+(97.6%) when saved first replies were replayed through its corrected parser;
+a later fresh one-image check scored 3/4. See the
+[grocery review notes](grocery/README.md#per-package-experiment) for denominators,
+the kitchen-towel inclusion and the distinction between replay and live results.
 
 ## Current and archived generation batches
 

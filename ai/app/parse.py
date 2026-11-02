@@ -26,6 +26,7 @@ from app.model_client import (
     ModelUnavailable,
     model_id_for_task,
 )
+from app.photos import PhotoExtractionResult, resolve_photo_instances, uses_photo_instances
 from app.pricing import COST_UNIT, cost_text
 from app.quantities import ExtractionResult, resolve_quantities
 from app.receipts import clean_receipt
@@ -54,11 +55,14 @@ async def parse_image(body: ParseImageRequest, client: ModelClient) -> DraftResu
         validate_image, body.media_type, body.image_base64, abandon_on_cancel=True
     )
     task = "receipt" if body.kind is ImageKind.RECEIPT else "photo"
+    instances = task == "photo" and uses_photo_instances(client)
     request = ModelRequest(
         task=task,
-        system=_prompt(task),
+        system=_prompt("photo_instances" if instances else task),
         image=Image(media_type=body.media_type, base64=body.image_base64),
     )
+    if instances:
+        return resolve_photo_instances(await _call(client, request, PhotoExtractionResult))
     extracted = await _call(client, request, ExtractionResult)
     draft = resolve_quantities(extracted)
     if body.kind is ImageKind.RECEIPT:

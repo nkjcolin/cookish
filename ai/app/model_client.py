@@ -19,6 +19,7 @@ from app.config import TIMEOUT_SECONDS as TIMEOUT_SECONDS
 from app.config import ConfigurationError, Settings
 from app.credentials import APIKeyProvider, CredentialUnavailable
 from app.errors import ApiError, ErrorCode
+from app.photos import PhotoExtractionResult, uses_photo_instances
 from app.pricing import (
     ModelRate,
     PricingCache,
@@ -108,6 +109,7 @@ class SchoolModelClient:
     ) -> None:
         self.settings = settings
         self.model_id = settings.model
+        self.photo_quantity_mode = settings.photo_quantity_mode
         self._timeout = httpx.Timeout(
             settings.timeout_seconds,
             connect=min(5, settings.timeout_seconds),
@@ -145,7 +147,13 @@ class SchoolModelClient:
         model = self.model_for_task(request.task)
         if request.task == "transcription":
             return self._transcribe(request, model)
-        schema_class = CookAdjust if request.task == "interpret" else ExtractionResult
+        schema_class = (
+            CookAdjust
+            if request.task == "interpret"
+            else PhotoExtractionResult
+            if request.task == "photo" and uses_photo_instances(self)
+            else ExtractionResult
+        )
         if self.settings.output_mode == "json_schema":
             schema = schema_class.model_json_schema()
             _strict_schema(schema)
