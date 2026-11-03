@@ -1,16 +1,33 @@
 name: CI
-
 on:
   pull_request:
   push:
     branches: [main]
-
 jobs:
   backend:
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: backend
+    # Tests that need a database build a throwaway one on this server (tests/conftest.py).
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: cookish
+          POSTGRES_PASSWORD: cookish
+          POSTGRES_DB: cookish
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U cookish -d cookish"
+          --health-interval 2s
+          --health-timeout 3s
+          --health-retries 15
+    env:
+      DATABASE_URL: postgresql+psycopg://cookish:cookish@localhost:5432/cookish
+      # Stop with an error, instead of skipping database tests, if Postgres cannot be reached.
+      REQUIRE_DB: "1"
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
@@ -21,7 +38,6 @@ jobs:
       - run: uv run ruff format --check .
       # Includes the check that docs/openapi.json matches the code.
       - run: uv run pytest
-
   ai:
     runs-on: ubuntu-latest
     defaults:
@@ -37,7 +53,6 @@ jobs:
       - run: uv run ruff format --check .
       # Includes the check that the /ai endpoints match docs/openapi.json.
       - run: uv run pytest
-
   frontend:
     runs-on: ubuntu-latest
     defaults:
