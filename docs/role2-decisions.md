@@ -18,7 +18,7 @@ Update the last column as pull requests merge.
 | Identity service | `backend/app/services/identity.py` | pull request |
 | Tests on a throwaway database, Postgres in CI | `backend/tests/conftest.py`, `tests/db/`, `.github/workflows/ci.yml` | pull request |
 | Inventory reads and freshness | `services/inventory.py`, `stock_events.py`, `freshness.py` | pull request |
-| Write path: add, edit, remove, undo, `apply_stock_event` | `services/stock_events.py`, `inventory.py` | not started, still returns mock data |
+| Write path: add, edit, remove, undo, activity list, `apply_stock_event` | `services/stock_events.py`, `inventory.py`, `tests/db/test_stock_events_db.py` | pull request |
 | Ingredient search | `services/catalogue.py` | not started |
 | AWS: migrate Lambda, database secret | `app/migrate.py`, `session.py` | not started (with Role 3) |
 | Reliability tests (SPEC A10) | `backend/tests/db/` | not started |
@@ -74,6 +74,45 @@ Example: tomatoes bought on 1 Nov and kept in the fridge (7 days) get 8 Nov. The
 - Photos cannot certify freshness, so nothing is inferred from images. At the moment the printed
   date can only be typed in (the API accepts it when adding or editing an item).
   Reading it from a package photo is not built.
+
+## Stock events (the write path)
+
+Every inventory change, from the Kitchen screen or from Cook and Shop, goes through
+`apply_stock_event`. It runs in the caller's transaction, so a failure anywhere rolls the whole
+change back.
+
+- **One event, one set of lines.** The event records who, when and why (`ref_type`, `ref_id`).
+  Each line holds a `before` and `after` snapshot of every changeable field, so undo can restore
+  all of them. A snapshot also stores the revision the item had afterwards.
+- **Retries are safe.** A repeated `Idempotency-Key` returns the original change and writes
+  nothing. The database's unique constraint on (household, key) settles two requests arriving at
+  once, not a look-up first. A retry returns the items as they are **now**, not as they were then.
+- **Reusing a key for a different operation is a `CONFLICT`.** It is compared on event type,
+  `ref_type`, `ref_id` and which items the lines touch.
+- **Edits cannot overwrite each other.** The items are locked (`SELECT ... FOR UPDATE`) and each
+  line's `revision` is compared inside the lock. A mismatch raises `STALE_REVISION` before
+  anything is written. A system change may pass `revision=None` to skip the check.
+- **Another household's item is `NOT_FOUND`**, the same as one that does not exist.
+- **An empty list of lines is allowed.** It records an event that changed nothing, so a retry of
+  "cooked, nothing used" is still protected by its key.
+- **Undo** restores each line's `before` snapshot (a removal is brought back, an add is removed).
+  A line whose item has been changed since is reported as a conflict and left alone, and the
+  other lines are still undone. An undo cannot be undone, and an event is undone once. An undo
+  is itself a change, so the item's revision goes up.
+- **Removing an item is a soft delete** (`deleted_at`), which is what makes undo possible.
+
+Small decisions made while building it (tell me if the team disagrees):
+
+- For a countable ingredient, setting the count to 0 sets the state to `out`, and a positive count
+  on an `out` item sets it back to `enough`, unless the edit sets the state itself. Otherwise an
+  item with 0 left would still count as stock.
+- A new item takes its name from the catalogue with a capital letter ("Egg"), its unit from the
+  ingredient when a count is given, and its storage from the ingredient (a free-text item
+  defaults to pantry).
+- An edit sent as `null` clears the field to unknown. For `remaining_state`, null means `unknown`.
+  `storage` and `display_name` cannot be null.
+- If an undo restores only some lines, the original event is marked as undone and cannot be
+  undone again, so the lines left in conflict stay as they are.
 
 ## Ingredient catalogue (`backend/seed/ingredients.csv`)
 

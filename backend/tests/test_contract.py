@@ -138,6 +138,17 @@ ENDPOINTS = [
 
 IDS = [f"{e[0]} {e[1]}" for e in ENDPOINTS]
 
+# These three change a real inventory item now, so a made-up ID no longer works.
+# They stay in ENDPOINTS so the spec check above still sees them, and are tested
+# against the database in tests/db/test_inventory_api_db.py.
+REAL_DATABASE = {
+    ("PATCH", "/api/inventory/items/{item_id}"),
+    ("DELETE", "/api/inventory/items/{item_id}"),
+    ("POST", "/api/stock-events/{event_id}/undo"),
+}
+STUBS = [e for e in ENDPOINTS if (e[0], e[1]) not in REAL_DATABASE]
+STUB_IDS = [f"{e[0]} {e[1]}" for e in STUBS]
+
 
 def test_spec_and_app_list_the_same_endpoints() -> None:
     documented = {(method, template) for method, template, *_ in ENDPOINTS}
@@ -151,7 +162,7 @@ def test_spec_and_app_list_the_same_endpoints() -> None:
 
 
 @pytest.mark.parametrize(
-    ("method", "_template", "path", "body", "keyed", "status"), ENDPOINTS, ids=IDS
+    ("method", "_template", "path", "body", "keyed", "status"), STUBS, ids=STUB_IDS
 )
 def test_stub_answers(method, _template, path, body, keyed, status) -> None:
     response = client.request(method, path or _template, json=body, headers=KEY if keyed else {})
@@ -171,19 +182,6 @@ def test_inventory_changes_require_an_idempotency_key(
 
     assert response.status_code == 422
     assert response.json()["error"]["code"] == "VALIDATION"
-
-
-def test_stale_revision_is_reported() -> None:
-    response = client.patch(
-        f"/api/inventory/items/{ITEM}", json={"revision": 7, "count": 2}, headers=KEY
-    )
-
-    assert response.status_code == 409
-    assert response.json()["error"] == {
-        "code": "STALE_REVISION",
-        "message": "This item was changed elsewhere",
-        "details": {"current_revision": 1},
-    }
 
 
 def test_operation_ids_are_plain_function_names() -> None:
