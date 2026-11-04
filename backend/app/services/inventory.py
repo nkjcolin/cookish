@@ -1,10 +1,7 @@
 """Inventory reads and edits. Role 2 owns this file.
 
-`list_inventory` is real. `add_items`, `update_item` and `delete_item` are still STUBS
-returning mock data until the write path is built.
-
-Every change must go through `stock_events.apply_stock_event`, so that it is atomic,
-idempotent and reversible (SPEC A6).
+Every change goes through `stock_events.apply_stock_event`, so that it is atomic, idempotent
+and reversible (SPEC A6). This file only turns a request into stock-event lines.
 
 `est_use_first_date` and `freshness_status` are computed when items are read, from
 the label date, the purchase date and the ingredient's shelf life (services/freshness.py).
@@ -12,26 +9,22 @@ the label date, the purchase date and the ingredient's shelf life (services/fres
 
 from uuid import UUID
 
-from app import clock, mock
+from app import clock
 from app.auth import CurrentUser
 from app.db.session import transaction
-from app.errors import ApiError, ErrorCode
 from app.schemas.inventory import (
     Inventory,
     InventoryGroup,
-    InventoryItem,
     InventoryItemsCreate,
     InventoryItemUpdate,
 )
 from app.schemas.stock_events import InventoryChange, StockEventType
-from app.services.stock_events import get_inventory_snapshot
-
-
-def _find(item_id: UUID) -> InventoryItem:
-    found = mock.inventory_items().get(str(item_id))
-    if found is None:
-        raise ApiError(ErrorCode.NOT_FOUND, "Inventory item not found")
-    return found
+from app.services.stock_events import (
+    ChangeBatch,
+    NewBatch,
+    apply_stock_event,
+    get_inventory_snapshot,
+)
 
 
 def list_inventory(user: CurrentUser) -> Inventory:
@@ -62,35 +55,26 @@ def list_inventory(user: CurrentUser) -> Inventory:
 def add_items(
     user: CurrentUser, body: InventoryItemsCreate, idempotency_key: UUID
 ) -> InventoryChange:
-    items = [mock.item("tomato").model_copy(update={"source": body.source})] * len(body.items)
-    return InventoryChange(
-        event=mock.stock_event(StockEventType.PURCHASE, items, created=True), items=items
-    )
+    lines = [NewBatch(item=item, source=body.source) for item in body.items]
+    with transaction() as s:
+        return apply_stock_event(s, user, StockEventType.PURCHASE, lines, idempotency_key)
 
 
 def update_item(
     user: CurrentUser, item_id: UUID, body: InventoryItemUpdate, idempotency_key: UUID
 ) -> InventoryChange:
-    current = _find(item_id)
-    if body.revision != current.revision:
-        raise ApiError(
-            ErrorCode.STALE_REVISION,
-            "This item was changed elsewhere",
-            {"current_revision": current.revision},
-        )
+    # Only the fields the client sent: an absent field is left alone, a null one is cleared.
     changes = body.model_dump(exclude_unset=True, exclude={"revision", "freshness_confirmed"})
     if body.freshness_confirmed:
         changes["freshness_confirmed_at"] = clock.now()
-    updated = current.model_copy(update={**changes, "revision": current.revision + 1})
-    return InventoryChange(
-        event=mock.stock_event(StockEventType.ADJUST, [updated]), items=[updated]
-    )
+    line = ChangeBatch(item_id=item_id, revision=body.revision, changes=changes)
+    with transaction() as s:
+        return apply_stock_event(s, user, StockEventType.ADJUST, [line], idempotency_key)
 
 
 def delete_item(
     user: CurrentUser, item_id: UUID, revision: int, idempotency_key: UUID
 ) -> InventoryChange:
-    current = _find(item_id)
-    return InventoryChange(
-        event=mock.stock_event(StockEventType.ADJUST, [current], removed=True), items=[]
-    )
+    line = ChangeBatch(item_id=item_id, revision=revision, changes={}, remove=True)
+    with transaction() as s:
+        return apply_stock_event(s, user, StockEventType.ADJUST, [line], idempotency_key)
