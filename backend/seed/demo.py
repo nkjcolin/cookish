@@ -56,7 +56,7 @@ ITEMS = [
     DemoItem("egg-new", "egg", "Egg", count=6, use_first_in_days=14, source="receipt"),
     DemoItem("tomato", "tomato", "Tomato", count=3, use_first_in_days=5),
     DemoItem("cabbage", "cabbage", "Cabbage", state="low", use_first_in_days=1),
-    DemoItem("garlic", "garlic", "Garlic", use_first_in_days=40),
+    DemoItem("garlic", "garlic", "Garlic", use_first_in_days=25),
     DemoItem("chicken", "chicken thigh", "Chicken thigh", use_first_in_days=-1, source="photo"),
     DemoItem("tofu", "firm tofu", "Firm tofu", count=1, label_use_by_in_days=4, source="voice"),
     DemoItem(
