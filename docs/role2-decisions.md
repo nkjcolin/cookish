@@ -20,7 +20,7 @@ Update the last column as pull requests merge.
 | Inventory reads and freshness | `services/inventory.py`, `stock_events.py`, `freshness.py` | pull request |
 | Write path: add, edit, remove, undo, activity list, `apply_stock_event` | `services/stock_events.py`, `inventory.py`, `tests/db/test_stock_events_db.py` | pull request |
 | Ingredient search | `services/catalogue.py`, `tests/db/test_catalogue_db.py` | pull request |
-| AWS: migrate Lambda, database secret | `app/migrate.py`, `session.py` | not started (with Role 3) |
+| AWS: migrate Lambda, database secret | `app/migrate.py`, `app/db/session.py`, `tests/db/test_migrate_db.py`, `tests/test_session_url.py` | pull request; **needs Role 3's answers below before it can run on AWS** |
 | Reliability tests (SPEC A10) | `backend/tests/db/` | not started |
 
 ## How freshness works
@@ -114,6 +114,38 @@ Small decisions made while building it (tell me if the team disagrees):
 - If an undo restores only some lines, the original event is marked as undone and cannot be
   undone again, so the lines left in conflict stay as they are.
 
+## AWS: reaching the database
+
+Two small pieces, both tested against a real Postgres but **not yet run on AWS**.
+
+**The database login (`app/db/session.py`).** The app looks for the database in this order:
+`DATABASE_URL` (docker-compose and the tests), then `DB_SECRET_ARN`, then the local database. With
+`DB_SECRET_ARN` it reads that Secrets Manager secret once per Lambda instance and builds the URL.
+The secret must be JSON with `username`, `password` and `host`. `port` (default 5432) and `dbname`
+(default `DB_NAME`, else `cookish`) are optional, and these are the field names RDS uses in the
+secrets it creates itself. Connections use `sslmode=require` (RDS for PostgreSQL 15 and later
+refuses unencrypted ones); `DB_SSLMODE` overrides it. `boto3` comes with the Lambda Python runtime,
+so it is not a project dependency and is imported only when the secret is read.
+
+**The migration step (`app/migrate.py`).** `app.migrate.handler` runs `alembic upgrade head` and
+then `seed.seed` (ingredients and recipes), and returns the revision and the seed counts. It never
+seeds the demo household. It is safe to run again, and a database lock makes two runs at the same
+moment take turns. It needs to run inside the same network as the database, once per deploy, and
+its package must contain the `migrations/` and `seed/` folders at the top, next to `app/`.
+
+**Questions for Role 3** (open until answered):
+
+1. **How does the `api` Lambda get the password?** SPEC A3 puts it in a private network with no NAT
+   gateway and no VPC endpoint, but reading a secret from Secrets Manager normally needs one of
+   those. The ways round it: a Secrets Manager VPC endpoint (a few dollars a month), a NAT gateway
+   (about US$32 a month), a CloudFormation dynamic reference that puts the password into the
+   Lambda's settings at deploy time (then set `DATABASE_URL` instead of `DB_SECRET_ARN`), or RDS
+   IAM login. Which one, given the school account? **VERIFY**
+2. What are the secret's field names? (The ones above, if RDS creates it.)
+3. How is the migration Lambda run: after every deploy by the pipeline, or by hand?
+4. Its timeout and memory. Migration plus seed took about a second locally; allow a minute.
+5. Is the code packaged as a zip or a container? Either way it must hold `migrations/` and `seed/`.
+
 ## Ingredient search
 
 `GET /api/ingredients?q=` searches the canonical name and every alias, using `pg_trgm`. Results are
@@ -195,7 +227,7 @@ ratings and Role 4's matching point at it.
 | Who | Question |
 |---|---|
 | Role 1 | Free-text items as category `other`, state-tracked. Kitchen groups are alphabetical by name: should "use first" groups come first? Is there a field for the printed date when adding or editing an item? Batches are grouped under one row (SPEC B1 says the row expands). The collapsed row can mislead: "Egg, 8 pcs, ~2 days" reads as if all 8 eggs are about to go off, when only an older batch may be. Can the collapsed row say how many are old ("2 expire in ~2 days")? The batches are already in the API response, so this is a screen change, unless the schema needs a field. |
-| Role 3 | `ci.yml` now has a Postgres service for the backend job. The AWS migrate Lambda should run `seed.seed` only, and needs PyYAML as a runtime dependency |
+| Role 3 | `ci.yml` now has a Postgres service for the backend job. The AWS migration step and secret handling are written (see "AWS: reaching the database"); the five questions in that section need answers. |
 | Role 4 | The draft item from `/ai/parse-image` has no date field, so a printed date cannot be read from a package photo. Do we want that? The report says photos cannot certify freshness; reading a printed date is a different thing and the wording should say so |
 | Role 5 | The explicit "buyable" flag (above). The 3-day "use soon" window versus your urgency window. Internal access to `taste_weights` and to update only the `last_*` fields. Where to store your snapshots, evidence and confirmation keys (this needs a new migration, which Role 2 writes). Empty line lists in `apply_stock_event`. Reusing a key for a different operation raising `CONFLICT` |
 
