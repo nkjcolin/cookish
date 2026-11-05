@@ -32,7 +32,7 @@ Nothing is deployed. What you will deploy is ready:
 
 | Resource | Notes |
 |---|---|
-| VPC with two private subnets | No NAT gateway and no VPC endpoints: nothing in the VPC needs the internet |
+| VPC with two private subnets | Private subnets in two different Availability Zones. No NAT gateway. A Secrets Manager interface VPC endpoint is required if `api` and `migrate` retrieve `DB_SECRET_ARN` at runtime. |
 | RDS PostgreSQL 16, `db.t4g.micro`, single-AZ | Credentials in Secrets Manager; security group allows only the `api` and `migrate` Lambdas on port 5432 |
 | `api` Lambda | In the VPC; 512 MB to start |
 | `ai` Lambda | **Outside** the VPC, so it can reach the model provider; 29-second timeout, because API Gateway stops at 30 |
@@ -79,6 +79,7 @@ RDS is in private subnets, so neither GitHub Actions nor a laptop can reach it. 
 - **The `ai` Lambda needs a file from `backend/`.** Copy `backend/seed/ingredients.csv` into the `ai` package during the build, and point `INGREDIENTS_CSV` at it.
 - **Native dependencies.** The backend uses `psycopg[binary]`; build on Linux (`sam build --use-container`) so the right wheels are packaged.
 - **No long-lived AWS keys in GitHub.** Deploy with a GitHub OIDC role.
+- **Secrets Manager networking.** `api` and `migrate` run in private subnets and read `DB_SECRET_ARN` at runtime. Without a NAT gateway, the VPC therefore needs an interface endpoint for Secrets Manager (`com.amazonaws.ap-southeast-1.secretsmanager`). Include its fixed cost in the cloud cost model.
 
 ## Tasks, in order
 
