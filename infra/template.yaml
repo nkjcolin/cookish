@@ -1,0 +1,168 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: Cookish AWS infrastructure
+
+Parameters:
+  FrontendOrigin:
+    Type: String
+    Default: http://localhost:5173
+    Description: Allowed frontend origin for CORS
+
+Globals:
+  Function:
+    Runtime: python3.12
+    MemorySize: 512
+
+Resources:
+
+  # ---------------------------------------------------------
+  # Cognito
+  # ---------------------------------------------------------
+
+  CookishUserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: cookish-users
+
+      UsernameAttributes:
+        - email
+
+      AutoVerifiedAttributes:
+        - email
+
+      Schema:
+        - Name: email
+          Required: true
+          Mutable: true
+
+  CookishUserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      ClientName: cookish-web
+      UserPoolId: !Ref CookishUserPool
+
+      # Browser applications must not have a client secret
+      GenerateSecret: false
+
+      ExplicitAuthFlows:
+        - ALLOW_USER_SRP_AUTH
+        - ALLOW_REFRESH_TOKEN_AUTH
+
+      PreventUserExistenceErrors: ENABLED
+
+
+  # ---------------------------------------------------------
+  # API Gateway HTTP API
+  # ---------------------------------------------------------
+
+  CookishHttpApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      StageName: $default
+
+      CorsConfiguration:
+        AllowOrigins:
+          - !Ref FrontendOrigin
+
+        AllowHeaders:
+          - Authorization
+          - Content-Type
+          - Idempotency-Key
+
+        AllowMethods:
+          - GET
+          - POST
+          - PUT
+          - PATCH
+          - DELETE
+          - OPTIONS
+
+      Auth:
+        DefaultAuthorizer: CookishJwtAuthorizer
+
+        Authorizers:
+          CookishJwtAuthorizer:
+            IdentitySource: $request.header.Authorization
+
+            JwtConfiguration:
+              issuer: !Sub
+                - "https://cognito-idp.${AWS::Region}.amazonaws.com/${PoolId}"
+                - PoolId: !Ref CookishUserPool
+
+              audience:
+                - !Ref CookishUserPoolClient
+
+
+  # ---------------------------------------------------------
+  # Main API Lambda
+  # ---------------------------------------------------------
+
+  ApiFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: cookish-api
+      CodeUri: ../backend/
+      Handler: app.lambda_handler.handler
+      Runtime: python3.12
+      Architectures:
+        - arm64
+      MemorySize: 512
+      Timeout: 15
+
+      Events:
+        ApiProxy:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref CookishHttpApi
+            Path: /api/{proxy+}
+            Method: ANY
+            PayloadFormatVersion: "2.0"
+
+
+  # ---------------------------------------------------------
+  # AI Lambda
+  # ---------------------------------------------------------
+
+  AiFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: cookish-ai
+      CodeUri: ../ai/
+      Handler: app.lambda_handler.handler
+      Runtime: python3.12
+      Architectures:
+        - arm64
+      MemorySize: 512
+      Timeout: 29
+
+      Environment:
+        Variables:
+          AI_PROVIDER: fake
+
+      Events:
+        AiProxy:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref CookishHttpApi
+            Path: /ai/{proxy+}
+            Method: ANY
+            PayloadFormatVersion: "2.0"
+
+
+# -----------------------------------------------------------
+# Useful values for Role 1 / CI
+# -----------------------------------------------------------
+
+Outputs:
+
+  ApiUrl:
+    Description: Cookish HTTP API URL
+    Value: !Sub "https://${CookishHttpApi}.execute-api.${AWS::Region}.amazonaws.com"
+
+  CognitoUserPoolId:
+    Description: Cognito User Pool ID
+    Value: !Ref CookishUserPool
+
+  CognitoClientId:
+    Description: Cognito App Client ID
+    Value: !Ref CookishUserPoolClient
