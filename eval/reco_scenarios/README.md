@@ -87,10 +87,11 @@ after changes rather than reusing a result from different inputs or code.
 algorithm until it is ready for its final check.** This tests whether the rules
 also work on cases they were not adjusted to pass.
 
-This CLI deliberately accepts only development IDs. A separate held-out
-execution path still needs to be prepared and checked using development copies
-before the freeze. Do not bypass this separation by relabelling reserved cases
-as development cases.
+The development CLI deliberately accepts only development IDs. The separate
+[`evaluation.held_out`](../../backend/evaluation/held_out.py) CLI provides freeze,
+rehearsal, first-run and regression commands. Its tests use temporary development
+copies; no reserved cases have been authored or evaluated. Do not bypass the
+separation by relabelling reserved cases as development cases.
 
 1. Finish development and record the frozen engine, scoring configuration,
    runner and fixture versions with their hashes. Agree the acceptance checks
@@ -111,3 +112,95 @@ Do not relabel existing tests or development cases as held-out. Until this
 protocol is completed, report the held-out evaluation as pending. Passing this
 offline suite also does not satisfy the separate requirement for Cook and Shop
 to work on the deployed stack against real inventory.
+
+## Rehearse the runner without exposing reserved cases
+
+The rehearsal command accepts only `DEV-Cnn`/`DEV-Snn` cases with
+`split: development`. Its reports say `split: rehearsal`,
+`held_out_executed: 0` and `first_held_out_attempt: false`, even when every case
+passes. It supports development subsets for testing the harness, not for final
+evaluation. The production engines and assertion logic are shared with the
+development runner; a second, weaker set of assertions is not introduced.
+
+From a clean checkout, run these commands in `backend/`. Use a **new** output
+directory and freeze filename for each rehearsal. `private/` is already ignored
+by Git, keeping input/output artifacts from making the checkout dirty.
+
+```powershell
+.venv/Scripts/python.exe -m evaluation.held_out freeze --purpose rehearsal --output ../private/rehearsal-freeze.json
+.venv/Scripts/python.exe -m evaluation.held_out rehearse --freeze ../private/rehearsal-freeze.json --fixtures ../eval/reco_scenarios/fixtures.yaml --cases-dir ../eval/reco_scenarios/development --output-dir ../private/rehearsal-result
+```
+
+Temporary copies of those development files work identically. The automated
+harness tests cover split isolation, invalid input, source/runtime changes,
+failure retention, interrupted attempts, output protection and regression links.
+Some schema-only tests relabel temporary development copies to check the held-out
+format; those copies are never run as held-out scenarios and are not reserved cases.
+
+## Freeze and evaluate the independent suite later
+
+Only perform this step after the implementation is ready and the acceptance
+checks are agreed. A freeze records the Git commit; hashes of the engine, schemas,
+runner, dependency files and clock; scoring configuration; and Python/library
+versions. A clean working tree and matching fingerprint are required at execution.
+The manifest fixes the target at **30 cases covering both Cook and Shop**, with
+every scenario and step passing and no hard-constraint violations. The specification
+does not prescribe a 15/15 split; the independent author chooses coverage within
+the agreed requirements.
+
+```powershell
+.venv/Scripts/python.exe -m evaluation.held_out freeze --purpose evaluation --output ../private/final-freeze.json
+```
+
+Have the independent author prepare the scenario inputs and expectations without
+consulting engine outputs. Use the same scenario fields and assertion rules as
+development, but `split: held-out` and unique `HELD-Cnn`/`HELD-Snn` IDs matching
+each case's mode. Supply an explicit fixtures file and exactly 30 scenario YAML
+files. Keep these outside development/CI, for example under
+`private/final-evaluation-inputs/`, until the frozen evaluation. Do not simply
+rename development scenarios. A rehearsal freeze cannot authorize this command:
+
+```powershell
+.venv/Scripts/python.exe -m evaluation.held_out run --freeze ../private/final-freeze.json --fixtures ../private/final-evaluation-inputs/fixtures.yaml --cases-dir ../private/final-evaluation-inputs/cases --independent-author "Author name" --output-dir ../private/first-held-out-result
+```
+
+There is no case-subset option for a held-out run. All inputs are validated before
+any engine call. The runner captures the exact normalized input text and hashes,
+then evaluates those captured contents. Duplicate IDs, wrong splits, unknown
+references, malformed assertions or a changed freeze fail the run.
+
+## Preserve the first attempt and distinguish regressions
+
+Every attempt uses a new directory. `attempt.json` preserves the frozen source,
+input contents/hashes and declared independent author before execution.
+`result.json` records all observations and assertion/runtime failures; an
+interruption leaves `interrupted.json` with completed case results. A source change
+during execution produces an invalid recorded result rather than valid evidence.
+
+Neither manifests nor output directories are overwritten. A first-run reservation
+file beside the evaluation manifest prevents a second `run` with that manifest,
+even with a different output directory. Keep this marker and the entire attempt,
+including failures or interruptions. Copying/deleting manifests or markers can
+bypass this local protection; the runner cannot prove an author's independence or
+that humans have never seen the inputs. `first_held_out_attempt: true` records a
+valid first attempt under this manifest, not proof of unseen data or a passing score.
+
+Once cases have been exposed, further runs are regressions. If code changes,
+record a new evaluation freeze and retain the original freeze and result. Use:
+
+```powershell
+.venv/Scripts/python.exe -m evaluation.held_out regression --freeze ../private/updated-freeze.json --fixtures ../private/final-evaluation-inputs/fixtures.yaml --cases-dir ../private/final-evaluation-inputs/cases --original ../private/first-held-out-result/result.json --output-dir ../private/held-out-regression
+```
+
+After an interruption, `--original` may instead point to the original
+`attempt.json`, which preserves the inputs even without a complete result.
+Regression reports retain the original artifact's path/hash, require unchanged
+input hashes, use `split: held-out-regression`, and set
+`first_held_out_attempt: false`. They still count the executed formerly held-out
+cases, but cannot be presented as a fresh unseen evaluation. Correcting case
+inputs is a separately documented new suite, not a rewrite of original evidence.
+
+Exit codes are **0** for all assertions passing, **1** for scenario failures,
+and **2** for invalid input, freeze mismatch or an unusable evidence destination.
+Preserve the full artifacts with any reported figures; no held-out files are added
+to normal CI by this workflow.

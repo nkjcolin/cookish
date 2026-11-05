@@ -127,7 +127,8 @@ def make_world(fixtures: Fixtures) -> World:
 
 
 def validate_references(case: Scenario, world: World):
-    expected_prefix = "DEV-C" if case.mode == "cook" else "DEV-S"
+    split_prefix = "DEV" if case.split == "development" else "HELD"
+    expected_prefix = f"{split_prefix}-{'C' if case.mode == 'cook' else 'S'}"
     if not case.id.startswith(expected_prefix):
         raise InputError(f"{case.id}: ID prefix does not match mode")
     unknown = set(case.recipes) - world.recipes.keys()
@@ -416,6 +417,44 @@ def git_value(*args):
     return result.stdout.strip() if result.returncode == 0 else None
 
 
+def source_provenance():
+    """Fingerprint the evaluator, engine, schemas, dependencies and configuration."""
+    source_paths = sorted((ROOT / "backend/app/reco").glob("*.py"))
+    source_paths += sorted((ROOT / "backend/app/schemas").glob("*.py"))
+    source_paths += sorted((ROOT / "backend/evaluation").glob("*.py"))
+    source_paths += [ROOT / "backend/app/clock.py"]
+    source_paths += [ROOT / "backend/pyproject.toml", ROOT / "backend/uv.lock"]
+    status = git_value("status", "--porcelain")
+    return {
+        "git_head": git_value("rev-parse", "HEAD"),
+        "working_tree_dirty": None if status is None else bool(status),
+        "runtime": {
+            "python": platform.python_version(),
+            "pydantic": pydantic_version,
+            "pyyaml": yaml.__version__,
+        },
+        "source_sha256": {p.relative_to(ROOT).as_posix(): digest(p) for p in source_paths},
+        "config": {
+            "cook": asdict(DEFAULT_CONFIG),
+            "shop": asdict(DEFAULT_SHOP_CONFIG),
+            "learning": asdict(DEFAULT_LEARNING_CONFIG),
+        },
+    }
+
+
+def summarize(results, *, held_out_executed=0):
+    steps = [step for result in results for step in result["steps"]]
+    return {
+        "scenarios": len(results),
+        "passed": sum(r["passed"] for r in results),
+        "steps": len(steps),
+        "steps_passed": sum(step["passed"] for step in steps),
+        "failures_by_kind": dict(Counter(f["kind"] for s in steps for f in s["failures"])),
+        "modes": dict(Counter(result["mode"] for result in results)),
+        "held_out_executed": held_out_executed,
+    }
+
+
 def run_suite(fixtures_path=SUITE / "fixtures.yaml", cases_dir=SUITE / "development", selected=()):
     fixtures_path, cases_dir = Path(fixtures_path), Path(cases_dir)
     world = make_world(load_yaml(fixtures_path, Fixtures))
@@ -434,17 +473,10 @@ def run_suite(fixtures_path=SUITE / "fixtures.yaml", cases_dir=SUITE / "developm
     if set(selected) - set(ids):
         raise InputError(f"unknown selected IDs: {sorted(set(selected) - set(ids))}")
     results = [run_scenario(case, world) for case in cases if not selected or case.id in selected]
-    steps = [step for result in results for step in result["steps"]]
     categories = {}
     for name in sorted({name for result in results for name in result["categories"]}):
         members = [result for result in results if name in result["categories"]]
         categories[name] = {"scenarios": len(members), "passed": sum(r["passed"] for r in members)}
-    source_paths = sorted((ROOT / "backend/app/reco").glob("*.py"))
-    source_paths += sorted((ROOT / "backend/app/schemas").glob("*.py"))
-    source_paths += sorted((ROOT / "backend/evaluation").glob("*.py"))
-    source_paths += [ROOT / "backend/app/clock.py"]
-    source_paths += [ROOT / "backend/pyproject.toml", ROOT / "backend/uv.lock"]
-    status = git_value("status", "--porcelain")
     return {
         "version": 1,
         "split": "development",
@@ -454,31 +486,11 @@ def run_suite(fixtures_path=SUITE / "fixtures.yaml", cases_dir=SUITE / "developm
             "load or user-study evidence."
         ),
         "as_of": world.fixtures.as_of.isoformat(),
-        "summary": {
-            "scenarios": len(results),
-            "passed": sum(r["passed"] for r in results),
-            "steps": len(steps),
-            "steps_passed": sum(step["passed"] for step in steps),
-            "failures_by_kind": dict(Counter(f["kind"] for s in steps for f in s["failures"])),
-            "modes": dict(Counter(result["mode"] for result in results)),
-            "held_out_executed": 0,
-        },
+        "summary": summarize(results),
         "provenance": {
-            "git_head": git_value("rev-parse", "HEAD"),
-            "working_tree_dirty": None if status is None else bool(status),
-            "runtime": {
-                "python": platform.python_version(),
-                "pydantic": pydantic_version,
-                "pyyaml": yaml.__version__,
-            },
-            "source_sha256": {p.relative_to(ROOT).as_posix(): digest(p) for p in source_paths},
+            **source_provenance(),
             "fixture_sha256": digest(fixtures_path),
             "scenario_sha256": {path.name: digest(path) for path in paths},
-            "config": {
-                "cook": asdict(DEFAULT_CONFIG),
-                "shop": asdict(DEFAULT_SHOP_CONFIG),
-                "learning": asdict(DEFAULT_LEARNING_CONFIG),
-            },
         },
         "categories": categories,
         "results": results,
