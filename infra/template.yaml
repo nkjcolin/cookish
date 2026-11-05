@@ -50,6 +50,190 @@ Resources:
 
       PreventUserExistenceErrors: ENABLED
 
+  # ---------------------------------------------------------
+  # VPC
+  # ---------------------------------------------------------
+
+  CookishVpc:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: cookish-vpc
+        - Key: project
+          Value: cookish
+
+  CookishPrivateSubnetA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref CookishVpc
+      CidrBlock: 10.0.1.0/24
+      AvailabilityZone: !Select [0, !GetAZs ""]
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: cookish-private-a
+        - Key: project
+          Value: cookish
+
+  CookishPrivateSubnetB:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref CookishVpc
+      CidrBlock: 10.0.2.0/24
+      AvailabilityZone: !Select [1, !GetAZs ""]
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: cookish-private-b
+        - Key: project
+          Value: cookish
+
+  # ---------------------------------------------------------
+  # Security Groups
+  # ---------------------------------------------------------
+
+  CookishLambdaSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for Cookish API Lambda
+      VpcId: !Ref CookishVpc
+      Tags:
+        - Key: Name
+          Value: cookish-lambda-sg
+        - Key: project
+          Value: cookish
+
+  CookishDbSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow PostgreSQL from Cookish Lambda only
+      VpcId: !Ref CookishVpc
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 5432
+          ToPort: 5432
+          SourceSecurityGroupId: !Ref CookishLambdaSecurityGroup
+      Tags:
+        - Key: Name
+          Value: cookish-db-sg
+        - Key: project
+          Value: cookish
+
+  CookishSecretsEndpointSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow Lambda access to Secrets Manager endpoint
+      VpcId: !Ref CookishVpc
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          SourceSecurityGroupId: !Ref CookishLambdaSecurityGroup
+      Tags:
+        - Key: Name
+          Value: cookish-secrets-endpoint-sg
+        - Key: project
+          Value: cookish
+
+  # ---------------------------------------------------------
+  # Secrets Manager VPC Endpoint
+  # ---------------------------------------------------------
+
+  CookishSecretsManagerEndpoint:
+    Type: AWS::EC2::VPCEndpoint
+    Properties:
+      VpcId: !Ref CookishVpc
+      VpcEndpointType: Interface
+      ServiceName: !Sub com.amazonaws.${AWS::Region}.secretsmanager
+      PrivateDnsEnabled: true
+      SubnetIds:
+        - !Ref CookishPrivateSubnetA
+        - !Ref CookishPrivateSubnetB
+      SecurityGroupIds:
+        - !Ref CookishSecretsEndpointSecurityGroup
+
+  # ---------------------------------------------------------
+  # Database Secret
+  # ---------------------------------------------------------
+
+  CookishDbSecret:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Description: Cookish PostgreSQL credentials
+      GenerateSecretString:
+        SecretStringTemplate: '{"username":"cookish_admin"}'
+        GenerateStringKey: password
+        PasswordLength: 32
+        ExcludePunctuation: true
+      Tags:
+        - Key: project
+          Value: cookish
+
+  # ---------------------------------------------------------
+  # RDS Subnet Group
+  # ---------------------------------------------------------
+
+  CookishDbSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: Cookish private database subnets
+      SubnetIds:
+        - !Ref CookishPrivateSubnetA
+        - !Ref CookishPrivateSubnetB
+      Tags:
+        - Key: project
+          Value: cookish
+
+  # ---------------------------------------------------------
+  # RDS PostgreSQL
+  # ---------------------------------------------------------
+
+  CookishDb:
+    Type: AWS::RDS::DBInstance
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      DBInstanceIdentifier: cookish-db
+      DBName: cookish
+
+      Engine: postgres
+      EngineVersion: "16.15"
+      DBInstanceClass: db.t4g.micro
+
+      AllocatedStorage: 20
+      StorageType: gp3
+      StorageEncrypted: true
+
+      Port: 5432
+
+      MultiAZ: false
+      PubliclyAccessible: false
+
+      DBSubnetGroupName: !Ref CookishDbSubnetGroup
+      VPCSecurityGroups:
+        - !Ref CookishDbSecurityGroup
+
+      MasterUsername: !Sub "{{resolve:secretsmanager:${CookishDbSecret}:SecretString:username}}"
+      MasterUserPassword: !Sub "{{resolve:secretsmanager:${CookishDbSecret}:SecretString:password}}"
+
+      BackupRetentionPeriod: 0
+      DeleteAutomatedBackups: true
+      DeletionProtection: false
+
+      Tags:
+        - Key: project
+          Value: cookish
+
+  CookishDbSecretAttachment:
+    Type: AWS::SecretsManager::SecretTargetAttachment
+    Properties:
+      SecretId: !Ref CookishDbSecret
+      TargetId: !Ref CookishDb
+      TargetType: AWS::RDS::DBInstance
 
   # ---------------------------------------------------------
   # API Gateway HTTP API
@@ -108,7 +292,21 @@ Resources:
         - arm64
       MemorySize: 512
       Timeout: 15
+      VpcConfig:
+        SecurityGroupIds:
+          - !Ref CookishLambdaSecurityGroup
+        SubnetIds:
+          - !Ref CookishPrivateSubnetA
+          - !Ref CookishPrivateSubnetB
 
+      Environment:
+        Variables:
+          DB_SECRET_ARN: !Ref CookishDbSecret
+
+      Policies:
+        - AWSLambdaVPCAccessExecutionRole
+        - AWSSecretsManagerGetSecretValuePolicy:
+            SecretArn: !Ref CookishDbSecret
       Events:
         ApiProxy:
           Type: HttpApi
@@ -166,3 +364,15 @@ Outputs:
   CognitoClientId:
     Description: Cognito App Client ID
     Value: !Ref CookishUserPoolClient
+
+  VpcId:
+    Description: Cookish VPC ID
+    Value: !Ref CookishVpc
+
+  DbEndpoint:
+    Description: Cookish PostgreSQL endpoint
+    Value: !GetAtt CookishDb.Endpoint.Address
+
+  DbSecretArn:
+    Description: ARN of Cookish database secret
+    Value: !Ref CookishDbSecret
