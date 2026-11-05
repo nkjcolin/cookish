@@ -9,8 +9,12 @@ The pure engines now have a service orchestration layer:
 - [`test_recommendation_workflow.py`](../backend/tests/test_recommendation_workflow.py)
   exercises these flows with a transactional test double.
 
-**The public Cook/Shop endpoint functions still return mocks.** No production
-database adapter, migration, seed loader or in-memory persistence is installed.
+**The public Cook/Shop endpoint functions still return mocks.** Role 2's models,
+migrations, seed loader, inventory reads and stock write service are now merged.
+The [SQL input reader](../backend/app/services/recommendation_inputs.py) loads real
+catalogue/preferences/inventory data; the complete persistence adapter is not
+installed. The [storage proposal](role5-storage-proposal.md) lists the exact
+remaining additions for Role 2's next migration and the integration sequence.
 The test double exists only under `backend/tests/`. These are development
 integration tests, not Postgres reliability tests or held-out report scenarios.
 

@@ -24,11 +24,30 @@ costs and user research are still required.
 ## What already exists
 
 - **Every service function above, as a stub** marked `STUB`, returning sample data from `app/mock.py`. The frontend is built against them.
-- **Role 2's functions you call**, with agreed signatures and stubs that return sample data, so you can wire your services before the database exists (see below).
+- **Role 2's functions you call**, now implemented against PostgreSQL: household preferences, inventory snapshots and stock events. The agreed signatures are unchanged.
 - **`app/db/session.py`**: `transaction()`, one per request.
 - **`app/clock.py`**: today's date in Singapore.
 - **The recipe file format**, agreed with Role 2, in [seed/README.md](../../seed/README.md).
 - **The pure Cook/Shop engines and learning**, described below, tested independently of those service stubs.
+
+## Database input loading: implemented milestone
+
+[`SqlRecommendationInputs`](../services/recommendation_inputs.py) reads the 48
+reviewed recipes and 42 authoritative ingredients, household stars, preferences
+and inventory in the caller's transaction. It supplies the existing pure engine
+types without guessing counts, pack conversions or missing safety metadata.
+It is the read portion of the future repository, not a complete session service.
+
+The [storage proposal](../../../docs/role5-storage-proposal.md) lists the remaining
+snapshots, ordered learning evidence and confirmation replay storage for Role 2's
+new migration. Public Cook/Shop endpoints remain mocked until that persistence
+layer is implemented. The proposal also records the catalogue mapping choices.
+
+`tests/test_recommendation_inputs.py` validates all delivered seed content at the
+mapping boundary. `tests/db/test_recommendation_inputs_db.py` exercises real
+Postgres reads, both engines, review filtering, optional-ingredient dietary
+checks, household isolation and transaction rollback. CI requires Postgres for
+these tests; a local run without Postgres skips them.
 
 ## Cook engine: implemented milestone
 
