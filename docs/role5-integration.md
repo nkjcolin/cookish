@@ -9,16 +9,14 @@ The pure engines now have a service orchestration layer:
 - [`test_recommendation_workflow.py`](../backend/tests/test_recommendation_workflow.py)
   exercises these flows with a transactional test double.
 
-**Current draft status (5 November 2026):** Cook/Shop endpoints use
-[`SqlRecommendationRepository`](../backend/app/services/recommendation_sql.py).
-It reuses Role 2's catalogue, preferences, inventory and stock-event services in
-one transaction. The new migration `e51c9a8d7201` adds snapshots, ordered learning
-and confirmation response storage; the original migration is unchanged.
-
-The [storage design](role5-storage-proposal.md) describes the migration for Role
-2 review, mapping choices and locking. Deployment is not performed by this PR.
-The pure workflow tests use a test double; the additional SQL tests under
-`backend/tests/db/test_recommendation_sql_db.py` use real PostgreSQL.
+**The public Cook/Shop endpoint functions still return mocks.** Role 2's models,
+migrations, seed loader, inventory reads and stock write service are now merged.
+The [SQL input reader](../backend/app/services/recommendation_inputs.py) loads real
+catalogue/preferences/inventory data; the complete persistence adapter is not
+installed. The [storage proposal](role5-storage-proposal.md) lists the exact
+remaining additions for Role 2's next migration and the integration sequence.
+The test double exists only under `backend/tests/`. These are development
+integration tests, not Postgres reliability tests or held-out report scenarios.
 
 ## What is implemented
 
@@ -112,9 +110,10 @@ This layer does not claim retry deduplication for those actions. Adding such a
 contract would require Role 1 agreement. Confirmation retries are covered by the
 existing key header.
 
-## Snapshot storage implemented in this draft
+## Data that needs agreement before wiring
 
-The internal dataclasses are serialized into versioned JSON snapshots by the SQL adapter. The new migration remains subject to Role 2 review. The storage design covers:
+The internal dataclasses are a **proposed adapter representation**, not a second
+schema or an amendment to Role 2's migration ownership. Agree where to store:
 
 1. Saved suggestion responses and the current history position, accumulated
    engine state, selected-record link and fixed expiry.
@@ -133,10 +132,10 @@ Use existing JSON fields/relations where suitable; Role 2 owns any additional
 columns, constraints and migrations. No invented ingredient IDs or fixture
 allergen/pack metadata should be used in production.
 
-## Wiring and review checklist
+## Wiring sequence once the models are published
 
-1. Implemented: the SQL port uses Role 2's models and the new snapshot migration, pending Role 2 review.
-2. The installed unit-of-work factory is:
+1. Implement the port using Role 2's models and the agreed snapshot storage.
+2. Provide a unit-of-work factory:
 
    ```python
    from contextlib import contextmanager
@@ -145,11 +144,11 @@ allergen/pack metadata should be used in production.
    @contextmanager
    def recommendation_uow():
        with transaction() as session:
-           yield SqlRecommendationRepository(session)
+           yield SqlRecommendationRepository(session)  # Adapter still to implement.
    ```
 
-3. The public services construct `RecommendationWorkflow(recommendation_uow)`
-   and keep every existing signature, delegating as follows:
+3. Construct `RecommendationWorkflow(recommendation_uow)`. Keep every existing
+   public service signature and delegate to the corresponding method:
 
    | Existing service function | Workflow method |
    |---|---|
@@ -158,20 +157,16 @@ allergen/pack metadata should be used in production.
    | `cook.select` / `confirm` / `give_feedback` | `select_cook` / `confirm_cook` / `feedback` |
    | `shop.start_session` / `adjust` / `confirm_basket` | `start_shop` / `adjust_shop` / `confirm_shop` |
 
-4. Recipe details, persisted stars and use-first reads are implemented. A
-   recent-cooked repetition window still needs agreement; the workflow supplies
-   learned weights but does not infer a time window from undated evidence.
-5. PostgreSQL CI covers concurrent confirmation/selection, stale revisions,
-   simultaneous feedback edits, household isolation, manual stock-key races,
-   failure rollback, exact replay and snapshots surviving catalogue changes.
-   It also compares the migrated schema with the declared models.
+4. Implement the remaining recipe-detail/star queries and optional use-first
+   endpoint against the same catalogue. Populate recent-cooked history from an
+   agreed history window; the workflow currently supplies learned weights but
+   does not infer a time window from undated evidence.
+5. Run real Postgres tests for concurrent confirmations/selection, stale
+   inventory revisions, simultaneous feedback edits, cross-household access,
+   failure rollback and retry replay. Then replace the stubs and exercise the
+   frontend with the seeded demo household.
 
-Validation at implementation commit `73e4186`: backend, frontend and AI CI pass.
-Backend CI requires PostgreSQL (`REQUIRE_DB=1`), so database tests cannot silently
-skip. Local checks passed 301 tests excluding database, HTTP contract and auth
-suites; local PostgreSQL is unavailable. All 70 development scenarios and 85
-steps pass. Those scenarios are offline engine evidence, not deployed results.
-
-The migration remains in draft for Role 2 review. Still required: deployed
-frontend/backend checks, the 30 independent held-out scenarios, measured cloud
-costs and elasticity evidence. No production migration or deployment was run.
+The current tests verify workflow branching, port calls, rollback expectations,
+response shapes and tenant scoping using a test double. They **do not verify
+SQL isolation, database constraints, migrations, deployed latency or elasticity**.
+Those remain required before claiming database integration is complete.

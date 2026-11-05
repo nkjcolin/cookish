@@ -329,7 +329,6 @@ class PlanSession(Base):
     status: Mapped[str] = mapped_column(Text, server_default="active")
     created_at: Mapped[datetime] = _created_at()
     expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
-    recommendation_state: Mapped[dict[str, Any] | None] = mapped_column(JSONB)
 
 
 class CookRecord(Base):
@@ -345,8 +344,6 @@ class CookRecord(Base):
     status: Mapped[str] = mapped_column(Text, server_default="selected")
     stock_event_id: Mapped[UUID | None] = mapped_column(ForeignKey("stock_events.id"))
     created_at: Mapped[datetime] = _created_at()
-    selection_snapshot: Mapped[dict[str, Any] | None] = mapped_column(JSONB)
-    confirmation_snapshot: Mapped[dict[str, Any] | None] = mapped_column(JSONB)
 
 
 class RecipeFeedback(Base):
@@ -382,7 +379,6 @@ class Basket(Base):
     status: Mapped[str] = mapped_column(Text, server_default="suggested")
     stock_event_id: Mapped[UUID | None] = mapped_column(ForeignKey("stock_events.id"))
     created_at: Mapped[datetime] = _created_at()
-    planning_snapshot: Mapped[dict[str, Any] | None] = mapped_column(JSONB)
 
 
 class BasketMeal(Base):
@@ -408,30 +404,3 @@ class BasketItem(Base):
     reason: Mapped[str | None] = mapped_column(Text)
     actual_bought: Mapped[bool | None] = mapped_column(Boolean)
     actual_packs: Mapped[int | None] = mapped_column(SmallInteger)
-
-
-class RecommendationLearning(Base):
-    """Ordered, replaceable meal evidence. Role 5 serializes writes per household."""
-
-    __tablename__ = "recommendation_learning"
-
-    household_id: Mapped[UUID] = mapped_column(ForeignKey("households.id"), primary_key=True)
-    state: Mapped[dict[str, Any]] = mapped_column(JSONB)
-    updated_by: Mapped[UUID] = mapped_column(ForeignKey("users.id"))
-    updated_at: Mapped[datetime] = _created_at()
-
-
-class RecommendationConfirmation(Base):
-    """Exact response replay; keys share the stock-event household namespace."""
-
-    __tablename__ = "recommendation_confirmations"
-    __table_args__ = (one_of("operation", ("cook", "shop")),)
-
-    household_id: Mapped[UUID] = mapped_column(ForeignKey("households.id"), primary_key=True)
-    idempotency_key: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
-    operation: Mapped[str] = mapped_column(Text)
-    target_id: Mapped[UUID] = mapped_column(Uuid)
-    request_json: Mapped[str] = mapped_column(Text)
-    response_snapshot: Mapped[dict[str, Any]] = mapped_column(JSONB)
-    stock_event_id: Mapped[UUID] = mapped_column(ForeignKey("stock_events.id"))
-    created_at: Mapped[datetime] = _created_at()

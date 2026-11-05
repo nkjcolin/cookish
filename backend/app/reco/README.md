@@ -23,7 +23,7 @@ costs and user research are still required.
 
 ## What already exists
 
-- **Cook/Shop service functions** now delegate to the transactional SQL workflow. Recipe details, stars and use-first reads also use real data; API schemas are unchanged.
+- **Every service function above, as a stub** marked `STUB`, returning sample data from `app/mock.py`. The frontend is built against them.
 - **Role 2's functions you call**, now implemented against PostgreSQL: household preferences, inventory snapshots and stock events. The agreed signatures are unchanged.
 - **`app/db/session.py`**: `transaction()`, one per request.
 - **`app/clock.py`**: today's date in Singapore.
@@ -40,9 +40,12 @@ development tests. Resolve those findings before freezing for held-out evaluatio
 reviewed recipes and 42 authoritative ingredients, household stars, preferences
 and inventory in the caller's transaction. It supplies the existing pure engine
 types without guessing counts, pack conversions or missing safety metadata.
-The SQL repository reuses these reads and adds session, record, basket, feedback and retry persistence.
+It is the read portion of the future repository, not a complete session service.
 
-The [storage design](../../../docs/role5-storage-proposal.md) documents the new migration and mapping choices for Role 2 review. Apply migration `e51c9a8d7201` before running this version. No production deployment has been performed.
+The [storage proposal](../../../docs/role5-storage-proposal.md) lists the remaining
+snapshots, ordered learning evidence and confirmation replay storage for Role 2's
+new migration. Public Cook/Shop endpoints remain mocked until that persistence
+layer is implemented. The proposal also records the catalogue mapping choices.
 
 `tests/test_recommendation_inputs.py` validates all delivered seed content at the
 mapping boundary. `tests/db/test_recommendation_inputs_db.py` exercises real
@@ -58,9 +61,11 @@ and classifies stock. `models.py` defines internal inputs and results;
 `config.py` contains all initial scoring weights. These modules perform no I/O,
 database access, live clock reads or session persistence.
 
-The **public Cook/Shop services now use PostgreSQL** through the transaction-scoped workflow and SQL repository. The
+The **public Cook/Shop services still return mocks**. The pure basket and learning
+algorithms and a transaction-scoped service workflow are implemented. The
 [integration handoff](../../../docs/role5-integration.md) describes its repository
-port, tests and proposed snapshot storage. The database adapter and feedback persistence are implemented in this draft; deployed recommendation flows remain to verify. The
+port, tests and proposed snapshot storage. The database adapter, real feedback
+persistence and deployed recommendation flows remain to implement. The
 [development scenario suite](../../../eval/reco_scenarios/README.md) now contains
 70 cases; the 30 independently authored held-out cases remain reserved.
 
@@ -84,7 +89,7 @@ features remain pending a similarly authoritative mapping. The initial engine
 reads `tag:<tag>` and `cuisine:<cuisine>` weights. `learning.py` produces those
 weights from confirmed cooking and subsequent feedback.
 
-Typical engine call inside the installed SQL workflow:
+Typical service flow, once its repository adapter exists:
 
 ```python
 from app import clock
@@ -338,7 +343,7 @@ basket schema, bounded feedback, retries and replacement after saturation.
 Two additional property tests generate 80 Shop cases and 80 feedback sequences.
 A structural integration test loads all 48 approved recipe files and produces
 a seven-meal plan with explicit synthetic metadata; it does not validate the
-authoritative catalogue. The new SQL input tests additionally load the real 42 ingredient rows and all 48 recipes.
+still-pending authoritative catalogue.
 
 These unit, property and workflow tests remain separate from the report
 scenario suite. The [scenario runner](../../../eval/reco_scenarios/README.md)
@@ -352,9 +357,9 @@ They must remain unseen until a frozen implementation is evaluated, with the
 first result preserved and reported separately. See the scenario README for
 the protocol; no held-out pass claim is made.
 
-The SQL repository, real stock confirmation and retry-safe feedback persistence
-are implemented and pass PostgreSQL CI in draft PR #21. The migration needs Role 2
-review; held-out and deployed evaluation remain. No synthetic metadata from
+Still to implement: the database repository adapter for the implemented
+Cook/Shop workflow, real stock confirmation and retry-safe feedback persistence,
+the held-out evaluation and deployed evaluation. No synthetic metadata from
 tests or scenarios should be seeded as the authoritative ingredient catalogue.
 
 ## What you may change, and what you must keep
@@ -461,16 +466,17 @@ Use the existing taste-tag vocabulary consistently:
 - Equipment lists mean AND: all listed appliances are required. Total times
   include meal staples and can assume the stated parallel cooking.
 
-Role 2 has delivered the 42 authoritative ingredient rows and seed loader. The
-SQL reader follows the stored staple and no-purchase metadata and preserves
-uncertainty for incompatible count/weight/pack conversions. Role 4 consumes the
-same catalogue. The recipe review itself does not constitute a cooking trial.
+Role 2 still needs to turn the ingredient request list into authoritative
+catalogue rows, settle water's assumed-available/no-purchase treatment, and
+agree count/weight/pack conversions. Role 4 consumes that same final catalogue.
+The reviewed recipe set does not itself implement the loader, recommendation
+algorithms or Cook/Shop services; those integration tasks remain.
 
 ## Tasks, in order
 
 1. **Recipes first**, because Role 2's catalogue comes from them. Lean towards everyday Singapore home cooking. Use only original or properly licensed content: the repository is public.
 2. `reco/` as pure functions, tested with fixture data: filter, score, suggest, adjust, build a basket. None of this needs the database.
-3. Cook/Shop services are wired to persisted sessions and Role 2's functions in draft PR #21; review the migration before merge and deployment.
+3. Wire the Cook and Shop services to sessions and to Role 2's functions. Their stubs return sample data, so this can start now.
 4. Fill `needs_check` and `freshness_check`, and return `NO_RESULT` as described above.
 5. Ratings: Like and Dislike adjust `taste_weights` as in SPEC B5; Maybe and "Not tonight" do not.
 6. Evaluation target: 100 scenarios in `eval/reco_scenarios/`, keeping 30 unseen during development, plus property-based tests that an allergen never appears in any output. The 70 development scenarios and property tests are implemented; the 30 held-out cases remain reserved under the [evaluation protocol](../../../eval/reco_scenarios/README.md).

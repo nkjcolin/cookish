@@ -1,7 +1,8 @@
-"""Shop sessions and baskets backed by the transactional SQL repository."""
+"""Shop sessions and baskets. STUB — Role 5 replaces the function bodies."""
 
 from uuid import UUID
 
+from app import mock
 from app.auth import CurrentUser
 from app.schemas.shop import (
     Basket,
@@ -10,21 +11,30 @@ from app.schemas.shop import (
     ShopAdjust,
     ShopSessionCreate,
 )
-from app.services.recommendation_sql import recommendation_uow
-from app.services.recommendation_workflow import RecommendationWorkflow
-
-workflow = RecommendationWorkflow(recommendation_uow)
+from app.schemas.stock_events import StockEventType, StockRefType
 
 
 def start_session(user: CurrentUser, body: ShopSessionCreate) -> Basket:
-    return workflow.start_shop(user, body)
+    prefs = mock.preferences()
+    return mock.basket(
+        people=body.people or prefs.last_shop_people, meals=body.meals or prefs.last_shop_meals
+    )
 
 
 def adjust(user: CurrentUser, session_id: UUID, body: ShopAdjust) -> Basket:
-    return workflow.adjust_shop(user, session_id, body)
+    return mock.basket(people=body.people or 2, meals=body.meals or 3, tags=body.tags)
 
 
 def confirm_basket(
     user: CurrentUser, basket_id: UUID, body: BasketConfirm, idempotency_key: UUID
 ) -> BasketConfirmResult:
-    return workflow.confirm_shop(user, basket_id, body, idempotency_key)
+    """Add what was actually bought through `apply_stock_event`."""
+    items = [mock.item("cabbage"), mock.item("tofu")]
+    event = mock.stock_event(
+        StockEventType.PURCHASE,
+        items,
+        ref_type=StockRefType.BASKET,
+        ref_id=basket_id,
+        created=True,
+    )
+    return BasketConfirmResult(event=event, items=items, basket_id=basket_id)

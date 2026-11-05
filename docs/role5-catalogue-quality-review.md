@@ -7,6 +7,12 @@ shopping completeness before user testing or freezing for held-out evaluation.
 
 ## Method and reproducibility
 
+**Integration status:** public Cook/Shop endpoints currently return mocks. The
+database model/migration changes and dependent SQL persistence wiring were
+removed to respect Role 2's schema ownership. These findings concern the pure
+engines and intended workflow integration, not a deployed end-to-end service.
+The recorded baseline retains its original source commit for reproducibility.
+
 The [runner](../backend/evaluation/catalogue_review.py) loads the actual 48 reviewed
 recipe YAML files and Role 2's 42 ingredient rows through the seed parser and SQL
 input mapping functions. It calls the production pure Cook/Shop engines, without

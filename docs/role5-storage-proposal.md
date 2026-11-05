@@ -1,6 +1,9 @@
 # Role 5 database integration: next migration proposal
 
-Prepared 5 November 2026 against `main` at `a360567`. **Implemented in draft PR #21 for Role 2 review.** The new migration `e51c9a8d7201` adds the fields below without changing the original migration or public API. Role 2 retains ownership of database design and migration review. No production migration has been run.
+Prepared 5 November 2026 against `main` at `a360567`. **Proposed for Role 2 to
+review and implement; no migration or shared API change is included.** Role 2
+owns the database models and migrations. Role 5 owns the recommendation queries,
+serialization and endpoint wiring.
 
 ## Available now
 
@@ -8,10 +11,12 @@ Prepared 5 November 2026 against `main` at `a360567`. **Implemented in draft PR 
 [`recommendation_inputs.py`](../backend/app/services/recommendation_inputs.py)
 loads reviewed recipes, ingredient metadata, purchase definitions and household
 stars from the existing tables. It delegates preferences and inventory reads to
-Role 2, using the caller's SQLAlchemy transaction. It is reused by `SqlRecommendationRepository`, which now implements the full persistence port.
+Role 2, using the caller's SQLAlchemy transaction. It is a component of the future
+repository, not a complete implementation of `RecommendationRepository`.
 
 The 42 ingredient rows and 48 approved recipes can now feed the pure engines.
-Cook/Shop endpoints now delegate to the workflow and SQL repository. Sessions, feedback, stars and confirmations persist; invented IDs no longer return successful mock results. The request/response schemas are unchanged. Apply the new migration before running this revision.
+Cook/Shop session endpoints still use mocks until the remaining repository is
+implemented and tested. No HTTP behavior changes in this milestone.
 
 Mapping choices in this reader:
 
@@ -31,7 +36,8 @@ Mapping choices in this reader:
   separate existing behaviors.
 - Stars use the latest `starred`/`unstarred` feedback event for the household;
   other signals do not affect stars. Equal timestamps use UUID order only as a
-  stable fallback, not proof of event chronology. The implemented star writer serializes household updates and gives each changed star a timestamp strictly later than the previous star event. Repeating the current star value writes nothing.
+  stable fallback, not proof of event chronology. A future star writer should
+  serialize household updates and make event order unambiguous.
 - Recipe ingredient display order is stable UUID order: the current relation
   has no source-position field. Instructions retain their stored order.
 - `active_minutes` must be present because the public Recipe schema requires it.
@@ -39,9 +45,9 @@ Mapping choices in this reader:
   with its ID rather than getting a fabricated time. Missing or invalid safety
   and purchase metadata also fails validation.
 
-## Storage additions prepared for Role 2 review
+## Storage additions requested from Role 2
 
-The **new migration** leaves the merged initial migration unchanged. These
+Use a **new migration**, leaving the merged initial migration unchanged. These
 fields correspond directly to the existing internal records in
 [`recommendation_repository.py`](../backend/app/services/recommendation_repository.py).
 Keep existing relational columns as the searchable identity/status fields.
@@ -78,12 +84,13 @@ retroactively reconstruct them from today's inventory or recipe. Existing
 nonempty taste weights without evidence need an explicit migration/reset
 decision before learning writes are enabled; never silently erase them.
 
-## Implemented transaction and lock rules
+## Transaction and lock rules to confirm
 
 1. Use the caller's transaction for all repository methods and
    `apply_stock_event`. Commit the event, target status, learning and replay
    response together, or roll them all back.
-2. The implementation serializes Role 5 mutations with a `FOR NO KEY UPDATE` lock on the household row **before** session/record/basket/learning locks. This allows the foreign-key `KEY SHARE` locks needed by concurrent manual stock-event inserts, avoiding a deadlock during a shared-key race. This gives a lock even
+2. For the first implementation, serialize Role 5 mutations on the household
+   row **before** session/record/basket/learning locks. This gives a lock even
    before a learning or replay row exists, and a consistent order for feedback,
    selection, adjustment and confirmation. Different households remain parallel.
 3. The replay table is not a separate key namespace. Before confirmation,
@@ -104,18 +111,16 @@ requested. Role 5 will update only its `last_*` fields and learned weights,
 preserving user preferences. Selection and confirmation must re-read inventory;
 the input reader alone is not a concurrency guarantee.
 
-## Verification and next steps
+## Next implementation and verification
 
-Implemented: SQL repository, versioned snapshot codecs, endpoint wiring, recipe detail/star queries and real use-first reads. Role 2 should review the schema and migration in the draft before merge. Deployment and the remaining held-out evaluation are still separate tasks.
+After agreement and migration: complete the SQL repository, implement versioned
+snapshot codecs, then install `RecommendationWorkflow` behind the existing
+Cook/Shop functions. Include recipe detail/star queries and their ordering.
 
-PostgreSQL CI passed at implementation commit `73e4186`. Tests exercise concurrent
-same/different-key confirmation, stock-event key races with manual writes, stale
-inventory revisions, selection retries, simultaneous rating replacement,
-cross-household access, snapshot stability after recipe/pack edits and rollback
-after an injected post-stock-event failure. The migrated schema matches the
-models. Pure learning tests cover replacement after weight clipping; codec tests
-preserve evidence order and configuration across JSON storage.
-
-The remaining 30 held-out scenarios, deployed Cook/Shop checks, cloud cost and
-elasticity measurements remain separate evaluation work. Local database tests
-need PostgreSQL; CI requires it rather than allowing skips.
+Database tests must cover concurrent same/different-key confirmation, stock-event
+key races with manual writes, stale inventory revisions, selection retries,
+rating replacement after weight clipping, cross-household access, historical
+snapshot stability after recipe/pack edits and rollback after an injected
+post-stock-event failure. These are additional to the current input-reader
+tests and pure workflow tests. The remaining 30 held-out scenarios and deployed
+Cook/Shop checks stay separate final evaluation work.
