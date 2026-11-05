@@ -23,12 +23,80 @@ costs and user research are still required.
 
 ## What already exists
 
-- **Every service function above, as a stub** marked `STUB`, returning sample data from `app/mock.py`. The frontend is built against them.
-- **Role 2's functions you call**, with agreed signatures and stubs that return sample data, so you can wire your services before the database exists (see below).
+- **Recipe details, household stars and use-first use the real database.** Cook/Shop
+  sessions and cooking confirmation/ratings still return sample data
+  from `app/mock.py` while their integration is pending.
+- **Role 2's functions you call**, now implemented against PostgreSQL: household preferences, inventory snapshots and stock events. The agreed signatures are unchanged.
 - **`app/db/session.py`**: `transaction()`, one per request.
 - **`app/clock.py`**: today's date in Singapore.
 - **The recipe file format**, agreed with Role 2, in [seed/README.md](../../seed/README.md).
 - **The pure Cook/Shop engines and learning**, described below, tested independently of those service stubs.
+
+## Database input loading: implemented milestone
+
+The [Role 5 report draft](../../../docs/role5-report-notes.md) explains cold start,
+recipe provenance, household feedback updates and evaluation terminology, with
+implementation references and the current integration limits.
+
+### Use first
+
+`cook.use_first` now calls Role 2's `get_inventory_snapshot` for the authenticated
+household and delegates to the pure `reco/use_first.py` function. It returns only
+`use_soon` batches with a non-past date and known positive counted stock or a
+state of `enough`/`low`. Unknown/out states, absent/invalid counts or units, and
+stale perishable confirmations are excluded. Freshness statuses and estimated
+dates are read unchanged from Role 2's snapshot; no shelf-life policy is duplicated.
+
+Dates are ordered earliest first, then acquisition date and batch ID; batches are
+never merged. `days_left` uses the Singapore date. Empty kitchens return an empty
+list. The snapshot's `use_soon` status currently covers today through three days
+ahead; the Cook ranking's four-day urgency coefficient is a separate policy.
+The endpoint is read-only for inventory and retains the existing API schema.
+Frontend integration and reminders are not part of this implementation.
+
+### Recipe detail and household stars
+
+`cook.get_recipe` and `cook.set_star` now delegate to the Role 5
+[`recipe_details`](../services/recipe_details.py) service using the existing
+recipe, ingredient and feedback tables. Detail returns reviewed catalogue content
+with household-specific star state; unknown or unreviewed IDs return `NOT_FOUND`.
+The existing public signatures and response schemas are unchanged.
+
+Star/unstar records the acting user in `recipe_feedback`, independently of cooked
+ratings and learned taste weights. A household row lock serializes these actions;
+repeating the current value creates no extra event. New event timestamps advance
+past the prior star event even if clocks tie or move backwards. Detail and the
+engine input reader use the same latest-event ordering. Other households' stars
+are isolated; household members share their household's state.
+
+No new database model or migration is needed. The PostgreSQL tests in
+`tests/db/test_recipe_details_db.py` cover all 48 detail responses, HTTP star
+round trips, unknown/unreviewed IDs, household/member scope, concurrent updates,
+event ordering, and rollback. These endpoints require the seeded catalogue.
+Mock Cook/Shop cards still carry mock recipe IDs, which these real endpoints
+reject; the complete UI flow awaits real session integration. No mock-ID aliases
+or fabricated catalogue rows are introduced.
+
+The [real-catalogue quality review](../../../docs/role5-catalogue-quality-review.md)
+finds quantity-resolution and shopping-completeness gaps despite passing
+development tests. Resolve those findings before freezing for held-out evaluation.
+
+[`SqlRecommendationInputs`](../services/recommendation_inputs.py) reads the 48
+reviewed recipes and 42 authoritative ingredients, household stars, preferences
+and inventory in the caller's transaction. It supplies the existing pure engine
+types without guessing counts, pack conversions or missing safety metadata.
+It is the read portion of the future repository, not a complete session service.
+
+The [storage proposal](../../../docs/role5-storage-proposal.md) lists the remaining
+snapshots, ordered learning evidence and confirmation replay storage for Role 2's
+new migration. Public Cook/Shop endpoints remain mocked until that persistence
+layer is implemented. The proposal also records the catalogue mapping choices.
+
+`tests/test_recommendation_inputs.py` validates all delivered seed content at the
+mapping boundary. `tests/db/test_recommendation_inputs_db.py` exercises real
+Postgres reads, both engines, review filtering, optional-ingredient dietary
+checks, household isolation and transaction rollback. CI requires Postgres for
+these tests; a local run without Postgres skips them.
 
 ## Cook engine: implemented milestone
 
@@ -188,17 +256,27 @@ eligible ingredient: category, explicit `buyable` flag, purchase unit, size and
 measure, and the estimated shelf life at default storage. Pack fields must be
 complete or all null. Missing rows raise an integration error rather than
 silently dropping an ingredient or treating it as safe. `buyable=False` is an
-explicit catalogue policy for something such as household tap water; the engine
-does not infer it from a name. No authoritative ingredient CSV exists yet.
+explicit catalogue policy for something such as household tap water or cooked
+rice; the engine does not infer it from a name. The SQL input reader supplies
+this metadata from Role 2's ingredient catalogue.
 
 The algorithm is deterministic and bounded, with no optimality claim:
 
 1. Apply the same review/allergen/diet/equipment/strict-time gate as Cook.
-   Score eligible recipes by learned/static preference and effort, ignoring
-   stock for admission. The public preferred time remains a soft penalty.
+   Before selecting families or taking the top candidates, exclude recipes with
+   essential, non-staple, non-buyable ingredients not confirmed available at home.
+   These require `have`: missing, low, unknown, stale, expired or unchecked stock
+   cannot be replenished by a shopping line. Optional ingredients and assumed
+   staples do not trigger this gate. Score the remaining recipes by learned/static
+   preference and effort, ignoring buyable stock for admission. The public
+   preferred time remains a soft penalty.
 2. Keep the best-scoring variant in each family, then take at most 20 families.
    Choose up to the requested number of meals by beam search of width 10.
-   No dish family repeats. A small catalogue can therefore return fewer meals.
+   No dish family repeats. Recheck non-buyable essential requirements across each
+   whole combination, scaling by people and counting each usable batch once.
+   If the bounded search cannot fill the requested plan, retry smaller sizes;
+   report the actual meal count. An empty plan follows the existing `NO_RESULT`
+   service path. State-tracked `enough` remains a state, not a numeric quantity.
 3. Score combinations with preference/effort, +0.5 per shared non-staple
    occurrence beyond the first, +1 per ingredient with confirmed usable stock,
    +0.5 per additional cuisine, and −0.5 per leftover pack fraction.

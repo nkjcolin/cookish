@@ -49,27 +49,14 @@ def adjust_shop(session: ShopSession, patch: ShopAdjust) -> ShopSession:
     )
 
 
-def shopping_list(
-    meals: Sequence[Candidate],
-    inventory: Sequence[InventoryItem],
-    catalogue: Mapping[UUID, CatalogIngredient],
-    purchases: Mapping[UUID, PurchaseSpec],
-    people: int,
-    *,
-    as_of: datetime,
-    config: ScoringConfig = DEFAULT_CONFIG,
-) -> ShoppingList:
-    """Aggregate the whole plan before subtracting stock, never once per meal."""
-    if not meals:
-        return ShoppingList((), 0)
+def _aggregate_ingredients(meals: Sequence[Candidate], people: int):
+    """Scale and combine requirements without inventing conversions between units."""
     grouped = defaultdict(list)
     for meal in meals:
         for line in meal.ingredients:
             grouped[line.ingredient_id].append((meal, line))
     lines, exact_needs = [], {}
     for ingredient_id, occurrences in sorted(grouped.items(), key=lambda item: str(item[0])):
-        if ingredient_id not in purchases:
-            raise ValueError("purchase metadata is required for every planned ingredient")
         units = {line.unit for _, line in occurrences}
         numeric = len(units) == 1 and all(line.quantity is not None for _, line in occurrences)
         quantity = (
@@ -94,6 +81,25 @@ def shopping_list(
                 prep_note=None,
             )
         )
+    return lines, exact_needs
+
+
+def shopping_list(
+    meals: Sequence[Candidate],
+    inventory: Sequence[InventoryItem],
+    catalogue: Mapping[UUID, CatalogIngredient],
+    purchases: Mapping[UUID, PurchaseSpec],
+    people: int,
+    *,
+    as_of: datetime,
+    config: ScoringConfig = DEFAULT_CONFIG,
+) -> ShoppingList:
+    """Aggregate the whole plan before subtracting stock, never once per meal."""
+    if not meals:
+        return ShoppingList((), 0)
+    lines, exact_needs = _aggregate_ingredients(meals, people)
+    if any(line.ingredient_id not in purchases for line in lines):
+        raise ValueError("purchase metadata is required for every planned ingredient")
     aggregate = Candidate.model_validate(
         {**meals[0].model_dump(), "servings": people, "ingredients": lines}
     )
@@ -196,9 +202,45 @@ def plan_shop(
     }
     if missing:
         raise ValueError("purchase metadata is required for every eligible ingredient")
+
+    # Non-buyable essentials cannot be repaired by the shopping list. Use the
+    # same recent-confirmation policy as shopping, including for pantry stock.
+    shop_catalogue = {
+        key: meta.model_copy(update={"perishable": True}) for key, meta in catalogue.items()
+    }
+
+    def can_supply_nonbuyable_essentials(meals):
+        required = [
+            meal.model_copy(
+                update={
+                    "ingredients": [
+                        line
+                        for line in meal.ingredients
+                        if line.essential
+                        and not catalogue[line.ingredient_id].is_staple
+                        and not purchases[line.ingredient_id].buyable
+                    ]
+                }
+            )
+            for meal in meals
+        ]
+        lines, _ = _aggregate_ingredients(required, session.people)
+        if not lines:
+            return True
+        aggregate = meals[0].model_copy(update={"servings": session.people, "ingredients": lines})
+        return all(
+            line.status == IngredientStatus.HAVE
+            for line in assess_ingredients(
+                aggregate, inventory, shop_catalogue, session.people, as_of=as_of, config=config
+            )
+        )
+
+    safe = [meal for meal in safe if can_supply_nonbuyable_essentials((meal,))]
+    if not safe:
+        return ShopPlan(session, (), (), {})
     scores = {}
     for meal in safe:
-        # Availability, urgency and uncertainty do not affect candidate admission.
+        # Buyable stock, urgency and uncertainty do not affect preference ranking.
         scored = score_recipe(
             meal,
             (),
@@ -258,24 +300,31 @@ def plan_shop(
         }
         return ShopPlan(session, chosen, shopping.items, terms)
 
-    beam = [((), ShopPlan(session, (), (), {}))]
-    for depth in range(1, target + 1):
-        expanded = {}
-        for indices, _ in beam:
-            # Increasing indices deduplicate combinations. Leave room to finish
-            # so pruning can never return fewer meals just because a branch is full.
-            start = indices[-1] + 1 if indices else 0
-            for index in range(start, len(candidates) - (target - depth)):
-                combination = (*indices, index)
-                expanded[combination] = evaluate(combination)
-        beam = sorted(
-            expanded.items(),
-            key=lambda entry: (
-                -entry[1].score,
-                tuple(str(meal.id) for meal in entry[1].planned_meals),
-            ),
-        )[: shop_config.beam_width]
-    return beam[0][1]
+    # Individual meals may fit stock while their combined essential need does
+    # not. Retry a smaller target if the bounded search cannot fill the plan.
+    for size in range(target, 0, -1):
+        beam = [((), ShopPlan(session, (), (), {}))]
+        for depth in range(1, size + 1):
+            expanded = {}
+            for indices, _ in beam:
+                # Increasing indices deduplicate combinations. Leave room to finish.
+                start = indices[-1] + 1 if indices else 0
+                for index in range(start, len(candidates) - (size - depth)):
+                    combination = (*indices, index)
+                    if can_supply_nonbuyable_essentials(tuple(candidates[i] for i in combination)):
+                        expanded[combination] = evaluate(combination)
+            if not expanded:
+                break
+            beam = sorted(
+                expanded.items(),
+                key=lambda entry: (
+                    -entry[1].score,
+                    tuple(str(meal.id) for meal in entry[1].planned_meals),
+                ),
+            )[: shop_config.beam_width]
+        else:
+            return beam[0][1]
+    return ShopPlan(session, (), (), {})
 
 
 def to_basket(plan: ShopPlan, session_id: UUID, basket_id: UUID) -> Basket:

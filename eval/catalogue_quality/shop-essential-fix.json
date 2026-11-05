@@ -1,0 +1,4934 @@
+{
+  "kind": "real-catalogue development quality review",
+  "held_out_executed": 0,
+  "fixed_clock": "2026-11-05T12:00:00+08:00",
+  "source_commit": "c330e76ebe37b1fde95625842af806b2847b12f0",
+  "source_dirty": false,
+  "runtime": {
+    "python": "3.12.13",
+    "packages": {
+      "pydantic": "2.14.1",
+      "sqlalchemy": "2.1.4",
+      "pyyaml": "6.0.3"
+    }
+  },
+  "source_sha256_lf_utf8": {
+    "backend/app/clock.py": "9a389862e3bd33c13ed37a0cf4ae4441637e255b7f9a3f0d2771400a547d2b0e",
+    "backend/app/db/models.py": "1c35eaf6af1a2251b297e23e74093df7b4961cf990552c9545e7632ba0aecc35",
+    "backend/app/reco/__init__.py": "4d2e6d4928c464b6b5cfc2360c6705e41fc3a67227ac24b65baf9b256d2551ea",
+    "backend/app/reco/config.py": "c2280975cce129e0a6b20ccf619ae38dd48c95cb14113c45324a69054ab7f1ab",
+    "backend/app/reco/cook.py": "c9128b874b646819b4fcddfb5f33e6cead55eebffc255c708a9f95b476071451",
+    "backend/app/reco/inventory.py": "ce563f4d9b58e45ddcea9dcc4204a4f9d2feb4afc81c82bd6417618c84b5c4b9",
+    "backend/app/reco/learning.py": "9c2c6f9ee15eb8aa036a6c13cce550c24d409ea1f0103407109c8127e072ac1d",
+    "backend/app/reco/models.py": "3773b600b1e56601f9d3ec4fc86f5a47364f198ee47f51589e90d1b2977769bb",
+    "backend/app/reco/shop.py": "916ca17865765e6eb0ba330a0b761800873dbf950ce977517a13f94f5bd4d86b",
+    "backend/app/reco/shop_models.py": "48087de98552fe074a4b54d9ea3c257779a64f3332afdb4591e251c139a0cdef",
+    "backend/app/schemas/__init__.py": "8d99389859968a11616328fa3a967452d80dc4a90f0325a4f61b7dd5ae3cc626",
+    "backend/app/schemas/ai.py": "039991327ff749fb56b5c1801136049042088735f1c9c1c3f4b22df14a92bbaa",
+    "backend/app/schemas/catalogue.py": "10ef20b6f49fcc825c3a3ba812ecce7edbaa82d05429d0b4296e8f55112d15e5",
+    "backend/app/schemas/common.py": "78b45e5538054f3150599197ce2e81284b386c0642b59be7f045d5e328935a2e",
+    "backend/app/schemas/cook.py": "4be002fa05816d5e0399810c4ef93a75a369cca4fea64dec40d217333758119c",
+    "backend/app/schemas/identity.py": "e69eaff8d5981d33267a72b74591aaf7d63da2970f9bf1a62df76cb900f86c3e",
+    "backend/app/schemas/inventory.py": "da5a54c00c45d082c51e6231bfdaeb40746a85e163efec0ccfcb8aaf9376093d",
+    "backend/app/schemas/recipes.py": "66927bde31529e423b791a824756d401bb5a23a7273a5805d32c4a0f4c96f51a",
+    "backend/app/schemas/shop.py": "dd5813e17343ec5756550a09bfa69d75a2f5907c9f01318cb8165d3c53a41196",
+    "backend/app/schemas/stock_events.py": "ab4f8b3354357b8ed8181ec6f11a2a2c59bc9c5b16339d0197705db8acd7dbdb",
+    "backend/app/services/freshness.py": "f86df56862d895bf71f562ec5189bc36228653a99b8e4ccabfb727a679d866be",
+    "backend/app/services/recommendation_inputs.py": "8d387983d40b20c31cd12b8642e94086b797e99eec42d6f3bbeb0fb0fdb7111c",
+    "backend/app/services/stock_events.py": "4fb2804c14c880b5f71cbd1c441d1ede165f4d05853e77c111004fe5a52e0fe5",
+    "backend/evaluation/catalogue_review.py": "3ef7c90752ebb78291f7e8d5eeb015399c3da8f19c5c60d4499e127acc0b71d4",
+    "backend/seed/demo.py": "9e567e4bb45b8e8915bbf787b34e6d8f6feb11213490d91b76d3360603471e68",
+    "backend/seed/ingredients.csv": "6ed869562f3191b6cf3d3c3ea423074f3e546ea1a5ff081de5366f6835da021a",
+    "backend/seed/recipes/bee-hoon-cabbage.yaml": "70dc7793bb0c9d19b6a2c136e1e48164de830809a6b230bf51db9e5b9024345f",
+    "backend/seed/recipes/bee-hoon-egg.yaml": "dc39ea79004362696b938ea75a7633a599c8f8abf71e5771dc4b6a24153cda07",
+    "backend/seed/recipes/cabbage-carrot-egg-fried-rice.yaml": "567f592e1bd74e2778134a4a287b1f2aaf94fe47502a0e130715f80aba88b6a3",
+    "backend/seed/recipes/cabbage-tofu-stir-fry-less-oil.yaml": "71a3c8ebc952dcd03defeb40b0252db16f8d1f88a7f6dbf8e0bc106c98be99ea",
+    "backend/seed/recipes/cabbage-tofu-stir-fry.yaml": "b72b57896491c737f0b425076491d154d1a39c97c8e8bef4968382029371e31b",
+    "backend/seed/recipes/chicken-broccoli-stir-fry.yaml": "fa89b6dd9c67b2783222ecfa48384d8cb345e6d48333c677c9af9001f97a5751",
+    "backend/seed/recipes/chicken-rice-porridge.yaml": "b98267ba8139080ccdfe2f46dca9a112ebe8c78840049afe1355731d71412f78",
+    "backend/seed/recipes/chicken-vegetable-fried-rice.yaml": "fb5814275f4e7012967e863fad935712c6a9c799072a13007d860459c6536dde",
+    "backend/seed/recipes/chickpea-tomato-curry.yaml": "e83aa430fd756e3accfdff81650bab2572cbc7b0578725b29f29fbadfc64796a",
+    "backend/seed/recipes/chye-sim-egg-bee-hoon.yaml": "71f16194a07cf8bc7f3403fdbd7bbcd578c21a4956553441b19374c8601e19cb",
+    "backend/seed/recipes/coconut-chicken-curry.yaml": "d5df181a0e8ac43f4bbd2264d25093a2ed52808dfe733f3663e05b628ba0a6d5",
+    "backend/seed/recipes/coconut-tofu-curry.yaml": "d4dc54f5d7e1848e8361b2768b7caaea457dfb6bc98f3aebfc989ef0337e9f7f",
+    "backend/seed/recipes/cucumber-tomato-chickpea-salad.yaml": "c5f8efecdcadfa9d67751c71b56697d623c0b73acad11843d3e671710b512555",
+    "backend/seed/recipes/egg-fried-rice.yaml": "9e0e4006293e2a490cd2d7d9540e643b07948bf2238a8a9d68cc8c62b84ee3bb",
+    "backend/seed/recipes/fish-tomato-soup.yaml": "8aa8d644dc320ef8a9f1f632ac3c2cfc9cd92c9a10a90c1705ef71124c96f9ee",
+    "backend/seed/recipes/garlic-water-spinach.yaml": "b4acf3a7c5f14d63716cd0532ff498c42b72dffbc3c97ba059b5cfcfaf113ee3",
+    "backend/seed/recipes/ginger-chicken-rice-less-oil.yaml": "335aaa0a375847d30d791472e2f3c854c82e223cc68f9733cf50b17448e24cdf",
+    "backend/seed/recipes/ginger-chicken-rice.yaml": "7887575a757156f271ce161dd67d6b0d79b4beced8dcf4ab794bfb564119b110",
+    "backend/seed/recipes/ginger-chicken-soup.yaml": "547e136cb2ad046b52ec84a91dabed6059c06316d5b12bebedddc599b1611bea",
+    "backend/seed/recipes/lemon-pepper-chicken.yaml": "fcb5563b99945bc3f6389380225a0f9ec1cc9b24c2bc9619386f922d4d4814bf",
+    "backend/seed/recipes/lemon-pepper-fish.yaml": "556f5cffc165524618048fdb3a4f183afb139184289bd8ede7f3ada8ff3b4f0a",
+    "backend/seed/recipes/lentil-spinach-dhal.yaml": "51055840c70374db4e129b90a20a0529cf224b00ccbd2c8343638fd37d0a51b2",
+    "backend/seed/recipes/microwave-broccoli-chickpea-rice.yaml": "768244b629cf246620f1177cef61738af429f49b01d11825d86f9cb9d8355f1a",
+    "backend/seed/recipes/mushroom-omelette.yaml": "e131ff8d56f296c9a836e5fb9f1134db12d7bff8bab71ea93e7999fd6bd1fba9",
+    "backend/seed/recipes/mushroom-rice-porridge.yaml": "8b7c667fd514beb2db19168c97d9ada309aff2a874703c4ee927ab9a3a1871b8",
+    "backend/seed/recipes/potato-cauliflower-curry.yaml": "62d2af44bc246b62efbec64ead3699f030b012bd378377c2176824a762f9270c",
+    "backend/seed/recipes/pumpkin-lentil-soup.yaml": "7f44a2045bb568240a82b7d6254a9c60d778455c635b70b669092760be04d000",
+    "backend/seed/recipes/quicker-tomato-egg-rice.yaml": "c2c88bfefe4eb8af2c84924a9f1d34a0cb885e5067a2b3cf542d2754e161bf71",
+    "backend/seed/recipes/red-lentil-dhal.yaml": "5b1684b6000379d52a1c312753bf22509bd27a2c2ad091e17db57452214800ee",
+    "backend/seed/recipes/rice-cooker-bok-choy-tofu-rice.yaml": "7e762f4ca3de9d24b2b01c92c10cb3593b22e4502334bc22f7d65a5d815c6fe2",
+    "backend/seed/recipes/rice-vermicelli-chicken-soup.yaml": "214867afc28f463fd8392caabce6940214b1f72d0cc05aa347ebffe6b3ab35e1",
+    "backend/seed/recipes/rice-vermicelli-tofu-soup.yaml": "9cb5879622ea8e5939f23fd3fbb4b141d51a2ac31a2114cb5aa1e7477954bd38",
+    "backend/seed/recipes/sambal-prawn.yaml": "b8153c3bf1eccd35e8c3f23215c83fdde99c15539ce9e3de445d0fc68bbb02fa",
+    "backend/seed/recipes/sambal-tofu.yaml": "2216629f24f2b6e1dca04d90d0aa37dbfb2e5a5238efc5db835b954594a1f2d7",
+    "backend/seed/recipes/sesame-soba-egg.yaml": "35cb2fd455b3eee93d264324ca6de8f175e69e8f7a99e990f3871ad19dbf2475",
+    "backend/seed/recipes/sesame-soba-tofu.yaml": "9cd6d7704cd13c34edb34df06b954f477d7e0c91c9fb08f1d48f9aa9aee34dac",
+    "backend/seed/recipes/steamed-egg-tofu.yaml": "0f77d98e0108ef928b486915069c612ef8cb859519ac315958134ad32f102d34",
+    "backend/seed/recipes/steamed-egg.yaml": "bfff46cdabc87dbd0846d87947f7840ec313607c04221ebf98b5f2c78517cb62",
+    "backend/seed/recipes/steamed-ginger-fish.yaml": "54f796000ab8ec2979d4e7302364d7c768bf0c5007b92c7dfcc9aaff1df1c3d5",
+    "backend/seed/recipes/tempeh-cabbage-stir-fry.yaml": "f3bda80e1dcb705c6aa22f38c0953fca8d4f94d9a9afea6d6e3f384e72a0c016",
+    "backend/seed/recipes/tempeh-long-bean-stir-fry.yaml": "24d28446acf1b06c4b897bac1ee0a0dfecaf08c0e439e1fcab40febbb8183101",
+    "backend/seed/recipes/tofu-broccoli-stir-fry.yaml": "1669bd3a413f8560dfbbe8ce43f20c8189ae2e80abd5428690474f9347e8006e",
+    "backend/seed/recipes/tofu-mushroom-rice.yaml": "9ec6c47fe68b3198e8b431fbf918d514f7068fde4a0267907dabfd737c8847bc",
+    "backend/seed/recipes/tofu-mushroom-soup.yaml": "59352d7903c3d2eaf0d4990acf1e8cd048e414c74327f734d2b42565347599ad",
+    "backend/seed/recipes/tofu-vegetable-fried-rice.yaml": "dbe12cfb72bd588e2c02abe181abeb76306ad0632c77ecb8b091c5dc0c5d682f",
+    "backend/seed/recipes/tomato-egg-stir-fry-less-oil.yaml": "b0d6c730a2f17931cb184d708e5b6a3d4f63074357c57c869423bb43c8217a57",
+    "backend/seed/recipes/tomato-egg-stir-fry.yaml": "ac08c47bf677aa8e21778e50e7618d9437c779357c9b8e46562494127936d510",
+    "backend/seed/recipes/tomato-onion-omelette.yaml": "3691d41b8732e13965d2a1de8bb5dd534e3503c12428f04cb629c65443ca0e64",
+    "backend/seed/seed.py": "59f5cc666324da483e715d3e3c84855638a8a5ffc96f9cca5cce85417bbff107"
+  },
+  "scoring": {
+    "coverage": 3.0,
+    "expiry": 1.0,
+    "preference": 1.0,
+    "effort": 0.5,
+    "repetition": 1.0,
+    "uncertainty": 1.0,
+    "similarity": 0.5,
+    "cuisine_bonus": 0.5,
+    "star_bonus": 1.0,
+    "disliked_ingredient_penalty": 1.0,
+    "boosted_tag_bonus": 2.0,
+    "low_coverage": 0.5,
+    "urgency_window_days": 4,
+    "stale_confirmation_days": 14,
+    "default_minutes": 60,
+    "default_difficulty": 3
+  },
+  "shop_config": {
+    "candidate_limit": 20,
+    "beam_width": 10,
+    "sharing": 0.5,
+    "at_home": 1.0,
+    "variety": 0.5,
+    "surplus": 0.5,
+    "vegetables": 2.0,
+    "longer_lasting": 1.0,
+    "shelf_life_horizon_days": 30
+  },
+  "assumptions": {
+    "all_catalogue_units": "100 of each counted default unit; all state items enough; synthetic valid seven-day labels; confirmed now. No grams/count conversion assumed.",
+    "empty": "No stock, feedback or stars; absent staples assumed by existing policy.",
+    "demo": "Role 2 demo kitchen, reconstructed at the fixed clock.",
+    "readiness": "Mirrors selection blockers, not a cooking/portion/safety guarantee.",
+    "coverage": "Development probes, not population estimates or held-out tests.",
+    "have_it_probe": "Set existing batches to enough and confirmed now; preserve counts/units/dates. Missing batches remain absent."
+  },
+  "catalogue": {
+    "recipes": 48,
+    "families": 28,
+    "ingredients": 42,
+    "cuisines": {
+      "chinese": 29,
+      "indian": 4,
+      "malay": 2,
+      "western": 4,
+      "other": 7,
+      "japanese": 2
+    }
+  },
+  "unit_mismatches": [
+    {
+      "recipe": "Cabbage and carrot bee hoon",
+      "ingredient": "carrot",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pcs",
+      "purchase_unit": "pcs"
+    },
+    {
+      "recipe": "Egg, cabbage and carrot bee hoon",
+      "ingredient": "carrot",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pcs",
+      "purchase_unit": "pcs"
+    },
+    {
+      "recipe": "Egg fried rice with extra cabbage and carrot",
+      "ingredient": "carrot",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pcs",
+      "purchase_unit": "pcs"
+    },
+    {
+      "recipe": "Cabbage and tofu rice bowls with less oil",
+      "ingredient": "firm tofu",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pack",
+      "purchase_unit": "g"
+    },
+    {
+      "recipe": "Cabbage and tofu rice bowls",
+      "ingredient": "firm tofu",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pack",
+      "purchase_unit": "g"
+    },
+    {
+      "recipe": "Chicken, egg and vegetable fried rice",
+      "ingredient": "carrot",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pcs",
+      "purchase_unit": "pcs"
+    },
+    {
+      "recipe": "Chickpea and tomato curry with rice",
+      "ingredient": "tomato",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pcs",
+      "purchase_unit": "pcs"
+    },
+    {
+      "recipe": "Chickpea and tomato curry with rice",
+      "ingredient": "onion",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pcs",
+      "purchase_unit": "pcs"
+    },
+    {
+      "recipe": "Coconut chicken and vegetable curry with rice",
+      "ingredient": "carrot",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pcs",
+      "purchase_unit": "pcs"
+    },
+    {
+      "recipe": "Coconut chicken and vegetable curry with rice",
+      "ingredient": "onion",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pcs",
+      "purchase_unit": "pcs"
+    },
+    {
+      "recipe": "Coconut tofu and vegetable curry with rice",
+      "ingredient": "firm tofu",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pack",
+      "purchase_unit": "g"
+    },
+    {
+      "recipe": "Coconut tofu and vegetable curry with rice",
+      "ingredient": "carrot",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pcs",
+      "purchase_unit": "pcs"
+    },
+    {
+      "recipe": "Coconut tofu and vegetable curry with rice",
+      "ingredient": "onion",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pcs",
+      "purchase_unit": "pcs"
+    },
+    {
+      "recipe": "Cucumber, tomato and chickpea rice salad",
+      "ingredient": "cucumber",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pcs",
+      "purchase_unit": "pcs"
+    },
+    {
+      "recipe": "Cucumber, tomato and chickpea rice salad",
+      "ingredient": "tomato",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pcs",
+      "purchase_unit": "pcs"
+    },
+    {
+      "recipe": "Egg fried rice with vegetables",
+      "ingredient": "carrot",
+      "essential": false,
+      "recipe_unit": "g",
+      "inventory_unit": "pcs",
+      "purchase_unit": "pcs"
+    },
+    {
+      "recipe": "Fish and tomato vermicelli soup",
+      "ingredient": "tomato",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pcs",
+      "purchase_unit": "pcs"
+    },
+    {
+      "recipe": "Garlic water spinach and tofu rice bowls",
+      "ingredient": "firm tofu",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pack",
+      "purchase_unit": "g"
+    },
+    {
+      "recipe": "Ginger chicken and potato soup",
+      "ingredient": "potato",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pcs",
+      "purchase_unit": "pcs"
+    },
+    {
+      "recipe": "Ginger chicken and potato soup",
+      "ingredient": "carrot",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pcs",
+      "purchase_unit": "pcs"
+    },
+    {
+      "recipe": "Lemon pepper chicken with potatoes and carrots",
+      "ingredient": "potato",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pcs",
+      "purchase_unit": "pcs"
+    },
+    {
+      "recipe": "Lemon pepper chicken with potatoes and carrots",
+      "ingredient": "carrot",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pcs",
+      "purchase_unit": "pcs"
+    },
+    {
+      "recipe": "Lemon pepper fish with potatoes and carrots",
+      "ingredient": "potato",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pcs",
+      "purchase_unit": "pcs"
+    },
+    {
+      "recipe": "Lemon pepper fish with potatoes and carrots",
+      "ingredient": "carrot",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pcs",
+      "purchase_unit": "pcs"
+    },
+    {
+      "recipe": "Red lentil and spinach dhal with rice",
+      "ingredient": "tomato",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pcs",
+      "purchase_unit": "pcs"
+    },
+    {
+      "recipe": "Red lentil and spinach dhal with rice",
+      "ingredient": "onion",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pcs",
+      "purchase_unit": "pcs"
+    },
+    {
+      "recipe": "Mushroom and tofu rice porridge",
+      "ingredient": "firm tofu",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pack",
+      "purchase_unit": "g"
+    },
+    {
+      "recipe": "Potato and cauliflower curry with rice",
+      "ingredient": "potato",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pcs",
+      "purchase_unit": "pcs"
+    },
+    {
+      "recipe": "Potato and cauliflower curry with rice",
+      "ingredient": "onion",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pcs",
+      "purchase_unit": "pcs"
+    },
+    {
+      "recipe": "Potato and cauliflower curry with rice",
+      "ingredient": "tomato",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pcs",
+      "purchase_unit": "pcs"
+    },
+    {
+      "recipe": "Pumpkin, potato and red lentil soup",
+      "ingredient": "potato",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pcs",
+      "purchase_unit": "pcs"
+    },
+    {
+      "recipe": "Pumpkin, potato and red lentil soup",
+      "ingredient": "onion",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pcs",
+      "purchase_unit": "pcs"
+    },
+    {
+      "recipe": "Quick tomato and egg rice",
+      "ingredient": "tomato",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pcs",
+      "purchase_unit": "pcs"
+    },
+    {
+      "recipe": "Tomato and red lentil dhal with rice",
+      "ingredient": "onion",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pcs",
+      "purchase_unit": "pcs"
+    },
+    {
+      "recipe": "Tomato and red lentil dhal with rice",
+      "ingredient": "tomato",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pcs",
+      "purchase_unit": "pcs"
+    },
+    {
+      "recipe": "Rice-cooker bok choy and tofu rice",
+      "ingredient": "firm tofu",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pack",
+      "purchase_unit": "g"
+    },
+    {
+      "recipe": "Bok choy and tofu bee hoon soup",
+      "ingredient": "firm tofu",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pack",
+      "purchase_unit": "g"
+    },
+    {
+      "recipe": "Chilli prawns with rice",
+      "ingredient": "onion",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pcs",
+      "purchase_unit": "pcs"
+    },
+    {
+      "recipe": "Chilli prawns with rice",
+      "ingredient": "tomato",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pcs",
+      "purchase_unit": "pcs"
+    },
+    {
+      "recipe": "Chilli tofu with rice",
+      "ingredient": "firm tofu",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pack",
+      "purchase_unit": "g"
+    },
+    {
+      "recipe": "Chilli tofu with rice",
+      "ingredient": "onion",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pcs",
+      "purchase_unit": "pcs"
+    },
+    {
+      "recipe": "Chilli tofu with rice",
+      "ingredient": "tomato",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pcs",
+      "purchase_unit": "pcs"
+    },
+    {
+      "recipe": "Sesame soba with egg and vegetables",
+      "ingredient": "cucumber",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pcs",
+      "purchase_unit": "pcs"
+    },
+    {
+      "recipe": "Sesame soba with egg and vegetables",
+      "ingredient": "carrot",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pcs",
+      "purchase_unit": "pcs"
+    },
+    {
+      "recipe": "Sesame soba with tofu and vegetables",
+      "ingredient": "firm tofu",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pack",
+      "purchase_unit": "g"
+    },
+    {
+      "recipe": "Sesame soba with tofu and vegetables",
+      "ingredient": "cucumber",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pcs",
+      "purchase_unit": "pcs"
+    },
+    {
+      "recipe": "Sesame soba with tofu and vegetables",
+      "ingredient": "carrot",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pcs",
+      "purchase_unit": "pcs"
+    },
+    {
+      "recipe": "Steamed egg and tofu with rice",
+      "ingredient": "firm tofu",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pack",
+      "purchase_unit": "g"
+    },
+    {
+      "recipe": "Tofu and broccoli stir-fry with rice",
+      "ingredient": "firm tofu",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pack",
+      "purchase_unit": "g"
+    },
+    {
+      "recipe": "One-pot tofu and mushroom rice",
+      "ingredient": "firm tofu",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pack",
+      "purchase_unit": "g"
+    },
+    {
+      "recipe": "Tofu, mushroom and cabbage noodle soup",
+      "ingredient": "firm tofu",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pack",
+      "purchase_unit": "g"
+    },
+    {
+      "recipe": "Tofu and vegetable fried rice",
+      "ingredient": "firm tofu",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pack",
+      "purchase_unit": "g"
+    },
+    {
+      "recipe": "Tofu and vegetable fried rice",
+      "ingredient": "carrot",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pcs",
+      "purchase_unit": "pcs"
+    },
+    {
+      "recipe": "Tomato and egg rice bowls with less oil",
+      "ingredient": "tomato",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pcs",
+      "purchase_unit": "pcs"
+    },
+    {
+      "recipe": "Tomato and egg rice bowls",
+      "ingredient": "tomato",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pcs",
+      "purchase_unit": "pcs"
+    },
+    {
+      "recipe": "Tomato and onion omelette with rice",
+      "ingredient": "tomato",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pcs",
+      "purchase_unit": "pcs"
+    },
+    {
+      "recipe": "Tomato and onion omelette with rice",
+      "ingredient": "onion",
+      "essential": true,
+      "recipe_unit": "g",
+      "inventory_unit": "pcs",
+      "purchase_unit": "pcs"
+    }
+  ],
+  "cook": [
+    {
+      "profile": "unrestricted",
+      "kitchen": "all_catalogue_units",
+      "preferences": {
+        "allergens": [],
+        "diets": [],
+        "equipment": [
+          "stove",
+          "oven",
+          "microwave",
+          "rice_cooker",
+          "air_fryer",
+          "steamer",
+          "blender"
+        ],
+        "cuisines": [],
+        "disliked_ingredient_ids": [],
+        "max_cook_minutes": 60,
+        "max_difficulty": 3,
+        "household_size": 2,
+        "last_cook_people": 2,
+        "last_shop_people": 2,
+        "last_shop_meals": 3,
+        "updated_at": "2026-11-05T12:00:00+08:00"
+      },
+      "hard_eligible": 48,
+      "within_time_and_difficulty": 48,
+      "ready_to_select": 13,
+      "first_five": [
+        {
+          "id": "0c7bea35-103a-4199-b3cd-11cf607baf3f",
+          "title": "Microwave broccoli and chickpea rice",
+          "family": "0c7bea35-103a-4199-b3cd-11cf607baf3f",
+          "minutes": 20,
+          "cuisine": "other",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.16666666666666666,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "ecbccf1f-44c2-448b-a25f-2695250fe976",
+          "title": "Chye sim and egg bee hoon soup",
+          "family": "ecbccf1f-44c2-448b-a25f-2695250fe976",
+          "minutes": 25,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.1875,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "c3954096-77f8-49a4-a0c3-519390c4477d",
+          "title": "Bok choy and chicken bee hoon soup",
+          "family": "202bfb57-26ca-4201-b935-7a7ea4db9785",
+          "minutes": 30,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.20833333333333331,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "5380fd71-a373-4bed-8474-7f0d8e46cb43",
+          "title": "Chicken and broccoli stir-fry with rice",
+          "family": "66ee604f-e55c-46a3-8d5f-a64e5e58085d",
+          "minutes": 35,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.22916666666666669,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "900f9630-7d36-4cad-9db6-1851bef26fd1",
+          "title": "Tempeh and cabbage stir-fry with rice",
+          "family": "404b4550-6cd6-4ee4-b79e-9b0b87161ece",
+          "minutes": 35,
+          "cuisine": "other",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.22916666666666669,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        }
+      ],
+      "distinct_families_in_first_five": 5,
+      "first_after_have_it_blockers": []
+    },
+    {
+      "profile": "stove_only",
+      "kitchen": "all_catalogue_units",
+      "preferences": {
+        "allergens": [],
+        "diets": [],
+        "equipment": [
+          "stove"
+        ],
+        "cuisines": [],
+        "disliked_ingredient_ids": [],
+        "max_cook_minutes": 60,
+        "max_difficulty": 3,
+        "household_size": 2,
+        "last_cook_people": 2,
+        "last_shop_people": 2,
+        "last_shop_meals": 3,
+        "updated_at": "2026-11-05T12:00:00+08:00"
+      },
+      "hard_eligible": 43,
+      "within_time_and_difficulty": 43,
+      "ready_to_select": 10,
+      "first_five": [
+        {
+          "id": "ecbccf1f-44c2-448b-a25f-2695250fe976",
+          "title": "Chye sim and egg bee hoon soup",
+          "family": "ecbccf1f-44c2-448b-a25f-2695250fe976",
+          "minutes": 25,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.1875,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "c3954096-77f8-49a4-a0c3-519390c4477d",
+          "title": "Bok choy and chicken bee hoon soup",
+          "family": "202bfb57-26ca-4201-b935-7a7ea4db9785",
+          "minutes": 30,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.20833333333333331,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "5380fd71-a373-4bed-8474-7f0d8e46cb43",
+          "title": "Chicken and broccoli stir-fry with rice",
+          "family": "66ee604f-e55c-46a3-8d5f-a64e5e58085d",
+          "minutes": 35,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.22916666666666669,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "900f9630-7d36-4cad-9db6-1851bef26fd1",
+          "title": "Tempeh and cabbage stir-fry with rice",
+          "family": "404b4550-6cd6-4ee4-b79e-9b0b87161ece",
+          "minutes": 35,
+          "cuisine": "other",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.22916666666666669,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "aa138433-2918-4a6f-b361-c1fe5eedeaaf",
+          "title": "Mushroom omelette with rice",
+          "family": "aa138433-2918-4a6f-b361-c1fe5eedeaaf",
+          "minutes": 35,
+          "cuisine": "other",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.22916666666666669,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        }
+      ],
+      "distinct_families_in_first_five": 5,
+      "first_after_have_it_blockers": []
+    },
+    {
+      "profile": "microwave_only",
+      "kitchen": "all_catalogue_units",
+      "preferences": {
+        "allergens": [],
+        "diets": [],
+        "equipment": [
+          "microwave"
+        ],
+        "cuisines": [],
+        "disliked_ingredient_ids": [],
+        "max_cook_minutes": 60,
+        "max_difficulty": 3,
+        "household_size": 2,
+        "last_cook_people": 2,
+        "last_shop_people": 2,
+        "last_shop_meals": 3,
+        "updated_at": "2026-11-05T12:00:00+08:00"
+      },
+      "hard_eligible": 2,
+      "within_time_and_difficulty": 2,
+      "ready_to_select": 1,
+      "first_five": [
+        {
+          "id": "0c7bea35-103a-4199-b3cd-11cf607baf3f",
+          "title": "Microwave broccoli and chickpea rice",
+          "family": "0c7bea35-103a-4199-b3cd-11cf607baf3f",
+          "minutes": 20,
+          "cuisine": "other",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.16666666666666666,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "719b4fca-2889-4389-a4f7-8605dee34c48",
+          "title": "Cucumber, tomato and chickpea rice salad",
+          "family": "719b4fca-2889-4389-a4f7-8605dee34c48",
+          "minutes": 15,
+          "cuisine": "western",
+          "missing_fallback": false,
+          "selection_blockers": [
+            {
+              "ingredient": "cucumber",
+              "status": "unknown",
+              "amount": "200 g"
+            },
+            {
+              "ingredient": "tomato",
+              "status": "unknown",
+              "amount": "250 g"
+            }
+          ],
+          "score_terms": {
+            "coverage": 1.7999999999999998,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.14583333333333331,
+            "repetition": -0.0,
+            "unknown_essentials": -2.0,
+            "similarity": 0.0
+          }
+        }
+      ],
+      "distinct_families_in_first_five": 2,
+      "first_after_have_it_blockers": []
+    },
+    {
+      "profile": "no_equipment",
+      "kitchen": "all_catalogue_units",
+      "preferences": {
+        "allergens": [],
+        "diets": [],
+        "equipment": [],
+        "cuisines": [],
+        "disliked_ingredient_ids": [],
+        "max_cook_minutes": 60,
+        "max_difficulty": 3,
+        "household_size": 2,
+        "last_cook_people": 2,
+        "last_shop_people": 2,
+        "last_shop_meals": 3,
+        "updated_at": "2026-11-05T12:00:00+08:00"
+      },
+      "hard_eligible": 1,
+      "within_time_and_difficulty": 1,
+      "ready_to_select": 0,
+      "first_five": [
+        {
+          "id": "719b4fca-2889-4389-a4f7-8605dee34c48",
+          "title": "Cucumber, tomato and chickpea rice salad",
+          "family": "719b4fca-2889-4389-a4f7-8605dee34c48",
+          "minutes": 15,
+          "cuisine": "western",
+          "missing_fallback": false,
+          "selection_blockers": [
+            {
+              "ingredient": "cucumber",
+              "status": "unknown",
+              "amount": "200 g"
+            },
+            {
+              "ingredient": "tomato",
+              "status": "unknown",
+              "amount": "250 g"
+            }
+          ],
+          "score_terms": {
+            "coverage": 1.7999999999999998,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.14583333333333331,
+            "repetition": -0.0,
+            "unknown_essentials": -2.0,
+            "similarity": 0.0
+          }
+        }
+      ],
+      "distinct_families_in_first_five": 1,
+      "first_after_have_it_blockers": [
+        {
+          "ingredient": "cucumber",
+          "status": "unknown",
+          "amount": "200 g"
+        },
+        {
+          "ingredient": "tomato",
+          "status": "unknown",
+          "amount": "250 g"
+        }
+      ]
+    },
+    {
+      "profile": "vegetarian",
+      "kitchen": "all_catalogue_units",
+      "preferences": {
+        "allergens": [],
+        "diets": [
+          "vegetarian"
+        ],
+        "equipment": [
+          "stove",
+          "oven",
+          "microwave",
+          "rice_cooker",
+          "air_fryer",
+          "steamer",
+          "blender"
+        ],
+        "cuisines": [],
+        "disliked_ingredient_ids": [],
+        "max_cook_minutes": 60,
+        "max_difficulty": 3,
+        "household_size": 2,
+        "last_cook_people": 2,
+        "last_shop_people": 2,
+        "last_shop_meals": 3,
+        "updated_at": "2026-11-05T12:00:00+08:00"
+      },
+      "hard_eligible": 35,
+      "within_time_and_difficulty": 35,
+      "ready_to_select": 7,
+      "first_five": [
+        {
+          "id": "0c7bea35-103a-4199-b3cd-11cf607baf3f",
+          "title": "Microwave broccoli and chickpea rice",
+          "family": "0c7bea35-103a-4199-b3cd-11cf607baf3f",
+          "minutes": 20,
+          "cuisine": "other",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.16666666666666666,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "ecbccf1f-44c2-448b-a25f-2695250fe976",
+          "title": "Chye sim and egg bee hoon soup",
+          "family": "ecbccf1f-44c2-448b-a25f-2695250fe976",
+          "minutes": 25,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.1875,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "900f9630-7d36-4cad-9db6-1851bef26fd1",
+          "title": "Tempeh and cabbage stir-fry with rice",
+          "family": "404b4550-6cd6-4ee4-b79e-9b0b87161ece",
+          "minutes": 35,
+          "cuisine": "other",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.22916666666666669,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "9d5276e3-b3c1-4fb0-8825-7334f1b5dba8",
+          "title": "Steamed egg with rice",
+          "family": "9d5276e3-b3c1-4fb0-8825-7334f1b5dba8",
+          "minutes": 35,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.22916666666666669,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "aa138433-2918-4a6f-b361-c1fe5eedeaaf",
+          "title": "Mushroom omelette with rice",
+          "family": "aa138433-2918-4a6f-b361-c1fe5eedeaaf",
+          "minutes": 35,
+          "cuisine": "other",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.22916666666666669,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        }
+      ],
+      "distinct_families_in_first_five": 5,
+      "first_after_have_it_blockers": []
+    },
+    {
+      "profile": "vegan",
+      "kitchen": "all_catalogue_units",
+      "preferences": {
+        "allergens": [],
+        "diets": [
+          "vegan"
+        ],
+        "equipment": [
+          "stove",
+          "oven",
+          "microwave",
+          "rice_cooker",
+          "air_fryer",
+          "steamer",
+          "blender"
+        ],
+        "cuisines": [],
+        "disliked_ingredient_ids": [],
+        "max_cook_minutes": 60,
+        "max_difficulty": 3,
+        "household_size": 2,
+        "last_cook_people": 2,
+        "last_shop_people": 2,
+        "last_shop_meals": 3,
+        "updated_at": "2026-11-05T12:00:00+08:00"
+      },
+      "hard_eligible": 23,
+      "within_time_and_difficulty": 23,
+      "ready_to_select": 3,
+      "first_five": [
+        {
+          "id": "0c7bea35-103a-4199-b3cd-11cf607baf3f",
+          "title": "Microwave broccoli and chickpea rice",
+          "family": "0c7bea35-103a-4199-b3cd-11cf607baf3f",
+          "minutes": 20,
+          "cuisine": "other",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.16666666666666666,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "900f9630-7d36-4cad-9db6-1851bef26fd1",
+          "title": "Tempeh and cabbage stir-fry with rice",
+          "family": "404b4550-6cd6-4ee4-b79e-9b0b87161ece",
+          "minutes": 35,
+          "cuisine": "other",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.22916666666666669,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "404b4550-6cd6-4ee4-b79e-9b0b87161ece",
+          "title": "Tempeh and long bean stir-fry with rice",
+          "family": "404b4550-6cd6-4ee4-b79e-9b0b87161ece",
+          "minutes": 40,
+          "cuisine": "other",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.25,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "cec3641a-2ff2-44ae-b64c-8e59d69bea59",
+          "title": "Tofu, mushroom and cabbage noodle soup",
+          "family": "cec3641a-2ff2-44ae-b64c-8e59d69bea59",
+          "minutes": 30,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [
+            {
+              "ingredient": "firm tofu",
+              "status": "unknown",
+              "amount": "300 g"
+            }
+          ],
+          "score_terms": {
+            "coverage": 2.5,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.20833333333333331,
+            "repetition": -0.0,
+            "unknown_essentials": -1.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "109d8db0-0c6c-4229-b0fc-bf295cfb6eb7",
+          "title": "One-pot tofu and mushroom rice",
+          "family": "85d5ed52-10d6-4769-8bc5-435decbd08d8",
+          "minutes": 40,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [
+            {
+              "ingredient": "firm tofu",
+              "status": "unknown",
+              "amount": "300 g"
+            }
+          ],
+          "score_terms": {
+            "coverage": 2.5,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.25,
+            "repetition": -0.0,
+            "unknown_essentials": -1.0,
+            "similarity": 0.0
+          }
+        }
+      ],
+      "distinct_families_in_first_five": 4,
+      "first_after_have_it_blockers": []
+    },
+    {
+      "profile": "pescatarian",
+      "kitchen": "all_catalogue_units",
+      "preferences": {
+        "allergens": [],
+        "diets": [
+          "pescatarian"
+        ],
+        "equipment": [
+          "stove",
+          "oven",
+          "microwave",
+          "rice_cooker",
+          "air_fryer",
+          "steamer",
+          "blender"
+        ],
+        "cuisines": [],
+        "disliked_ingredient_ids": [],
+        "max_cook_minutes": 60,
+        "max_difficulty": 3,
+        "household_size": 2,
+        "last_cook_people": 2,
+        "last_shop_people": 2,
+        "last_shop_meals": 3,
+        "updated_at": "2026-11-05T12:00:00+08:00"
+      },
+      "hard_eligible": 39,
+      "within_time_and_difficulty": 39,
+      "ready_to_select": 8,
+      "first_five": [
+        {
+          "id": "0c7bea35-103a-4199-b3cd-11cf607baf3f",
+          "title": "Microwave broccoli and chickpea rice",
+          "family": "0c7bea35-103a-4199-b3cd-11cf607baf3f",
+          "minutes": 20,
+          "cuisine": "other",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.16666666666666666,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "ecbccf1f-44c2-448b-a25f-2695250fe976",
+          "title": "Chye sim and egg bee hoon soup",
+          "family": "ecbccf1f-44c2-448b-a25f-2695250fe976",
+          "minutes": 25,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.1875,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "900f9630-7d36-4cad-9db6-1851bef26fd1",
+          "title": "Tempeh and cabbage stir-fry with rice",
+          "family": "404b4550-6cd6-4ee4-b79e-9b0b87161ece",
+          "minutes": 35,
+          "cuisine": "other",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.22916666666666669,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "9d5276e3-b3c1-4fb0-8825-7334f1b5dba8",
+          "title": "Steamed egg with rice",
+          "family": "9d5276e3-b3c1-4fb0-8825-7334f1b5dba8",
+          "minutes": 35,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.22916666666666669,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "aa138433-2918-4a6f-b361-c1fe5eedeaaf",
+          "title": "Mushroom omelette with rice",
+          "family": "aa138433-2918-4a6f-b361-c1fe5eedeaaf",
+          "minutes": 35,
+          "cuisine": "other",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.22916666666666669,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        }
+      ],
+      "distinct_families_in_first_five": 5,
+      "first_after_have_it_blockers": []
+    },
+    {
+      "profile": "halal",
+      "kitchen": "all_catalogue_units",
+      "preferences": {
+        "allergens": [],
+        "diets": [
+          "halal"
+        ],
+        "equipment": [
+          "stove",
+          "oven",
+          "microwave",
+          "rice_cooker",
+          "air_fryer",
+          "steamer",
+          "blender"
+        ],
+        "cuisines": [],
+        "disliked_ingredient_ids": [],
+        "max_cook_minutes": 60,
+        "max_difficulty": 3,
+        "household_size": 2,
+        "last_cook_people": 2,
+        "last_shop_people": 2,
+        "last_shop_meals": 3,
+        "updated_at": "2026-11-05T12:00:00+08:00"
+      },
+      "hard_eligible": 39,
+      "within_time_and_difficulty": 39,
+      "ready_to_select": 8,
+      "first_five": [
+        {
+          "id": "0c7bea35-103a-4199-b3cd-11cf607baf3f",
+          "title": "Microwave broccoli and chickpea rice",
+          "family": "0c7bea35-103a-4199-b3cd-11cf607baf3f",
+          "minutes": 20,
+          "cuisine": "other",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.16666666666666666,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "ecbccf1f-44c2-448b-a25f-2695250fe976",
+          "title": "Chye sim and egg bee hoon soup",
+          "family": "ecbccf1f-44c2-448b-a25f-2695250fe976",
+          "minutes": 25,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.1875,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "900f9630-7d36-4cad-9db6-1851bef26fd1",
+          "title": "Tempeh and cabbage stir-fry with rice",
+          "family": "404b4550-6cd6-4ee4-b79e-9b0b87161ece",
+          "minutes": 35,
+          "cuisine": "other",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.22916666666666669,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "9d5276e3-b3c1-4fb0-8825-7334f1b5dba8",
+          "title": "Steamed egg with rice",
+          "family": "9d5276e3-b3c1-4fb0-8825-7334f1b5dba8",
+          "minutes": 35,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.22916666666666669,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "aa138433-2918-4a6f-b361-c1fe5eedeaaf",
+          "title": "Mushroom omelette with rice",
+          "family": "aa138433-2918-4a6f-b361-c1fe5eedeaaf",
+          "minutes": 35,
+          "cuisine": "other",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.22916666666666669,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        }
+      ],
+      "distinct_families_in_first_five": 5,
+      "first_after_have_it_blockers": []
+    },
+    {
+      "profile": "no_pork",
+      "kitchen": "all_catalogue_units",
+      "preferences": {
+        "allergens": [],
+        "diets": [
+          "no_pork"
+        ],
+        "equipment": [
+          "stove",
+          "oven",
+          "microwave",
+          "rice_cooker",
+          "air_fryer",
+          "steamer",
+          "blender"
+        ],
+        "cuisines": [],
+        "disliked_ingredient_ids": [],
+        "max_cook_minutes": 60,
+        "max_difficulty": 3,
+        "household_size": 2,
+        "last_cook_people": 2,
+        "last_shop_people": 2,
+        "last_shop_meals": 3,
+        "updated_at": "2026-11-05T12:00:00+08:00"
+      },
+      "hard_eligible": 48,
+      "within_time_and_difficulty": 48,
+      "ready_to_select": 13,
+      "first_five": [
+        {
+          "id": "0c7bea35-103a-4199-b3cd-11cf607baf3f",
+          "title": "Microwave broccoli and chickpea rice",
+          "family": "0c7bea35-103a-4199-b3cd-11cf607baf3f",
+          "minutes": 20,
+          "cuisine": "other",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.16666666666666666,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "ecbccf1f-44c2-448b-a25f-2695250fe976",
+          "title": "Chye sim and egg bee hoon soup",
+          "family": "ecbccf1f-44c2-448b-a25f-2695250fe976",
+          "minutes": 25,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.1875,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "c3954096-77f8-49a4-a0c3-519390c4477d",
+          "title": "Bok choy and chicken bee hoon soup",
+          "family": "202bfb57-26ca-4201-b935-7a7ea4db9785",
+          "minutes": 30,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.20833333333333331,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "5380fd71-a373-4bed-8474-7f0d8e46cb43",
+          "title": "Chicken and broccoli stir-fry with rice",
+          "family": "66ee604f-e55c-46a3-8d5f-a64e5e58085d",
+          "minutes": 35,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.22916666666666669,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "900f9630-7d36-4cad-9db6-1851bef26fd1",
+          "title": "Tempeh and cabbage stir-fry with rice",
+          "family": "404b4550-6cd6-4ee4-b79e-9b0b87161ece",
+          "minutes": 35,
+          "cuisine": "other",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.22916666666666669,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        }
+      ],
+      "distinct_families_in_first_five": 5,
+      "first_after_have_it_blockers": []
+    },
+    {
+      "profile": "no_beef",
+      "kitchen": "all_catalogue_units",
+      "preferences": {
+        "allergens": [],
+        "diets": [
+          "no_beef"
+        ],
+        "equipment": [
+          "stove",
+          "oven",
+          "microwave",
+          "rice_cooker",
+          "air_fryer",
+          "steamer",
+          "blender"
+        ],
+        "cuisines": [],
+        "disliked_ingredient_ids": [],
+        "max_cook_minutes": 60,
+        "max_difficulty": 3,
+        "household_size": 2,
+        "last_cook_people": 2,
+        "last_shop_people": 2,
+        "last_shop_meals": 3,
+        "updated_at": "2026-11-05T12:00:00+08:00"
+      },
+      "hard_eligible": 48,
+      "within_time_and_difficulty": 48,
+      "ready_to_select": 13,
+      "first_five": [
+        {
+          "id": "0c7bea35-103a-4199-b3cd-11cf607baf3f",
+          "title": "Microwave broccoli and chickpea rice",
+          "family": "0c7bea35-103a-4199-b3cd-11cf607baf3f",
+          "minutes": 20,
+          "cuisine": "other",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.16666666666666666,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "ecbccf1f-44c2-448b-a25f-2695250fe976",
+          "title": "Chye sim and egg bee hoon soup",
+          "family": "ecbccf1f-44c2-448b-a25f-2695250fe976",
+          "minutes": 25,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.1875,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "c3954096-77f8-49a4-a0c3-519390c4477d",
+          "title": "Bok choy and chicken bee hoon soup",
+          "family": "202bfb57-26ca-4201-b935-7a7ea4db9785",
+          "minutes": 30,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.20833333333333331,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "5380fd71-a373-4bed-8474-7f0d8e46cb43",
+          "title": "Chicken and broccoli stir-fry with rice",
+          "family": "66ee604f-e55c-46a3-8d5f-a64e5e58085d",
+          "minutes": 35,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.22916666666666669,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "900f9630-7d36-4cad-9db6-1851bef26fd1",
+          "title": "Tempeh and cabbage stir-fry with rice",
+          "family": "404b4550-6cd6-4ee4-b79e-9b0b87161ece",
+          "minutes": 35,
+          "cuisine": "other",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.22916666666666669,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        }
+      ],
+      "distinct_families_in_first_five": 5,
+      "first_after_have_it_blockers": []
+    },
+    {
+      "profile": "avoid_peanut",
+      "kitchen": "all_catalogue_units",
+      "preferences": {
+        "allergens": [
+          "peanut"
+        ],
+        "diets": [],
+        "equipment": [
+          "stove",
+          "oven",
+          "microwave",
+          "rice_cooker",
+          "air_fryer",
+          "steamer",
+          "blender"
+        ],
+        "cuisines": [],
+        "disliked_ingredient_ids": [],
+        "max_cook_minutes": 60,
+        "max_difficulty": 3,
+        "household_size": 2,
+        "last_cook_people": 2,
+        "last_shop_people": 2,
+        "last_shop_meals": 3,
+        "updated_at": "2026-11-05T12:00:00+08:00"
+      },
+      "hard_eligible": 48,
+      "within_time_and_difficulty": 48,
+      "ready_to_select": 13,
+      "first_five": [
+        {
+          "id": "0c7bea35-103a-4199-b3cd-11cf607baf3f",
+          "title": "Microwave broccoli and chickpea rice",
+          "family": "0c7bea35-103a-4199-b3cd-11cf607baf3f",
+          "minutes": 20,
+          "cuisine": "other",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.16666666666666666,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "ecbccf1f-44c2-448b-a25f-2695250fe976",
+          "title": "Chye sim and egg bee hoon soup",
+          "family": "ecbccf1f-44c2-448b-a25f-2695250fe976",
+          "minutes": 25,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.1875,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "c3954096-77f8-49a4-a0c3-519390c4477d",
+          "title": "Bok choy and chicken bee hoon soup",
+          "family": "202bfb57-26ca-4201-b935-7a7ea4db9785",
+          "minutes": 30,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.20833333333333331,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "5380fd71-a373-4bed-8474-7f0d8e46cb43",
+          "title": "Chicken and broccoli stir-fry with rice",
+          "family": "66ee604f-e55c-46a3-8d5f-a64e5e58085d",
+          "minutes": 35,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.22916666666666669,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "900f9630-7d36-4cad-9db6-1851bef26fd1",
+          "title": "Tempeh and cabbage stir-fry with rice",
+          "family": "404b4550-6cd6-4ee4-b79e-9b0b87161ece",
+          "minutes": 35,
+          "cuisine": "other",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.22916666666666669,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        }
+      ],
+      "distinct_families_in_first_five": 5,
+      "first_after_have_it_blockers": []
+    },
+    {
+      "profile": "avoid_tree_nut",
+      "kitchen": "all_catalogue_units",
+      "preferences": {
+        "allergens": [
+          "tree_nut"
+        ],
+        "diets": [],
+        "equipment": [
+          "stove",
+          "oven",
+          "microwave",
+          "rice_cooker",
+          "air_fryer",
+          "steamer",
+          "blender"
+        ],
+        "cuisines": [],
+        "disliked_ingredient_ids": [],
+        "max_cook_minutes": 60,
+        "max_difficulty": 3,
+        "household_size": 2,
+        "last_cook_people": 2,
+        "last_shop_people": 2,
+        "last_shop_meals": 3,
+        "updated_at": "2026-11-05T12:00:00+08:00"
+      },
+      "hard_eligible": 48,
+      "within_time_and_difficulty": 48,
+      "ready_to_select": 13,
+      "first_five": [
+        {
+          "id": "0c7bea35-103a-4199-b3cd-11cf607baf3f",
+          "title": "Microwave broccoli and chickpea rice",
+          "family": "0c7bea35-103a-4199-b3cd-11cf607baf3f",
+          "minutes": 20,
+          "cuisine": "other",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.16666666666666666,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "ecbccf1f-44c2-448b-a25f-2695250fe976",
+          "title": "Chye sim and egg bee hoon soup",
+          "family": "ecbccf1f-44c2-448b-a25f-2695250fe976",
+          "minutes": 25,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.1875,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "c3954096-77f8-49a4-a0c3-519390c4477d",
+          "title": "Bok choy and chicken bee hoon soup",
+          "family": "202bfb57-26ca-4201-b935-7a7ea4db9785",
+          "minutes": 30,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.20833333333333331,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "5380fd71-a373-4bed-8474-7f0d8e46cb43",
+          "title": "Chicken and broccoli stir-fry with rice",
+          "family": "66ee604f-e55c-46a3-8d5f-a64e5e58085d",
+          "minutes": 35,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.22916666666666669,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "900f9630-7d36-4cad-9db6-1851bef26fd1",
+          "title": "Tempeh and cabbage stir-fry with rice",
+          "family": "404b4550-6cd6-4ee4-b79e-9b0b87161ece",
+          "minutes": 35,
+          "cuisine": "other",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.22916666666666669,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        }
+      ],
+      "distinct_families_in_first_five": 5,
+      "first_after_have_it_blockers": []
+    },
+    {
+      "profile": "avoid_milk",
+      "kitchen": "all_catalogue_units",
+      "preferences": {
+        "allergens": [
+          "milk"
+        ],
+        "diets": [],
+        "equipment": [
+          "stove",
+          "oven",
+          "microwave",
+          "rice_cooker",
+          "air_fryer",
+          "steamer",
+          "blender"
+        ],
+        "cuisines": [],
+        "disliked_ingredient_ids": [],
+        "max_cook_minutes": 60,
+        "max_difficulty": 3,
+        "household_size": 2,
+        "last_cook_people": 2,
+        "last_shop_people": 2,
+        "last_shop_meals": 3,
+        "updated_at": "2026-11-05T12:00:00+08:00"
+      },
+      "hard_eligible": 48,
+      "within_time_and_difficulty": 48,
+      "ready_to_select": 13,
+      "first_five": [
+        {
+          "id": "0c7bea35-103a-4199-b3cd-11cf607baf3f",
+          "title": "Microwave broccoli and chickpea rice",
+          "family": "0c7bea35-103a-4199-b3cd-11cf607baf3f",
+          "minutes": 20,
+          "cuisine": "other",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.16666666666666666,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "ecbccf1f-44c2-448b-a25f-2695250fe976",
+          "title": "Chye sim and egg bee hoon soup",
+          "family": "ecbccf1f-44c2-448b-a25f-2695250fe976",
+          "minutes": 25,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.1875,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "c3954096-77f8-49a4-a0c3-519390c4477d",
+          "title": "Bok choy and chicken bee hoon soup",
+          "family": "202bfb57-26ca-4201-b935-7a7ea4db9785",
+          "minutes": 30,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.20833333333333331,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "5380fd71-a373-4bed-8474-7f0d8e46cb43",
+          "title": "Chicken and broccoli stir-fry with rice",
+          "family": "66ee604f-e55c-46a3-8d5f-a64e5e58085d",
+          "minutes": 35,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.22916666666666669,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "900f9630-7d36-4cad-9db6-1851bef26fd1",
+          "title": "Tempeh and cabbage stir-fry with rice",
+          "family": "404b4550-6cd6-4ee4-b79e-9b0b87161ece",
+          "minutes": 35,
+          "cuisine": "other",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.22916666666666669,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        }
+      ],
+      "distinct_families_in_first_five": 5,
+      "first_after_have_it_blockers": []
+    },
+    {
+      "profile": "avoid_egg",
+      "kitchen": "all_catalogue_units",
+      "preferences": {
+        "allergens": [
+          "egg"
+        ],
+        "diets": [],
+        "equipment": [
+          "stove",
+          "oven",
+          "microwave",
+          "rice_cooker",
+          "air_fryer",
+          "steamer",
+          "blender"
+        ],
+        "cuisines": [],
+        "disliked_ingredient_ids": [],
+        "max_cook_minutes": 60,
+        "max_difficulty": 3,
+        "household_size": 2,
+        "last_cook_people": 2,
+        "last_shop_people": 2,
+        "last_shop_meals": 3,
+        "updated_at": "2026-11-05T12:00:00+08:00"
+      },
+      "hard_eligible": 35,
+      "within_time_and_difficulty": 35,
+      "ready_to_select": 9,
+      "first_five": [
+        {
+          "id": "0c7bea35-103a-4199-b3cd-11cf607baf3f",
+          "title": "Microwave broccoli and chickpea rice",
+          "family": "0c7bea35-103a-4199-b3cd-11cf607baf3f",
+          "minutes": 20,
+          "cuisine": "other",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.16666666666666666,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "c3954096-77f8-49a4-a0c3-519390c4477d",
+          "title": "Bok choy and chicken bee hoon soup",
+          "family": "202bfb57-26ca-4201-b935-7a7ea4db9785",
+          "minutes": 30,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.20833333333333331,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "5380fd71-a373-4bed-8474-7f0d8e46cb43",
+          "title": "Chicken and broccoli stir-fry with rice",
+          "family": "66ee604f-e55c-46a3-8d5f-a64e5e58085d",
+          "minutes": 35,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.22916666666666669,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "900f9630-7d36-4cad-9db6-1851bef26fd1",
+          "title": "Tempeh and cabbage stir-fry with rice",
+          "family": "404b4550-6cd6-4ee4-b79e-9b0b87161ece",
+          "minutes": 35,
+          "cuisine": "other",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.22916666666666669,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "ab302fa5-3663-4431-b28c-f380b5b9b1f7",
+          "title": "Steamed ginger cod with broccoli and rice",
+          "family": "ab302fa5-3663-4431-b28c-f380b5b9b1f7",
+          "minutes": 35,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.22916666666666669,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        }
+      ],
+      "distinct_families_in_first_five": 5,
+      "first_after_have_it_blockers": []
+    },
+    {
+      "profile": "avoid_fish",
+      "kitchen": "all_catalogue_units",
+      "preferences": {
+        "allergens": [
+          "fish"
+        ],
+        "diets": [],
+        "equipment": [
+          "stove",
+          "oven",
+          "microwave",
+          "rice_cooker",
+          "air_fryer",
+          "steamer",
+          "blender"
+        ],
+        "cuisines": [],
+        "disliked_ingredient_ids": [],
+        "max_cook_minutes": 60,
+        "max_difficulty": 3,
+        "household_size": 2,
+        "last_cook_people": 2,
+        "last_shop_people": 2,
+        "last_shop_meals": 3,
+        "updated_at": "2026-11-05T12:00:00+08:00"
+      },
+      "hard_eligible": 45,
+      "within_time_and_difficulty": 45,
+      "ready_to_select": 12,
+      "first_five": [
+        {
+          "id": "0c7bea35-103a-4199-b3cd-11cf607baf3f",
+          "title": "Microwave broccoli and chickpea rice",
+          "family": "0c7bea35-103a-4199-b3cd-11cf607baf3f",
+          "minutes": 20,
+          "cuisine": "other",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.16666666666666666,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "ecbccf1f-44c2-448b-a25f-2695250fe976",
+          "title": "Chye sim and egg bee hoon soup",
+          "family": "ecbccf1f-44c2-448b-a25f-2695250fe976",
+          "minutes": 25,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.1875,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "c3954096-77f8-49a4-a0c3-519390c4477d",
+          "title": "Bok choy and chicken bee hoon soup",
+          "family": "202bfb57-26ca-4201-b935-7a7ea4db9785",
+          "minutes": 30,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.20833333333333331,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "5380fd71-a373-4bed-8474-7f0d8e46cb43",
+          "title": "Chicken and broccoli stir-fry with rice",
+          "family": "66ee604f-e55c-46a3-8d5f-a64e5e58085d",
+          "minutes": 35,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.22916666666666669,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "900f9630-7d36-4cad-9db6-1851bef26fd1",
+          "title": "Tempeh and cabbage stir-fry with rice",
+          "family": "404b4550-6cd6-4ee4-b79e-9b0b87161ece",
+          "minutes": 35,
+          "cuisine": "other",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.22916666666666669,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        }
+      ],
+      "distinct_families_in_first_five": 5,
+      "first_after_have_it_blockers": []
+    },
+    {
+      "profile": "avoid_shellfish",
+      "kitchen": "all_catalogue_units",
+      "preferences": {
+        "allergens": [
+          "shellfish"
+        ],
+        "diets": [],
+        "equipment": [
+          "stove",
+          "oven",
+          "microwave",
+          "rice_cooker",
+          "air_fryer",
+          "steamer",
+          "blender"
+        ],
+        "cuisines": [],
+        "disliked_ingredient_ids": [],
+        "max_cook_minutes": 60,
+        "max_difficulty": 3,
+        "household_size": 2,
+        "last_cook_people": 2,
+        "last_shop_people": 2,
+        "last_shop_meals": 3,
+        "updated_at": "2026-11-05T12:00:00+08:00"
+      },
+      "hard_eligible": 47,
+      "within_time_and_difficulty": 47,
+      "ready_to_select": 13,
+      "first_five": [
+        {
+          "id": "0c7bea35-103a-4199-b3cd-11cf607baf3f",
+          "title": "Microwave broccoli and chickpea rice",
+          "family": "0c7bea35-103a-4199-b3cd-11cf607baf3f",
+          "minutes": 20,
+          "cuisine": "other",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.16666666666666666,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "ecbccf1f-44c2-448b-a25f-2695250fe976",
+          "title": "Chye sim and egg bee hoon soup",
+          "family": "ecbccf1f-44c2-448b-a25f-2695250fe976",
+          "minutes": 25,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.1875,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "c3954096-77f8-49a4-a0c3-519390c4477d",
+          "title": "Bok choy and chicken bee hoon soup",
+          "family": "202bfb57-26ca-4201-b935-7a7ea4db9785",
+          "minutes": 30,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.20833333333333331,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "5380fd71-a373-4bed-8474-7f0d8e46cb43",
+          "title": "Chicken and broccoli stir-fry with rice",
+          "family": "66ee604f-e55c-46a3-8d5f-a64e5e58085d",
+          "minutes": 35,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.22916666666666669,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "900f9630-7d36-4cad-9db6-1851bef26fd1",
+          "title": "Tempeh and cabbage stir-fry with rice",
+          "family": "404b4550-6cd6-4ee4-b79e-9b0b87161ece",
+          "minutes": 35,
+          "cuisine": "other",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.22916666666666669,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        }
+      ],
+      "distinct_families_in_first_five": 5,
+      "first_after_have_it_blockers": []
+    },
+    {
+      "profile": "avoid_soy",
+      "kitchen": "all_catalogue_units",
+      "preferences": {
+        "allergens": [
+          "soy"
+        ],
+        "diets": [],
+        "equipment": [
+          "stove",
+          "oven",
+          "microwave",
+          "rice_cooker",
+          "air_fryer",
+          "steamer",
+          "blender"
+        ],
+        "cuisines": [],
+        "disliked_ingredient_ids": [],
+        "max_cook_minutes": 60,
+        "max_difficulty": 3,
+        "household_size": 2,
+        "last_cook_people": 2,
+        "last_shop_people": 2,
+        "last_shop_meals": 3,
+        "updated_at": "2026-11-05T12:00:00+08:00"
+      },
+      "hard_eligible": 20,
+      "within_time_and_difficulty": 20,
+      "ready_to_select": 4,
+      "first_five": [
+        {
+          "id": "0c7bea35-103a-4199-b3cd-11cf607baf3f",
+          "title": "Microwave broccoli and chickpea rice",
+          "family": "0c7bea35-103a-4199-b3cd-11cf607baf3f",
+          "minutes": 20,
+          "cuisine": "other",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.16666666666666666,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "ecbccf1f-44c2-448b-a25f-2695250fe976",
+          "title": "Chye sim and egg bee hoon soup",
+          "family": "ecbccf1f-44c2-448b-a25f-2695250fe976",
+          "minutes": 25,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.1875,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "aa138433-2918-4a6f-b361-c1fe5eedeaaf",
+          "title": "Mushroom omelette with rice",
+          "family": "aa138433-2918-4a6f-b361-c1fe5eedeaaf",
+          "minutes": 35,
+          "cuisine": "other",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.22916666666666669,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "1d920435-f931-4d7b-91d2-86d184e31e3b",
+          "title": "Ginger chicken rice porridge",
+          "family": "1d920435-f931-4d7b-91d2-86d184e31e3b",
+          "minutes": 60,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.3333333333333333,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "61456d3b-fc96-4bef-91b5-f54dce95fed7",
+          "title": "Fish and tomato vermicelli soup",
+          "family": "61456d3b-fc96-4bef-91b5-f54dce95fed7",
+          "minutes": 30,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [
+            {
+              "ingredient": "tomato",
+              "status": "unknown",
+              "amount": "300 g"
+            }
+          ],
+          "score_terms": {
+            "coverage": 2.4000000000000004,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.20833333333333331,
+            "repetition": -0.0,
+            "unknown_essentials": -1.0,
+            "similarity": 0.0
+          }
+        }
+      ],
+      "distinct_families_in_first_five": 5,
+      "first_after_have_it_blockers": []
+    },
+    {
+      "profile": "avoid_gluten",
+      "kitchen": "all_catalogue_units",
+      "preferences": {
+        "allergens": [
+          "gluten"
+        ],
+        "diets": [],
+        "equipment": [
+          "stove",
+          "oven",
+          "microwave",
+          "rice_cooker",
+          "air_fryer",
+          "steamer",
+          "blender"
+        ],
+        "cuisines": [],
+        "disliked_ingredient_ids": [],
+        "max_cook_minutes": 60,
+        "max_difficulty": 3,
+        "household_size": 2,
+        "last_cook_people": 2,
+        "last_shop_people": 2,
+        "last_shop_meals": 3,
+        "updated_at": "2026-11-05T12:00:00+08:00"
+      },
+      "hard_eligible": 22,
+      "within_time_and_difficulty": 22,
+      "ready_to_select": 4,
+      "first_five": [
+        {
+          "id": "0c7bea35-103a-4199-b3cd-11cf607baf3f",
+          "title": "Microwave broccoli and chickpea rice",
+          "family": "0c7bea35-103a-4199-b3cd-11cf607baf3f",
+          "minutes": 20,
+          "cuisine": "other",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.16666666666666666,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "ecbccf1f-44c2-448b-a25f-2695250fe976",
+          "title": "Chye sim and egg bee hoon soup",
+          "family": "ecbccf1f-44c2-448b-a25f-2695250fe976",
+          "minutes": 25,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.1875,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "aa138433-2918-4a6f-b361-c1fe5eedeaaf",
+          "title": "Mushroom omelette with rice",
+          "family": "aa138433-2918-4a6f-b361-c1fe5eedeaaf",
+          "minutes": 35,
+          "cuisine": "other",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.22916666666666669,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "1d920435-f931-4d7b-91d2-86d184e31e3b",
+          "title": "Ginger chicken rice porridge",
+          "family": "1d920435-f931-4d7b-91d2-86d184e31e3b",
+          "minutes": 60,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.3333333333333333,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "61456d3b-fc96-4bef-91b5-f54dce95fed7",
+          "title": "Fish and tomato vermicelli soup",
+          "family": "61456d3b-fc96-4bef-91b5-f54dce95fed7",
+          "minutes": 30,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [
+            {
+              "ingredient": "tomato",
+              "status": "unknown",
+              "amount": "300 g"
+            }
+          ],
+          "score_terms": {
+            "coverage": 2.4000000000000004,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.20833333333333331,
+            "repetition": -0.0,
+            "unknown_essentials": -1.0,
+            "similarity": 0.0
+          }
+        }
+      ],
+      "distinct_families_in_first_five": 5,
+      "first_after_have_it_blockers": []
+    },
+    {
+      "profile": "avoid_sesame",
+      "kitchen": "all_catalogue_units",
+      "preferences": {
+        "allergens": [
+          "sesame"
+        ],
+        "diets": [],
+        "equipment": [
+          "stove",
+          "oven",
+          "microwave",
+          "rice_cooker",
+          "air_fryer",
+          "steamer",
+          "blender"
+        ],
+        "cuisines": [],
+        "disliked_ingredient_ids": [],
+        "max_cook_minutes": 60,
+        "max_difficulty": 3,
+        "household_size": 2,
+        "last_cook_people": 2,
+        "last_shop_people": 2,
+        "last_shop_meals": 3,
+        "updated_at": "2026-11-05T12:00:00+08:00"
+      },
+      "hard_eligible": 46,
+      "within_time_and_difficulty": 46,
+      "ready_to_select": 13,
+      "first_five": [
+        {
+          "id": "0c7bea35-103a-4199-b3cd-11cf607baf3f",
+          "title": "Microwave broccoli and chickpea rice",
+          "family": "0c7bea35-103a-4199-b3cd-11cf607baf3f",
+          "minutes": 20,
+          "cuisine": "other",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.16666666666666666,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "ecbccf1f-44c2-448b-a25f-2695250fe976",
+          "title": "Chye sim and egg bee hoon soup",
+          "family": "ecbccf1f-44c2-448b-a25f-2695250fe976",
+          "minutes": 25,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.1875,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "c3954096-77f8-49a4-a0c3-519390c4477d",
+          "title": "Bok choy and chicken bee hoon soup",
+          "family": "202bfb57-26ca-4201-b935-7a7ea4db9785",
+          "minutes": 30,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.20833333333333331,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "5380fd71-a373-4bed-8474-7f0d8e46cb43",
+          "title": "Chicken and broccoli stir-fry with rice",
+          "family": "66ee604f-e55c-46a3-8d5f-a64e5e58085d",
+          "minutes": 35,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.22916666666666669,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "900f9630-7d36-4cad-9db6-1851bef26fd1",
+          "title": "Tempeh and cabbage stir-fry with rice",
+          "family": "404b4550-6cd6-4ee4-b79e-9b0b87161ece",
+          "minutes": 35,
+          "cuisine": "other",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.22916666666666669,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        }
+      ],
+      "distinct_families_in_first_five": 5,
+      "first_after_have_it_blockers": []
+    },
+    {
+      "profile": "max_15_minutes",
+      "kitchen": "all_catalogue_units",
+      "preferences": {
+        "allergens": [],
+        "diets": [],
+        "equipment": [
+          "stove",
+          "oven",
+          "microwave",
+          "rice_cooker",
+          "air_fryer",
+          "steamer",
+          "blender"
+        ],
+        "cuisines": [],
+        "disliked_ingredient_ids": [],
+        "max_cook_minutes": 15,
+        "max_difficulty": 3,
+        "household_size": 2,
+        "last_cook_people": 2,
+        "last_shop_people": 2,
+        "last_shop_meals": 3,
+        "updated_at": "2026-11-05T12:00:00+08:00"
+      },
+      "hard_eligible": 48,
+      "within_time_and_difficulty": 1,
+      "ready_to_select": 0,
+      "first_five": [
+        {
+          "id": "719b4fca-2889-4389-a4f7-8605dee34c48",
+          "title": "Cucumber, tomato and chickpea rice salad",
+          "family": "719b4fca-2889-4389-a4f7-8605dee34c48",
+          "minutes": 15,
+          "cuisine": "western",
+          "missing_fallback": false,
+          "selection_blockers": [
+            {
+              "ingredient": "cucumber",
+              "status": "unknown",
+              "amount": "200 g"
+            },
+            {
+              "ingredient": "tomato",
+              "status": "unknown",
+              "amount": "250 g"
+            }
+          ],
+          "score_terms": {
+            "coverage": 1.7999999999999998,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.3333333333333333,
+            "repetition": -0.0,
+            "unknown_essentials": -2.0,
+            "similarity": 0.0
+          }
+        }
+      ],
+      "distinct_families_in_first_five": 1,
+      "first_after_have_it_blockers": [
+        {
+          "ingredient": "cucumber",
+          "status": "unknown",
+          "amount": "200 g"
+        },
+        {
+          "ingredient": "tomato",
+          "status": "unknown",
+          "amount": "250 g"
+        }
+      ]
+    },
+    {
+      "profile": "max_20_minutes",
+      "kitchen": "all_catalogue_units",
+      "preferences": {
+        "allergens": [],
+        "diets": [],
+        "equipment": [
+          "stove",
+          "oven",
+          "microwave",
+          "rice_cooker",
+          "air_fryer",
+          "steamer",
+          "blender"
+        ],
+        "cuisines": [],
+        "disliked_ingredient_ids": [],
+        "max_cook_minutes": 20,
+        "max_difficulty": 3,
+        "household_size": 2,
+        "last_cook_people": 2,
+        "last_shop_people": 2,
+        "last_shop_meals": 3,
+        "updated_at": "2026-11-05T12:00:00+08:00"
+      },
+      "hard_eligible": 48,
+      "within_time_and_difficulty": 4,
+      "ready_to_select": 2,
+      "first_five": [
+        {
+          "id": "0c7bea35-103a-4199-b3cd-11cf607baf3f",
+          "title": "Microwave broccoli and chickpea rice",
+          "family": "0c7bea35-103a-4199-b3cd-11cf607baf3f",
+          "minutes": 20,
+          "cuisine": "other",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.3333333333333333,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "82837c0b-d649-4fe6-aa5b-196c64459b28",
+          "title": "Egg fried rice with vegetables",
+          "family": "82837c0b-d649-4fe6-aa5b-196c64459b28",
+          "minutes": 20,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 2.5,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.3333333333333333,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "eaacfdcd-aa3e-4fd9-9252-7602e8fedc65",
+          "title": "Quick tomato and egg rice",
+          "family": "645a8d38-bfae-47f2-b00e-3ca6828a964e",
+          "minutes": 20,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [
+            {
+              "ingredient": "tomato",
+              "status": "unknown",
+              "amount": "300 g"
+            }
+          ],
+          "score_terms": {
+            "coverage": 2.25,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.3333333333333333,
+            "repetition": -0.0,
+            "unknown_essentials": -1.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "719b4fca-2889-4389-a4f7-8605dee34c48",
+          "title": "Cucumber, tomato and chickpea rice salad",
+          "family": "719b4fca-2889-4389-a4f7-8605dee34c48",
+          "minutes": 15,
+          "cuisine": "western",
+          "missing_fallback": false,
+          "selection_blockers": [
+            {
+              "ingredient": "cucumber",
+              "status": "unknown",
+              "amount": "200 g"
+            },
+            {
+              "ingredient": "tomato",
+              "status": "unknown",
+              "amount": "250 g"
+            }
+          ],
+          "score_terms": {
+            "coverage": 1.7999999999999998,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.2708333333333333,
+            "repetition": -0.0,
+            "unknown_essentials": -2.0,
+            "similarity": 0.0
+          }
+        }
+      ],
+      "distinct_families_in_first_five": 4,
+      "first_after_have_it_blockers": []
+    },
+    {
+      "profile": "max_30_minutes",
+      "kitchen": "all_catalogue_units",
+      "preferences": {
+        "allergens": [],
+        "diets": [],
+        "equipment": [
+          "stove",
+          "oven",
+          "microwave",
+          "rice_cooker",
+          "air_fryer",
+          "steamer",
+          "blender"
+        ],
+        "cuisines": [],
+        "disliked_ingredient_ids": [],
+        "max_cook_minutes": 30,
+        "max_difficulty": 3,
+        "household_size": 2,
+        "last_cook_people": 2,
+        "last_shop_people": 2,
+        "last_shop_meals": 3,
+        "updated_at": "2026-11-05T12:00:00+08:00"
+      },
+      "hard_eligible": 48,
+      "within_time_and_difficulty": 16,
+      "ready_to_select": 4,
+      "first_five": [
+        {
+          "id": "0c7bea35-103a-4199-b3cd-11cf607baf3f",
+          "title": "Microwave broccoli and chickpea rice",
+          "family": "0c7bea35-103a-4199-b3cd-11cf607baf3f",
+          "minutes": 20,
+          "cuisine": "other",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.25,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "ecbccf1f-44c2-448b-a25f-2695250fe976",
+          "title": "Chye sim and egg bee hoon soup",
+          "family": "ecbccf1f-44c2-448b-a25f-2695250fe976",
+          "minutes": 25,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.2916666666666667,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "c3954096-77f8-49a4-a0c3-519390c4477d",
+          "title": "Bok choy and chicken bee hoon soup",
+          "family": "202bfb57-26ca-4201-b935-7a7ea4db9785",
+          "minutes": 30,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.3333333333333333,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "82837c0b-d649-4fe6-aa5b-196c64459b28",
+          "title": "Egg fried rice with vegetables",
+          "family": "82837c0b-d649-4fe6-aa5b-196c64459b28",
+          "minutes": 20,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 2.5,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.25,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "84caffd7-90b8-4d20-878c-c266f7fa6a87",
+          "title": "Egg fried rice with extra cabbage and carrot",
+          "family": "82837c0b-d649-4fe6-aa5b-196c64459b28",
+          "minutes": 25,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [
+            {
+              "ingredient": "carrot",
+              "status": "unknown",
+              "amount": "150 g"
+            }
+          ],
+          "score_terms": {
+            "coverage": 2.571428571428571,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.2916666666666667,
+            "repetition": -0.0,
+            "unknown_essentials": -1.0,
+            "similarity": 0.0
+          }
+        }
+      ],
+      "distinct_families_in_first_five": 4,
+      "first_after_have_it_blockers": []
+    },
+    {
+      "profile": "avoid_soy_gluten_sesame",
+      "kitchen": "all_catalogue_units",
+      "preferences": {
+        "allergens": [
+          "soy",
+          "gluten",
+          "sesame"
+        ],
+        "diets": [],
+        "equipment": [
+          "stove",
+          "oven",
+          "microwave",
+          "rice_cooker",
+          "air_fryer",
+          "steamer",
+          "blender"
+        ],
+        "cuisines": [],
+        "disliked_ingredient_ids": [],
+        "max_cook_minutes": 60,
+        "max_difficulty": 3,
+        "household_size": 2,
+        "last_cook_people": 2,
+        "last_shop_people": 2,
+        "last_shop_meals": 3,
+        "updated_at": "2026-11-05T12:00:00+08:00"
+      },
+      "hard_eligible": 20,
+      "within_time_and_difficulty": 20,
+      "ready_to_select": 4,
+      "first_five": [
+        {
+          "id": "0c7bea35-103a-4199-b3cd-11cf607baf3f",
+          "title": "Microwave broccoli and chickpea rice",
+          "family": "0c7bea35-103a-4199-b3cd-11cf607baf3f",
+          "minutes": 20,
+          "cuisine": "other",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.16666666666666666,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "ecbccf1f-44c2-448b-a25f-2695250fe976",
+          "title": "Chye sim and egg bee hoon soup",
+          "family": "ecbccf1f-44c2-448b-a25f-2695250fe976",
+          "minutes": 25,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.1875,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "aa138433-2918-4a6f-b361-c1fe5eedeaaf",
+          "title": "Mushroom omelette with rice",
+          "family": "aa138433-2918-4a6f-b361-c1fe5eedeaaf",
+          "minutes": 35,
+          "cuisine": "other",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.22916666666666669,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "1d920435-f931-4d7b-91d2-86d184e31e3b",
+          "title": "Ginger chicken rice porridge",
+          "family": "1d920435-f931-4d7b-91d2-86d184e31e3b",
+          "minutes": 60,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [],
+          "score_terms": {
+            "coverage": 3.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.3333333333333333,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "61456d3b-fc96-4bef-91b5-f54dce95fed7",
+          "title": "Fish and tomato vermicelli soup",
+          "family": "61456d3b-fc96-4bef-91b5-f54dce95fed7",
+          "minutes": 30,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [
+            {
+              "ingredient": "tomato",
+              "status": "unknown",
+              "amount": "300 g"
+            }
+          ],
+          "score_terms": {
+            "coverage": 2.4000000000000004,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.20833333333333331,
+            "repetition": -0.0,
+            "unknown_essentials": -1.0,
+            "similarity": 0.0
+          }
+        }
+      ],
+      "distinct_families_in_first_five": 5,
+      "first_after_have_it_blockers": []
+    },
+    {
+      "profile": "new_user_empty",
+      "kitchen": "empty",
+      "preferences": {
+        "allergens": [],
+        "diets": [],
+        "equipment": [
+          "stove",
+          "oven",
+          "microwave",
+          "rice_cooker",
+          "air_fryer",
+          "steamer",
+          "blender"
+        ],
+        "cuisines": [],
+        "disliked_ingredient_ids": [],
+        "max_cook_minutes": 60,
+        "max_difficulty": 3,
+        "household_size": 2,
+        "last_cook_people": 2,
+        "last_shop_people": 2,
+        "last_shop_meals": 3,
+        "updated_at": "2026-11-05T12:00:00+08:00"
+      },
+      "hard_eligible": 48,
+      "within_time_and_difficulty": 48,
+      "ready_to_select": 0,
+      "first_five": [
+        {
+          "id": "719b4fca-2889-4389-a4f7-8605dee34c48",
+          "title": "Cucumber, tomato and chickpea rice salad",
+          "family": "719b4fca-2889-4389-a4f7-8605dee34c48",
+          "minutes": 15,
+          "cuisine": "western",
+          "missing_fallback": true,
+          "selection_blockers": [
+            {
+              "ingredient": "cucumber",
+              "status": "missing",
+              "amount": "200 g"
+            },
+            {
+              "ingredient": "tomato",
+              "status": "missing",
+              "amount": "250 g"
+            },
+            {
+              "ingredient": "canned chickpea",
+              "status": "missing",
+              "amount": "300 g"
+            },
+            {
+              "ingredient": "cooked rice",
+              "status": "missing",
+              "amount": "300 g"
+            },
+            {
+              "ingredient": "lemon",
+              "status": "missing",
+              "amount": "0.5 pcs"
+            }
+          ],
+          "score_terms": {
+            "coverage": 0.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.14583333333333331,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "0c7bea35-103a-4199-b3cd-11cf607baf3f",
+          "title": "Microwave broccoli and chickpea rice",
+          "family": "0c7bea35-103a-4199-b3cd-11cf607baf3f",
+          "minutes": 20,
+          "cuisine": "other",
+          "missing_fallback": true,
+          "selection_blockers": [
+            {
+              "ingredient": "cooked rice",
+              "status": "missing",
+              "amount": "350 g"
+            },
+            {
+              "ingredient": "canned chickpea",
+              "status": "missing",
+              "amount": "240 g"
+            },
+            {
+              "ingredient": "broccoli",
+              "status": "missing",
+              "amount": "250 g"
+            }
+          ],
+          "score_terms": {
+            "coverage": 0.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.16666666666666666,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "82837c0b-d649-4fe6-aa5b-196c64459b28",
+          "title": "Egg fried rice with vegetables",
+          "family": "82837c0b-d649-4fe6-aa5b-196c64459b28",
+          "minutes": 20,
+          "cuisine": "chinese",
+          "missing_fallback": true,
+          "selection_blockers": [
+            {
+              "ingredient": "cooked rice",
+              "status": "missing",
+              "amount": "400 g"
+            },
+            {
+              "ingredient": "egg",
+              "status": "missing",
+              "amount": "2 pcs"
+            }
+          ],
+          "score_terms": {
+            "coverage": 0.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.16666666666666666,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "eaacfdcd-aa3e-4fd9-9252-7602e8fedc65",
+          "title": "Quick tomato and egg rice",
+          "family": "645a8d38-bfae-47f2-b00e-3ca6828a964e",
+          "minutes": 20,
+          "cuisine": "chinese",
+          "missing_fallback": true,
+          "selection_blockers": [
+            {
+              "ingredient": "cooked rice",
+              "status": "missing",
+              "amount": "400 g"
+            },
+            {
+              "ingredient": "tomato",
+              "status": "missing",
+              "amount": "300 g"
+            },
+            {
+              "ingredient": "egg",
+              "status": "missing",
+              "amount": "3 pcs"
+            }
+          ],
+          "score_terms": {
+            "coverage": 0.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.16666666666666666,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "202bfb57-26ca-4201-b935-7a7ea4db9785",
+          "title": "Bok choy and tofu bee hoon soup",
+          "family": "202bfb57-26ca-4201-b935-7a7ea4db9785",
+          "minutes": 25,
+          "cuisine": "chinese",
+          "missing_fallback": true,
+          "selection_blockers": [
+            {
+              "ingredient": "rice vermicelli",
+              "status": "missing",
+              "amount": "160 g"
+            },
+            {
+              "ingredient": "firm tofu",
+              "status": "missing",
+              "amount": "300 g"
+            },
+            {
+              "ingredient": "bok choy",
+              "status": "missing",
+              "amount": "250 g"
+            },
+            {
+              "ingredient": "ginger",
+              "status": "missing",
+              "amount": "15 g"
+            }
+          ],
+          "score_terms": {
+            "coverage": 0.0,
+            "expiry_urgency": 0.0,
+            "preference": 0.0,
+            "effort": -0.1875,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        }
+      ],
+      "distinct_families_in_first_five": 5,
+      "first_after_have_it_blockers": [
+        {
+          "ingredient": "cucumber",
+          "status": "missing",
+          "amount": "200 g"
+        },
+        {
+          "ingredient": "tomato",
+          "status": "missing",
+          "amount": "250 g"
+        },
+        {
+          "ingredient": "canned chickpea",
+          "status": "missing",
+          "amount": "300 g"
+        },
+        {
+          "ingredient": "cooked rice",
+          "status": "missing",
+          "amount": "300 g"
+        },
+        {
+          "ingredient": "lemon",
+          "status": "missing",
+          "amount": "0.5 pcs"
+        }
+      ]
+    },
+    {
+      "profile": "seeded_demo",
+      "kitchen": "demo",
+      "preferences": {
+        "allergens": [],
+        "diets": [],
+        "equipment": [
+          "stove",
+          "rice_cooker",
+          "microwave"
+        ],
+        "cuisines": [
+          "chinese",
+          "malay"
+        ],
+        "disliked_ingredient_ids": [],
+        "max_cook_minutes": 45,
+        "max_difficulty": 2,
+        "household_size": 2,
+        "last_cook_people": 2,
+        "last_shop_people": 2,
+        "last_shop_meals": 3,
+        "updated_at": "2026-11-05T12:00:00+08:00"
+      },
+      "hard_eligible": 45,
+      "within_time_and_difficulty": 42,
+      "ready_to_select": 0,
+      "first_five": [
+        {
+          "id": "2173bce1-8bbd-40ee-be78-e80627d8ba07",
+          "title": "Cabbage and tofu rice bowls",
+          "family": "2173bce1-8bbd-40ee-be78-e80627d8ba07",
+          "minutes": 35,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [
+            {
+              "ingredient": "uncooked rice",
+              "status": "unknown",
+              "amount": "160 g"
+            },
+            {
+              "ingredient": "firm tofu",
+              "status": "unknown",
+              "amount": "300 g"
+            }
+          ],
+          "score_terms": {
+            "coverage": 1.125,
+            "expiry_urgency": 0.1875,
+            "preference": 0.5,
+            "effort": -0.3194444444444444,
+            "repetition": -0.0,
+            "unknown_essentials": -2.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "79093e58-6ac3-46ab-adee-c948efc5b880",
+          "title": "Cabbage and tofu rice bowls with less oil",
+          "family": "2173bce1-8bbd-40ee-be78-e80627d8ba07",
+          "minutes": 35,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [
+            {
+              "ingredient": "uncooked rice",
+              "status": "unknown",
+              "amount": "160 g"
+            },
+            {
+              "ingredient": "firm tofu",
+              "status": "unknown",
+              "amount": "300 g"
+            }
+          ],
+          "score_terms": {
+            "coverage": 1.125,
+            "expiry_urgency": 0.1875,
+            "preference": 0.5,
+            "effort": -0.3194444444444444,
+            "repetition": -0.0,
+            "unknown_essentials": -2.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "45045a12-f142-4125-b594-34f486c75032",
+          "title": "Tomato and egg rice bowls with less oil",
+          "family": "645a8d38-bfae-47f2-b00e-3ca6828a964e",
+          "minutes": 35,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [
+            {
+              "ingredient": "uncooked rice",
+              "status": "unknown",
+              "amount": "200 g"
+            },
+            {
+              "ingredient": "tomato",
+              "status": "unknown",
+              "amount": "300 g"
+            }
+          ],
+          "score_terms": {
+            "coverage": 0.75,
+            "expiry_urgency": 0.125,
+            "preference": 0.5,
+            "effort": -0.3194444444444444,
+            "repetition": -0.0,
+            "unknown_essentials": -2.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "645a8d38-bfae-47f2-b00e-3ca6828a964e",
+          "title": "Tomato and egg rice bowls",
+          "family": "645a8d38-bfae-47f2-b00e-3ca6828a964e",
+          "minutes": 35,
+          "cuisine": "chinese",
+          "missing_fallback": false,
+          "selection_blockers": [
+            {
+              "ingredient": "uncooked rice",
+              "status": "unknown",
+              "amount": "200 g"
+            },
+            {
+              "ingredient": "tomato",
+              "status": "unknown",
+              "amount": "300 g"
+            }
+          ],
+          "score_terms": {
+            "coverage": 0.75,
+            "expiry_urgency": 0.125,
+            "preference": 0.5,
+            "effort": -0.3194444444444444,
+            "repetition": -0.0,
+            "unknown_essentials": -2.0,
+            "similarity": 0.0
+          }
+        },
+        {
+          "id": "88e3e915-9e9a-4d66-8520-90c4efb34f8a",
+          "title": "Egg, cabbage and carrot bee hoon",
+          "family": "48daffdb-9a7e-4645-b7bd-dc3b575080b2",
+          "minutes": 30,
+          "cuisine": "chinese",
+          "missing_fallback": true,
+          "selection_blockers": [
+            {
+              "ingredient": "rice vermicelli",
+              "status": "missing",
+              "amount": "180 g"
+            },
+            {
+              "ingredient": "carrot",
+              "status": "missing",
+              "amount": "150 g"
+            }
+          ],
+          "score_terms": {
+            "coverage": 1.5,
+            "expiry_urgency": 0.25,
+            "preference": 0.5,
+            "effort": -0.29166666666666663,
+            "repetition": -0.0,
+            "unknown_essentials": -0.0,
+            "similarity": 0.0
+          }
+        }
+      ],
+      "distinct_families_in_first_five": 3,
+      "first_after_have_it_blockers": [
+        {
+          "ingredient": "firm tofu",
+          "status": "unknown",
+          "amount": "300 g"
+        }
+      ]
+    }
+  ],
+  "shop": [
+    {
+      "profile": "empty_3",
+      "preferences": {
+        "allergens": [],
+        "diets": [],
+        "equipment": [
+          "stove",
+          "oven",
+          "microwave",
+          "rice_cooker",
+          "air_fryer",
+          "steamer",
+          "blender"
+        ],
+        "cuisines": [],
+        "disliked_ingredient_ids": [],
+        "max_cook_minutes": 60,
+        "max_difficulty": 3,
+        "household_size": 2,
+        "last_cook_people": 2,
+        "last_shop_people": 2,
+        "last_shop_meals": 3,
+        "updated_at": "2026-11-05T12:00:00+08:00"
+      },
+      "requested_meals": 3,
+      "people": 2,
+      "planned_meals": [
+        {
+          "id": "bf7c533d-ae14-4e97-b0a5-fa05ef11a822",
+          "title": "Chilli prawns with rice",
+          "cuisine": "other",
+          "family": "c3729c50-e498-4026-94d0-a35154738ed9"
+        },
+        {
+          "id": "5bd66173-7561-4c71-965d-ee17a8c8ebed",
+          "title": "Coconut tofu and vegetable curry with rice",
+          "cuisine": "malay",
+          "family": "5bd66173-7561-4c71-965d-ee17a8c8ebed"
+        },
+        {
+          "id": "785f4606-ac45-4a26-b915-a47a0eab08ae",
+          "title": "Chickpea and tomato curry with rice",
+          "cuisine": "indian",
+          "family": "785f4606-ac45-4a26-b915-a47a0eab08ae"
+        }
+      ],
+      "score_terms": {
+        "preference_and_effort": -0.7291666666666667,
+        "shared_ingredients": 4.5,
+        "confirmed_at_home": 0.0,
+        "cuisine_variety": 1.0,
+        "pack_surplus": -0.0
+      },
+      "shopping_lines": [
+        {
+          "ingredient": "long bean",
+          "countable": false,
+          "amount": "180 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "cumin powder",
+          "countable": false,
+          "amount": "2 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "canned chickpea",
+          "countable": false,
+          "amount": "360 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "tomato",
+          "countable": true,
+          "amount": "Check at home — 600 g; check quantity and purchase units",
+          "needs_check": true,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "uncooked rice",
+          "countable": false,
+          "amount": "480 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "firm tofu",
+          "countable": true,
+          "amount": "1 × pack (300 g each)",
+          "needs_check": false,
+          "suggested_packs": 1
+        },
+        {
+          "ingredient": "garlic",
+          "countable": false,
+          "amount": "24 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "carrot",
+          "countable": true,
+          "amount": "Check at home — 150 g; check quantity and purchase units",
+          "needs_check": true,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "turmeric powder",
+          "countable": false,
+          "amount": "2 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "ginger",
+          "countable": false,
+          "amount": "8 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "prawn",
+          "countable": false,
+          "amount": "300 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "chilli paste",
+          "countable": false,
+          "amount": "25 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "coconut milk",
+          "countable": false,
+          "amount": "200 ml for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "onion",
+          "countable": true,
+          "amount": "Check at home — 280 g; check quantity and purchase units",
+          "needs_check": true,
+          "suggested_packs": null
+        }
+      ],
+      "essential_unavailable_nonbuyable": []
+    },
+    {
+      "profile": "empty_7",
+      "preferences": {
+        "allergens": [],
+        "diets": [],
+        "equipment": [
+          "stove",
+          "oven",
+          "microwave",
+          "rice_cooker",
+          "air_fryer",
+          "steamer",
+          "blender"
+        ],
+        "cuisines": [],
+        "disliked_ingredient_ids": [],
+        "max_cook_minutes": 60,
+        "max_difficulty": 3,
+        "household_size": 2,
+        "last_cook_people": 2,
+        "last_shop_people": 2,
+        "last_shop_meals": 3,
+        "updated_at": "2026-11-05T12:00:00+08:00"
+      },
+      "requested_meals": 7,
+      "people": 2,
+      "planned_meals": [
+        {
+          "id": "61456d3b-fc96-4bef-91b5-f54dce95fed7",
+          "title": "Fish and tomato vermicelli soup",
+          "cuisine": "chinese",
+          "family": "61456d3b-fc96-4bef-91b5-f54dce95fed7"
+        },
+        {
+          "id": "cec3641a-2ff2-44ae-b64c-8e59d69bea59",
+          "title": "Tofu, mushroom and cabbage noodle soup",
+          "cuisine": "chinese",
+          "family": "cec3641a-2ff2-44ae-b64c-8e59d69bea59"
+        },
+        {
+          "id": "ab302fa5-3663-4431-b28c-f380b5b9b1f7",
+          "title": "Steamed ginger cod with broccoli and rice",
+          "cuisine": "chinese",
+          "family": "ab302fa5-3663-4431-b28c-f380b5b9b1f7"
+        },
+        {
+          "id": "109d8db0-0c6c-4229-b0fc-bf295cfb6eb7",
+          "title": "One-pot tofu and mushroom rice",
+          "cuisine": "chinese",
+          "family": "85d5ed52-10d6-4769-8bc5-435decbd08d8"
+        },
+        {
+          "id": "5bd66173-7561-4c71-965d-ee17a8c8ebed",
+          "title": "Coconut tofu and vegetable curry with rice",
+          "cuisine": "malay",
+          "family": "5bd66173-7561-4c71-965d-ee17a8c8ebed"
+        },
+        {
+          "id": "785f4606-ac45-4a26-b915-a47a0eab08ae",
+          "title": "Chickpea and tomato curry with rice",
+          "cuisine": "indian",
+          "family": "785f4606-ac45-4a26-b915-a47a0eab08ae"
+        },
+        {
+          "id": "97f2ee52-db16-4544-80ba-11b117dcd4b0",
+          "title": "Tomato and red lentil dhal with rice",
+          "cuisine": "indian",
+          "family": "97f2ee52-db16-4544-80ba-11b117dcd4b0"
+        }
+      ],
+      "score_terms": {
+        "preference_and_effort": -1.6458333333333333,
+        "shared_ingredients": 13.0,
+        "confirmed_at_home": 0.0,
+        "cuisine_variety": 1.0,
+        "pack_surplus": -0.0
+      },
+      "shopping_lines": [
+        {
+          "ingredient": "long bean",
+          "countable": false,
+          "amount": "180 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "cumin powder",
+          "countable": false,
+          "amount": "4 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "canned chickpea",
+          "countable": false,
+          "amount": "360 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "tomato",
+          "countable": true,
+          "amount": "Check at home — 800 g; check quantity and purchase units",
+          "needs_check": true,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "uncooked rice",
+          "countable": false,
+          "amount": "810 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "firm tofu",
+          "countable": true,
+          "amount": "3 × pack (300 g each)",
+          "needs_check": false,
+          "suggested_packs": 3
+        },
+        {
+          "ingredient": "cod fillet",
+          "countable": false,
+          "amount": "650 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "spring onion",
+          "countable": false,
+          "amount": "50 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "garlic",
+          "countable": false,
+          "amount": "32 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "carrot",
+          "countable": true,
+          "amount": "Check at home — 150 g; check quantity and purchase units",
+          "needs_check": true,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "red lentil",
+          "countable": false,
+          "amount": "160 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "rice vermicelli",
+          "countable": false,
+          "amount": "290 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "turmeric powder",
+          "countable": false,
+          "amount": "4 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "broccoli",
+          "countable": false,
+          "amount": "250 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "cabbage",
+          "countable": false,
+          "amount": "200 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "ginger",
+          "countable": false,
+          "amount": "63 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "chilli paste",
+          "countable": false,
+          "amount": "10 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "coconut milk",
+          "countable": false,
+          "amount": "200 ml for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "onion",
+          "countable": true,
+          "amount": "Check at home — 280 g; check quantity and purchase units",
+          "needs_check": true,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "fresh shiitake mushroom",
+          "countable": false,
+          "amount": "330 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        }
+      ],
+      "essential_unavailable_nonbuyable": []
+    },
+    {
+      "profile": "family_4_7",
+      "preferences": {
+        "allergens": [],
+        "diets": [],
+        "equipment": [
+          "stove",
+          "oven",
+          "microwave",
+          "rice_cooker",
+          "air_fryer",
+          "steamer",
+          "blender"
+        ],
+        "cuisines": [],
+        "disliked_ingredient_ids": [],
+        "max_cook_minutes": 60,
+        "max_difficulty": 3,
+        "household_size": 2,
+        "last_cook_people": 2,
+        "last_shop_people": 2,
+        "last_shop_meals": 3,
+        "updated_at": "2026-11-05T12:00:00+08:00"
+      },
+      "requested_meals": 7,
+      "people": 4,
+      "planned_meals": [
+        {
+          "id": "61456d3b-fc96-4bef-91b5-f54dce95fed7",
+          "title": "Fish and tomato vermicelli soup",
+          "cuisine": "chinese",
+          "family": "61456d3b-fc96-4bef-91b5-f54dce95fed7"
+        },
+        {
+          "id": "cec3641a-2ff2-44ae-b64c-8e59d69bea59",
+          "title": "Tofu, mushroom and cabbage noodle soup",
+          "cuisine": "chinese",
+          "family": "cec3641a-2ff2-44ae-b64c-8e59d69bea59"
+        },
+        {
+          "id": "ab302fa5-3663-4431-b28c-f380b5b9b1f7",
+          "title": "Steamed ginger cod with broccoli and rice",
+          "cuisine": "chinese",
+          "family": "ab302fa5-3663-4431-b28c-f380b5b9b1f7"
+        },
+        {
+          "id": "109d8db0-0c6c-4229-b0fc-bf295cfb6eb7",
+          "title": "One-pot tofu and mushroom rice",
+          "cuisine": "chinese",
+          "family": "85d5ed52-10d6-4769-8bc5-435decbd08d8"
+        },
+        {
+          "id": "5bd66173-7561-4c71-965d-ee17a8c8ebed",
+          "title": "Coconut tofu and vegetable curry with rice",
+          "cuisine": "malay",
+          "family": "5bd66173-7561-4c71-965d-ee17a8c8ebed"
+        },
+        {
+          "id": "785f4606-ac45-4a26-b915-a47a0eab08ae",
+          "title": "Chickpea and tomato curry with rice",
+          "cuisine": "indian",
+          "family": "785f4606-ac45-4a26-b915-a47a0eab08ae"
+        },
+        {
+          "id": "97f2ee52-db16-4544-80ba-11b117dcd4b0",
+          "title": "Tomato and red lentil dhal with rice",
+          "cuisine": "indian",
+          "family": "97f2ee52-db16-4544-80ba-11b117dcd4b0"
+        }
+      ],
+      "score_terms": {
+        "preference_and_effort": -1.6458333333333333,
+        "shared_ingredients": 13.0,
+        "confirmed_at_home": 0.0,
+        "cuisine_variety": 1.0,
+        "pack_surplus": -0.0
+      },
+      "shopping_lines": [
+        {
+          "ingredient": "long bean",
+          "countable": false,
+          "amount": "360 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "cumin powder",
+          "countable": false,
+          "amount": "8 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "canned chickpea",
+          "countable": false,
+          "amount": "720 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "tomato",
+          "countable": true,
+          "amount": "Check at home — 1600 g; check quantity and purchase units",
+          "needs_check": true,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "uncooked rice",
+          "countable": false,
+          "amount": "1620 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "firm tofu",
+          "countable": true,
+          "amount": "6 × pack (300 g each)",
+          "needs_check": false,
+          "suggested_packs": 6
+        },
+        {
+          "ingredient": "cod fillet",
+          "countable": false,
+          "amount": "1300 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "spring onion",
+          "countable": false,
+          "amount": "100 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "garlic",
+          "countable": false,
+          "amount": "64 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "carrot",
+          "countable": true,
+          "amount": "Check at home — 300 g; check quantity and purchase units",
+          "needs_check": true,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "red lentil",
+          "countable": false,
+          "amount": "320 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "rice vermicelli",
+          "countable": false,
+          "amount": "580 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "turmeric powder",
+          "countable": false,
+          "amount": "8 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "broccoli",
+          "countable": false,
+          "amount": "500 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "cabbage",
+          "countable": false,
+          "amount": "400 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "ginger",
+          "countable": false,
+          "amount": "126 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "chilli paste",
+          "countable": false,
+          "amount": "20 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "coconut milk",
+          "countable": false,
+          "amount": "400 ml for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "onion",
+          "countable": true,
+          "amount": "Check at home — 560 g; check quantity and purchase units",
+          "needs_check": true,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "fresh shiitake mushroom",
+          "countable": false,
+          "amount": "660 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        }
+      ],
+      "essential_unavailable_nonbuyable": []
+    },
+    {
+      "profile": "vegan_7",
+      "preferences": {
+        "allergens": [],
+        "diets": [
+          "vegan"
+        ],
+        "equipment": [
+          "stove",
+          "oven",
+          "microwave",
+          "rice_cooker",
+          "air_fryer",
+          "steamer",
+          "blender"
+        ],
+        "cuisines": [],
+        "disliked_ingredient_ids": [],
+        "max_cook_minutes": 60,
+        "max_difficulty": 3,
+        "household_size": 2,
+        "last_cook_people": 2,
+        "last_shop_people": 2,
+        "last_shop_meals": 3,
+        "updated_at": "2026-11-05T12:00:00+08:00"
+      },
+      "requested_meals": 7,
+      "people": 2,
+      "planned_meals": [
+        {
+          "id": "66ee604f-e55c-46a3-8d5f-a64e5e58085d",
+          "title": "Tofu and broccoli stir-fry with rice",
+          "cuisine": "chinese",
+          "family": "66ee604f-e55c-46a3-8d5f-a64e5e58085d"
+        },
+        {
+          "id": "5bd66173-7561-4c71-965d-ee17a8c8ebed",
+          "title": "Coconut tofu and vegetable curry with rice",
+          "cuisine": "malay",
+          "family": "5bd66173-7561-4c71-965d-ee17a8c8ebed"
+        },
+        {
+          "id": "785f4606-ac45-4a26-b915-a47a0eab08ae",
+          "title": "Chickpea and tomato curry with rice",
+          "cuisine": "indian",
+          "family": "785f4606-ac45-4a26-b915-a47a0eab08ae"
+        },
+        {
+          "id": "97f2ee52-db16-4544-80ba-11b117dcd4b0",
+          "title": "Tomato and red lentil dhal with rice",
+          "cuisine": "indian",
+          "family": "97f2ee52-db16-4544-80ba-11b117dcd4b0"
+        },
+        {
+          "id": "c3729c50-e498-4026-94d0-a35154738ed9",
+          "title": "Chilli tofu with rice",
+          "cuisine": "other",
+          "family": "c3729c50-e498-4026-94d0-a35154738ed9"
+        },
+        {
+          "id": "5e1d2eab-44fb-4882-bd2e-577b6e186a26",
+          "title": "Pumpkin, potato and red lentil soup",
+          "cuisine": "western",
+          "family": "5e1d2eab-44fb-4882-bd2e-577b6e186a26"
+        },
+        {
+          "id": "cd823518-b570-4185-ba71-b1d0cdde2adf",
+          "title": "Potato and cauliflower curry with rice",
+          "cuisine": "indian",
+          "family": "cd823518-b570-4185-ba71-b1d0cdde2adf"
+        }
+      ],
+      "score_terms": {
+        "preference_and_effort": -1.7708333333333333,
+        "shared_ingredients": 15.5,
+        "confirmed_at_home": 0.0,
+        "cuisine_variety": 2.0,
+        "pack_surplus": -0.4166666666666667
+      },
+      "shopping_lines": [
+        {
+          "ingredient": "long bean",
+          "countable": false,
+          "amount": "180 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "cumin powder",
+          "countable": false,
+          "amount": "8 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "canned chickpea",
+          "countable": false,
+          "amount": "360 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "tomato",
+          "countable": true,
+          "amount": "Check at home — 1000 g; check quantity and purchase units",
+          "needs_check": true,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "uncooked rice",
+          "countable": false,
+          "amount": "900 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "firm tofu",
+          "countable": true,
+          "amount": "4 × pack (300 g each)",
+          "needs_check": false,
+          "suggested_packs": 4
+        },
+        {
+          "ingredient": "garlic",
+          "countable": false,
+          "amount": "56 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "carrot",
+          "countable": true,
+          "amount": "Check at home — 150 g; check quantity and purchase units",
+          "needs_check": true,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "red lentil",
+          "countable": false,
+          "amount": "300 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "turmeric powder",
+          "countable": false,
+          "amount": "5 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "broccoli",
+          "countable": false,
+          "amount": "300 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "ginger",
+          "countable": false,
+          "amount": "16 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "potato",
+          "countable": true,
+          "amount": "Check at home — 500 g; check quantity and purchase units",
+          "needs_check": true,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "chilli paste",
+          "countable": false,
+          "amount": "25 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "coconut milk",
+          "countable": false,
+          "amount": "200 ml for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "onion",
+          "countable": true,
+          "amount": "Check at home — 580 g; check quantity and purchase units",
+          "needs_check": true,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "pumpkin",
+          "countable": false,
+          "amount": "350 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "cauliflower",
+          "countable": false,
+          "amount": "300 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        }
+      ],
+      "essential_unavailable_nonbuyable": []
+    },
+    {
+      "profile": "halal_7",
+      "preferences": {
+        "allergens": [],
+        "diets": [
+          "halal"
+        ],
+        "equipment": [
+          "stove",
+          "oven",
+          "microwave",
+          "rice_cooker",
+          "air_fryer",
+          "steamer",
+          "blender"
+        ],
+        "cuisines": [],
+        "disliked_ingredient_ids": [],
+        "max_cook_minutes": 60,
+        "max_difficulty": 3,
+        "household_size": 2,
+        "last_cook_people": 2,
+        "last_shop_people": 2,
+        "last_shop_meals": 3,
+        "updated_at": "2026-11-05T12:00:00+08:00"
+      },
+      "requested_meals": 7,
+      "people": 2,
+      "planned_meals": [
+        {
+          "id": "61456d3b-fc96-4bef-91b5-f54dce95fed7",
+          "title": "Fish and tomato vermicelli soup",
+          "cuisine": "chinese",
+          "family": "61456d3b-fc96-4bef-91b5-f54dce95fed7"
+        },
+        {
+          "id": "ab302fa5-3663-4431-b28c-f380b5b9b1f7",
+          "title": "Steamed ginger cod with broccoli and rice",
+          "cuisine": "chinese",
+          "family": "ab302fa5-3663-4431-b28c-f380b5b9b1f7"
+        },
+        {
+          "id": "bf7c533d-ae14-4e97-b0a5-fa05ef11a822",
+          "title": "Chilli prawns with rice",
+          "cuisine": "other",
+          "family": "c3729c50-e498-4026-94d0-a35154738ed9"
+        },
+        {
+          "id": "5bd66173-7561-4c71-965d-ee17a8c8ebed",
+          "title": "Coconut tofu and vegetable curry with rice",
+          "cuisine": "malay",
+          "family": "5bd66173-7561-4c71-965d-ee17a8c8ebed"
+        },
+        {
+          "id": "785f4606-ac45-4a26-b915-a47a0eab08ae",
+          "title": "Chickpea and tomato curry with rice",
+          "cuisine": "indian",
+          "family": "785f4606-ac45-4a26-b915-a47a0eab08ae"
+        },
+        {
+          "id": "97f2ee52-db16-4544-80ba-11b117dcd4b0",
+          "title": "Tomato and red lentil dhal with rice",
+          "cuisine": "indian",
+          "family": "97f2ee52-db16-4544-80ba-11b117dcd4b0"
+        },
+        {
+          "id": "5e1d2eab-44fb-4882-bd2e-577b6e186a26",
+          "title": "Pumpkin, potato and red lentil soup",
+          "cuisine": "western",
+          "family": "5e1d2eab-44fb-4882-bd2e-577b6e186a26"
+        }
+      ],
+      "score_terms": {
+        "preference_and_effort": -1.6875,
+        "shared_ingredients": 12.5,
+        "confirmed_at_home": 0.0,
+        "cuisine_variety": 2.0,
+        "pack_surplus": -0.0
+      },
+      "shopping_lines": [
+        {
+          "ingredient": "long bean",
+          "countable": false,
+          "amount": "180 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "cumin powder",
+          "countable": false,
+          "amount": "6 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "canned chickpea",
+          "countable": false,
+          "amount": "360 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "tomato",
+          "countable": true,
+          "amount": "Check at home — 1100 g; check quantity and purchase units",
+          "needs_check": true,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "uncooked rice",
+          "countable": false,
+          "amount": "790 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "firm tofu",
+          "countable": true,
+          "amount": "1 × pack (300 g each)",
+          "needs_check": false,
+          "suggested_packs": 1
+        },
+        {
+          "ingredient": "cod fillet",
+          "countable": false,
+          "amount": "650 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "spring onion",
+          "countable": false,
+          "amount": "30 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "garlic",
+          "countable": false,
+          "amount": "40 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "carrot",
+          "countable": true,
+          "amount": "Check at home — 150 g; check quantity and purchase units",
+          "needs_check": true,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "red lentil",
+          "countable": false,
+          "amount": "300 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "rice vermicelli",
+          "countable": false,
+          "amount": "140 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "turmeric powder",
+          "countable": false,
+          "amount": "4 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "broccoli",
+          "countable": false,
+          "amount": "250 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "ginger",
+          "countable": false,
+          "amount": "38 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "potato",
+          "countable": true,
+          "amount": "Check at home — 250 g; check quantity and purchase units",
+          "needs_check": true,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "prawn",
+          "countable": false,
+          "amount": "300 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "chilli paste",
+          "countable": false,
+          "amount": "25 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "coconut milk",
+          "countable": false,
+          "amount": "200 ml for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "onion",
+          "countable": true,
+          "amount": "Check at home — 480 g; check quantity and purchase units",
+          "needs_check": true,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "pumpkin",
+          "countable": false,
+          "amount": "350 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        }
+      ],
+      "essential_unavailable_nonbuyable": []
+    },
+    {
+      "profile": "microwave_7",
+      "preferences": {
+        "allergens": [],
+        "diets": [],
+        "equipment": [
+          "microwave"
+        ],
+        "cuisines": [],
+        "disliked_ingredient_ids": [],
+        "max_cook_minutes": 60,
+        "max_difficulty": 3,
+        "household_size": 2,
+        "last_cook_people": 2,
+        "last_shop_people": 2,
+        "last_shop_meals": 3,
+        "updated_at": "2026-11-05T12:00:00+08:00"
+      },
+      "requested_meals": 7,
+      "people": 2,
+      "planned_meals": [],
+      "score_terms": {},
+      "shopping_lines": [],
+      "essential_unavailable_nonbuyable": []
+    },
+    {
+      "profile": "demo_3",
+      "preferences": {
+        "allergens": [],
+        "diets": [],
+        "equipment": [
+          "stove",
+          "rice_cooker",
+          "microwave"
+        ],
+        "cuisines": [
+          "chinese",
+          "malay"
+        ],
+        "disliked_ingredient_ids": [],
+        "max_cook_minutes": 45,
+        "max_difficulty": 2,
+        "household_size": 2,
+        "last_cook_people": 2,
+        "last_shop_people": 2,
+        "last_shop_meals": 3,
+        "updated_at": "2026-11-05T12:00:00+08:00"
+      },
+      "requested_meals": 3,
+      "people": 2,
+      "planned_meals": [
+        {
+          "id": "ecbccf1f-44c2-448b-a25f-2695250fe976",
+          "title": "Chye sim and egg bee hoon soup",
+          "cuisine": "chinese",
+          "family": "ecbccf1f-44c2-448b-a25f-2695250fe976"
+        },
+        {
+          "id": "cec3641a-2ff2-44ae-b64c-8e59d69bea59",
+          "title": "Tofu, mushroom and cabbage noodle soup",
+          "cuisine": "chinese",
+          "family": "cec3641a-2ff2-44ae-b64c-8e59d69bea59"
+        },
+        {
+          "id": "109d8db0-0c6c-4229-b0fc-bf295cfb6eb7",
+          "title": "One-pot tofu and mushroom rice",
+          "cuisine": "chinese",
+          "family": "85d5ed52-10d6-4769-8bc5-435decbd08d8"
+        }
+      ],
+      "score_terms": {
+        "preference_and_effort": 0.5972222222222223,
+        "shared_ingredients": 3.5,
+        "confirmed_at_home": 3.0,
+        "cuisine_variety": 0.0,
+        "pack_surplus": -0.0
+      },
+      "shopping_lines": [
+        {
+          "ingredient": "uncooked rice",
+          "countable": false,
+          "amount": "Check at home — 200 g for the planned meals; buy as needed",
+          "needs_check": true,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "firm tofu",
+          "countable": true,
+          "amount": "Check at home — 2 × pack (300 g each)",
+          "needs_check": true,
+          "suggested_packs": 2
+        },
+        {
+          "ingredient": "spring onion",
+          "countable": false,
+          "amount": "20 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "chye sim",
+          "countable": false,
+          "amount": "300 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "rice vermicelli",
+          "countable": false,
+          "amount": "310 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "cabbage",
+          "countable": false,
+          "amount": "200 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "ginger",
+          "countable": false,
+          "amount": "35 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        },
+        {
+          "ingredient": "fresh shiitake mushroom",
+          "countable": false,
+          "amount": "330 g for the planned meals; buy as needed",
+          "needs_check": false,
+          "suggested_packs": null
+        }
+      ],
+      "essential_unavailable_nonbuyable": []
+    }
+  ]
+}

@@ -1,0 +1,3286 @@
+{
+  "version": 1,
+  "split": "development",
+  "selection": "full",
+  "scope": "Offline synthetic fixtures; not held-out, database, deployed, load or user-study evidence.",
+  "as_of": "2026-10-24T12:00:00+08:00",
+  "summary": {
+    "scenarios": 70,
+    "passed": 70,
+    "steps": 85,
+    "steps_passed": 85,
+    "failures_by_kind": {},
+    "modes": {
+      "cook": 40,
+      "shop": 30
+    },
+    "held_out_executed": 0
+  },
+  "provenance": {
+    "git_head": "c330e76ebe37b1fde95625842af806b2847b12f0",
+    "working_tree_dirty": false,
+    "runtime": {
+      "python": "3.12.13",
+      "pydantic": "2.14.1",
+      "pyyaml": "6.0.3"
+    },
+    "source_sha256": {
+      "backend/app/reco/__init__.py": "4d2e6d4928c464b6b5cfc2360c6705e41fc3a67227ac24b65baf9b256d2551ea",
+      "backend/app/reco/config.py": "c2280975cce129e0a6b20ccf619ae38dd48c95cb14113c45324a69054ab7f1ab",
+      "backend/app/reco/cook.py": "c9128b874b646819b4fcddfb5f33e6cead55eebffc255c708a9f95b476071451",
+      "backend/app/reco/inventory.py": "ce563f4d9b58e45ddcea9dcc4204a4f9d2feb4afc81c82bd6417618c84b5c4b9",
+      "backend/app/reco/learning.py": "9c2c6f9ee15eb8aa036a6c13cce550c24d409ea1f0103407109c8127e072ac1d",
+      "backend/app/reco/models.py": "3773b600b1e56601f9d3ec4fc86f5a47364f198ee47f51589e90d1b2977769bb",
+      "backend/app/reco/shop.py": "916ca17865765e6eb0ba330a0b761800873dbf950ce977517a13f94f5bd4d86b",
+      "backend/app/reco/shop_models.py": "48087de98552fe074a4b54d9ea3c257779a64f3332afdb4591e251c139a0cdef",
+      "backend/app/schemas/__init__.py": "8d99389859968a11616328fa3a967452d80dc4a90f0325a4f61b7dd5ae3cc626",
+      "backend/app/schemas/ai.py": "039991327ff749fb56b5c1801136049042088735f1c9c1c3f4b22df14a92bbaa",
+      "backend/app/schemas/catalogue.py": "10ef20b6f49fcc825c3a3ba812ecce7edbaa82d05429d0b4296e8f55112d15e5",
+      "backend/app/schemas/common.py": "78b45e5538054f3150599197ce2e81284b386c0642b59be7f045d5e328935a2e",
+      "backend/app/schemas/cook.py": "4be002fa05816d5e0399810c4ef93a75a369cca4fea64dec40d217333758119c",
+      "backend/app/schemas/identity.py": "e69eaff8d5981d33267a72b74591aaf7d63da2970f9bf1a62df76cb900f86c3e",
+      "backend/app/schemas/inventory.py": "da5a54c00c45d082c51e6231bfdaeb40746a85e163efec0ccfcb8aaf9376093d",
+      "backend/app/schemas/recipes.py": "66927bde31529e423b791a824756d401bb5a23a7273a5805d32c4a0f4c96f51a",
+      "backend/app/schemas/shop.py": "dd5813e17343ec5756550a09bfa69d75a2f5907c9f01318cb8165d3c53a41196",
+      "backend/app/schemas/stock_events.py": "ab4f8b3354357b8ed8181ec6f11a2a2c59bc9c5b16339d0197705db8acd7dbdb",
+      "backend/evaluation/__init__.py": "92f990c1d79ce8ead235466a8a8d8f4ea35efc583273ef9d6d891393d8a4b335",
+      "backend/evaluation/catalogue_review.py": "3ef7c90752ebb78291f7e8d5eeb015399c3da8f19c5c60d4499e127acc0b71d4",
+      "backend/evaluation/run.py": "16f740a87b0cce8611973eccda9c3b918ff85e5393c97e4d76411f8c006b86eb",
+      "backend/evaluation/schema.py": "63431bc96eca2c885ba9e0220e3aa20b0bf64c23cd3fd7b88b02720a6d83e33a",
+      "backend/app/clock.py": "9a389862e3bd33c13ed37a0cf4ae4441637e255b7f9a3f0d2771400a547d2b0e",
+      "backend/pyproject.toml": "da735c8e51d4058c7cd4a46fa4cf11cf5ab3f52b54c5f6b165457683892dc508",
+      "backend/uv.lock": "06fe3cd0059457d5a49bc43113ccdde7278b0b762eb668af9c13429d4bbb6f25"
+    },
+    "fixture_sha256": "485fc11fa9c6e484510157914336ef6b63df7edd77c4cc38de34d4ec7eac943f",
+    "scenario_sha256": {
+      "cook-01-cold-start.yaml": "780e3d50b8fbadab553bc2d715407905a02966b442e89986f3b37a2f5eaabbf7",
+      "cook-02-stock-before-star.yaml": "a47ba57cd6218c09a0cc67a3648700b290e4a78d5c91193e00a1964ea61bc3c1",
+      "cook-03-sum-counted-batches.yaml": "efba09e39491eefd07e1b2d99bb3a83f58324ba4db1e51fcc49e15e975bc9874",
+      "cook-04-known-short-count.yaml": "0f6b85f50a3041c2289a22c03d6043730749550bac1b2c2b3fe9c2a97deba8de",
+      "cook-05-zero-is-absent.yaml": "7582b07cad9ab944345ea901fec0e7a572307f80140813c366732b3c85618cb4",
+      "cook-06-null-count-uncertain.yaml": "19c1eeb456b99fea2463ed829cbecaea0629686d564036f7d0a4ab7563198a8d",
+      "cook-07-incompatible-stock-unit.yaml": "fc8dad89c497f97bc50e838e9bd3d869e5d082cecc0ed8e48d3fcb52ebcd27fc",
+      "cook-08-stale-perishable-stock.yaml": "19b6b7cfa06588b221736e19a28b0f81d126066fdcd5be12b722f08d66d50950",
+      "cook-09-fresh-plus-expired.yaml": "3637e317eca20ef7665ae526f884ae6dbf86df7f44b06994f6ef677ea2e8a7d3",
+      "cook-10-expired-is-not-coverage.yaml": "2a7fcd82f089a85db2b80afe88a82fbede4614f5c90af52d725b589973662306",
+      "cook-11-freshness-check-gate.yaml": "3c59f1aab77548d36eec5d19b4264ff46fda11b1ad5cb844e5b9f3bd722e38f7",
+      "cook-12-state-stock-no-invented-grams.yaml": "6902f57853fc72cbe8471b2617a7e0a8469e04b3c58d2ea6d9406f48598ecede",
+      "cook-13-low-state-stock.yaml": "4cb571a12575200fc97162ab84bbd7b6c052e683276db7fdde976702b516f8a5",
+      "cook-14-unknown-state-stock.yaml": "e3116f71bff0637b29f921f790603f9f76a2a35e04ebbcc481e7cc9ff28a910e",
+      "cook-15-explicit-staple-out.yaml": "21aa2afd1bba2f2de479f261eb6701f11c92529fbd334a1bc9449de4d4d749a6",
+      "cook-16-request-portions.yaml": "e9545375f24a6ad441cc8039ab68a3dd4229453beb079be3a9203d28106f3c09",
+      "cook-17-remembered-portions.yaml": "41dc6248fa5cb6497189d6c2e0485bbdb48a7aaad54bc9f7f7fdb2ccbb0b6ca9",
+      "cook-18-coarse-amount-scaling.yaml": "410e0217e2280b9a07a4dec0137e9e68bf9cc44a04e83595e7091d61d846ebab",
+      "cook-19-allergen-egg.yaml": "d8da10273522e5eccdb1b782a692e449aeb0d3989bc705ef61f6826c990c7efc",
+      "cook-20-allergen-soy.yaml": "612008306389ee855d21899732a72e38a6853628ea5dc143232173cef2ddb1b8",
+      "cook-21-allergen-peanut.yaml": "e952b1abe8266f58745e820c67d6fdcc3b373d55609b134451c25e9baf5d0180",
+      "cook-22-allergen-tree-nut.yaml": "1fc8d3eec1ca988b694e22f61ec40fe01e40fdb0db705eb90aa6891e8b163885",
+      "cook-23-allergen-milk.yaml": "aa60f1f4814015ce506d908affc830d302e9fcc26dec90425a987afb7102f47c",
+      "cook-24-allergen-fish.yaml": "4c4751990ecc805de0fe9d4586600b36a58a3d15cc4f8c9bae89add20f5d2331",
+      "cook-25-allergen-shellfish.yaml": "bddb0c5ab3d0808e58f9506f6c40f0caa3963b62674e05fbd7ddbb42a420c88d",
+      "cook-26-allergen-gluten.yaml": "f5c49c38ede123501ac08fd4a1d8ff3a9747b2e49fcf636b86719c16941d0a1e",
+      "cook-27-allergen-sesame.yaml": "8a955aab456068e38b8eb97254d5e60036239470d54eb3e8d7251bebca564fad",
+      "cook-28-vegan-hard-gate.yaml": "1a7495ae5f24819bf270ba7012fb0109f03e0ed0fd74e4e980009175e0072def",
+      "cook-29-combined-diet-gates.yaml": "59b3375d1ffb2bec5f883aef064707728fc447338c08e80680a9e3cedf5e1521",
+      "cook-30-equipment-hard-gate.yaml": "35ca497bf030f6ea18b556bab2a1c9541660b7f0665fd3da70702790968cd61d",
+      "cook-31-review-hard-gate.yaml": "0e25af426eb9a47ae88bc035928d77d7306be1a6a1693c7b17b23742ebd51a6d",
+      "cook-32-strict-time-bound.yaml": "d865fa13da729442e57bd70172969ab90bf5eebb04ed9c96470952ae49a16346",
+      "cook-33-soft-time-relaxation.yaml": "d3b2ea218145b638df570e05b3a2a5ef7d3e2949e82f49f1ba1b2c4050c17663",
+      "cook-34-quicker-variant.yaml": "f263f4c278c6558d953e24dc0935c96a4d1079bae6d0a6dc2ac9a47ac0bcff87",
+      "cook-35-easier-variant.yaml": "5bdc1501f6ea310f353f4f3e2bfa82f11d870c5fab0ac4fda325529974734f54",
+      "cook-36-low-oil-variant.yaml": "a17c9ebec5d6d628f468c787f188b7df5c0131ba1895622cc488b54c0e0b162e",
+      "cook-37-vegetable-variant.yaml": "4f1826d4bb8fff98d949d50240a21ec6a57388e2d2aedd7d8ac9bda18c4588d9",
+      "cook-38-protein-variant.yaml": "996985db78cf34b8cb88e53763409b46ea88002f9e3b90b206f536f20ca7a30e",
+      "cook-39-accumulated-tag-relaxation.yaml": "0fdc1a4dbfc17aa6acd3654f422d229f9a37dde6782e43b3c262ab54b2e18373",
+      "cook-40-learned-taste-vs-cuisine.yaml": "a401d3513a501d69d8b2b239eb1f698cccb48ea9142082d42578aff3d6da0f1e",
+      "shop-01-empty-pantry.yaml": "e995ff53fb9d9a1a677c116a353330cf670ae609d866a0a5c97dcf4d2dfdee35",
+      "shop-02-maximum-household.yaml": "a780c03901297943b1cbd54bfcdbe1ee52e74f1731d4b7a02161b00f92ecac28",
+      "shop-03-remembered-portions-and-meals.yaml": "e39dc409891df16bc4c4cb76715de6b2917ca7363b03a43a747c8b96758454dc",
+      "shop-04-aggregate-before-subtraction.yaml": "6bb02e3fcf8d77f52eae478118f49ea39469a14770f7f499256e46f6f731b11c",
+      "shop-05-sum-confirmed-batches.yaml": "7f0198e9166cd39268b66ecae9167bda09f5ac31e34b1239782c6b028316aed5",
+      "shop-06-known-plus-unknown-state-counts.yaml": "09c6d45d5df396c389056c97765c671d0c517c08c4ec103ec5f6e2a365b69dec",
+      "shop-07-enough-stock-does-not-hide-unknown.yaml": "8ff5b42f010b2c864b1c01088391e867fa50f30d985b62298a1f98f69edb4286",
+      "shop-08-unknown-count.yaml": "47311b9deaccc14cb4d754842e303d4b771e91c38cb3111e376d32141aed446a",
+      "shop-09-stale-counts.yaml": "a299fc8ee9c032956b09617efd136c39343d326b7a2af858fb92cf0b6f28c586",
+      "shop-10-freshness-check-counts.yaml": "a055018d1567db46eea87e776e28ecfd22edf284b3845e7aacba7d40d85969b9",
+      "shop-11-expired-counts.yaml": "52e31af61a726f402f01683aafd28b0c6254c7f177b518cd6e879e42c0f0f2a4",
+      "shop-12-explicit-out-counts.yaml": "8e0d32c2012715577f437d15357c7bb2b986597b8f78e84f6a29497a45d820a4",
+      "shop-13-state-enough.yaml": "c4a8fe39733d366899013979a6c9fa3c2b55b153f8d6ad3255851b181160478d",
+      "shop-14-state-low.yaml": "fcf797ad08c09b52078e39e67b5af6c1b3c986e2bb51949b7109a5017d7eb338",
+      "shop-15-state-out.yaml": "2aeab1d212f1f017f52a45fc0b29b63d3cc039b7ae0828f1df2e9239a81ede77",
+      "shop-16-state-unknown.yaml": "b11c8fe45505b95c55b7f4afed381c69cb7d775d0226f54225a83e46b7797cfe",
+      "shop-17-stale-pantry-stock.yaml": "2b2f55dc33b3e1a2e99d1a0c07fcaf9a1945990734bd9fd56a509f9dbc76e9ff",
+      "shop-18-tracked-staple-and-water.yaml": "8afab6e709755423a5ec1d942aa2ed69697f32170bd5150ff53015447e8113a1",
+      "shop-19-coarse-countable-amount.yaml": "ca5ce5e57296f00cb0fb5f47bba6d96dee3fe18d1f6569e7698907104426e1ec",
+      "shop-20-mixed-recipe-units.yaml": "7c08e8a1444e6f03ab7937d79d976a9140b332ed2c4fd19d86f12675ad869a5f",
+      "shop-21-mass-unit-mismatch.yaml": "c0f39a4143404be11abb5efb90370f280f9568a6f42d3c2afa372ea8ee28081c",
+      "shop-22-equipment-and-review-gates.yaml": "057f6a123b19016e1c8f50e0319d290416232ecbf5b41d4f7c9ec0b6ffa7f622",
+      "shop-23-all-nine-allergen-exclusions.yaml": "963852b8dbcd1b0d0a4e8bda6e25e4971557501aaaa92c8b7e33e33279912c7c",
+      "shop-24-vegan-diet-and-fewer-meals.yaml": "a630a75bbc0849578789c2d3c45e93d29ebb60e6da42dbb6a6263b16ebf3b8fe",
+      "shop-25-strict-time-gate.yaml": "f4df92dc0a5eebb824ea5c825d316b79d85ca9759a4196eb0c6a20278faff2e0",
+      "shop-26-distinct-families.yaml": "bc1541c4b4acedf8cab37348a528f73d12776867ee2df1fe6d52a32de95a0e71",
+      "shop-27-more-vegetables-and-rescale.yaml": "3ee6b330389c501eb5db7da2c1fd3037276031460ca7cdfd7308c892b4ba3159",
+      "shop-28-longer-lasting.yaml": "e6a66a787670b53440e59e55c1a66ca0a6a86c220db5ffce79871f059ab3a88d",
+      "shop-29-cover-more-and-explicit-meals.yaml": "a124bb89bbc82efcc8491fc7fda2467dece9a689629e7bda12a0d0edd5d5abc7",
+      "shop-30-soft-time-is-nonfatal.yaml": "e2914419c9ce64f5c201c4c6bfaeee85a88356f679414fde19ae13911ae51bf5"
+    },
+    "config": {
+      "cook": {
+        "coverage": 3.0,
+        "expiry": 1.0,
+        "preference": 1.0,
+        "effort": 0.5,
+        "repetition": 1.0,
+        "uncertainty": 1.0,
+        "similarity": 0.5,
+        "cuisine_bonus": 0.5,
+        "star_bonus": 1.0,
+        "disliked_ingredient_penalty": 1.0,
+        "boosted_tag_bonus": 2.0,
+        "low_coverage": 0.5,
+        "urgency_window_days": 4,
+        "stale_confirmation_days": 14,
+        "default_minutes": 60,
+        "default_difficulty": 3
+      },
+      "shop": {
+        "candidate_limit": 20,
+        "beam_width": 10,
+        "sharing": 0.5,
+        "at_home": 1.0,
+        "variety": 0.5,
+        "surplus": 0.5,
+        "vegetables": 2.0,
+        "longer_lasting": 1.0,
+        "shelf_life_horizon_days": 30
+      },
+      "learning": {
+        "step": 0.25,
+        "lower": -2.0,
+        "upper": 2.0
+      }
+    }
+  },
+  "categories": {
+    "accumulation": {
+      "scenarios": 2,
+      "passed": 2
+    },
+    "adjustment": {
+      "scenarios": 3,
+      "passed": 3
+    },
+    "adjustments": {
+      "scenarios": 6,
+      "passed": 6
+    },
+    "aggregation": {
+      "scenarios": 3,
+      "passed": 3
+    },
+    "allergen_gate": {
+      "scenarios": 9,
+      "passed": 9
+    },
+    "allergens": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "boundary": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "check_stock": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "coarse-amount": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "coarse-stock": {
+      "scenarios": 2,
+      "passed": 2
+    },
+    "coarse_amount": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "cold-start": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "cold_start": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "combined_constraints": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "confirmed-at-home": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "counted-stock": {
+      "scenarios": 4,
+      "passed": 4
+    },
+    "counted_stock": {
+      "scenarios": 6,
+      "passed": 6
+    },
+    "cover-more-meals": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "coverage": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "cuisine_preferences": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "diet": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "diet_gate": {
+      "scenarios": 2,
+      "passed": 2
+    },
+    "easier": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "egg": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "equipment": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "equipment_gate": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "expired-stock": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "explicit-default-override": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "explicit-out": {
+      "scenarios": 2,
+      "passed": 2
+    },
+    "explicit_out": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "family-diversity": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "family-variant": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "fewer-meals": {
+      "scenarios": 4,
+      "passed": 4
+    },
+    "fish": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "freshness": {
+      "scenarios": 3,
+      "passed": 3
+    },
+    "freshness-check": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "gluten": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "hard-filter": {
+      "scenarios": 3,
+      "passed": 3
+    },
+    "hard_constraints": {
+      "scenarios": 8,
+      "passed": 8
+    },
+    "learned_weights": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "less_oil": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "longer-lasting": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "low_stock": {
+      "scenarios": 2,
+      "passed": 2
+    },
+    "milk": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "missing_fallback": {
+      "scenarios": 3,
+      "passed": 3
+    },
+    "mixed-units": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "more-vegetables": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "more_protein": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "more_vegetables": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "multi-batch": {
+      "scenarios": 3,
+      "passed": 3
+    },
+    "multiple_batches": {
+      "scenarios": 2,
+      "passed": 2
+    },
+    "no-false-no-result": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "no-result": {
+      "scenarios": 2,
+      "passed": 2
+    },
+    "no_result": {
+      "scenarios": 4,
+      "passed": 4
+    },
+    "nonbuyable-water": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "optional_allergen": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "pack-rounding": {
+      "scenarios": 3,
+      "passed": 3
+    },
+    "pack-units": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "pantry-stock": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "peanut": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "portion-scaling": {
+      "scenarios": 2,
+      "passed": 2
+    },
+    "portions": {
+      "scenarios": 4,
+      "passed": 4
+    },
+    "quicker": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "relaxation": {
+      "scenarios": 2,
+      "passed": 2
+    },
+    "remembered-defaults": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "remembered_defaults": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "review-gate": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "review_gate": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "sesame": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "shelf-life": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "shellfish": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "soft-difficulty": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "soft-time": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "soft_time": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "soy": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "stale-stock": {
+      "scenarios": 2,
+      "passed": 2
+    },
+    "stale_stock": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "staples": {
+      "scenarios": 4,
+      "passed": 4
+    },
+    "stars": {
+      "scenarios": 2,
+      "passed": 2
+    },
+    "state-enough": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "state-low": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "state-out": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "state-unknown": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "state_stock": {
+      "scenarios": 3,
+      "passed": 3
+    },
+    "stock-subtraction": {
+      "scenarios": 3,
+      "passed": 3
+    },
+    "strict-time": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "strict_time": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "tree_nut": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "uncertainty-visibility": {
+      "scenarios": 2,
+      "passed": 2
+    },
+    "unit_mismatch": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "unknown-count": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "unknown-state": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "unknown_stock": {
+      "scenarios": 3,
+      "passed": 3
+    },
+    "unsupported-conversion": {
+      "scenarios": 3,
+      "passed": 3
+    },
+    "variants": {
+      "scenarios": 5,
+      "passed": 5
+    },
+    "vegan": {
+      "scenarios": 1,
+      "passed": 1
+    },
+    "zero_stock": {
+      "scenarios": 1,
+      "passed": 1
+    }
+  },
+  "results": [
+    {
+      "id": "DEV-C01",
+      "mode": "cook",
+      "description": "With no inventory or learned history, the starred recipe wins the initial soft preference comparison; missing staples are explicitly assumed.",
+      "categories": [
+        "cold_start",
+        "stars",
+        "missing_fallback",
+        "staples"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "selected": "egg-rice",
+            "relaxable": [],
+            "missing_essential_fallback": true,
+            "people": 2,
+            "ingredient_status": {
+              "egg": "missing",
+              "rice": "missing",
+              "water": "staple",
+              "oil": "staple"
+            },
+            "amounts": {
+              "egg": "3 pcs",
+              "rice": "200 g",
+              "water": "100 ml",
+              "oil": "10 ml"
+            },
+            "needs_check": [],
+            "freshness_check": []
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-C02",
+      "mode": "cook",
+      "description": "A fully stocked tofu meal remains preferable to a starred meal whose essential eggs are absent.",
+      "categories": [
+        "coverage",
+        "missing_fallback"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "selected": "tofu-rice",
+            "relaxable": [],
+            "missing_essential_fallback": false,
+            "people": 2,
+            "ingredient_status": {
+              "tofu": "have",
+              "rice": "have"
+            },
+            "amounts": {
+              "tofu": "300 g",
+              "rice": "200 g"
+            },
+            "needs_check": [],
+            "freshness_check": []
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-C03",
+      "mode": "cook",
+      "description": "Two compatible egg batches jointly satisfy three eggs, even though neither batch can satisfy the meal alone.",
+      "categories": [
+        "counted_stock",
+        "multiple_batches"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "selected": "egg-rice",
+            "relaxable": [],
+            "missing_essential_fallback": false,
+            "people": 2,
+            "ingredient_status": {
+              "egg": "have",
+              "rice": "have",
+              "water": "staple",
+              "oil": "staple"
+            },
+            "amounts": {
+              "egg": "3 pcs",
+              "rice": "200 g",
+              "water": "100 ml",
+              "oil": "10 ml"
+            },
+            "needs_check": [],
+            "freshness_check": []
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-C04",
+      "mode": "cook",
+      "description": "One confirmed egg for a three-egg meal is low stock, not unknown and not an absent-ingredient fallback.",
+      "categories": [
+        "counted_stock",
+        "low_stock"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "selected": "egg-rice",
+            "relaxable": [],
+            "missing_essential_fallback": false,
+            "people": 2,
+            "ingredient_status": {
+              "egg": "low",
+              "rice": "have",
+              "water": "staple",
+              "oil": "staple"
+            },
+            "amounts": {
+              "egg": "3 pcs",
+              "rice": "200 g",
+              "water": "100 ml",
+              "oil": "10 ml"
+            },
+            "needs_check": [],
+            "freshness_check": []
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-C05",
+      "mode": "cook",
+      "description": "An egg batch with a zero count is absent even when its qualitative state says enough.",
+      "categories": [
+        "counted_stock",
+        "zero_stock"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "selected": "egg-rice",
+            "relaxable": [],
+            "missing_essential_fallback": true,
+            "people": 2,
+            "ingredient_status": {
+              "egg": "missing",
+              "rice": "have",
+              "water": "staple",
+              "oil": "staple"
+            },
+            "amounts": {
+              "egg": "3 pcs",
+              "rice": "200 g",
+              "water": "100 ml",
+              "oil": "10 ml"
+            },
+            "needs_check": [],
+            "freshness_check": []
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-C06",
+      "mode": "cook",
+      "description": "A null egg count is uncertainty rather than zero and requires a real stock-check batch.",
+      "categories": [
+        "counted_stock",
+        "unknown_stock"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "selected": "egg-rice",
+            "relaxable": [],
+            "missing_essential_fallback": false,
+            "people": 2,
+            "ingredient_status": {
+              "egg": "unknown",
+              "rice": "have",
+              "water": "staple",
+              "oil": "staple"
+            },
+            "amounts": {
+              "egg": "3 pcs",
+              "rice": "200 g",
+              "water": "100 ml",
+              "oil": "10 ml"
+            },
+            "needs_check": [
+              "egg"
+            ],
+            "freshness_check": []
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-C07",
+      "mode": "cook",
+      "description": "Three egg cartons cannot be treated as three individual eggs without a declared conversion.",
+      "categories": [
+        "counted_stock",
+        "unit_mismatch"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "selected": "egg-rice",
+            "relaxable": [],
+            "missing_essential_fallback": false,
+            "people": 2,
+            "ingredient_status": {
+              "egg": "unknown",
+              "rice": "have",
+              "water": "staple",
+              "oil": "staple"
+            },
+            "amounts": {
+              "egg": "3 pcs",
+              "rice": "200 g",
+              "water": "100 ml",
+              "oil": "10 ml"
+            },
+            "needs_check": [
+              "egg"
+            ],
+            "freshness_check": []
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-C08",
+      "mode": "cook",
+      "description": "A perishable egg count last confirmed fifteen days ago requires confirmation before stock coverage is trusted.",
+      "categories": [
+        "stale_stock",
+        "unknown_stock"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "selected": "egg-rice",
+            "relaxable": [],
+            "missing_essential_fallback": false,
+            "people": 2,
+            "ingredient_status": {
+              "egg": "unknown",
+              "rice": "have",
+              "water": "staple",
+              "oil": "staple"
+            },
+            "amounts": {
+              "egg": "3 pcs",
+              "rice": "200 g",
+              "water": "100 ml",
+              "oil": "10 ml"
+            },
+            "needs_check": [
+              "egg"
+            ],
+            "freshness_check": []
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-C09",
+      "mode": "cook",
+      "description": "A fresh egg batch can satisfy the meal while a separate expired batch remains visible for a freshness check.",
+      "categories": [
+        "freshness",
+        "multiple_batches"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "selected": "egg-rice",
+            "relaxable": [],
+            "missing_essential_fallback": false,
+            "people": 2,
+            "ingredient_status": {
+              "egg": "have",
+              "rice": "have",
+              "water": "staple",
+              "oil": "staple"
+            },
+            "amounts": {
+              "egg": "3 pcs",
+              "rice": "200 g",
+              "water": "100 ml",
+              "oil": "10 ml"
+            },
+            "needs_check": [],
+            "freshness_check": [
+              "egg"
+            ]
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-C10",
+      "mode": "cook",
+      "description": "Expired eggs provide no usable stock and cannot make an essential ingredient appear available.",
+      "categories": [
+        "freshness",
+        "missing_fallback"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "selected": "egg-rice",
+            "relaxable": [],
+            "missing_essential_fallback": true,
+            "people": 2,
+            "ingredient_status": {
+              "egg": "missing",
+              "rice": "have",
+              "water": "staple",
+              "oil": "staple"
+            },
+            "amounts": {
+              "egg": "3 pcs",
+              "rice": "200 g",
+              "water": "100 ml",
+              "oil": "10 ml"
+            },
+            "needs_check": [],
+            "freshness_check": [
+              "egg"
+            ]
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-C11",
+      "mode": "cook",
+      "description": "Eggs marked check remain a freshness question and are not silently counted as safe stock.",
+      "categories": [
+        "freshness",
+        "check_stock"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "selected": "egg-rice",
+            "relaxable": [],
+            "missing_essential_fallback": false,
+            "people": 2,
+            "ingredient_status": {
+              "egg": "check",
+              "rice": "have",
+              "water": "staple",
+              "oil": "staple"
+            },
+            "amounts": {
+              "egg": "3 pcs",
+              "rice": "200 g",
+              "water": "100 ml",
+              "oil": "10 ml"
+            },
+            "needs_check": [],
+            "freshness_check": [
+              "egg"
+            ]
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-C12",
+      "mode": "cook",
+      "description": "A recently confirmed enough state stays qualitative for twelve people; recipe amounts scale without inventing grams in inventory.",
+      "categories": [
+        "state_stock",
+        "portions"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "selected": "tomato-rice",
+            "relaxable": [],
+            "missing_essential_fallback": false,
+            "people": 12,
+            "ingredient_status": {
+              "tomato": "have",
+              "rice": "have"
+            },
+            "amounts": {
+              "tomato": "1800 g",
+              "rice": "1200 g"
+            },
+            "needs_check": [],
+            "freshness_check": []
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-C13",
+      "mode": "cook",
+      "description": "A qualitative low state remains low even when the recipe has an explicit gram requirement.",
+      "categories": [
+        "state_stock",
+        "low_stock"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "selected": "tomato-rice",
+            "relaxable": [],
+            "missing_essential_fallback": false,
+            "people": 2,
+            "ingredient_status": {
+              "tomato": "low",
+              "rice": "have"
+            },
+            "amounts": {
+              "tomato": "300 g",
+              "rice": "200 g"
+            },
+            "needs_check": [],
+            "freshness_check": []
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-C14",
+      "mode": "cook",
+      "description": "Unknown tomato stock prompts confirmation without fabricating an available or zero quantity.",
+      "categories": [
+        "state_stock",
+        "unknown_stock"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "selected": "tomato-rice",
+            "relaxable": [],
+            "missing_essential_fallback": false,
+            "people": 2,
+            "ingredient_status": {
+              "tomato": "unknown",
+              "rice": "have"
+            },
+            "amounts": {
+              "tomato": "300 g",
+              "rice": "200 g"
+            },
+            "needs_check": [
+              "tomato"
+            ],
+            "freshness_check": []
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-C15",
+      "mode": "cook",
+      "description": "Explicitly out oil overrides the usual staple assumption and makes the essential oil requirement missing.",
+      "categories": [
+        "staples",
+        "explicit_out"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "selected": "egg-rice",
+            "relaxable": [],
+            "missing_essential_fallback": true,
+            "people": 2,
+            "ingredient_status": {
+              "egg": "have",
+              "rice": "have",
+              "water": "staple",
+              "oil": "missing"
+            },
+            "amounts": {
+              "egg": "3 pcs",
+              "rice": "200 g",
+              "water": "100 ml",
+              "oil": "10 ml"
+            },
+            "needs_check": [],
+            "freshness_check": []
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-C16",
+      "mode": "cook",
+      "description": "An explicit four-person request doubles the two-serving recipe and exposes the shortage in a three-egg batch.",
+      "categories": [
+        "portions",
+        "counted_stock"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "selected": "egg-rice",
+            "relaxable": [],
+            "missing_essential_fallback": false,
+            "people": 4,
+            "ingredient_status": {
+              "egg": "low",
+              "rice": "have",
+              "water": "staple",
+              "oil": "staple"
+            },
+            "amounts": {
+              "egg": "6 pcs",
+              "rice": "400 g",
+              "water": "200 ml",
+              "oil": "20 ml"
+            },
+            "needs_check": [],
+            "freshness_check": []
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-C17",
+      "mode": "cook",
+      "description": "With no explicit people value, the remembered one-person Cook preference halves recipe amounts, independently of household size.",
+      "categories": [
+        "portions",
+        "remembered_defaults"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "selected": "egg-rice",
+            "relaxable": [],
+            "missing_essential_fallback": false,
+            "people": 1,
+            "ingredient_status": {
+              "egg": "have",
+              "rice": "have",
+              "water": "staple",
+              "oil": "staple"
+            },
+            "amounts": {
+              "egg": "1.5 pcs",
+              "rice": "100 g",
+              "water": "50 ml",
+              "oil": "5 ml"
+            },
+            "needs_check": [],
+            "freshness_check": []
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-C18",
+      "mode": "cook",
+      "description": "A coarse egg amount cannot be converted into a precise count; four-person guidance preserves the original wording and serving context.",
+      "categories": [
+        "coarse_amount",
+        "portions"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "selected": "egg-coarse",
+            "relaxable": [],
+            "missing_essential_fallback": false,
+            "people": 4,
+            "ingredient_status": {
+              "egg": "unknown",
+              "rice": "have"
+            },
+            "amounts": {
+              "egg": "a few eggs (adjust for 4 people; original serves 2)",
+              "rice": "400 g"
+            },
+            "needs_check": [
+              "egg"
+            ],
+            "freshness_check": []
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-C19",
+      "mode": "cook",
+      "description": "The declared egg allergy excludes the synthetic egg recipe, including optional ingredients; no soft relaxation may restore it.",
+      "categories": [
+        "allergen_gate",
+        "egg",
+        "hard_constraints"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": false,
+            "selected": null,
+            "relaxable": [],
+            "missing_essential_fallback": false
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-C20",
+      "mode": "cook",
+      "description": "The declared soy allergy excludes the synthetic tofu recipe, including optional ingredients; no soft relaxation may restore it.",
+      "categories": [
+        "allergen_gate",
+        "soy",
+        "hard_constraints"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": false,
+            "selected": null,
+            "relaxable": [],
+            "missing_essential_fallback": false
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-C21",
+      "mode": "cook",
+      "description": "The declared peanut allergy excludes the synthetic peanut recipe, including optional ingredients; no soft relaxation may restore it.",
+      "categories": [
+        "allergen_gate",
+        "peanut",
+        "hard_constraints"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": false,
+            "selected": null,
+            "relaxable": [],
+            "missing_essential_fallback": false
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-C22",
+      "mode": "cook",
+      "description": "The declared tree_nut allergy excludes the synthetic almond recipe, including optional ingredients; no soft relaxation may restore it.",
+      "categories": [
+        "allergen_gate",
+        "tree_nut",
+        "hard_constraints"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": false,
+            "selected": null,
+            "relaxable": [],
+            "missing_essential_fallback": false
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-C23",
+      "mode": "cook",
+      "description": "The declared milk allergy excludes the synthetic milk recipe, including optional ingredients; no soft relaxation may restore it.",
+      "categories": [
+        "allergen_gate",
+        "milk",
+        "hard_constraints"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": false,
+            "selected": null,
+            "relaxable": [],
+            "missing_essential_fallback": false
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-C24",
+      "mode": "cook",
+      "description": "The declared fish allergy excludes the synthetic fish recipe, including optional ingredients; no soft relaxation may restore it.",
+      "categories": [
+        "allergen_gate",
+        "fish",
+        "hard_constraints"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": false,
+            "selected": null,
+            "relaxable": [],
+            "missing_essential_fallback": false
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-C25",
+      "mode": "cook",
+      "description": "The declared shellfish allergy excludes the synthetic prawn recipe, including optional ingredients; no soft relaxation may restore it.",
+      "categories": [
+        "allergen_gate",
+        "shellfish",
+        "hard_constraints"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": false,
+            "selected": null,
+            "relaxable": [],
+            "missing_essential_fallback": false
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-C26",
+      "mode": "cook",
+      "description": "The declared gluten allergy excludes the synthetic wheat recipe, including optional ingredients; no soft relaxation may restore it.",
+      "categories": [
+        "allergen_gate",
+        "gluten",
+        "hard_constraints"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": false,
+            "selected": null,
+            "relaxable": [],
+            "missing_essential_fallback": false
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-C27",
+      "mode": "cook",
+      "description": "The declared sesame allergy excludes the synthetic sesame recipe, including optional ingredients; no soft relaxation may restore it.",
+      "categories": [
+        "allergen_gate",
+        "sesame",
+        "optional_allergen"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": false,
+            "selected": null,
+            "relaxable": [],
+            "missing_essential_fallback": false
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-C28",
+      "mode": "cook",
+      "description": "The declared vegan constraint excludes the starred egg recipe and retains the synthetic plant-only recipe.",
+      "categories": [
+        "diet_gate",
+        "vegan"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "selected": "tomato-rice",
+            "relaxable": [],
+            "missing_essential_fallback": true,
+            "people": 2,
+            "ingredient_status": {
+              "tomato": "missing",
+              "rice": "missing"
+            },
+            "amounts": {
+              "tomato": "300 g",
+              "rice": "200 g"
+            },
+            "needs_check": [],
+            "freshness_check": []
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-C29",
+      "mode": "cook",
+      "description": "Every requested diet flag must be declared: no-pork plus no-beef rejects both meat fixtures and leaves only the plant fixture.",
+      "categories": [
+        "diet_gate",
+        "combined_constraints"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "selected": "tomato-rice",
+            "relaxable": [],
+            "missing_essential_fallback": true,
+            "people": 2,
+            "ingredient_status": {
+              "tomato": "missing",
+              "rice": "missing"
+            },
+            "amounts": {
+              "tomato": "300 g",
+              "rice": "200 g"
+            },
+            "needs_check": [],
+            "freshness_check": []
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-C30",
+      "mode": "cook",
+      "description": "A stove-only household cannot receive an oven-only recipe, and a time relaxation cannot solve missing equipment.",
+      "categories": [
+        "equipment_gate",
+        "no_result"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": false,
+            "selected": null,
+            "relaxable": [],
+            "missing_essential_fallback": false
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-C31",
+      "mode": "cook",
+      "description": "An unreviewed synthetic recipe cannot be recommended even if its only ingredient is already available.",
+      "categories": [
+        "review_gate",
+        "no_result"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": false,
+            "selected": null,
+            "relaxable": [],
+            "missing_essential_fallback": false
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-C32",
+      "mode": "cook",
+      "description": "A twenty-minute strict cap excludes a thirty-minute recipe permanently; the engine must not suggest relaxing that hard bound.",
+      "categories": [
+        "strict_time",
+        "no_result"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": false,
+            "selected": null,
+            "relaxable": [],
+            "missing_essential_fallback": false
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-C33",
+      "mode": "cook",
+      "description": "A twenty-minute remembered Cook preference has an actionable time relaxation when a safe thirty-minute recipe exists.",
+      "categories": [
+        "soft_time",
+        "relaxation"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": false,
+            "selected": null,
+            "relaxable": [
+              "max_minutes"
+            ],
+            "missing_essential_fallback": false
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-C34",
+      "mode": "cook",
+      "description": "Quicker replaces the forty-minute starred base with its twenty-minute same-family variant; a further five-minute cap yields only a soft time relaxation.",
+      "categories": [
+        "adjustments",
+        "quicker",
+        "variants",
+        "accumulation"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "selected": "egg-rice",
+            "relaxable": [],
+            "missing_essential_fallback": false,
+            "people": 2,
+            "ingredient_status": {
+              "egg": "have",
+              "rice": "have",
+              "water": "staple",
+              "oil": "staple"
+            },
+            "amounts": {
+              "egg": "3 pcs",
+              "rice": "200 g",
+              "water": "100 ml",
+              "oil": "10 ml"
+            },
+            "needs_check": [],
+            "freshness_check": []
+          },
+          "failures": []
+        },
+        {
+          "step": 1,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "selected": "egg-quick",
+            "relaxable": [],
+            "missing_essential_fallback": false,
+            "people": 2,
+            "ingredient_status": {
+              "egg": "have",
+              "rice": "have",
+              "water": "staple",
+              "oil": "staple"
+            },
+            "amounts": {
+              "egg": "3 pcs",
+              "rice": "200 g",
+              "water": "100 ml",
+              "oil": "10 ml"
+            },
+            "needs_check": [],
+            "freshness_check": []
+          },
+          "failures": []
+        },
+        {
+          "step": 2,
+          "passed": true,
+          "observed": {
+            "result": false,
+            "selected": null,
+            "relaxable": [
+              "max_minutes"
+            ],
+            "missing_essential_fallback": false
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-C35",
+      "mode": "cook",
+      "description": "Easier selects the difficulty-one family variant; asking easier again produces no result rather than relaxing difficulty below its requested bound.",
+      "categories": [
+        "adjustments",
+        "easier",
+        "variants",
+        "no_result"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "selected": "egg-rice",
+            "relaxable": [],
+            "missing_essential_fallback": false,
+            "people": 2,
+            "ingredient_status": {
+              "egg": "have",
+              "rice": "have",
+              "water": "staple",
+              "oil": "staple"
+            },
+            "amounts": {
+              "egg": "3 pcs",
+              "rice": "200 g",
+              "water": "100 ml",
+              "oil": "10 ml"
+            },
+            "needs_check": [],
+            "freshness_check": []
+          },
+          "failures": []
+        },
+        {
+          "step": 1,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "selected": "egg-easy",
+            "relaxable": [],
+            "missing_essential_fallback": false,
+            "people": 2,
+            "ingredient_status": {
+              "egg": "have",
+              "rice": "have",
+              "water": "staple",
+              "oil": "staple"
+            },
+            "amounts": {
+              "egg": "3 pcs",
+              "rice": "200 g",
+              "water": "100 ml",
+              "oil": "10 ml"
+            },
+            "needs_check": [],
+            "freshness_check": []
+          },
+          "failures": []
+        },
+        {
+          "step": 2,
+          "passed": true,
+          "observed": {
+            "result": false,
+            "selected": null,
+            "relaxable": [],
+            "missing_essential_fallback": false
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-C36",
+      "mode": "cook",
+      "description": "Less oil requires the declared low-oil tag and selects the same-family variant without making an unmeasured nutrition claim.",
+      "categories": [
+        "adjustments",
+        "less_oil",
+        "variants"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "selected": "egg-rice",
+            "relaxable": [],
+            "missing_essential_fallback": false,
+            "people": 2,
+            "ingredient_status": {
+              "egg": "have",
+              "rice": "have",
+              "water": "staple",
+              "oil": "staple"
+            },
+            "amounts": {
+              "egg": "3 pcs",
+              "rice": "200 g",
+              "water": "100 ml",
+              "oil": "10 ml"
+            },
+            "needs_check": [],
+            "freshness_check": []
+          },
+          "failures": []
+        },
+        {
+          "step": 1,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "selected": "egg-light",
+            "relaxable": [],
+            "missing_essential_fallback": false,
+            "people": 2,
+            "ingredient_status": {
+              "egg": "have",
+              "rice": "have",
+              "water": "staple",
+              "oil": "staple"
+            },
+            "amounts": {
+              "egg": "3 pcs",
+              "rice": "200 g",
+              "water": "100 ml",
+              "oil": "10 ml"
+            },
+            "needs_check": [],
+            "freshness_check": []
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-C37",
+      "mode": "cook",
+      "description": "More vegetables selects the family variant with the explicit vegetable-rich tag when its added greens are available.",
+      "categories": [
+        "adjustments",
+        "more_vegetables",
+        "variants"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "selected": "egg-rice",
+            "relaxable": [],
+            "missing_essential_fallback": false,
+            "people": 2,
+            "ingredient_status": {
+              "egg": "have",
+              "rice": "have",
+              "water": "staple",
+              "oil": "staple"
+            },
+            "amounts": {
+              "egg": "3 pcs",
+              "rice": "200 g",
+              "water": "100 ml",
+              "oil": "10 ml"
+            },
+            "needs_check": [],
+            "freshness_check": []
+          },
+          "failures": []
+        },
+        {
+          "step": 1,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "selected": "egg-vegetables",
+            "relaxable": [],
+            "missing_essential_fallback": false,
+            "people": 2,
+            "ingredient_status": {
+              "egg": "have",
+              "rice": "have",
+              "water": "staple",
+              "oil": "staple",
+              "greens": "have"
+            },
+            "amounts": {
+              "egg": "3 pcs",
+              "rice": "200 g",
+              "water": "100 ml",
+              "oil": "10 ml",
+              "greens": "300 g"
+            },
+            "needs_check": [],
+            "freshness_check": []
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-C38",
+      "mode": "cook",
+      "description": "More protein boosts the declared high-protein variant and displays its larger egg requirement instead of pretending three eggs meet six.",
+      "categories": [
+        "adjustments",
+        "more_protein",
+        "variants"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "selected": "egg-rice",
+            "relaxable": [],
+            "missing_essential_fallback": false,
+            "people": 2,
+            "ingredient_status": {
+              "egg": "have",
+              "rice": "have",
+              "water": "staple",
+              "oil": "staple"
+            },
+            "amounts": {
+              "egg": "3 pcs",
+              "rice": "200 g",
+              "water": "100 ml",
+              "oil": "10 ml"
+            },
+            "needs_check": [],
+            "freshness_check": []
+          },
+          "failures": []
+        },
+        {
+          "step": 1,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "selected": "egg-protein",
+            "relaxable": [],
+            "missing_essential_fallback": false,
+            "people": 2,
+            "ingredient_status": {
+              "egg": "low",
+              "rice": "have",
+              "water": "staple",
+              "oil": "staple"
+            },
+            "amounts": {
+              "egg": "6 pcs",
+              "rice": "200 g",
+              "water": "100 ml",
+              "oil": "10 ml"
+            },
+            "needs_check": [],
+            "freshness_check": []
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-C39",
+      "mode": "cook",
+      "description": "Less-oil remains active after a later more-vegetables request; disjoint tagged variants cannot satisfy both, so relaxing tags is the useful recovery.",
+      "categories": [
+        "adjustments",
+        "accumulation",
+        "relaxation"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "selected": "egg-rice",
+            "relaxable": [],
+            "missing_essential_fallback": false,
+            "people": 2,
+            "ingredient_status": {
+              "egg": "have",
+              "rice": "have",
+              "water": "staple",
+              "oil": "staple"
+            },
+            "amounts": {
+              "egg": "3 pcs",
+              "rice": "200 g",
+              "water": "100 ml",
+              "oil": "10 ml"
+            },
+            "needs_check": [],
+            "freshness_check": []
+          },
+          "failures": []
+        },
+        {
+          "step": 1,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "selected": "egg-light",
+            "relaxable": [],
+            "missing_essential_fallback": false,
+            "people": 2,
+            "ingredient_status": {
+              "egg": "have",
+              "rice": "have",
+              "water": "staple",
+              "oil": "staple"
+            },
+            "amounts": {
+              "egg": "3 pcs",
+              "rice": "200 g",
+              "water": "100 ml",
+              "oil": "10 ml"
+            },
+            "needs_check": [],
+            "freshness_check": []
+          },
+          "failures": []
+        },
+        {
+          "step": 2,
+          "passed": true,
+          "observed": {
+            "result": false,
+            "selected": null,
+            "relaxable": [
+              "tags"
+            ],
+            "missing_essential_fallback": false
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-C40",
+      "mode": "cook",
+      "description": "A positive learned light-tag weight outweighs the smaller Chinese-cuisine preference when two equally stocked, equally easy meals compete.",
+      "categories": [
+        "learned_weights",
+        "cuisine_preferences"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "selected": "tofu-rice",
+            "relaxable": [],
+            "missing_essential_fallback": false,
+            "people": 2,
+            "ingredient_status": {
+              "tofu": "have",
+              "rice": "have"
+            },
+            "amounts": {
+              "tofu": "300 g",
+              "rice": "200 g"
+            },
+            "needs_check": [],
+            "freshness_check": []
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-S01",
+      "mode": "shop",
+      "description": "A new household can shop for one meal without inventory: three eggs require one tray, rice stays a state-tracked amount, and untracked oil and nonbuyable water add no purchases.",
+      "categories": [
+        "cold-start",
+        "pack-rounding",
+        "staples"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "meal_count": 1,
+            "planned": [
+              "egg-rice"
+            ],
+            "items": {
+              "egg": {
+                "packs": 1,
+                "needs_check": false,
+                "amount": "1 × tray (10 pcs each)"
+              },
+              "rice": {
+                "packs": null,
+                "needs_check": false,
+                "amount": "200 g for the planned meals; buy as needed"
+              }
+            }
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-S02",
+      "mode": "shop",
+      "description": "Twelve people multiply the two-serving recipe by six: eighteen eggs require two ten-egg trays and rice becomes 1200 g.",
+      "categories": [
+        "portion-scaling",
+        "boundary",
+        "pack-rounding"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "meal_count": 1,
+            "planned": [
+              "egg-rice"
+            ],
+            "items": {
+              "egg": {
+                "packs": 2,
+                "needs_check": false,
+                "amount": "2 × tray (10 pcs each)"
+              },
+              "rice": {
+                "packs": null,
+                "needs_check": false,
+                "amount": "1200 g for the planned meals; buy as needed"
+              }
+            }
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-S03",
+      "mode": "shop",
+      "description": "Omitted request values use remembered four people and two meals, rather than household size two: two three-egg recipes need twelve eggs and 800 g rice.",
+      "categories": [
+        "remembered-defaults",
+        "aggregation"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "meal_count": 2,
+            "planned": [
+              "egg-rice",
+              "egg-second"
+            ],
+            "items": {
+              "egg": {
+                "packs": 2,
+                "needs_check": false,
+                "amount": "2 × tray (10 pcs each)"
+              },
+              "rice": {
+                "packs": null,
+                "needs_check": false,
+                "amount": "800 g for the planned meals; buy as needed"
+              }
+            }
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-S04",
+      "mode": "shop",
+      "description": "Two meals for four people need twelve eggs in total; subtract one confirmed egg once, leaving eleven eggs and therefore two trays. Incorrectly subtracting that egg per meal would yield ten eggs and only one tray.",
+      "categories": [
+        "aggregation",
+        "stock-subtraction",
+        "pack-rounding"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "meal_count": 2,
+            "planned": [
+              "egg-rice",
+              "egg-second"
+            ],
+            "items": {
+              "egg": {
+                "packs": 2,
+                "needs_check": false,
+                "amount": "2 × tray (10 pcs each)"
+              },
+              "rice": {
+                "packs": null,
+                "needs_check": false,
+                "amount": "800 g for the planned meals; buy as needed"
+              }
+            }
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-S05",
+      "mode": "shop",
+      "description": "One confirmed egg plus two confirmed eggs in another batch exactly cover the three-egg meal; both batches contribute and only rice remains to buy.",
+      "categories": [
+        "multi-batch",
+        "stock-subtraction"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "meal_count": 1,
+            "planned": [
+              "egg-rice"
+            ],
+            "items": {
+              "rice": {
+                "packs": null,
+                "needs_check": false,
+                "amount": "200 g for the planned meals; buy as needed"
+              }
+            }
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-S06",
+      "mode": "shop",
+      "description": "A twelve-person meal needs eighteen eggs: eight confirmed eggs reduce the deficit to ten and one tray, while a second batch marked unknown contributes none even though its stored count is 99; retain its check marker.",
+      "categories": [
+        "multi-batch",
+        "unknown-state",
+        "stock-subtraction"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "meal_count": 1,
+            "planned": [
+              "egg-rice"
+            ],
+            "items": {
+              "egg": {
+                "packs": 1,
+                "needs_check": true,
+                "amount": "Check at home — 1 × tray (10 pcs each)"
+              },
+              "rice": {
+                "packs": null,
+                "needs_check": false,
+                "amount": "1200 g for the planned meals; buy as needed"
+              }
+            }
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-S07",
+      "mode": "shop",
+      "description": "Three confirmed eggs already cover the meal, but a second unknown-count batch must stay visible: check the stock and suggest no additional tray.",
+      "categories": [
+        "multi-batch",
+        "uncertainty-visibility"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "meal_count": 1,
+            "planned": [
+              "egg-rice"
+            ],
+            "items": {
+              "egg": {
+                "packs": null,
+                "needs_check": true,
+                "amount": "Check at home — Confirmed stock covers the plan; check the other stock"
+              },
+              "rice": {
+                "packs": null,
+                "needs_check": false,
+                "amount": "200 g for the planned meals; buy as needed"
+              }
+            }
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-S08",
+      "mode": "shop",
+      "description": "A countable batch whose count is null does not count as zero or confirmed supply: retain a check and the full one-tray purchase suggestion.",
+      "categories": [
+        "unknown-count"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "meal_count": 1,
+            "planned": [
+              "egg-rice"
+            ],
+            "items": {
+              "egg": {
+                "packs": 1,
+                "needs_check": true,
+                "amount": "Check at home — 1 × tray (10 pcs each)"
+              },
+              "rice": {
+                "packs": null,
+                "needs_check": false,
+                "amount": "200 g for the planned meals; buy as needed"
+              }
+            }
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-S09",
+      "mode": "shop",
+      "description": "One hundred eggs last confirmed fifteen days ago cannot remove the purchase line; they trigger a check and do not reduce the one-tray suggestion.",
+      "categories": [
+        "stale-stock",
+        "counted-stock"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "meal_count": 1,
+            "planned": [
+              "egg-rice"
+            ],
+            "items": {
+              "egg": {
+                "packs": 1,
+                "needs_check": true,
+                "amount": "Check at home — 1 × tray (10 pcs each)"
+              },
+              "rice": {
+                "packs": null,
+                "needs_check": false,
+                "amount": "200 g for the planned meals; buy as needed"
+              }
+            }
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-S10",
+      "mode": "shop",
+      "description": "A recent count of one hundred eggs is unusable for subtraction while freshness requires a check; the one-tray suggestion remains visibly uncertain.",
+      "categories": [
+        "freshness-check",
+        "counted-stock"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "meal_count": 1,
+            "planned": [
+              "egg-rice"
+            ],
+            "items": {
+              "egg": {
+                "packs": 1,
+                "needs_check": true,
+                "amount": "Check at home — 1 × tray (10 pcs each)"
+              },
+              "rice": {
+                "packs": null,
+                "needs_check": false,
+                "amount": "200 g for the planned meals; buy as needed"
+              }
+            }
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-S11",
+      "mode": "shop",
+      "description": "Expired eggs contribute no usable stock and require replacement; a known expired batch does not masquerade as pending confirmation, so the replacement line is not marked needs_check.",
+      "categories": [
+        "expired-stock",
+        "counted-stock"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "meal_count": 1,
+            "planned": [
+              "egg-rice"
+            ],
+            "items": {
+              "egg": {
+                "packs": 1,
+                "needs_check": false,
+                "amount": "1 × tray (10 pcs each)"
+              },
+              "rice": {
+                "packs": null,
+                "needs_check": false,
+                "amount": "200 g for the planned meals; buy as needed"
+              }
+            }
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-S12",
+      "mode": "shop",
+      "description": "An explicit out state overrides an old count of one hundred eggs; the complete three-egg need must still produce one tray without a check.",
+      "categories": [
+        "explicit-out",
+        "counted-stock"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "meal_count": 1,
+            "planned": [
+              "egg-rice"
+            ],
+            "items": {
+              "egg": {
+                "packs": 1,
+                "needs_check": false,
+                "amount": "1 × tray (10 pcs each)"
+              },
+              "rice": {
+                "packs": null,
+                "needs_check": false,
+                "amount": "200 g for the planned meals; buy as needed"
+              }
+            }
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-S13",
+      "mode": "shop",
+      "description": "Recently confirmed enough tomato and rice satisfy a state-tracked meal; no grams are subtracted or invented and the basket is empty.",
+      "categories": [
+        "state-enough",
+        "confirmed-at-home"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "meal_count": 1,
+            "planned": [
+              "tomato-rice"
+            ],
+            "items": {}
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-S14",
+      "mode": "shop",
+      "description": "Low tomato stock keeps the full displayed 300 g meal need, with no invented gram balance and no numeric pack count; confirmed rice is omitted.",
+      "categories": [
+        "state-low",
+        "coarse-stock"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "meal_count": 1,
+            "planned": [
+              "tomato-rice"
+            ],
+            "items": {
+              "tomato": {
+                "packs": null,
+                "needs_check": false,
+                "amount": "300 g for the planned meals; buy as needed"
+              }
+            }
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-S15",
+      "mode": "shop",
+      "description": "Explicitly out tomato must be purchased without a stock check; state-tracked ingredients never receive a fabricated numeric pack count.",
+      "categories": [
+        "state-out",
+        "coarse-stock"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "meal_count": 1,
+            "planned": [
+              "tomato-rice"
+            ],
+            "items": {
+              "tomato": {
+                "packs": null,
+                "needs_check": false,
+                "amount": "300 g for the planned meals; buy as needed"
+              }
+            }
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-S16",
+      "mode": "shop",
+      "description": "Unknown tomato stock stays in the basket with a check marker and the requested 300 g; confirmed rice still disappears from the list.",
+      "categories": [
+        "state-unknown",
+        "uncertainty-visibility"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "meal_count": 1,
+            "planned": [
+              "tomato-rice"
+            ],
+            "items": {
+              "tomato": {
+                "packs": null,
+                "needs_check": true,
+                "amount": "Check at home — 300 g for the planned meals; buy as needed"
+              }
+            }
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-S17",
+      "mode": "shop",
+      "description": "Shop requires recent stock confirmation even for nonperishable pantry rice: fifteen-day-old enough rice stays as a check while recent enough tomato is omitted.",
+      "categories": [
+        "stale-stock",
+        "pantry-stock"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "meal_count": 1,
+            "planned": [
+              "tomato-rice"
+            ],
+            "items": {
+              "rice": {
+                "packs": null,
+                "needs_check": true,
+                "amount": "Check at home — 200 g for the planned meals; buy as needed"
+              }
+            }
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-S18",
+      "mode": "shop",
+      "description": "An explicitly out oil staple must be bought despite the usual pantry assumption; nonbuyable tap water remains absent even when tracked as out.",
+      "categories": [
+        "staples",
+        "nonbuyable-water",
+        "explicit-out"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "meal_count": 1,
+            "planned": [
+              "egg-rice"
+            ],
+            "items": {
+              "oil": {
+                "packs": null,
+                "needs_check": false,
+                "amount": "10 ml for the planned meals; buy as needed"
+              }
+            }
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-S19",
+      "mode": "shop",
+      "description": "A few eggs cannot be converted into a tray count, even with ten eggs recorded; retain the coarse quantity and an explicit unit check.",
+      "categories": [
+        "coarse-amount",
+        "unsupported-conversion"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "meal_count": 1,
+            "planned": [
+              "egg-coarse"
+            ],
+            "items": {
+              "egg": {
+                "packs": null,
+                "needs_check": true,
+                "amount": "Check at home — a few eggs; check quantity and purchase units"
+              },
+              "rice": {
+                "packs": null,
+                "needs_check": false,
+                "amount": "200 g for the planned meals; buy as needed"
+              }
+            }
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-S20",
+      "mode": "shop",
+      "description": "One meal needs three eggs by piece and another needs 150 g egg; their units cannot be added, so ten recorded pieces cannot erase the combined check line.",
+      "categories": [
+        "mixed-units",
+        "aggregation",
+        "unsupported-conversion"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "meal_count": 2,
+            "planned": [
+              "egg-mass",
+              "egg-rice"
+            ],
+            "items": {
+              "egg": {
+                "packs": null,
+                "needs_check": true,
+                "amount": "Check at home — 3 pcs; 150 g; check quantity and purchase units"
+              },
+              "rice": {
+                "packs": null,
+                "needs_check": false,
+                "amount": "400 g for the planned meals; buy as needed"
+              }
+            }
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-S21",
+      "mode": "shop",
+      "description": "A 0.5 kg chicken requirement cannot silently use 500 g stock or a 500 g pack without a conversion adapter; keep the recipe and expose the unresolved quantity.",
+      "categories": [
+        "unsupported-conversion",
+        "pack-units"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "meal_count": 1,
+            "planned": [
+              "chicken-kilograms"
+            ],
+            "items": {
+              "chicken": {
+                "packs": null,
+                "needs_check": true,
+                "amount": "Check at home — 0.5 kg; check quantity and purchase units"
+              },
+              "rice": {
+                "packs": null,
+                "needs_check": false,
+                "amount": "200 g for the planned meals; buy as needed"
+              }
+            }
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-S22",
+      "mode": "shop",
+      "description": "A stove-only household cannot use an oven recipe, and an unreviewed rice recipe is never eligible; no safe candidate means no planned meal or basket item.",
+      "categories": [
+        "equipment",
+        "review-gate",
+        "no-result"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": false,
+            "meal_count": 0,
+            "planned": [],
+            "items": {}
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-S23",
+      "mode": "shop",
+      "description": "Every declared allergen is excluded before planning; with all nine allergen dishes plus tomato rice available, only the safe tomato meal may survive.",
+      "categories": [
+        "allergens",
+        "hard-filter",
+        "fewer-meals"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "meal_count": 1,
+            "planned": [
+              "tomato-rice"
+            ],
+            "items": {
+              "tomato": {
+                "packs": null,
+                "needs_check": false,
+                "amount": "300 g for the planned meals; buy as needed"
+              },
+              "rice": {
+                "packs": null,
+                "needs_check": false,
+                "amount": "200 g for the planned meals; buy as needed"
+              }
+            }
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-S24",
+      "mode": "shop",
+      "description": "Vegan constraints remove egg and chicken recipes; requesting seven meals returns the two eligible plant dishes and aggregates their rice to 400 g.",
+      "categories": [
+        "diet",
+        "hard-filter",
+        "fewer-meals"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "meal_count": 2,
+            "planned": [
+              "tofu-rice",
+              "tomato-rice"
+            ],
+            "items": {
+              "tomato": {
+                "packs": null,
+                "needs_check": false,
+                "amount": "300 g for the planned meals; buy as needed"
+              },
+              "tofu": {
+                "packs": null,
+                "needs_check": false,
+                "amount": "300 g for the planned meals; buy as needed"
+              },
+              "rice": {
+                "packs": null,
+                "needs_check": false,
+                "amount": "400 g for the planned meals; buy as needed"
+              }
+            }
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-S25",
+      "mode": "shop",
+      "description": "An explicitly strict ten-minute cooking cap excludes both thirty-minute dishes even though ordinary Shop time preferences are soft.",
+      "categories": [
+        "strict-time",
+        "hard-filter",
+        "no-result"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": false,
+            "meal_count": 0,
+            "planned": [],
+            "items": {}
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-S26",
+      "mode": "shop",
+      "description": "Seven requested meals cannot be filled by repeating variants: the starred egg base wins its family and tomato rice adds a second family, leaving exactly two meals.",
+      "categories": [
+        "family-diversity",
+        "fewer-meals",
+        "stars"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "meal_count": 2,
+            "planned": [
+              "egg-rice",
+              "tomato-rice"
+            ],
+            "items": {
+              "tomato": {
+                "packs": null,
+                "needs_check": false,
+                "amount": "300 g for the planned meals; buy as needed"
+              },
+              "egg": {
+                "packs": 1,
+                "needs_check": false,
+                "amount": "1 × tray (10 pcs each)"
+              },
+              "rice": {
+                "packs": null,
+                "needs_check": false,
+                "amount": "400 g for the planned meals; buy as needed"
+              }
+            }
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-S27",
+      "mode": "shop",
+      "description": "The vegetable request switches the preferred egg family member to its greens variant; changing to four people preserves that request and doubles all meal quantities.",
+      "categories": [
+        "more-vegetables",
+        "adjustment",
+        "family-variant",
+        "portion-scaling"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "meal_count": 1,
+            "planned": [
+              "egg-rice"
+            ],
+            "items": {
+              "egg": {
+                "packs": 1,
+                "needs_check": false,
+                "amount": "1 × tray (10 pcs each)"
+              },
+              "rice": {
+                "packs": null,
+                "needs_check": false,
+                "amount": "200 g for the planned meals; buy as needed"
+              }
+            }
+          },
+          "failures": []
+        },
+        {
+          "step": 1,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "meal_count": 1,
+            "planned": [
+              "egg-vegetables"
+            ],
+            "items": {
+              "egg": {
+                "packs": 1,
+                "needs_check": false,
+                "amount": "1 × tray (10 pcs each)"
+              },
+              "greens": {
+                "packs": null,
+                "needs_check": false,
+                "amount": "300 g for the planned meals; buy as needed"
+              },
+              "rice": {
+                "packs": null,
+                "needs_check": false,
+                "amount": "200 g for the planned meals; buy as needed"
+              }
+            }
+          },
+          "failures": []
+        },
+        {
+          "step": 2,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "meal_count": 1,
+            "planned": [
+              "egg-vegetables"
+            ],
+            "items": {
+              "egg": {
+                "packs": 1,
+                "needs_check": false,
+                "amount": "1 × tray (10 pcs each)"
+              },
+              "greens": {
+                "packs": null,
+                "needs_check": false,
+                "amount": "600 g for the planned meals; buy as needed"
+              },
+              "rice": {
+                "packs": null,
+                "needs_check": false,
+                "amount": "400 g for the planned meals; buy as needed"
+              }
+            }
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-S28",
+      "mode": "shop",
+      "description": "Without a shelf-life preference the tomato meal avoids half a bag of wheat surplus; longer-lasting then favors pantry wheat over a meal containing short-lived tomato.",
+      "categories": [
+        "longer-lasting",
+        "adjustment",
+        "shelf-life"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "meal_count": 1,
+            "planned": [
+              "tomato-rice"
+            ],
+            "items": {
+              "tomato": {
+                "packs": null,
+                "needs_check": false,
+                "amount": "300 g for the planned meals; buy as needed"
+              },
+              "rice": {
+                "packs": null,
+                "needs_check": false,
+                "amount": "200 g for the planned meals; buy as needed"
+              }
+            }
+          },
+          "failures": []
+        },
+        {
+          "step": 1,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "meal_count": 1,
+            "planned": [
+              "wheat-meal"
+            ],
+            "items": {
+              "wheat": {
+                "packs": 1,
+                "needs_check": false,
+                "amount": "1 × bag (1000 g each)"
+              }
+            }
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-S29",
+      "mode": "shop",
+      "description": "Cover-more expands the single egg meal to both available families, a further tap cannot invent a third family, and an explicit meal count of one overrides the tag increment.",
+      "categories": [
+        "cover-more-meals",
+        "adjustment",
+        "fewer-meals",
+        "explicit-default-override"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "meal_count": 1,
+            "planned": [
+              "egg-rice"
+            ],
+            "items": {
+              "egg": {
+                "packs": 1,
+                "needs_check": false,
+                "amount": "1 × tray (10 pcs each)"
+              },
+              "rice": {
+                "packs": null,
+                "needs_check": false,
+                "amount": "200 g for the planned meals; buy as needed"
+              }
+            }
+          },
+          "failures": []
+        },
+        {
+          "step": 1,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "meal_count": 2,
+            "planned": [
+              "egg-rice",
+              "tomato-rice"
+            ],
+            "items": {
+              "tomato": {
+                "packs": null,
+                "needs_check": false,
+                "amount": "300 g for the planned meals; buy as needed"
+              },
+              "egg": {
+                "packs": 1,
+                "needs_check": false,
+                "amount": "1 × tray (10 pcs each)"
+              },
+              "rice": {
+                "packs": null,
+                "needs_check": false,
+                "amount": "400 g for the planned meals; buy as needed"
+              }
+            }
+          },
+          "failures": []
+        },
+        {
+          "step": 2,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "meal_count": 2,
+            "planned": [
+              "egg-rice",
+              "tomato-rice"
+            ],
+            "items": {
+              "tomato": {
+                "packs": null,
+                "needs_check": false,
+                "amount": "300 g for the planned meals; buy as needed"
+              },
+              "egg": {
+                "packs": 1,
+                "needs_check": false,
+                "amount": "1 × tray (10 pcs each)"
+              },
+              "rice": {
+                "packs": null,
+                "needs_check": false,
+                "amount": "400 g for the planned meals; buy as needed"
+              }
+            }
+          },
+          "failures": []
+        },
+        {
+          "step": 3,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "meal_count": 1,
+            "planned": [
+              "egg-rice"
+            ],
+            "items": {
+              "egg": {
+                "packs": 1,
+                "needs_check": false,
+                "amount": "1 × tray (10 pcs each)"
+              },
+              "rice": {
+                "packs": null,
+                "needs_check": false,
+                "amount": "200 g for the planned meals; buy as needed"
+              }
+            }
+          },
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "DEV-S30",
+      "mode": "shop",
+      "description": "A preferred five-minute cook time and easy difficulty do not discard a forty-minute difficult Shop recipe; it remains a complete plan when no strict time cap was supplied.",
+      "categories": [
+        "soft-time",
+        "soft-difficulty",
+        "no-false-no-result"
+      ],
+      "passed": true,
+      "steps": [
+        {
+          "step": 0,
+          "passed": true,
+          "observed": {
+            "result": true,
+            "meal_count": 1,
+            "planned": [
+              "egg-rice"
+            ],
+            "items": {
+              "egg": {
+                "packs": 1,
+                "needs_check": false,
+                "amount": "1 × tray (10 pcs each)"
+              },
+              "rice": {
+                "packs": null,
+                "needs_check": false,
+                "amount": "200 g for the planned meals; buy as needed"
+              }
+            }
+          },
+          "failures": []
+        }
+      ]
+    }
+  ]
+}

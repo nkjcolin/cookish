@@ -190,3 +190,10 @@ class Scenario(StrictModel):
         for step in self.adjustments:
             (CookAdjust if self.mode == "cook" else ShopAdjust).model_validate(step.patch)
         return self
+
+
+class HeldOutScenario(Scenario):
+    """Only the separate frozen-evaluation runner accepts these inputs."""
+
+    id: str = Field(pattern=r"^HELD-(C|S)[0-9]{2}$")
+    split: Literal["held-out"]
