@@ -19,7 +19,7 @@ Update the last column as pull requests merge.
 | Tests on a throwaway database, Postgres in CI | `backend/tests/conftest.py`, `tests/db/`, `.github/workflows/ci.yml` | pull request |
 | Inventory reads and freshness | `services/inventory.py`, `stock_events.py`, `freshness.py` | pull request |
 | Write path: add, edit, remove, undo, activity list, `apply_stock_event` | `services/stock_events.py`, `inventory.py`, `tests/db/test_stock_events_db.py` | pull request |
-| Ingredient search | `services/catalogue.py` | not started |
+| Ingredient search | `services/catalogue.py`, `tests/db/test_catalogue_db.py` | pull request |
 | AWS: migrate Lambda, database secret | `app/migrate.py`, `session.py` | not started (with Role 3) |
 | Reliability tests (SPEC A10) | `backend/tests/db/` | not started |
 
@@ -113,6 +113,16 @@ Small decisions made while building it (tell me if the team disagrees):
   `storage` and `display_name` cannot be null.
 - If an undo restores only some lines, the original event is marked as undone and cannot be
   undone again, so the lines left in conflict stay as they are.
+
+## Ingredient search
+
+`GET /api/ingredients?q=` searches the canonical name and every alias, using `pg_trgm`. Results are
+ranked: what was typed is the whole name or alias, then a name or alias that starts with it, then
+one that contains it, then one that is close to it (a typo). At the same level a match on the real
+name beats a match on an alias, and a shorter name beats a longer one. Each ingredient appears
+once. Typing nothing lists the catalogue alphabetically. The `%` and `_` characters mean
+themselves. Aliases are the only way the search knows local names ("kangkong", "tau kwa"), so a
+miss found by Role 4's receipts is fixed by adding an alias to `ingredients.csv`.
 
 ## Ingredient catalogue (`backend/seed/ingredients.csv`)
 
