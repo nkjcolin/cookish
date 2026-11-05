@@ -1,6 +1,7 @@
 # Role 5 database integration: next migration proposal
 
-Prepared 5 November 2026 against `main` at `a360567`. **Proposed for Role 2 to
+Originally prepared 5 November 2026 against `main` at `a360567`; status notes
+updated after PR #21 merged at `a6d06a5`. **Proposed for Role 2 to
 review and implement; no migration or shared API change is included.** Role 2
 owns the database models and migrations. Role 5 owns the recommendation queries,
 serialization and endpoint wiring.
@@ -16,7 +17,8 @@ repository, not a complete implementation of `RecommendationRepository`.
 
 The 42 ingredient rows and 48 approved recipes can now feed the pure engines.
 Cook/Shop session endpoints still use mocks until the remaining repository is
-implemented and tested. No HTTP behavior changes in this milestone.
+implemented and tested. Recipe detail/star and use-first endpoints already use
+the existing database services; they do not require the proposed storage below.
 
 Mapping choices in this reader:
 
@@ -36,8 +38,10 @@ Mapping choices in this reader:
   separate existing behaviors.
 - Stars use the latest `starred`/`unstarred` feedback event for the household;
   other signals do not affect stars. Equal timestamps use UUID order only as a
-  stable fallback, not proof of event chronology. A future star writer should
-  serialize household updates and make event order unambiguous.
+  stable fallback, not proof of event chronology. The implemented star writer in
+  `services/recipe_details.py` serializes household updates and advances each
+  changed star event's timestamp beyond the prior event. Repeating the current
+  state creates no additional event.
 - Recipe ingredient display order is stable UUID order: the current relation
   has no source-position field. Instructions retain their stored order.
 - `active_minutes` must be present because the public Recipe schema requires it.
@@ -124,5 +128,6 @@ key races with manual writes, stale inventory revisions, selection retries,
 rating replacement after weight clipping, cross-household access, historical
 snapshot stability after recipe/pack edits and rollback after an injected
 post-stock-event failure. These are additional to the current input-reader
-tests and pure workflow tests. The remaining 30 held-out scenarios and deployed
-Cook/Shop checks stay separate final evaluation work.
+tests, recipe/star/use-first database tests and pure workflow tests. The held-out
+runner is prepared, but the final freeze, 30 independent unseen scenarios and
+deployed Cook/Shop checks stay separate final evaluation work.
