@@ -18,6 +18,12 @@ remaining additions for Role 2's next migration and the integration sequence.
 The test double exists only under `backend/tests/`. These are development
 integration tests, not Postgres reliability tests or held-out report scenarios.
 
+Recipe detail and star/unstar are implemented independently in
+[`recipe_details.py`](../backend/app/services/recipe_details.py), using the existing
+tables and public service signatures. They return reviewed catalogue recipes and
+persist household-scoped stars. Mock session recipe IDs are not real catalogue IDs
+and return `NOT_FOUND`; the end-to-end UI still awaits real Cook/Shop sessions.
+
 ## What is implemented
 
 | Flow | Implemented behavior |
@@ -157,7 +163,7 @@ allergen/pack metadata should be used in production.
    | `cook.select` / `confirm` / `give_feedback` | `select_cook` / `confirm_cook` / `feedback` |
    | `shop.start_session` / `adjust` / `confirm_basket` | `start_shop` / `adjust_shop` / `confirm_shop` |
 
-4. Implement the remaining recipe-detail/star queries and optional use-first
+4. Reuse the implemented recipe-detail/star services and add the optional use-first
    endpoint against the same catalogue. Populate recent-cooked history from an
    agreed history window; the workflow currently supplies learned weights but
    does not infer a time window from undated evidence.

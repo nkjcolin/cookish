@@ -138,13 +138,15 @@ ENDPOINTS = [
 
 IDS = [f"{e[0]} {e[1]}" for e in ENDPOINTS]
 
-# These three change a real inventory item now, so a made-up ID no longer works.
+# These endpoints use real database IDs now, so a made-up ID no longer works.
 # They stay in ENDPOINTS so the spec check above still sees them, and are tested
-# against the database in tests/db/test_inventory_api_db.py.
+# against the database in test_inventory_api_db.py and test_recipe_details_db.py.
 REAL_DATABASE = {
     ("PATCH", "/api/inventory/items/{item_id}"),
     ("DELETE", "/api/inventory/items/{item_id}"),
     ("POST", "/api/stock-events/{event_id}/undo"),
+    ("GET", "/api/recipes/{recipe_id}"),
+    ("PUT", "/api/recipes/{recipe_id}/star"),
 }
 STUBS = [e for e in ENDPOINTS if (e[0], e[1]) not in REAL_DATABASE]
 STUB_IDS = [f"{e[0]} {e[1]}" for e in STUBS]

@@ -1,4 +1,4 @@
-"""Cook sessions, recipes and ratings. STUB — Role 5 replaces the function bodies.
+"""Role 5 Cook services: real recipe details/stars; sessions and ratings still mocked.
 
 The real versions keep the logic in `app/reco/` (pure functions) and use this module
 only to load and save: sessions, feedback, and inventory through Role 2's services.
@@ -8,6 +8,7 @@ from uuid import UUID
 
 from app import mock
 from app.auth import CurrentUser
+from app.db.session import transaction
 from app.errors import ApiError, ErrorCode
 from app.schemas.cook import (
     CookAdjust,
@@ -24,6 +25,7 @@ from app.schemas.cook import (
 )
 from app.schemas.recipes import Recipe, StarResult
 from app.schemas.stock_events import StockEventType, StockRefType
+from app.services.recipe_details import read_recipe, save_star
 
 
 def start_session(user: CurrentUser, body: CookSessionCreate) -> Suggestion:
@@ -80,15 +82,13 @@ def give_feedback(user: CurrentUser, record_id: UUID, body: CookFeedback) -> Coo
 
 
 def get_recipe(user: CurrentUser, recipe_id: UUID) -> Recipe:
-    found = mock.RECIPES.get(str(recipe_id))
-    if found is None:
-        raise ApiError(ErrorCode.NOT_FOUND, "Recipe not found")
-    return found
+    with transaction() as session:
+        return read_recipe(session, user.household_id, recipe_id)
 
 
 def set_star(user: CurrentUser, recipe_id: UUID, starred: bool) -> StarResult:
-    get_recipe(user, recipe_id)
-    return StarResult(recipe_id=recipe_id, starred=starred)
+    with transaction() as session:
+        return save_star(session, user, recipe_id, starred)
 
 
 def use_first(user: CurrentUser) -> UseFirstList:

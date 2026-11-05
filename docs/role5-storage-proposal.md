@@ -115,7 +115,9 @@ the input reader alone is not a concurrency guarantee.
 
 After agreement and migration: complete the SQL repository, implement versioned
 snapshot codecs, then install `RecommendationWorkflow` behind the existing
-Cook/Shop functions. Include recipe detail/star queries and their ordering.
+Cook/Shop functions. Recipe detail/star queries are already implemented against
+the existing tables in `services/recipe_details.py`; preserve their household
+locking and timestamp/ID ordering when integrating the full repository.
 
 Database tests must cover concurrent same/different-key confirmation, stock-event
 key races with manual writes, stale inventory revisions, selection retries,

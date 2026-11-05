@@ -23,7 +23,9 @@ costs and user research are still required.
 
 ## What already exists
 
-- **Every service function above, as a stub** marked `STUB`, returning sample data from `app/mock.py`. The frontend is built against them.
+- **Recipe details and household stars use the real database.** Cook/Shop sessions,
+  cooking confirmation/ratings and optional use-first still return sample data
+  from `app/mock.py` while their integration is pending.
 - **Role 2's functions you call**, now implemented against PostgreSQL: household preferences, inventory snapshots and stock events. The agreed signatures are unchanged.
 - **`app/db/session.py`**: `transaction()`, one per request.
 - **`app/clock.py`**: today's date in Singapore.
@@ -31,6 +33,29 @@ costs and user research are still required.
 - **The pure Cook/Shop engines and learning**, described below, tested independently of those service stubs.
 
 ## Database input loading: implemented milestone
+
+### Recipe detail and household stars
+
+`cook.get_recipe` and `cook.set_star` now delegate to the Role 5
+[`recipe_details`](../services/recipe_details.py) service using the existing
+recipe, ingredient and feedback tables. Detail returns reviewed catalogue content
+with household-specific star state; unknown or unreviewed IDs return `NOT_FOUND`.
+The existing public signatures and response schemas are unchanged.
+
+Star/unstar records the acting user in `recipe_feedback`, independently of cooked
+ratings and learned taste weights. A household row lock serializes these actions;
+repeating the current value creates no extra event. New event timestamps advance
+past the prior star event even if clocks tie or move backwards. Detail and the
+engine input reader use the same latest-event ordering. Other households' stars
+are isolated; household members share their household's state.
+
+No new database model or migration is needed. The PostgreSQL tests in
+`tests/db/test_recipe_details_db.py` cover all 48 detail responses, HTTP star
+round trips, unknown/unreviewed IDs, household/member scope, concurrent updates,
+event ordering, and rollback. These endpoints require the seeded catalogue.
+Mock Cook/Shop cards still carry mock recipe IDs, which these real endpoints
+reject; the complete UI flow awaits real session integration. No mock-ID aliases
+or fabricated catalogue rows are introduced.
 
 The [real-catalogue quality review](../../../docs/role5-catalogue-quality-review.md)
 finds quantity-resolution and shopping-completeness gaps despite passing
