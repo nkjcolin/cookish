@@ -342,7 +342,9 @@ def test_all_48_seed_recipes_can_feed_a_seven_meal_plan_with_explicit_fixture_me
             line["ingredient_id"] = ingredient_id
             for field in ("quantity", "unit", "coarse_amount", "prep_note"):
                 line.setdefault(field, None)
-            catalogue[ingredient_id] = metadata(line["name"], countable=line["name"] == "egg")
+            catalogue[ingredient_id] = metadata(
+                line["name"], countable=line["name"] == "egg", staple=line["name"] == "water"
+            )
             purchases[ingredient_id] = PurchaseSpec(
                 category=IngredientCategory.OTHER,
                 buyable=line["name"] != "water",

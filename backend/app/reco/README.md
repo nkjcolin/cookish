@@ -211,17 +211,27 @@ eligible ingredient: category, explicit `buyable` flag, purchase unit, size and
 measure, and the estimated shelf life at default storage. Pack fields must be
 complete or all null. Missing rows raise an integration error rather than
 silently dropping an ingredient or treating it as safe. `buyable=False` is an
-explicit catalogue policy for something such as household tap water; the engine
-does not infer it from a name. No authoritative ingredient CSV exists yet.
+explicit catalogue policy for something such as household tap water or cooked
+rice; the engine does not infer it from a name. The SQL input reader supplies
+this metadata from Role 2's ingredient catalogue.
 
 The algorithm is deterministic and bounded, with no optimality claim:
 
 1. Apply the same review/allergen/diet/equipment/strict-time gate as Cook.
-   Score eligible recipes by learned/static preference and effort, ignoring
-   stock for admission. The public preferred time remains a soft penalty.
+   Before selecting families or taking the top candidates, exclude recipes with
+   essential, non-staple, non-buyable ingredients not confirmed available at home.
+   These require `have`: missing, low, unknown, stale, expired or unchecked stock
+   cannot be replenished by a shopping line. Optional ingredients and assumed
+   staples do not trigger this gate. Score the remaining recipes by learned/static
+   preference and effort, ignoring buyable stock for admission. The public
+   preferred time remains a soft penalty.
 2. Keep the best-scoring variant in each family, then take at most 20 families.
    Choose up to the requested number of meals by beam search of width 10.
-   No dish family repeats. A small catalogue can therefore return fewer meals.
+   No dish family repeats. Recheck non-buyable essential requirements across each
+   whole combination, scaling by people and counting each usable batch once.
+   If the bounded search cannot fill the requested plan, retry smaller sizes;
+   report the actual meal count. An empty plan follows the existing `NO_RESULT`
+   service path. State-tracked `enough` remains a state, not a numeric quantity.
 3. Score combinations with preference/effort, +0.5 per shared non-staple
    occurrence beyond the first, +1 per ingredient with confirmed usable stock,
    +0.5 per additional cuisine, and −0.5 per leftover pack fraction.

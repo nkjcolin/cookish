@@ -5,6 +5,37 @@ The current catalogue is large enough to expose important integration problems;
 adding more recipes is not the immediate priority. Resolve quantity checking and
 shopping completeness before user testing or freezing for held-out evaluation.
 
+## Follow-up: Shop non-buyable essentials fixed
+
+The [post-fix review](../eval/catalogue_quality/shop-essential-fix.json) retains
+the same 25 Cook and seven Shop probes. Missing non-buyable essentials occur in
+**0/7 Shop probes**, compared with **3/7 in the original baseline**. Cook results
+are unchanged. The original findings below describe the original baseline;
+this follow-up supersedes finding 3 and the affected Shop coverage observations.
+
+The planner now requires confirmed usable home stock for every essential,
+non-staple ingredient that cannot be bought. It applies that check before family
+selection and the candidate limit, then checks combined requirements during
+meal search. Counted stock is scaled and used once for the whole plan; state
+tracking never becomes an invented numeric amount. If the bounded search cannot
+fill the request, it tries smaller plans and reports the actual meal count.
+
+The empty and halal seven-meal probes still return seven meals. The microwave-only
+empty-kitchen probe now returns **zero**, rather than two meals requiring missing
+cooked rice. That empty plan uses the workflow's existing `NO_RESULT` path; the
+public endpoint is still mocked pending persistence integration. When cooked
+rice is confirmed usable, both reviewed rice dishes remain eligible.
+
+Validation: **321 local non-database tests passed**, including 31 new Shop cases;
+Ruff lint/format checks passed; the [development rerun](../eval/reco_scenarios/results/shop-essential-fix.json)
+passed **70/70 scenarios and 85/85 steps**, with zero held-out scenarios executed.
+Tests cover insufficient/shared counts, portion scaling, stale or uncertain stock,
+freshness exclusions, optional ingredients, staples, and the real catalogue.
+
+This Role 5 change leaves ingredient metadata, recipes, database models,
+migrations, service activation and frontend code unchanged. Quantity-unit and
+purchase-entry findings still require the previously identified cross-role work.
+
 ## Method and reproducibility
 
 **Integration status:** public Cook/Shop endpoints currently return mocks. The
@@ -167,8 +198,8 @@ feedback alone does not establish that feature.
 1. Resolve the counted quantity/unit workflow with Roles 1/2; keep the engine's
    conservative checks. Retest the demo's “Have it” path and counted shopping
    confirmation through the real frontend/backend.
-2. Fix the Role 5 non-buyable-essential planning gap and add real-catalogue
-   regressions. This can proceed independently of the quantity decision.
+2. **Completed in the follow-up above:** fix the Role 5 non-buyable-essential
+   planning gap and add real-catalogue regressions.
 3. Make empty-stock fallback navigation explicit, then assess whether a few
    genuinely different quick/limited-equipment meals are needed.
 4. Rerun this review and the existing 70 development scenarios, retain both
