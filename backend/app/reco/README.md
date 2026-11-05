@@ -32,7 +32,7 @@ costs and user research are still required.
 - **The recipe file format**, agreed with Role 2, in [seed/README.md](../../seed/README.md).
 - **The pure Cook/Shop engines and learning**, described below, tested independently of those service stubs.
 
-## Database input loading: implemented milestone
+## Implemented database reads and catalogue services
 
 The [Role 5 report draft](../../../docs/role5-report-notes.md) explains cold start,
 recipe provenance, household feedback updates and evaluation terminology, with
@@ -77,9 +77,12 @@ Mock Cook/Shop cards still carry mock recipe IDs, which these real endpoints
 reject; the complete UI flow awaits real session integration. No mock-ID aliases
 or fabricated catalogue rows are introduced.
 
+### Catalogue input reader
+
 The [real-catalogue quality review](../../../docs/role5-catalogue-quality-review.md)
-finds quantity-resolution and shopping-completeness gaps despite passing
-development tests. Resolve those findings before freezing for held-out evaluation.
+records the fixed non-buyable-essential planning gap and the remaining quantity
+resolution and purchase-entry gaps. Resolve the remaining findings before the
+final implementation freeze.
 
 [`SqlRecommendationInputs`](../services/recommendation_inputs.py) reads the 48
 reviewed recipes and 42 authoritative ingredients, household stars, preferences
@@ -88,9 +91,10 @@ types without guessing counts, pack conversions or missing safety metadata.
 It is the read portion of the future repository, not a complete session service.
 
 The [storage proposal](../../../docs/role5-storage-proposal.md) lists the remaining
-snapshots, ordered learning evidence and confirmation replay storage for Role 2's
-new migration. Public Cook/Shop endpoints remain mocked until that persistence
-layer is implemented. The proposal also records the catalogue mapping choices.
+snapshots, ordered learning evidence and confirmation replay storage for Role 2
+to review. Cook/Shop session, confirmation and rating endpoints remain mocked
+until that persistence layer is implemented. The proposal also records the
+catalogue mapping choices.
 
 `tests/test_recommendation_inputs.py` validates all delivered seed content at the
 mapping boundary. `tests/db/test_recommendation_inputs_db.py` exercises real
@@ -106,8 +110,9 @@ and classifies stock. `models.py` defines internal inputs and results;
 `config.py` contains all initial scoring weights. These modules perform no I/O,
 database access, live clock reads or session persistence.
 
-The **public Cook/Shop services still return mocks**. The pure basket and learning
-algorithms and a transaction-scoped service workflow are implemented. The
+The **Cook/Shop session, confirmation and rating endpoints still return mocks**.
+Recipe detail, star/unstar and use-first are already database-backed. The pure
+basket and learning algorithms and a transaction-scoped service workflow are implemented. The
 [integration handoff](../../../docs/role5-integration.md) describes its repository
 port, tests and proposed snapshot storage. The database adapter, real feedback
 persistence and deployed recommendation flows remain to implement. The
@@ -128,9 +133,9 @@ The future service adapter supplies:
 | `as_of` | A timezone-aware instant from `app.clock.now()`, passed once by the service. Scoring uses its Singapore date. |
 | `taste_weights` | Optional household feature map. An omitted map means zero learned preference. No history is invented. |
 
-Internal `CatalogIngredient.perishable` needs an agreed mapping from Role 2's
-catalogue data; it is not inferred from recipe names. Main-protein learning
-features remain pending a similarly authoritative mapping. The initial engine
+`SqlRecommendationInputs` maps `CatalogIngredient.perishable` using Role 2's
+`PERISHABLE_CATEGORIES` and the stored ingredient category, not recipe names.
+Main-protein learning features still need an agreed authoritative mapping. The engine
 reads `tag:<tag>` and `cuisine:<cuisine>` weights. `learning.py` produces those
 weights from confirmed cooking and subsequent feedback.
 
@@ -191,8 +196,8 @@ For stock assessment:
   real batch IDs. Even a recently confirmed usable batch earns no urgency bonus
   for a date already past.
 - An untracked staple is assumed available. Explicit tracked `out`, expired or
-  uncertain stock overrides that assumption. Role 2 must agree which ingredients
-  receive the staple flag, especially water.
+  uncertain stock overrides that assumption. Use Role 2's stored staple flags;
+  the delivered catalogue already marks water as a staple.
 - A missing essential excludes the recipe while any eligible recipe without a
   missing essential remains. If every eligible recipe is missing something,
   return the best fallback with its ingredients visibly marked `missing`.
@@ -318,13 +323,16 @@ These tags bias ranking rather than eliminate all candidates.
 `cover_more_meals` increases the request by one per deliberate adjustment,
 capped at seven, unless the same patch explicitly supplies `meals`.
 Tags accumulate; people and explicit meal counts can change in either direction.
-The service must replay retries rather than apply an adjustment twice.
+Confirmation retries must replay their saved result. Start/adjust requests have
+no idempotency key in the current public API; retry deduplication for those actions
+is not implemented or claimed by the workflow.
 
 `ShopPlan` retains the requested count; `to_basket` reports the actual number
 of planned meals in `Basket.meals`. It derives stable item UUIDs from the saved
 basket UUID and ingredient UUID. Persist those exact IDs for confirmation;
 assign a fresh basket UUID to a new basket revision. An empty plan means no
-hard-eligible recipes: map it to `NO_RESULT` with `relaxable: []`. A valid plan
+eligible recipes remain after hard filtering and the non-buyable-essential
+stock gate: map it to `NO_RESULT` with `relaxable: []`. A valid plan
 with every ingredient at home can have zero purchase items. There are no prices,
 cost totals or budget promises.
 
@@ -398,7 +406,8 @@ basket schema, bounded feedback, retries and replacement after saturation.
 Two additional property tests generate 80 Shop cases and 80 feedback sequences.
 A structural integration test loads all 48 approved recipe files and produces
 a seven-meal plan with explicit synthetic metadata; it does not validate the
-still-pending authoritative catalogue.
+authoritative catalogue. Separate input-reader and real-catalogue tests exercise
+Role 2's delivered 42 ingredient rows and the 48 reviewed recipes.
 
 These unit, property and workflow tests remain separate from the report
 scenario suite. The [scenario runner](../../../eval/reco_scenarios/README.md)
@@ -407,6 +416,9 @@ initial result and every adjustment, exact basket expectations and source-hash
 provenance. Its fixture clock is `2026-10-24T12:00:00+08:00`. Its small synthetic
 recipe records are separate from the 48 approved seed recipes.
 
+The separate frozen-evaluation runner is implemented and rehearsed using
+development copies, with zero held-out cases executed. It preserves source/input
+hashes and first-attempt evidence and labels subsequent runs as regressions.
 The 30 held-out scenarios have not been authored or used for tuning here.
 They must remain unseen until a frozen implementation is evaluated, with the
 first result preserved and reported separately. See the scenario README for
@@ -429,13 +441,15 @@ tests or scenarios should be seeded as the authoritative ingredient catalogue.
 
 ## What the frontend expects from you
 
-The frontend is finished, so these behaviours are fixed.
+Keep the existing API expectations below. The [quality review](../../../docs/role5-catalogue-quality-review.md)
+records unresolved quantity-check, purchase-entry and empty-stock navigation
+issues for agreement with Roles 1/2; this section does not claim a completed UI flow.
 
 - **Adjustments only add conditions.** `POST /cook/sessions/{id}/adjust` adds to what the session already holds; there is no way to remove one. To remove a condition, the frontend starts a new session and sends the rest again, and its **Reset** button starts a session with none.
 - **Quick checks.** `Suggestion.needs_check` lists, for each essential ingredient of unknown stock, the batch to use first (`StockCheck.item`). `freshness_check` lists the batches whose `freshness_status` is `check`, with a reason. The frontend asks about exactly these before cooking and saves each answer on that batch with `PATCH /api/inventory/items/{id}`.
 - **"No, I don't have it".** The frontend records that batch as `out`, then calls `POST /cook/sessions/{id}/next`. The next suggestion must reflect the new stock. The `skipped` signal that `next` records must not change taste weights.
-- **Nothing fits.** Raise `ApiError(ErrorCode.NO_RESULT, …, {"relaxable": [...]})`. `relaxable` may contain only `"max_minutes"` and `"tags"`, and never a hard constraint. Shop avoids `NO_RESULT`: when it cannot fill every meal, it returns a basket for fewer. Only when no recipe at all passes the hard constraints does it return `NO_RESULT` with an empty `relaxable`.
-- **Expiry.** A session expires 12 hours after it starts. Any request on an expired or unknown session returns `NOT_FOUND`; the frontend then starts a new one with the same conditions.
+- **Nothing fits.** Raise `ApiError(ErrorCode.NO_RESULT, …, {"relaxable": [...]})`. `relaxable` may contain only `"max_minutes"` and `"tags"`, and never a hard constraint. Shop returns fewer meals when possible. If no recipe remains after hard filtering and the non-buyable-essential stock gate, return `NO_RESULT` with an empty `relaxable`.
+- **Expiry.** A session expires 12 hours after it starts. New session operations and first confirmations require an unexpired session. A previously successful confirmation with the same key/request replays its saved response after expiry; ratings for confirmed records also remain available. These workflow semantics still require SQL persistence wiring.
 - **People.** `people` defaults to the household's last choice and is written back when a session starts or changes; amounts in a suggestion are already scaled to it.
 
 ## Role 2's functions you call
@@ -489,7 +503,8 @@ One file per recipe in `backend/seed/recipes/`, in the format in [seed/README.md
 - No `diet_flags` or allergens in the file. The loader computes them from the ingredients: a recipe suits a diet only if every ingredient does, and its allergens are the union of its ingredients'.
 - `cuisine`, `equipment` and `taste_tags` take only the values in `app/schemas/common.py`.
 
-Role 2 builds the ingredient catalogue from your recipes, so **send them your ingredient list early**.
+Role 2's ingredient catalogue and loader are delivered. Coordinate future recipe
+ingredient additions or renaming through the existing handoff format.
 
 The [catalogue handoff](../../../docs/role5-handoff.md) contains 48 complete
 recipes (28 bases and 20 variants), a synchronised recipe index, the same 42-name
@@ -521,19 +536,25 @@ Use the existing taste-tag vocabulary consistently:
 - Equipment lists mean AND: all listed appliances are required. Total times
   include meal staples and can assume the stated parallel cooking.
 
-Role 2 still needs to turn the ingredient request list into authoritative
-catalogue rows, settle water's assumed-available/no-purchase treatment, and
-agree count/weight/pack conversions. Role 4 consumes that same final catalogue.
-The reviewed recipe set does not itself implement the loader, recommendation
-algorithms or Cook/Shop services; those integration tasks remain.
+The delivered catalogue includes water's staple/non-buyable policy and purchase
+definitions. Recipe-to-inventory quantity resolution remains a shared decision;
+existing purchase metadata does not authorize guessed count/weight conversions.
+Role 4 consumes the same authoritative catalogue.
 
-## Tasks, in order
+## Remaining Role 5 work
 
-1. **Recipes first**, because Role 2's catalogue comes from them. Lean towards everyday Singapore home cooking. Use only original or properly licensed content: the repository is public.
-2. `reco/` as pure functions, tested with fixture data: filter, score, suggest, adjust, build a basket. None of this needs the database.
-3. Wire the Cook and Shop services to sessions and to Role 2's functions. Their stubs return sample data, so this can start now.
-4. Fill `needs_check` and `freshness_check`, and return `NO_RESULT` as described above.
-5. Ratings: Like and Dislike adjust `taste_weights` as in SPEC B5; Maybe and "Not tonight" do not.
-6. Evaluation target: 100 scenarios in `eval/reco_scenarios/`, keeping 30 unseen during development, plus property-based tests that an allergen never appears in any output. The 70 development scenarios and property tests are implemented; the 30 held-out cases remain reserved under the [evaluation protocol](../../../eval/reco_scenarios/README.md).
+1. Agree the remaining snapshot, learning-evidence and retry-response storage
+   with Role 2. Role 2 implements models/migrations; Role 5 implements the SQL
+   repository and connects Cook/Shop session, confirmation and rating endpoints.
+2. Resolve recipe quantity checks and counted shopping confirmation with Roles
+   1/2, preserving uncertainty. Role 5 owns the recipe/engine behavior; UI and
+   ingredient/schema changes remain with their respective owners.
+3. Agree the recent-cooked history window and main-protein feature mapping, then
+   supply those ranking inputs. Existing cuisine/tag learning is already implemented.
+4. Freeze the completed implementation, obtain 30 independently authored unseen
+   scenarios, and run the prepared held-out workflow. The 70 development cases
+   and property tests are already available; held-out results must be separate.
+5. Verify Cook/Shop against real inventory on the deployed stack after integration.
+   Finalise the report and pricing conclusions with Roles 3/4's measured costs.
 
 **Done when** all 100 scenarios pass, and Cook and Shop work on the deployed stack against real inventory.

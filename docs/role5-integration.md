@@ -9,12 +9,12 @@ The pure engines now have a service orchestration layer:
 - [`test_recommendation_workflow.py`](../backend/tests/test_recommendation_workflow.py)
   exercises these flows with a transactional test double.
 
-**The public Cook/Shop endpoint functions still return mocks.** Role 2's models,
+**Cook/Shop session, confirmation and rating endpoints still return mocks.** Role 2's models,
 migrations, seed loader, inventory reads and stock write service are now merged.
 The [SQL input reader](../backend/app/services/recommendation_inputs.py) loads real
 catalogue/preferences/inventory data; the complete persistence adapter is not
 installed. The [storage proposal](role5-storage-proposal.md) lists the exact
-remaining additions for Role 2's next migration and the integration sequence.
+proposed remaining additions for Role 2's review and the integration sequence.
 The test double exists only under `backend/tests/`. These are development
 integration tests, not Postgres reliability tests or held-out report scenarios.
 
@@ -28,7 +28,11 @@ The optional `cook.use_first` endpoint also reads real inventory, using Role 2's
 freshness snapshot and Role 5's pure ordering/filtering function. It requires no
 additional persistence, migration or API fields.
 
-## What is implemented
+## Workflow behavior implemented against the repository port
+
+The following flows are tested with a transactional test double. Their SQL
+persistence and public endpoint activation remain pending; this table does not
+describe completed database-backed Cook/Shop sessions.
 
 | Flow | Implemented behavior |
 |---|---|
@@ -67,9 +71,8 @@ what the user actually purchased; `needs_check` does not automatically subtract
 uncertain home stock or claim the check was completed.
 
 A confirm where all lines are `not_used`/not bought still represents an explicit
-confirmation. The stock-event port must support an empty line list and an event
-with no inventory changes, or the roles must agree a different response policy.
-The existing internal signature accepts a list with no minimum. An entirely
+confirmation. Role 2's `apply_stock_event` already supports an empty line list
+and a recorded event with no inventory changes, including retry replay. An entirely
 empty Shop basket has no purchase to confirm; the public request schema still
 requires at least one line and is unchanged.
 
@@ -79,7 +82,7 @@ Every repository instance must use a single SQLAlchemy transaction. All queries
 and writes receive the authenticated household ID; record/session rows also
 retain their creator's user ID. Reject foreign rows as `NOT_FOUND`.
 
-| Port method | Role 2 / Role 5 implementation |
+| Port method | Role 5 adapter responsibility using Role 2's services/models |
 |---|---|
 | `preferences(household_id)` | Call Role 2 `get_preferences(s, household_id)`. |
 | `inventory(household_id)` | Call Role 2 `get_inventory_snapshot(s, household_id)`, with freshness already computed. |
@@ -142,7 +145,7 @@ Use existing JSON fields/relations where suitable; Role 2 owns any additional
 columns, constraints and migrations. No invented ingredient IDs or fixture
 allergen/pack metadata should be used in production.
 
-## Wiring sequence once the models are published
+## Wiring sequence after agreement on the additional storage
 
 1. Implement the port using Role 2's models and the agreed snapshot storage.
 2. Provide a unit-of-work factory:
@@ -168,15 +171,18 @@ allergen/pack metadata should be used in production.
    | `shop.start_session` / `adjust` / `confirm_basket` | `start_shop` / `adjust_shop` / `confirm_shop` |
 
 4. Reuse the implemented recipe-detail/star and optional use-first services.
-   Populate recent-cooked history from an
-   agreed history window; the workflow currently supplies learned weights but
+   Populate recent-cooked history from an agreed history window;
+   the workflow currently supplies learned weights but
    does not infer a time window from undated evidence.
 5. Run real Postgres tests for concurrent confirmations/selection, stale
    inventory revisions, simultaneous feedback edits, cross-household access,
    failure rollback and retry replay. Then replace the stubs and exercise the
    frontend with the seeded demo household.
 
-The current tests verify workflow branching, port calls, rollback expectations,
-response shapes and tenant scoping using a test double. They **do not verify
-SQL isolation, database constraints, migrations, deployed latency or elasticity**.
-Those remain required before claiming database integration is complete.
+The workflow tests verify branching, port calls, rollback expectations, response
+shapes and tenant scoping using a test double. Separate PostgreSQL tests already
+cover the input reader, recipe detail/stars and use-first. Those tests do not
+establish SQL isolation or transaction correctness for the still-unwired Cook/Shop
+workflow. Its database checks, deployed latency and elasticity evidence remain
+pending. The held-out runner is prepared; actual unseen evaluation follows the
+[freeze protocol](../eval/reco_scenarios/README.md).
