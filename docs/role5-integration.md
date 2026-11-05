@@ -135,8 +135,8 @@ allergen/pack metadata should be used in production.
 
 ## Wiring and review checklist
 
-1. Implement the port using Role 2's models and the agreed snapshot storage.
-2. Provide a unit-of-work factory:
+1. Implemented: the SQL port uses Role 2's models and the new snapshot migration, pending Role 2 review.
+2. The installed unit-of-work factory is:
 
    ```python
    from contextlib import contextmanager
@@ -148,8 +148,8 @@ allergen/pack metadata should be used in production.
            yield SqlRecommendationRepository(session)
    ```
 
-3. Construct `RecommendationWorkflow(recommendation_uow)`. Keep every existing
-   public service signature and delegate to the corresponding method:
+3. The public services construct `RecommendationWorkflow(recommendation_uow)`
+   and keep every existing signature, delegating as follows:
 
    | Existing service function | Workflow method |
    |---|---|
@@ -158,16 +158,20 @@ allergen/pack metadata should be used in production.
    | `cook.select` / `confirm` / `give_feedback` | `select_cook` / `confirm_cook` / `feedback` |
    | `shop.start_session` / `adjust` / `confirm_basket` | `start_shop` / `adjust_shop` / `confirm_shop` |
 
-4. Implement the remaining recipe-detail/star queries and optional use-first
-   endpoint against the same catalogue. Populate recent-cooked history from an
-   agreed history window; the workflow currently supplies learned weights but
-   does not infer a time window from undated evidence.
-5. Run real Postgres tests for concurrent confirmations/selection, stale
-   inventory revisions, simultaneous feedback edits, cross-household access,
-   failure rollback and retry replay. Then replace the stubs and exercise the
-   frontend with the seeded demo household.
+4. Recipe details, persisted stars and use-first reads are implemented. A
+   recent-cooked repetition window still needs agreement; the workflow supplies
+   learned weights but does not infer a time window from undated evidence.
+5. PostgreSQL CI covers concurrent confirmation/selection, stale revisions,
+   simultaneous feedback edits, household isolation, manual stock-key races,
+   failure rollback, exact replay and snapshots surviving catalogue changes.
+   It also compares the migrated schema with the declared models.
 
-The current tests verify workflow branching, port calls, rollback expectations,
-response shapes and tenant scoping using a test double. They **do not verify
-SQL isolation, database constraints, migrations, deployed latency or elasticity**.
-Those remain required before claiming database integration is complete.
+Validation at implementation commit `73e4186`: backend, frontend and AI CI pass.
+Backend CI requires PostgreSQL (`REQUIRE_DB=1`), so database tests cannot silently
+skip. Local checks passed 301 tests excluding database, HTTP contract and auth
+suites; local PostgreSQL is unavailable. All 70 development scenarios and 85
+steps pass. Those scenarios are offline engine evidence, not deployed results.
+
+The migration remains in draft for Role 2 review. Still required: deployed
+frontend/backend checks, the 30 independent held-out scenarios, measured cloud
+costs and elasticity evidence. No production migration or deployment was run.

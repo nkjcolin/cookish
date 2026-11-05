@@ -80,7 +80,7 @@ features remain pending a similarly authoritative mapping. The initial engine
 reads `tag:<tag>` and `cuisine:<cuisine>` weights. `learning.py` produces those
 weights from confirmed cooking and subsequent feedback.
 
-Typical service flow, once its repository adapter exists:
+Typical engine call inside the installed SQL workflow:
 
 ```python
 from app import clock
@@ -334,7 +334,7 @@ basket schema, bounded feedback, retries and replacement after saturation.
 Two additional property tests generate 80 Shop cases and 80 feedback sequences.
 A structural integration test loads all 48 approved recipe files and produces
 a seven-meal plan with explicit synthetic metadata; it does not validate the
-still-pending authoritative catalogue.
+authoritative catalogue. The new SQL input tests additionally load the real 42 ingredient rows and all 48 recipes.
 
 These unit, property and workflow tests remain separate from the report
 scenario suite. The [scenario runner](../../../eval/reco_scenarios/README.md)
@@ -348,9 +348,9 @@ They must remain unseen until a frozen implementation is evaluated, with the
 first result preserved and reported separately. See the scenario README for
 the protocol; no held-out pass claim is made.
 
-Still to implement: the database repository adapter for the implemented
-Cook/Shop workflow, real stock confirmation and retry-safe feedback persistence,
-the held-out evaluation and deployed evaluation. No synthetic metadata from
+The SQL repository, real stock confirmation and retry-safe feedback persistence
+are implemented and pass PostgreSQL CI in draft PR #21. The migration needs Role 2
+review; held-out and deployed evaluation remain. No synthetic metadata from
 tests or scenarios should be seeded as the authoritative ingredient catalogue.
 
 ## What you may change, and what you must keep
@@ -457,17 +457,16 @@ Use the existing taste-tag vocabulary consistently:
 - Equipment lists mean AND: all listed appliances are required. Total times
   include meal staples and can assume the stated parallel cooking.
 
-Role 2 still needs to turn the ingredient request list into authoritative
-catalogue rows, settle water's assumed-available/no-purchase treatment, and
-agree count/weight/pack conversions. Role 4 consumes that same final catalogue.
-The reviewed recipe set does not itself implement the loader, recommendation
-algorithms or Cook/Shop services; those integration tasks remain.
+Role 2 has delivered the 42 authoritative ingredient rows and seed loader. The
+SQL reader follows the stored staple and no-purchase metadata and preserves
+uncertainty for incompatible count/weight/pack conversions. Role 4 consumes the
+same catalogue. The recipe review itself does not constitute a cooking trial.
 
 ## Tasks, in order
 
 1. **Recipes first**, because Role 2's catalogue comes from them. Lean towards everyday Singapore home cooking. Use only original or properly licensed content: the repository is public.
 2. `reco/` as pure functions, tested with fixture data: filter, score, suggest, adjust, build a basket. None of this needs the database.
-3. Wire the Cook and Shop services to sessions and to Role 2's functions. Their stubs return sample data, so this can start now.
+3. Cook/Shop services are wired to persisted sessions and Role 2's functions in draft PR #21; review the migration before merge and deployment.
 4. Fill `needs_check` and `freshness_check`, and return `NO_RESULT` as described above.
 5. Ratings: Like and Dislike adjust `taste_weights` as in SPEC B5; Maybe and "Not tonight" do not.
 6. Evaluation target: 100 scenarios in `eval/reco_scenarios/`, keeping 30 unseen during development, plus property-based tests that an allergen never appears in any output. The 70 development scenarios and property tests are implemented; the 30 held-out cases remain reserved under the [evaluation protocol](../../../eval/reco_scenarios/README.md).
