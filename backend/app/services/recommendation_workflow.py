@@ -1,6 +1,6 @@
 """Cook/Shop orchestration ready for a transactional repository adapter.
 
-Not installed into the public stub endpoints yet. Construct with a unit-of-work
+The public endpoints use the PostgreSQL repository. Construct with a unit-of-work
 factory that commits every save and stock event together or rolls them all back.
 """
 
@@ -507,6 +507,9 @@ class RecommendationWorkflow:
         if not plan.planned_meals:
             raise ApiError(ErrorCode.NO_RESULT, "No eligible recipes", {"relaxable": []})
         response = to_basket(plan, row.id, row.basket_id)
+        # The session must exist before its basket's foreign key is inserted.
+        # Failure below rolls both back in the same unit of work.
+        repo.save_shop_session(household, row)
         repo.save_basket(
             household,
             BasketRow(
@@ -517,7 +520,6 @@ class RecommendationWorkflow:
                 dict(catalogue.purchases),
             ),
         )
-        repo.save_shop_session(household, row)
         repo.remember(household, shop_people=row.state.people, shop_meals=row.state.meals)
         return response
 

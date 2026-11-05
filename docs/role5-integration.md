@@ -9,14 +9,16 @@ The pure engines now have a service orchestration layer:
 - [`test_recommendation_workflow.py`](../backend/tests/test_recommendation_workflow.py)
   exercises these flows with a transactional test double.
 
-**The public Cook/Shop endpoint functions still return mocks.** Role 2's models,
-migrations, seed loader, inventory reads and stock write service are now merged.
-The [SQL input reader](../backend/app/services/recommendation_inputs.py) loads real
-catalogue/preferences/inventory data; the complete persistence adapter is not
-installed. The [storage proposal](role5-storage-proposal.md) lists the exact
-remaining additions for Role 2's next migration and the integration sequence.
-The test double exists only under `backend/tests/`. These are development
-integration tests, not Postgres reliability tests or held-out report scenarios.
+**Current draft status (5 November 2026):** Cook/Shop endpoints use
+[`SqlRecommendationRepository`](../backend/app/services/recommendation_sql.py).
+It reuses Role 2's catalogue, preferences, inventory and stock-event services in
+one transaction. The new migration `e51c9a8d7201` adds snapshots, ordered learning
+and confirmation response storage; the original migration is unchanged.
+
+The [storage design](role5-storage-proposal.md) describes the migration for Role
+2 review, mapping choices and locking. Deployment is not performed by this PR.
+The pure workflow tests use a test double; the additional SQL tests under
+`backend/tests/db/test_recommendation_sql_db.py` use real PostgreSQL.
 
 ## What is implemented
 
@@ -110,10 +112,9 @@ This layer does not claim retry deduplication for those actions. Adding such a
 contract would require Role 1 agreement. Confirmation retries are covered by the
 existing key header.
 
-## Data that needs agreement before wiring
+## Snapshot storage implemented in this draft
 
-The internal dataclasses are a **proposed adapter representation**, not a second
-schema or an amendment to Role 2's migration ownership. Agree where to store:
+The internal dataclasses are serialized into versioned JSON snapshots by the SQL adapter. The new migration remains subject to Role 2 review. The storage design covers:
 
 1. Saved suggestion responses and the current history position, accumulated
    engine state, selected-record link and fixed expiry.
@@ -132,7 +133,7 @@ Use existing JSON fields/relations where suitable; Role 2 owns any additional
 columns, constraints and migrations. No invented ingredient IDs or fixture
 allergen/pack metadata should be used in production.
 
-## Wiring sequence once the models are published
+## Wiring and review checklist
 
 1. Implement the port using Role 2's models and the agreed snapshot storage.
 2. Provide a unit-of-work factory:
@@ -144,7 +145,7 @@ allergen/pack metadata should be used in production.
    @contextmanager
    def recommendation_uow():
        with transaction() as session:
-           yield SqlRecommendationRepository(session)  # Adapter still to implement.
+           yield SqlRecommendationRepository(session)
    ```
 
 3. Construct `RecommendationWorkflow(recommendation_uow)`. Keep every existing

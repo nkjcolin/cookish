@@ -23,7 +23,7 @@ costs and user research are still required.
 
 ## What already exists
 
-- **Every service function above, as a stub** marked `STUB`, returning sample data from `app/mock.py`. The frontend is built against them.
+- **Cook/Shop service functions** now delegate to the transactional SQL workflow. Recipe details, stars and use-first reads also use real data; API schemas are unchanged.
 - **Role 2's functions you call**, now implemented against PostgreSQL: household preferences, inventory snapshots and stock events. The agreed signatures are unchanged.
 - **`app/db/session.py`**: `transaction()`, one per request.
 - **`app/clock.py`**: today's date in Singapore.
@@ -36,12 +36,9 @@ costs and user research are still required.
 reviewed recipes and 42 authoritative ingredients, household stars, preferences
 and inventory in the caller's transaction. It supplies the existing pure engine
 types without guessing counts, pack conversions or missing safety metadata.
-It is the read portion of the future repository, not a complete session service.
+The SQL repository reuses these reads and adds session, record, basket, feedback and retry persistence.
 
-The [storage proposal](../../../docs/role5-storage-proposal.md) lists the remaining
-snapshots, ordered learning evidence and confirmation replay storage for Role 2's
-new migration. Public Cook/Shop endpoints remain mocked until that persistence
-layer is implemented. The proposal also records the catalogue mapping choices.
+The [storage design](../../../docs/role5-storage-proposal.md) documents the new migration and mapping choices for Role 2 review. Apply migration `e51c9a8d7201` before running this version. No production deployment has been performed.
 
 `tests/test_recommendation_inputs.py` validates all delivered seed content at the
 mapping boundary. `tests/db/test_recommendation_inputs_db.py` exercises real
@@ -57,11 +54,9 @@ and classifies stock. `models.py` defines internal inputs and results;
 `config.py` contains all initial scoring weights. These modules perform no I/O,
 database access, live clock reads or session persistence.
 
-The **public Cook/Shop services still return mocks**. The pure basket and learning
-algorithms and a transaction-scoped service workflow are implemented. The
+The **public Cook/Shop services now use PostgreSQL** through the transaction-scoped workflow and SQL repository. The
 [integration handoff](../../../docs/role5-integration.md) describes its repository
-port, tests and proposed snapshot storage. The database adapter, real feedback
-persistence and deployed recommendation flows remain to implement. The
+port, tests and proposed snapshot storage. The database adapter and feedback persistence are implemented in this draft; deployed recommendation flows remain to verify. The
 [development scenario suite](../../../eval/reco_scenarios/README.md) now contains
 70 cases; the 30 independently authored held-out cases remain reserved.
 

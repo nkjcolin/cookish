@@ -146,6 +146,13 @@ REAL_DATABASE = {
     ("DELETE", "/api/inventory/items/{item_id}"),
     ("POST", "/api/stock-events/{event_id}/undo"),
 }
+# Cook/Shop now require persisted session/record/basket IDs. Their successful
+# HTTP flows are covered in tests/db/test_recommendation_sql_db.py.
+REAL_DATABASE.update(
+    (method, path)
+    for method, path, *_ in ENDPOINTS
+    if path.startswith(("/api/cook/", "/api/shop/", "/api/recipes/"))
+)
 STUBS = [e for e in ENDPOINTS if (e[0], e[1]) not in REAL_DATABASE]
 STUB_IDS = [f"{e[0]} {e[1]}" for e in STUBS]
 
@@ -198,12 +205,8 @@ def test_committed_openapi_file_is_current() -> None:
     )
 
 
-def test_no_result_lists_what_can_be_relaxed() -> None:
+def test_unknown_cook_session_is_not_found() -> None:
     response = client.post(f"/api/cook/sessions/{ANY}/adjust", json={"max_minutes": 15})
 
     assert response.status_code == 404
-    assert response.json()["error"] == {
-        "code": "NO_RESULT",
-        "message": "Nothing fits all of that",
-        "details": {"relaxable": ["max_minutes", "tags"]},
-    }
+    assert response.json()["error"]["code"] == "NOT_FOUND"
