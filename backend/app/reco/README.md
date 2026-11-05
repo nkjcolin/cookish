@@ -32,6 +32,10 @@ costs and user research are still required.
 
 ## Database input loading: implemented milestone
 
+The [real-catalogue quality review](../../../docs/role5-catalogue-quality-review.md)
+finds quantity-resolution and shopping-completeness gaps despite passing
+development tests. Resolve those findings before freezing for held-out evaluation.
+
 [`SqlRecommendationInputs`](../services/recommendation_inputs.py) reads the 48
 reviewed recipes and 42 authoritative ingredients, household stars, preferences
 and inventory in the caller's transaction. It supplies the existing pure engine
