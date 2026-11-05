@@ -23,8 +23,8 @@ costs and user research are still required.
 
 ## What already exists
 
-- **Recipe details and household stars use the real database.** Cook/Shop sessions,
-  cooking confirmation/ratings and optional use-first still return sample data
+- **Recipe details, household stars and use-first use the real database.** Cook/Shop
+  sessions and cooking confirmation/ratings still return sample data
   from `app/mock.py` while their integration is pending.
 - **Role 2's functions you call**, now implemented against PostgreSQL: household preferences, inventory snapshots and stock events. The agreed signatures are unchanged.
 - **`app/db/session.py`**: `transaction()`, one per request.
@@ -33,6 +33,26 @@ costs and user research are still required.
 - **The pure Cook/Shop engines and learning**, described below, tested independently of those service stubs.
 
 ## Database input loading: implemented milestone
+
+The [Role 5 report draft](../../../docs/role5-report-notes.md) explains cold start,
+recipe provenance, household feedback updates and evaluation terminology, with
+implementation references and the current integration limits.
+
+### Use first
+
+`cook.use_first` now calls Role 2's `get_inventory_snapshot` for the authenticated
+household and delegates to the pure `reco/use_first.py` function. It returns only
+`use_soon` batches with a non-past date and known positive counted stock or a
+state of `enough`/`low`. Unknown/out states, absent/invalid counts or units, and
+stale perishable confirmations are excluded. Freshness statuses and estimated
+dates are read unchanged from Role 2's snapshot; no shelf-life policy is duplicated.
+
+Dates are ordered earliest first, then acquisition date and batch ID; batches are
+never merged. `days_left` uses the Singapore date. Empty kitchens return an empty
+list. The snapshot's `use_soon` status currently covers today through three days
+ahead; the Cook ranking's four-day urgency coefficient is a separate policy.
+The endpoint is read-only for inventory and retains the existing API schema.
+Frontend integration and reminders are not part of this implementation.
 
 ### Recipe detail and household stars
 

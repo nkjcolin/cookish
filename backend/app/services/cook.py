@@ -1,4 +1,4 @@
-"""Role 5 Cook services: real recipe details/stars; sessions and ratings still mocked.
+"""Role 5 Cook services: real recipes, stars and use-first; sessions/ratings still mocked.
 
 The real versions keep the logic in `app/reco/` (pure functions) and use this module
 only to load and save: sessions, feedback, and inventory through Role 2's services.
@@ -6,10 +6,11 @@ only to load and save: sessions, feedback, and inventory through Role 2's servic
 
 from uuid import UUID
 
-from app import mock
+from app import clock, mock
 from app.auth import CurrentUser
 from app.db.session import transaction
 from app.errors import ApiError, ErrorCode
+from app.reco.use_first import use_first_items
 from app.schemas.cook import (
     CookAdjust,
     CookConfirm,
@@ -20,12 +21,13 @@ from app.schemas.cook import (
     CookSessionCreate,
     NoResultDetails,
     Suggestion,
-    UseFirstItem,
     UseFirstList,
 )
 from app.schemas.recipes import Recipe, StarResult
 from app.schemas.stock_events import StockEventType, StockRefType
+from app.services.freshness import PERISHABLE_CATEGORIES
 from app.services.recipe_details import read_recipe, save_star
+from app.services.stock_events import get_inventory_snapshot
 
 
 def start_session(user: CurrentUser, body: CookSessionCreate) -> Suggestion:
@@ -92,10 +94,9 @@ def set_star(user: CurrentUser, recipe_id: UUID, starred: bool) -> StarResult:
 
 
 def use_first(user: CurrentUser) -> UseFirstList:
-    """Optional feature (SPEC A2)."""
-    return UseFirstList(
-        items=[
-            UseFirstItem(item=mock.item("cabbage"), days_left=1),
-            UseFirstItem(item=mock.item("egg-old"), days_left=2),
-        ]
-    )
+    """Read the household's computed freshness and order usable soon-due stock."""
+    with transaction() as session:
+        inventory = get_inventory_snapshot(session, user.household_id)
+        return use_first_items(
+            inventory, as_of=clock.now(), perishable_categories=PERISHABLE_CATEGORIES
+        )

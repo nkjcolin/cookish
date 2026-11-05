@@ -24,6 +24,10 @@ tables and public service signatures. They return reviewed catalogue recipes and
 persist household-scoped stars. Mock session recipe IDs are not real catalogue IDs
 and return `NOT_FOUND`; the end-to-end UI still awaits real Cook/Shop sessions.
 
+The optional `cook.use_first` endpoint also reads real inventory, using Role 2's
+freshness snapshot and Role 5's pure ordering/filtering function. It requires no
+additional persistence, migration or API fields.
+
 ## What is implemented
 
 | Flow | Implemented behavior |
@@ -163,8 +167,8 @@ allergen/pack metadata should be used in production.
    | `cook.select` / `confirm` / `give_feedback` | `select_cook` / `confirm_cook` / `feedback` |
    | `shop.start_session` / `adjust` / `confirm_basket` | `start_shop` / `adjust_shop` / `confirm_shop` |
 
-4. Reuse the implemented recipe-detail/star services and add the optional use-first
-   endpoint against the same catalogue. Populate recent-cooked history from an
+4. Reuse the implemented recipe-detail/star and optional use-first services.
+   Populate recent-cooked history from an
    agreed history window; the workflow currently supplies learned weights but
    does not infer a time window from undated evidence.
 5. Run real Postgres tests for concurrent confirmations/selection, stale
