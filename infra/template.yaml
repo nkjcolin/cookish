@@ -7,6 +7,9 @@ Parameters:
     Type: String
     Default: https://main.d146krzza1ana.amplifyapp.com
     Description: Allowed frontend origin for CORS
+  SoclaasApiKeySecretArn:
+    Type: String
+    Default: arn:aws:secretsmanager:ap-southeast-1:534444203105:secret:cookish/soclaas-api-key-oyPgRQ
 
 Globals:
   Function:
@@ -400,11 +403,26 @@ Resources:
       Architectures:
         - arm64
       MemorySize: 512
-      Timeout: 29
+      Timeout: 120
 
       Environment:
         Variables:
-          AI_PROVIDER: fake
+          AI_PROVIDER: soclaas
+          SOCLAAS_BASE_URL: https://soclaas-api.comp.nus.edu.sg/v1
+          SOCLAAS_MODEL: qwen3-vl:32b
+          SOCLAAS_IMAGE_MODEL: qwen3-vl:32b
+          SOCLAAS_AUDIO_MODEL: whisper-large-v3
+          SOCLAAS_OUTPUT_MODE: json_schema
+          SOCLAAS_MAX_OUTPUT_TOKENS: "4096"
+          SOCLAAS_PRICING_CACHE_SECONDS: "3600"
+          AI_REQUEST_TIMEOUT_SECONDS: "90"
+          SOCLAAS_TIMEOUT_SECONDS: "60"
+          SOCLAAS_API_KEY_SECRET_ARN: !Ref SoclaasApiKeySecretArn
+          SOCLAAS_PHOTO_QUANTITY_MODE: instances
+
+      Policies:
+        - AWSSecretsManagerGetSecretValuePolicy:
+            SecretArn: !Ref SoclaasApiKeySecretArn
 
       Events:
         AiGet:
