@@ -13,9 +13,11 @@
     "gen:api": "openapi-typescript ../docs/openapi.json -o src/api/schema.d.ts"
   },
   "dependencies": {
+    "@aws-amplify/ui-react": "^6.15.7",
     "@fontsource-variable/fraunces": "^5.3.0",
     "@fontsource-variable/plus-jakarta-sans": "^5.3.0",
     "@tanstack/react-query": "^5.104.1",
+    "aws-amplify": "^6.22.2",
     "openapi-fetch": "^0.17.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",

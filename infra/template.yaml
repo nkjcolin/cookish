@@ -5,7 +5,7 @@ Description: Cookish AWS infrastructure
 Parameters:
   FrontendOrigin:
     Type: String
-    Default: http://localhost:5173
+    Default: https://main.d146krzza1ana.amplifyapp.com
     Description: Allowed frontend origin for CORS
 
 Globals:
@@ -260,19 +260,14 @@ Resources:
           - PATCH
           - DELETE
           - OPTIONS
-
       Auth:
-        DefaultAuthorizer: CookishJwtAuthorizer
-
         Authorizers:
           CookishJwtAuthorizer:
             IdentitySource: $request.header.Authorization
-
             JwtConfiguration:
               issuer: !Sub
                 - "https://cognito-idp.${AWS::Region}.amazonaws.com/${PoolId}"
                 - PoolId: !Ref CookishUserPool
-
               audience:
                 - !Ref CookishUserPoolClient
 
@@ -308,14 +303,55 @@ Resources:
         - AWSSecretsManagerGetSecretValuePolicy:
             SecretArn: !Ref CookishDbSecret
       Events:
-        ApiProxy:
+        ApiGet:
           Type: HttpApi
           Properties:
             ApiId: !Ref CookishHttpApi
             Path: /api/{proxy+}
-            Method: ANY
+            Method: GET
             PayloadFormatVersion: "2.0"
+            Auth:
+              Authorizer: CookishJwtAuthorizer
 
+        ApiPost:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref CookishHttpApi
+            Path: /api/{proxy+}
+            Method: POST
+            PayloadFormatVersion: "2.0"
+            Auth:
+              Authorizer: CookishJwtAuthorizer
+
+        ApiPut:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref CookishHttpApi
+            Path: /api/{proxy+}
+            Method: PUT
+            PayloadFormatVersion: "2.0"
+            Auth:
+              Authorizer: CookishJwtAuthorizer
+
+        ApiPatch:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref CookishHttpApi
+            Path: /api/{proxy+}
+            Method: PATCH
+            PayloadFormatVersion: "2.0"
+            Auth:
+              Authorizer: CookishJwtAuthorizer
+
+        ApiDelete:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref CookishHttpApi
+            Path: /api/{proxy+}
+            Method: DELETE
+            PayloadFormatVersion: "2.0"
+            Auth:
+              Authorizer: CookishJwtAuthorizer
   # ---------------------------------------------------------
   # Database Migration Lambda
   # ---------------------------------------------------------
@@ -349,7 +385,7 @@ Resources:
         - AWSLambdaVPCAccessExecutionRole
         - AWSSecretsManagerGetSecretValuePolicy:
             SecretArn: !Ref CookishDbSecret
-            
+
   # ---------------------------------------------------------
   # AI Lambda
   # ---------------------------------------------------------
@@ -371,17 +407,58 @@ Resources:
           AI_PROVIDER: fake
 
       Events:
-        AiProxy:
+        AiGet:
           Type: HttpApi
           Properties:
             ApiId: !Ref CookishHttpApi
             Path: /ai/{proxy+}
-            Method: ANY
+            Method: GET
             PayloadFormatVersion: "2.0"
+            Auth:
+              Authorizer: CookishJwtAuthorizer
 
+        AiPost:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref CookishHttpApi
+            Path: /ai/{proxy+}
+            Method: POST
+            PayloadFormatVersion: "2.0"
+            Auth:
+              Authorizer: CookishJwtAuthorizer
+
+        AiPut:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref CookishHttpApi
+            Path: /ai/{proxy+}
+            Method: PUT
+            PayloadFormatVersion: "2.0"
+            Auth:
+              Authorizer: CookishJwtAuthorizer
+
+        AiPatch:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref CookishHttpApi
+            Path: /ai/{proxy+}
+            Method: PATCH
+            PayloadFormatVersion: "2.0"
+            Auth:
+              Authorizer: CookishJwtAuthorizer
+
+        AiDelete:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref CookishHttpApi
+            Path: /ai/{proxy+}
+            Method: DELETE
+            PayloadFormatVersion: "2.0"
+            Auth:
+              Authorizer: CookishJwtAuthorizer
 
 # -----------------------------------------------------------
-# Useful values for Role 1 / CI
+# Useful values for Role 1
 # -----------------------------------------------------------
 
 Outputs:

@@ -1,4 +1,5 @@
-import createClient from "openapi-fetch";
+import { fetchAuthSession } from "aws-amplify/auth";
+import createClient, { type Middleware } from "openapi-fetch";
 
 import type { components, paths } from "./schema";
 
@@ -7,6 +8,20 @@ export const api = createClient<paths>({
   baseUrl: import.meta.env.VITE_API_URL ?? "",
 });
 
+const authMiddleware: Middleware = {
+  async onRequest({ request }) {
+    const session = await fetchAuthSession();
+    const token = session.tokens?.idToken?.toString();
+
+    if (token) {
+      request.headers.set("Authorization", `Bearer ${token}`);
+    }
+
+    return request;
+  },
+};
+
+api.use(authMiddleware);
 export type Schemas = components["schemas"];
 
 /**
