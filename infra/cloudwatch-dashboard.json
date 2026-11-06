@@ -1,0 +1,117 @@
+{
+  "widgets": [
+    {
+      "type": "text",
+      "x": 0,
+      "y": 0,
+      "width": 24,
+      "height": 2,
+      "properties": {
+        "markdown": "# Cookish Operations Dashboard\nLambda and API Gateway health for the Cookish deployment."
+      }
+    },
+    {
+      "type": "metric",
+      "x": 0,
+      "y": 2,
+      "width": 12,
+      "height": 6,
+      "properties": {
+        "title": "API Lambda - Invocations / Errors / Throttles",
+        "region": "ap-southeast-1",
+        "view": "timeSeries",
+        "period": 300,
+        "metrics": [
+          ["AWS/Lambda", "Invocations", "FunctionName", "cookish-api", {"stat": "Sum"}],
+          ["AWS/Lambda", "Errors", "FunctionName", "cookish-api", {"stat": "Sum"}],
+          ["AWS/Lambda", "Throttles", "FunctionName", "cookish-api", {"stat": "Sum"}]
+        ]
+      }
+    },
+    {
+      "type": "metric",
+      "x": 12,
+      "y": 2,
+      "width": 12,
+      "height": 6,
+      "properties": {
+        "title": "API Lambda - p95 Duration",
+        "region": "ap-southeast-1",
+        "view": "timeSeries",
+        "period": 300,
+        "metrics": [
+          ["AWS/Lambda", "Duration", "FunctionName", "cookish-api", {"stat": "p95"}]
+        ]
+      }
+    },
+    {
+      "type": "metric",
+      "x": 0,
+      "y": 8,
+      "width": 12,
+      "height": 6,
+      "properties": {
+        "title": "AI Lambda - Invocations / Errors / Throttles",
+        "region": "ap-southeast-1",
+        "view": "timeSeries",
+        "period": 300,
+        "metrics": [
+          ["AWS/Lambda", "Invocations", "FunctionName", "cookish-ai", {"stat": "Sum"}],
+          ["AWS/Lambda", "Errors", "FunctionName", "cookish-ai", {"stat": "Sum"}],
+          ["AWS/Lambda", "Throttles", "FunctionName", "cookish-ai", {"stat": "Sum"}]
+        ]
+      }
+    },
+    {
+      "type": "metric",
+      "x": 12,
+      "y": 8,
+      "width": 12,
+      "height": 6,
+      "properties": {
+        "title": "AI Lambda - p95 Duration",
+        "region": "ap-southeast-1",
+        "view": "timeSeries",
+        "period": 300,
+        "metrics": [
+          ["AWS/Lambda", "Duration", "FunctionName", "cookish-ai", {"stat": "p95"}]
+        ]
+      }
+    },
+    {
+      "type": "metric",
+      "x": 0,
+      "y": 14,
+      "width": 12,
+      "height": 6,
+      "properties": {
+        "title": "API Gateway - Requests / 4xx / 5xx",
+        "region": "ap-southeast-1",
+        "view": "timeSeries",
+        "period": 300,
+        "metrics": [
+          ["AWS/ApiGateway", "Count", "ApiId", "cit4onmvhf", "Stage", "$default", {"stat": "Sum"}],
+          ["AWS/ApiGateway", "4xx", "ApiId", "cit4onmvhf", "Stage", "$default", {"stat": "Sum"}],
+          ["AWS/ApiGateway", "5xx", "ApiId", "cit4onmvhf", "Stage", "$default", {"stat": "Sum"}]
+        ]
+      }
+    },
+    {
+      "type": "metric",
+      "x": 12,
+      "y": 14,
+      "width": 12,
+      "height": 6,
+      "properties": {
+        "title": "API Gateway - p95 Latency",
+        "region": "ap-southeast-1",
+        "view": "timeSeries",
+        "period": 300,
+        "metrics": [
+          ["AWS/ApiGateway", "Latency", "ApiId", "cit4onmvhf", "Stage", "$default", {"stat": "p95"}],
+          ["AWS/ApiGateway", "IntegrationLatency", "ApiId", "cit4onmvhf", "Stage", "$default", {"stat": "p95"}]
+        ]
+      }
+    }
+  ]
+}
