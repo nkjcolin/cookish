@@ -316,7 +316,40 @@ Resources:
             Method: ANY
             PayloadFormatVersion: "2.0"
 
+  # ---------------------------------------------------------
+  # Database Migration Lambda
+  # ---------------------------------------------------------
 
+  MigrateFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: cookish-migrate
+      CodeUri: ../backend/
+      Handler: app.migrate.handler
+      Runtime: python3.12
+
+      Architectures:
+        - arm64
+
+      MemorySize: 512
+      Timeout: 120
+
+      VpcConfig:
+        SecurityGroupIds:
+          - !Ref CookishLambdaSecurityGroup
+        SubnetIds:
+          - !Ref CookishPrivateSubnetA
+          - !Ref CookishPrivateSubnetB
+
+      Environment:
+        Variables:
+          DB_SECRET_ARN: !Ref CookishDbSecret
+
+      Policies:
+        - AWSLambdaVPCAccessExecutionRole
+        - AWSSecretsManagerGetSecretValuePolicy:
+            SecretArn: !Ref CookishDbSecret
+            
   # ---------------------------------------------------------
   # AI Lambda
   # ---------------------------------------------------------
