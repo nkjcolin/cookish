@@ -20,8 +20,8 @@ Update the last column as pull requests merge.
 | Inventory reads and freshness | `services/inventory.py`, `stock_events.py`, `freshness.py` | pull request |
 | Write path: add, edit, remove, undo, activity list, `apply_stock_event` | `services/stock_events.py`, `inventory.py`, `tests/db/test_stock_events_db.py` | pull request |
 | Ingredient search | `services/catalogue.py`, `tests/db/test_catalogue_db.py` | pull request |
-| AWS: migrate Lambda, database secret | `app/migrate.py`, `app/db/session.py`, `tests/db/test_migrate_db.py`, `tests/test_session_url.py` | pull request; **needs Role 3's answers below before it can run on AWS** |
-| Reliability tests (SPEC A10) | `backend/tests/db/` | not started |
+| AWS: migrate Lambda, database secret | `app/migrate.py`, `app/db/session.py`, `tests/db/test_migrate_db.py`, `tests/test_session_url.py` | merged; matches Role 3's template; **not yet run on AWS** |
+| Reliability and tenancy tests (SPEC A10, A6) | `tests/db/test_reliability_db.py`, `tests/db/test_tenancy_api_db.py` | pull request |
 
 ## How freshness works
 
@@ -133,18 +133,27 @@ seeds the demo household. It is safe to run again, and a database lock makes two
 moment take turns. It needs to run inside the same network as the database, once per deploy, and
 its package must contain the `migrations/` and `seed/` folders at the top, next to `app/`.
 
-**Questions for Role 3** (open until answered):
+**Role 3's template (`infra/template.yaml`), read against this code.** Role 3 creates the database
+and the secret, and the template matches what the code expects, so no code change was needed:
 
-1. **How does the `api` Lambda get the password?** SPEC A3 puts it in a private network with no NAT
-   gateway and no VPC endpoint, but reading a secret from Secrets Manager normally needs one of
-   those. The ways round it: a Secrets Manager VPC endpoint (a few dollars a month), a NAT gateway
-   (about US$32 a month), a CloudFormation dynamic reference that puts the password into the
-   Lambda's settings at deploy time (then set `DATABASE_URL` instead of `DB_SECRET_ARN`), or RDS
-   IAM login. Which one, given the school account? **VERIFY**
-2. What are the secret's field names? (The ones above, if RDS creates it.)
-3. How is the migration Lambda run: after every deploy by the pipeline, or by hand?
-4. Its timeout and memory. Migration plus seed took about a second locally; allow a minute.
-5. Is the code packaged as a zip or a container? Either way it must hold `migrations/` and `seed/`.
+- The secret is generated in the template (`username`, `password`), and a
+  `SecretTargetAttachment` adds `host`, `port` and `dbname` once the database exists. These are the
+  field names the code reads.
+- The password route is a Secrets Manager interface VPC endpoint in both private subnets, with no
+  NAT gateway. This resolves the conflict with SPEC A3's "no VPC endpoint"; Role 3's README says to
+  include its fixed cost in the cost model (SPEC A12 deviation).
+- The migrate Lambda uses `app.migrate.handler` from the backend code, in the VPC, with 512 MB and
+  a 120-second timeout, and the same security group as the `api` Lambda.
+- The database is PostgreSQL 16 named `cookish`; the master user can create `pg_trgm`.
+
+**Still open with Role 3.** None of this has run on AWS yet; the first deploy is the first real test.
+
+1. The template sets `BackupRetentionPeriod: 0`, so there are no automatic backups. A deleted stack
+   or a database fault would lose all data. A small retention period costs nothing at this size.
+2. `sam build` reads `requirements.txt` but the backend uses uv, and the package must keep
+   `migrations/` and `seed/` at the top next to `app/`. Check the built package contains them.
+3. `aws lambda invoke` succeeds even when the function fails. The deploy job must check for
+   `FunctionError` in the response, or a failed migration looks like a good deploy.
 
 ## Ingredient search
 
@@ -227,7 +236,7 @@ ratings and Role 4's matching point at it.
 | Who | Question |
 |---|---|
 | Role 1 | Free-text items as category `other`, state-tracked. Kitchen groups are alphabetical by name: should "use first" groups come first? Is there a field for the printed date when adding or editing an item? Batches are grouped under one row (SPEC B1 says the row expands). The collapsed row can mislead: "Egg, 8 pcs, ~2 days" reads as if all 8 eggs are about to go off, when only an older batch may be. Can the collapsed row say how many are old ("2 expire in ~2 days")? The batches are already in the API response, so this is a screen change, unless the schema needs a field. |
-| Role 3 | `ci.yml` now has a Postgres service for the backend job. The AWS migration step and secret handling are written (see "AWS: reaching the database"); the five questions in that section need answers. |
+| Role 3 | `ci.yml` now has a Postgres service for the backend job. The AWS migration step and secret handling match your template (see "AWS: reaching the database"); three points are still open there: backups, packaging and checking the migrate result. |
 | Role 4 | The draft item from `/ai/parse-image` has no date field, so a printed date cannot be read from a package photo. Do we want that? The report says photos cannot certify freshness; reading a printed date is a different thing and the wording should say so |
 | Role 5 | The explicit "buyable" flag (above). The 3-day "use soon" window versus your urgency window. Internal access to `taste_weights` and to update only the `last_*` fields. Where to store your snapshots, evidence and confirmation keys (this needs a new migration, which Role 2 writes). Empty line lists in `apply_stock_event`. Reusing a key for a different operation raising `CONFLICT` |
 
