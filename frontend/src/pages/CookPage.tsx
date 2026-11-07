@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { ApiError, type Schemas } from "../api/client";
 import {
+  dropCookTag,
   mergeConstraints,
   useCookStep,
   useCookSuggestion,
@@ -30,6 +31,7 @@ import {
   difficultyLabel,
   ingredientLines,
   mealName,
+  needsRestock,
   type CookedState,
 } from "./cook/view";
 
@@ -83,6 +85,16 @@ export function CookPage() {
       onError: (error) => {
         const relaxable = relaxableOf(error);
         if (relaxable) setNoMatch({ constraints, relaxable });
+      },
+    });
+  }
+
+  function reset(people: number) {
+    restart.mutate({ people }, {
+      onSuccess: () => setNoMatch(null),
+      onError: (error) => {
+        const relaxable = relaxableOf(error);
+        if (relaxable) setNoMatch({ constraints: { people, tags: [], maxMinutes: null, maxDifficulty: null }, relaxable });
       },
     });
   }
@@ -155,12 +167,11 @@ export function CookPage() {
           relaxable={noMatch.relaxable}
           busy={busy}
           onAllowMoreTime={(minutes) =>
-            // The adjustment that failed was never applied, so everything it asked for is sent again.
-            run({ kind: "adjust", body: { tags: noMatch.constraints.tags, people: noMatch.constraints.people, max_minutes: minutes } })
+            relax({ ...dropCookTag(noMatch.constraints, "quicker"), maxMinutes: minutes })
           }
-          onDropTime={() => relax({ ...noMatch.constraints, maxMinutes: null })}
-          onDropTag={(tag) => relax({ ...noMatch.constraints, tags: noMatch.constraints.tags.filter((t) => t !== tag) })}
-          onStartOver={() => relax({ people: noMatch.constraints.people, tags: [], maxMinutes: null })}
+          onDropTime={() => relax({ ...dropCookTag(noMatch.constraints, "quicker"), maxMinutes: null })}
+          onDropTag={(tag) => relax(dropCookTag(noMatch.constraints, tag))}
+          onStartOver={() => reset(noMatch.constraints.people)}
         />
       )}
 
@@ -170,7 +181,7 @@ export function CookPage() {
             suggestion={suggestion}
             busy={busy}
             onEdit={() => setSheet("adjust")}
-            onReset={() => relax({ people: suggestion.people, tags: [], maxMinutes: null })}
+            onReset={() => reset(suggestion.people)}
           />
           <SuggestionCard
             suggestion={suggestion}
@@ -306,7 +317,7 @@ type SuggestionCardProps = {
 function SuggestionCard({ suggestion, busy, onSkip, onPrevious, onCook, onPreview }: SuggestionCardProps) {
   const { recipe } = suggestion;
   const star = useStarRecipe();
-  const missingEssentials = suggestion.ingredients.some((line) => line.essential && line.status === "missing");
+  const missingEssentials = suggestion.ingredients.some(needsRestock);
 
   return (
     <article className="flex flex-col overflow-clip rounded-lg border border-border bg-surface shadow-[0px_8px_24px_0px_rgba(89,51,26,0.08)]">

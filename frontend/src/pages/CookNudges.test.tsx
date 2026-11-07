@@ -41,6 +41,7 @@ function client() {
 function setupCook(current: Suggestion) {
   const queryClient = client();
   queryClient.setQueryData(SUGGESTION_KEY, current);
+  queryClient.setQueryData(["me"], { preferences: { diets: [], allergens: [], equipment: [] } });
   const post = vi.spyOn(api, "POST").mockResolvedValue({ data: current } as never);
   render(
     <QueryClientProvider client={queryClient}>
@@ -137,6 +138,54 @@ describe("server-checked cooking nudges", () => {
     await waitFor(() => expect(post).toHaveBeenCalledWith("/api/cook/sessions/{session_id}/adjust", {
       params: { path: { session_id: "session" } }, body: { tags: ["quicker"] },
     }));
+  });
+});
+
+describe("recovering when no recipe fits", () => {
+  const noResult = { error: { error: {
+    code: "NO_RESULT", message: "Nothing fits all of that", details: { relaxable: ["max_minutes", "tags"] },
+  } } };
+
+  it("allows more time after skipping by restarting with skips and absolute difficulty preserved", async () => {
+    const current = suggestion({
+      applied_constraints: { max_minutes: 15, max_difficulty: 1, tags: ["quicker", "easier", "less_oil"] },
+    });
+    const { post } = setupCook(current);
+    post.mockResolvedValueOnce(noResult as never);
+    fireEvent.click(screen.getByRole("button", { name: "Not tonight" }));
+    fireEvent.click(await screen.findByRole("button", { name: /Allow up to 30 min/ }));
+    await waitFor(() => expect(post).toHaveBeenLastCalledWith("/api/cook/sessions", {
+      body: {
+        people: 2,
+        previous_session_id: "session",
+        constraints: { max_minutes: 30, max_difficulty: 1, tags: ["easier", "less_oil"] },
+      },
+    }));
+    expect(post).toHaveBeenCalledTimes(2);
+  });
+
+  it("removes time without applying the old Quicker command again", async () => {
+    const { post } = setupCook(suggestion({
+      applied_constraints: { max_minutes: 15, max_difficulty: 1, tags: ["quicker", "less_oil"] },
+    }));
+    post.mockResolvedValueOnce(noResult as never);
+    fireEvent.click(screen.getByRole("button", { name: "Not tonight" }));
+    fireEvent.click(await screen.findByRole("button", { name: /15 min.*Remove/ }));
+    await waitFor(() => expect(post).toHaveBeenLastCalledWith("/api/cook/sessions", {
+      body: {
+        people: 2,
+        previous_session_id: "session",
+        constraints: { max_minutes: null, max_difficulty: 1, tags: ["less_oil"] },
+      },
+    }));
+  });
+
+  it("Reset clears skips and uses household preference defaults", async () => {
+    const { post } = setupCook(suggestion({
+      applied_constraints: { max_minutes: 15, max_difficulty: 1, tags: ["quicker", "easier"] },
+    }));
+    fireEvent.click(screen.getByRole("button", { name: "Reset" }));
+    await waitFor(() => expect(post).toHaveBeenCalledExactlyOnceWith("/api/cook/sessions", { body: { people: 2 } }));
   });
 });
 

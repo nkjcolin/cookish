@@ -26,14 +26,14 @@ function validCount(count: number | null) {
 export function ConfirmPurchasePage() {
   const navigate = useNavigate();
   const basket = useBasket().data;
-  const { inCart } = useCart();
+  const { inCart, hasMadeSelection, quantityReviewIds } = useCart();
   const confirm = useConfirmBasket(basket?.id);
   const finishShopping = useFinishShopping();
   // Once confirmed the basket is cleared; this screen must then leave, not bounce back to Buy.
   const [done, setDone] = useState(false);
-  // Ticks made while shopping carry over; with none made, everything is assumed bought.
+  // Keep deliberate selections, including an empty selection after a changed shopping list.
   const [bought, setBought] = useState<string[]>(() =>
-    inCart.length > 0 ? inCart : (basket?.items.map((item) => item.id) ?? []),
+    hasMadeSelection ? inCart : (basket?.items.map((item) => item.id) ?? []),
   );
   const [packs, setPacks] = useState<Record<string, string>>({});
 
@@ -45,7 +45,9 @@ export function ConfirmPurchasePage() {
   const count = basket.items.filter((item) => bought.includes(item.id)).length;
   const actualCount = (item: BasketItem) => {
     const entered = packs[item.id];
-    return entered === undefined ? item.suggested_packs : entered.trim() === "" ? null : Number(entered);
+    return entered === undefined
+      ? quantityReviewIds.includes(item.id) ? null : item.suggested_packs
+      : entered.trim() === "" ? null : Number(entered);
   };
   const unresolved = basket.items.filter((item) => bought.includes(item.id) && (
     typeof item.countable !== "boolean" ||
@@ -97,6 +99,9 @@ export function ConfirmPurchasePage() {
           What’s in your bag?
         </h1>
         <p className="text-[14px] text-ink-muted">Only ticked items go into your kitchen. Check the amounts you actually bought.</p>
+        {quantityReviewIds.some((id) => bought.includes(id)) && (
+          <p role="status" className="text-[13px] text-warn">Your list changed. Enter the amounts you already put in your cart.</p>
+        )}
       </div>
 
       <Link to="/more/add" className="flex items-center gap-[12px] rounded-md bg-primary-soft p-[14px]">
@@ -140,7 +145,7 @@ export function ConfirmPurchasePage() {
               {ticked && item.countable && hasPurchaseUnit(item) && (
                 <div className="flex flex-col gap-[6px] pl-[34px]">
                   <p className="text-[12px] text-ink-muted">Per {unit}: {item.purchase_unit_size} {measure}</p>
-                  {item.suggested_packs === null ? (
+                  {item.suggested_packs === null || quantityReviewIds.includes(item.id) ? (
                     <label className="flex flex-col gap-[4px] text-[13px] font-semibold">
                       How many {pluralUnit} did you buy?
                       <input

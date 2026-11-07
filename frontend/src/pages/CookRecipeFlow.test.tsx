@@ -115,6 +115,24 @@ describe("recipe browsing and cooking", () => {
     expect(await screen.findByRole("button", { name: "Cook this" })).toBeInTheDocument();
   });
 
+  it("offers replenishment for a counted shortage instead of a Cook action the server rejects", async () => {
+    const current = suggestion("low");
+    current.ingredients[0]!.countable = true;
+    const { post } = setup(current);
+    expect(screen.queryByRole("button", { name: "Cook this" })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "View recipe" }));
+    expect(await screen.findByRole("button", { name: "Go to Buy" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Update kitchen" })).toBeInTheDocument();
+    expect(post).not.toHaveBeenCalled();
+  });
+
+  it("keeps state-tracked low stock cookable because no counted shortage is known", () => {
+    const current = suggestion("low");
+    current.ingredients[0]!.countable = false;
+    setup(current);
+    expect(screen.getByRole("button", { name: "Cook this" })).toBeInTheDocument();
+  });
+
   it("still selects a stocked recipe before offering the cooking confirmation", async () => {
     const { post } = setup(suggestion("have"));
     const suggestedImage = screen.getByRole("img", { name: /illustrative serving of cucumber/i }).getAttribute("src");

@@ -131,3 +131,17 @@ def test_the_endpoint_answers_with_the_same_search():
     response = TestClient(app).get("/api/ingredients?q=kangkong")
     assert response.status_code == 200
     assert [i["canonical_name"] for i in response.json()["items"]] == ["water spinach"]
+
+
+def test_the_endpoint_resolves_a_known_id_regardless_of_the_custom_batch_name():
+    _fill()
+    egg = search_ingredients("egg", 1).items[0]
+    response = TestClient(app).get(
+        "/api/ingredients",
+        params={"q": "Grandma's breakfast box", "ingredient_id": str(egg.id), "limit": 1},
+    )
+    assert response.status_code == 200
+    items = response.json()["items"]
+    assert [(item["id"], item["canonical_name"], item["default_unit"]) for item in items] == [
+        (str(egg.id), "egg", "pcs")
+    ]

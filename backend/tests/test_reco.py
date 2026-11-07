@@ -198,6 +198,18 @@ def test_check_batches_require_confirmation_without_becoming_missing(changes, re
     assert api.needs_check == []
 
 
+def test_suggestion_distinguishes_counted_shortage_from_state_tracked_low_stock():
+    counted = to_suggestion(choose([recipe()], [batch(count=1)]), uid("counted-session"))
+    assert counted.ingredients[0].status == IngredientStatus.LOW
+    assert counted.ingredients[0].countable is True
+    state_tracked = to_suggestion(
+        choose([recipe(ingredients=("tomato",))], [batch("tomato", remaining_state="low")]),
+        uid("state-session"),
+    )
+    assert state_tracked.ingredients[0].status == IngredientStatus.LOW
+    assert state_tracked.ingredients[0].countable is False
+
+
 def test_freshness_confirmation_is_owned_by_snapshot_not_recomputed():
     # Role 2 may mark a checked best-before batch usable for 24h.
     item = batch(

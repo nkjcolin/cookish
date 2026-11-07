@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { api, idempotencyKey, unwrap, type Schemas } from "./client";
-import { invalidateAfterStockChange } from "./stockCache";
+import { invalidateAfterStockChange, resetAfterPreferencesChange } from "./stockCache";
 
 export function useMe() {
   return useQuery({
@@ -60,8 +60,25 @@ export function useSavePreferences() {
   return useMutation({
     mutationFn: async (body: Schemas["PreferencesUpdate"]) =>
       unwrap(await api.PUT("/api/household/preferences", { body })),
-    onSuccess: (preferences) =>
-      queryClient.setQueryData<Schemas["Me"]>(["me"], (me) => (me ? { ...me, preferences } : me)),
+    onSuccess: async (preferences) => {
+      queryClient.setQueryData<Schemas["Me"]>(["me"], (me) => (me ? { ...me, preferences } : me));
+      await resetAfterPreferencesChange(queryClient);
+    },
+  });
+}
+
+/** Resolve metadata by ID, never by a fuzzy name match, before asking for a counted amount. */
+export function useInventoryIngredient(item: Schemas["InventoryItem"]) {
+  return useQuery({
+    queryKey: ["ingredient", item.ingredient_id],
+    queryFn: async () => {
+      const result = unwrap(await api.GET("/api/ingredients", {
+        params: { query: { q: item.display_name.slice(0, 50), ingredient_id: item.ingredient_id!, limit: 1 } },
+      }));
+      return result.items.find((ingredient) => ingredient.id === item.ingredient_id) ?? null;
+    },
+    enabled: item.countable && item.ingredient_id !== null,
+    staleTime: Infinity,
   });
 }
 

@@ -101,13 +101,20 @@ def _escape_like(value: str) -> str:
     return value.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
 
 
-def search_ingredients(q: str, limit: int) -> IngredientSearchResult:
-    """Match canonical names and aliases (pg_trgm), best match first."""
+def search_ingredients(
+    q: str, limit: int, *, ingredient_id: UUID | None = None
+) -> IngredientSearchResult:
+    """Resolve a known ID exactly, or match names and aliases (pg_trgm), best first."""
     needle = " ".join(q.lower().split())
     limit = max(0, min(limit, MAX_RESULTS))
     if limit == 0:
         return IngredientSearchResult(items=[])
     with transaction() as s:
+        if ingredient_id is not None:
+            ingredient = s.get(m.Ingredient, ingredient_id)
+            return IngredientSearchResult(
+                items=[] if ingredient is None else [Ingredient.model_validate(ingredient)]
+            )
         if not needle:
             rows = s.execute(_ALL, {"limit": limit}).mappings().all()
         else:

@@ -285,6 +285,21 @@ never loosens a restriction to fabricate an answer. Only
 those soft filters actually restores a candidate after the hard gate. Difficulty
 caps and skipped IDs are not silently removed.
 
+Explicit relaxation and expiry recovery start a replacement session with
+`CookSessionCreate.constraints`: absolute time/difficulty limits and saved tags.
+Quicker/Easier in this restored list are labels, not commands to tighten again.
+`previous_session_id` carries the household-owned skipped recipes and strict time
+gate into that replacement; Reset omits it and returns to preference defaults.
+All current allergy, diet, equipment and review gates still apply. The UI sends a
+larger absolute limit when the user chooses "Allow more time".
+
+`SuggestionIngredient.countable` distinguishes a known counted shortage from
+state-tracked `low`. The former offers replenishment/recipe preview rather than a
+Cook action that would be rejected. Old history has null countability and treats
+low stock conservatively until a fresh suggestion is obtained. Quick Check and
+Kitchen allow explicit counts in the ingredient's unit even when the old count
+was unknown; neither invents an amount or converts unmatched units.
+
 ## Shop engine: implemented milestone
 
 `shop.py` provides `new_shop_session`, `adjust_shop`, `plan_shop`,
@@ -311,6 +326,9 @@ The algorithm is deterministic and bounded, with no optimality claim:
    staples do not trigger this gate. Score the remaining recipes by learned/static
    preference and effort, ignoring buyable stock for admission. The public
    preferred time remains a soft penalty.
+   A requested recipe that fails these gates returns an actionable `NO_RESULT`
+   instead of being silently replaced. Missing non-buyable ingredients such as
+   cooked rice are named so the user can prepare/confirm them first.
 2. Keep the best-scoring variant in each family, then take at most 20 families.
    Choose up to the requested number of meals by beam search of width 10.
    No dish family repeats. Recheck non-buyable essential requirements across each
@@ -351,8 +369,14 @@ quantity/unit check. Counts are not converted between pieces and grams. A
 suggestion over the existing 50-pack confirmation limit is similarly flagged.
 **The service must resolve these cases or reject confirmation with an existing
 validation error; it must never treat null as a verified one-pack purchase.**
-The nullable public field is unchanged; this unresolved-counted-item behavior
-still needs Role 1/2 UI and quantity-resolution work; SQL wiring does not resolve it.
+The confirmation UI asks for an actual purchase count where the suggestion is
+unknown. A basket adjustment reconciles checked lines by ingredient ID; changed
+counted quantities require reviewing the actual amount rather than adopting a
+new, potentially larger suggestion silently.
+
+Quick Shop nudges remain additive. The Adjust sheet sends `replace_tags=true`
+with the complete chosen list, allowing removal as well as addition. Baskets
+expose `requested_recipe_ids` so expiry recovery preserves selected dishes.
 
 `more_vegetables` adds +2 for `vegetable_rich`. `longer_lasting` adds up to +1
 from mean non-staple shelf life, capped at 30 days; unknown life earns zero.

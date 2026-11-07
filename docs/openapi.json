@@ -93,6 +93,15 @@
             "title": "Planned Meals",
             "type": "array"
           },
+          "requested_recipe_ids": {
+            "description": "Recipes explicitly requested for this basket; preserve when restarting a session.",
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "title": "Requested Recipe Ids",
+            "type": "array"
+          },
           "session_id": {
             "format": "uuid",
             "title": "Session Id",
@@ -526,9 +535,64 @@
         "title": "CookRecordStatus",
         "type": "string"
       },
+      "CookSessionConstraints": {
+        "additionalProperties": false,
+        "description": "Absolute soft limits for a restart, not a list of commands to run again.",
+        "properties": {
+          "max_difficulty": {
+            "anyOf": [
+              {
+                "maximum": 3.0,
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Absolute difficulty limit; null removes the soft limit.",
+            "title": "Max Difficulty"
+          },
+          "max_minutes": {
+            "anyOf": [
+              {
+                "maximum": 240.0,
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Absolute time limit; null removes the soft time limit.",
+            "title": "Max Minutes"
+          },
+          "tags": {
+            "description": "Already applied tags. Quicker/easier label the supplied absolute limits; they do not reduce those limits again.",
+            "items": {
+              "$ref": "#/components/schemas/CookTag"
+            },
+            "title": "Tags",
+            "type": "array"
+          }
+        },
+        "title": "CookSessionConstraints",
+        "type": "object"
+      },
       "CookSessionCreate": {
         "additionalProperties": false,
         "properties": {
+          "constraints": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CookSessionConstraints"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Restore explicit soft constraints in one ranking. Omit to start from household preferences. Household safety constraints are always applied."
+          },
           "people": {
             "anyOf": [
               {
@@ -542,6 +606,24 @@
             ],
             "description": "Defaults to the last choice.",
             "title": "People"
+          },
+          "previous_session_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Carry skipped recipes and any strict time bound from this household's previous session. Does not restore history or a selected meal.",
+            "title": "Previous Session Id"
+          },
+          "skip_previous_recipe": {
+            "description": "When recovering a Not tonight request, also skip the previous session's current recipe. Requires previous_session_id.",
+            "title": "Skip Previous Recipe",
+            "type": "boolean"
           }
         },
         "title": "CookSessionCreate",
@@ -2045,6 +2127,11 @@
             ],
             "title": "People"
           },
+          "replace_tags": {
+            "description": "Replace the current keywords with tags, including an empty list to clear them. Otherwise tags are added to the current keywords.",
+            "title": "Replace Tags",
+            "type": "boolean"
+          },
           "tags": {
             "items": {
               "$ref": "#/components/schemas/ShopTag"
@@ -2387,6 +2474,18 @@
             "description": "Display text, already scaled to `people`.",
             "title": "Amount",
             "type": "string"
+          },
+          "countable": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Whether stock is counted. Null only for older saved suggestions.",
+            "title": "Countable"
           },
           "essential": {
             "title": "Essential",
@@ -3249,6 +3348,25 @@
               "minimum": 1,
               "title": "Limit",
               "type": "integer"
+            }
+          },
+          {
+            "description": "Resolve this catalogue ID exactly, ignoring q when supplied.",
+            "in": "query",
+            "name": "ingredient_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Resolve this catalogue ID exactly, ignoring q when supplied.",
+              "title": "Ingredient Id"
             }
           }
         ],

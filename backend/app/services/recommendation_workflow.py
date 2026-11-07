@@ -189,11 +189,31 @@ class RecommendationWorkflow:
         now = self._now()
         with self.unit_of_work() as repo:
             prefs = repo.preferences(user.household_id)
+            previous = (
+                repo.cook_session(user.household_id, body.previous_session_id)
+                if body.previous_session_id is not None
+                else None
+            )
+            # Expiry limits actions on the old session, not copying its skips.
+            # A deleted/unknown session simply has no history to carry forward.
+            if previous is not None:
+                _owned(previous, user.household_id)
+            state = new_session(
+                prefs,
+                body.people,
+                constraints=body.constraints,
+                strict_max_minutes=previous.state.strict_max_minutes if previous else None,
+            )
+            if previous is not None:
+                skipped = previous.state.skipped_recipe_ids
+                if body.skip_previous_recipe and previous.state.current_recipe_id is not None:
+                    skipped = skipped | {previous.state.current_recipe_id}
+                state = replace(state, skipped_recipe_ids=skipped)
             row = CookSessionRow(
                 self.new_id(),
                 user.household_id,
                 now + timedelta(hours=12),
-                new_session(prefs, body.people),
+                state,
                 (),
                 -1,
                 user.user_id,
@@ -548,6 +568,24 @@ class RecommendationWorkflow:
             taste_weights=self._weights(repo, household),
         )
         if not plan.planned_meals:
+            if plan.unavailable_recipe_ids:
+                message = (
+                    "To shop for your selected recipe, first prepare or confirm usable "
+                    + ", ".join(plan.required_at_home)
+                    + " in your kitchen, or choose another recipe."
+                    if plan.required_at_home
+                    else "Your selected recipe is unavailable or does not meet your current "
+                    "dietary or equipment settings. Choose another recipe."
+                )
+                raise ApiError(
+                    ErrorCode.NO_RESULT,
+                    message,
+                    {
+                        "relaxable": [],
+                        "recipe_ids": [str(recipe_id) for recipe_id in plan.unavailable_recipe_ids],
+                        "required_at_home": list(plan.required_at_home),
+                    },
+                )
             if plan.all_stocked:
                 raise ApiError(
                     ErrorCode.NO_RESULT,

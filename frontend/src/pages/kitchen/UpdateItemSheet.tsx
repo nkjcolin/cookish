@@ -1,13 +1,13 @@
 import { useState } from "react";
 
 import { ApiError, type Schemas } from "../../api/client";
-import { useUpdateInventoryItem } from "../../api/queries";
+import { useInventoryIngredient, useUpdateInventoryItem } from "../../api/queries";
 import { Button } from "../../components/Button";
+import { CountInput, readCount } from "../../components/CountInput";
 import { Icon } from "../../components/Icon";
 import { Level } from "../../components/Level";
 import { Segmented } from "../../components/Segmented";
 import { Sheet } from "../../components/Sheet";
-import { countStep, formatCount, stepCount } from "../../lib/count";
 import { freshnessNote, lastConfirmedText } from "./view";
 
 type Batch = Schemas["InventoryItem"];
@@ -32,10 +32,13 @@ type UpdateItemSheetProps = {
 };
 
 export function UpdateItemSheet({ name, batch, batchCount, onClose }: UpdateItemSheetProps) {
-  const tracksCount = batch.countable && batch.count !== null;
+  const tracksCount = batch.countable;
   const [state, setState] = useState<RemainingState>(batch.remaining_state);
-  const [count, setCount] = useState(batch.count ?? 0);
-  const step = countStep(batch);
+  const [enteredCount, setEnteredCount] = useState<string | null>(null);
+  const ingredient = useInventoryIngredient(batch);
+  const unit = ingredient.data?.default_unit;
+  const countText = enteredCount ?? (unit === batch.unit && batch.count !== null ? String(batch.count) : "");
+  const count = readCount(countText);
   const [storage, setStorage] = useState<Storage>(batch.storage);
   const update = useUpdateInventoryItem();
   const today = new Date();
@@ -46,9 +49,10 @@ export function UpdateItemSheet({ name, batch, batchCount, onClose }: UpdateItem
   }
 
   function save() {
+    if (tracksCount && (!unit || count === null)) return;
     // Saving also confirms the item, so the amount is sent even when it did not change.
     submit({
-      ...(tracksCount ? { count } : { remaining_state: state }),
+      ...(tracksCount ? { count, unit, remaining_state: count === 0 ? "out" : "enough" } : { remaining_state: state }),
       ...(storage !== batch.storage ? { storage } : {}),
     });
   }
@@ -86,17 +90,19 @@ export function UpdateItemSheet({ name, batch, batchCount, onClose }: UpdateItem
       {tracksCount ? (
         <>
           <p className="text-[15px] font-bold">How many are left?</p>
-          <div className="flex items-center justify-between rounded-md border border-border px-[14px] py-[12px]">
-            <StepButton label="Less" onClick={() => setCount((c) => stepCount(c, step, -1))} disabled={count <= 0}>
-              −
-            </StepButton>
-            <p className="text-[15px] font-bold" aria-live="polite">
-              {formatCount(count)} {batch.unit}
-            </p>
-            <StepButton label="More" onClick={() => setCount((c) => stepCount(c, step, 1))}>
-              +
-            </StepButton>
-          </div>
+          {unit ? (
+            <CountInput name={name} unit={unit} category={batch.category} value={countText} onChange={setEnteredCount} />
+          ) : ingredient.isPending ? (
+            <p className="text-[13px] text-ink-muted">Checking the amount unit…</p>
+          ) : (
+            <div role="alert" className="flex flex-col gap-[6px] text-[13px] text-danger">
+              <p>Could not find the unit for this ingredient. Try again before entering an amount.</p>
+              <button type="button" className="self-start font-semibold underline" onClick={() => void ingredient.refetch()}>Try again</button>
+            </div>
+          )}
+          {unit && batch.count !== null && batch.unit !== unit && (
+            <p className="text-[12px] text-ink-muted">The saved amount uses {batch.unit ?? "an unknown unit"}. Enter the amount in {unit}; we cannot convert it automatically.</p>
+          )}
         </>
       ) : (
         <>
@@ -150,34 +156,10 @@ export function UpdateItemSheet({ name, batch, batchCount, onClose }: UpdateItem
         <Button variant="secondary" className="min-w-px flex-1" onClick={usedUp} disabled={update.isPending}>
           Used it up
         </Button>
-        <Button className="min-w-px flex-1" onClick={save} disabled={update.isPending}>
+        <Button className="min-w-px flex-1" onClick={save} disabled={update.isPending || (tracksCount && (!unit || count === null))}>
           Save
         </Button>
       </div>
     </Sheet>
-  );
-}
-
-function StepButton({
-  label,
-  onClick,
-  disabled,
-  children,
-}: {
-  label: string;
-  onClick: () => void;
-  disabled?: boolean;
-  children: string;
-}) {
-  return (
-    <button
-      type="button"
-      aria-label={label}
-      onClick={onClick}
-      disabled={disabled}
-      className="flex size-[36px] items-center justify-center rounded-pill border border-border bg-surface text-[18px] font-bold disabled:opacity-40"
-    >
-      {children}
-    </button>
   );
 }

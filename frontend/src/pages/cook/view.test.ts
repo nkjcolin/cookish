@@ -67,10 +67,13 @@ describe("mergeConstraints", () => {
     current.applied_constraints = { tags: ["quicker"], max_minutes: 30, max_difficulty: null };
 
     expect(mergeConstraints(current, { tags: ["less_oil", "quicker"], max_minutes: 15 })).toEqual({
+      sourceSessionId: "s",
       people: 2,
       tags: ["quicker", "less_oil"],
-      maxMinutes: 15,
+      // The newly requested Quicker is relative to this 20-minute dish, not a replacement's dish.
+      maxMinutes: 10,
+      maxDifficulty: null,
     });
-    expect(mergeConstraints(current, null)).toEqual({ people: 2, tags: ["quicker"], maxMinutes: 30 });
+    expect(mergeConstraints(current, null)).toEqual({ sourceSessionId: "s", people: 2, tags: ["quicker"], maxMinutes: 30, maxDifficulty: null });
   });
 });

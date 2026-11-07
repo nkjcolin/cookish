@@ -27,6 +27,7 @@ from app.schemas.common import TasteTag
 from app.schemas.cook import (
     AppliedConstraints,
     CookAdjust,
+    CookSessionConstraints,
     CookTag,
     IngredientStatus,
     StockCheck,
@@ -39,13 +40,35 @@ from app.schemas.recipes import RecipeSummary
 
 
 def new_session(
-    prefs: Preferences, people: int | None = None, *, strict_max_minutes: int | None = None
+    prefs: Preferences,
+    people: int | None = None,
+    *,
+    strict_max_minutes: int | None = None,
+    constraints: CookSessionConstraints | None = None,
 ) -> CookSession:
-    return CookSession(
+    session = CookSession(
         people=prefs.last_cook_people if people is None else people,
         max_minutes=prefs.max_cook_minutes,
         max_difficulty=prefs.max_difficulty,
         strict_max_minutes=strict_max_minutes,
+    )
+    if constraints is None:
+        return session
+    tags = tuple(dict.fromkeys(constraints.tags))
+    required = set()
+    if CookTag.LESS_OIL in tags:
+        required.add(TasteTag.LOW_OIL)
+    if CookTag.MORE_VEGETABLES in tags:
+        required.add(TasteTag.VEGETABLE_RICH)
+    return replace(
+        session,
+        max_minutes=constraints.max_minutes,
+        max_difficulty=constraints.max_difficulty,
+        tags=tags,
+        required_tags=frozenset(required),
+        boosted_tags=(
+            frozenset({TasteTag.HIGH_PROTEIN}) if CookTag.MORE_PROTEIN in tags else frozenset()
+        ),
     )
 
 
@@ -394,6 +417,7 @@ def to_suggestion(result: Recommendation, session_id: UUID) -> Suggestion:
                 amount=item.amount,
                 essential=item.essential,
                 status=item.status,
+                countable=item.known_quantity is not None,
             )
             for item in selected.ingredients
         ],

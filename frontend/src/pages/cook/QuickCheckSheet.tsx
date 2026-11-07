@@ -1,8 +1,10 @@
-import { useState, type ReactNode } from "react";
+import { useRef, useState, type ReactNode } from "react";
 
 import type { Schemas } from "../../api/client";
+import { useRecipe } from "../../api/cook";
 import { useUpdateInventoryItem } from "../../api/queries";
 import { Button } from "../../components/Button";
+import { CountInput, readCount } from "../../components/CountInput";
 import { Icon, type IconName } from "../../components/Icon";
 import { Segmented } from "../../components/Segmented";
 import { Sheet } from "../../components/Sheet";
@@ -11,6 +13,8 @@ import { FRESHNESS_REASONS } from "./view";
 
 type StockAnswer = "enough" | "low" | "out";
 type FreshAnswer = "fine" | "discard";
+type Item = Schemas["InventoryItem"];
+type Changes = Omit<Schemas["InventoryItemUpdate"], "revision">;
 
 const STOCK_OPTIONS: { value: StockAnswer; label: string }[] = [
   { value: "enough", label: "Have it" },
@@ -40,49 +44,88 @@ export function QuickCheckSheet({ suggestion, onProceed, onUnavailable, onClose 
   const { needs_check: stockChecks, freshness_check: freshChecks } = suggestion;
   const [stock, setStock] = useState<Record<string, StockAnswer>>({});
   const [fresh, setFresh] = useState<Record<string, FreshAnswer>>({});
+  const [counts, setCounts] = useState<Record<string, string>>({});
+  const [saving, setSaving] = useState(false);
+  const savedItems = useRef<Record<string, { signature: string; revision: number }>>({});
+  const hasCountedItems = [...stockChecks, ...freshChecks].some(({ item }) => item.countable);
+  const recipe = useRecipe(hasCountedItems ? suggestion.recipe.id : undefined);
   const updateItem = useUpdateInventoryItem();
   const count = stockChecks.length + freshChecks.length;
-  const saving = updateItem.isPending;
   const failure = updateItem.error;
+  const unitFor = (item: Item) => recipe.data?.ingredients.find((line) => line.ingredient_id === item.ingredient_id)?.unit;
+  const countText = (item: Item) => counts[item.id] ?? (item.count !== null && item.unit === unitFor(item) ? String(item.count) : "");
+  const checkedCount = (item: Item) => unitFor(item) ? readCount(countText(item)) : null;
+  const needsFreshCount = (item: Item) => item.countable && (item.count === null || item.unit !== unitFor(item) || item.remaining_state === "unknown");
+  const ready = stockChecks.every(({ item }) => item.countable ? checkedCount(item) !== null : Boolean(stock[item.id])) &&
+    freshChecks.every(({ item }) => fresh[item.id] && (fresh[item.id] === "discard" || !needsFreshCount(item) || checkedCount(item) !== null));
+
+  function countedChanges(item: Item): Changes {
+    const amount = checkedCount(item)!;
+    return { count: amount, unit: unitFor(item), remaining_state: amount === 0 ? "out" : "enough" };
+  }
+
+  function amountInput(item: Item) {
+    const unit = unitFor(item);
+    if (!unit) return <p className="text-[13px] text-ink-muted">Waiting for the recipe’s amount unit.</p>;
+    return <CountInput name={item.display_name} unit={unit} category={item.category} value={countText(item)} onChange={(value) => setCounts((current) => ({ ...current, [item.id]: value }))} />;
+  }
 
   // Each answer updates the batch the question was about.
   async function save() {
+    if (!ready || saving) return;
+    setSaving(true);
+    const updates = new Map<string, { item: Item; changes: Changes }>();
     for (const { item } of stockChecks) {
-      const answer = stock[item.id];
-      if (!answer) continue;
-      await updateItem.mutateAsync({ itemId: item.id, body: { revision: item.revision, remaining_state: answer } });
+      updates.set(item.id, { item, changes: item.countable ? countedChanges(item) : { remaining_state: stock[item.id] } });
     }
     for (const { item } of freshChecks) {
-      const answer = fresh[item.id];
-      if (!answer) continue;
-      await updateItem.mutateAsync({
-        itemId: item.id,
-        body:
-          answer === "fine"
-            ? { revision: item.revision, freshness_confirmed: true }
-            : { revision: item.revision, remaining_state: "out" },
+      const changes: Changes = fresh[item.id] === "fine"
+        ? { ...(needsFreshCount(item) ? countedChanges(item) : {}), freshness_confirmed: true }
+        : { remaining_state: "out", ...(item.countable ? { count: 0 } : {}) };
+      updates.set(item.id, {
+        item, changes: { ...updates.get(item.id)?.changes, ...changes },
       });
     }
-    const missing = Object.values(stock).includes("out") || Object.values(fresh).includes("discard");
-    if (missing) onUnavailable();
-    else onProceed();
+    try {
+      for (const { item, changes } of updates.values()) {
+        const previous = savedItems.current[item.id];
+        const signature = JSON.stringify(changes);
+        if (previous?.signature === signature) continue;
+        const result = await updateItem.mutateAsync({ itemId: item.id, body: { revision: previous?.revision ?? item.revision, ...changes } });
+        const updated = result.items.find((batch) => batch.id === item.id);
+        savedItems.current[item.id] = { signature, revision: updated?.revision ?? item.revision + 1 };
+      }
+      const missing = [...updates.values()].some(({ changes }) => changes.remaining_state === "out");
+      if (missing) onUnavailable();
+      else onProceed();
+    } catch {
+      // Show the mutation error and retain answers; a retry skips already-saved batches.
+    } finally {
+      setSaving(false);
+    }
   }
 
   return (
-    <Sheet labelledBy={TITLE_ID} onClose={onClose}>
-      <SheetHeader id={TITLE_ID} title="Quick check" onClose={onClose} />
+    <Sheet labelledBy={TITLE_ID} onClose={() => { if (!saving) onClose(); }}>
+      <SheetHeader id={TITLE_ID} title="Quick check" onClose={() => { if (!saving) onClose(); }} />
       <p className="text-[14px] leading-[1.45] text-ink-muted">
         {suggestion.recipe.title} needs {count} {count === 1 ? "thing" : "things"} we’re not sure about.
       </p>
 
+      {hasCountedItems && recipe.isError && (
+        <div role="alert" className="text-[13px] text-danger">
+          Could not load the recipe’s amounts. <button type="button" className="font-semibold underline" onClick={() => void recipe.refetch()}>Try again</button>
+        </div>
+      )}
+      <fieldset disabled={saving} className="flex min-w-0 flex-col gap-[16px]">
       {stockChecks.map(({ item }) => (
         <CheckCard key={item.id} icon="box" tint="bg-info-soft" name={item.display_name} detail="Not sure if you still have it">
-          <Segmented
+          {item.countable ? amountInput(item) : <Segmented
             label={`Do you have ${item.display_name}?`}
             options={STOCK_OPTIONS}
             value={stock[item.id] ?? null}
             onChange={(answer) => setStock({ ...stock, [item.id]: answer })}
-          />
+          />}
         </CheckCard>
       ))}
 
@@ -94,8 +137,10 @@ export function QuickCheckSheet({ suggestion, onProceed, onUnavailable, onClose 
             value={fresh[item.id] ?? null}
             onChange={(answer) => setFresh({ ...fresh, [item.id]: answer })}
           />
+          {fresh[item.id] === "fine" && needsFreshCount(item) && amountInput(item)}
         </CheckCard>
       ))}
+      </fieldset>
 
       {freshChecks.length > 0 && (
         <p className="text-[12px] text-ink-muted">
@@ -108,11 +153,11 @@ export function QuickCheckSheet({ suggestion, onProceed, onUnavailable, onClose 
         </p>
       )}
 
-      <Button className="w-full shrink-0" onClick={() => void save()} disabled={saving}>
-        Show recipe
+      <Button className="w-full shrink-0" onClick={() => void save()} disabled={saving || !ready}>
+        {saving ? "Saving…" : "Show recipe"}
       </Button>
-      <button type="button" onClick={onProceed} disabled={saving} className="text-center text-[14px] font-semibold text-ink-muted">
-        Skip — I’ll figure it out
+      <button type="button" onClick={onClose} disabled={saving} className="text-center text-[14px] font-semibold text-ink-muted">
+        Check later
       </button>
     </Sheet>
   );
