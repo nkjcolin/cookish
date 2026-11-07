@@ -15,6 +15,7 @@ import {
 import { Button } from "../components/Button";
 import { Chip } from "../components/Chip";
 import { Icon } from "../components/Icon";
+import { RecipeImage } from "../components/RecipeImage";
 import { Tag } from "../components/Tag";
 import { UndoToast } from "../components/UndoToast";
 import { useArrivalState } from "../lib/arrival";
@@ -35,9 +36,6 @@ type Suggestion = Schemas["Suggestion"];
 type CookTag = Schemas["CookTag"];
 
 const displayFont = { fontVariationSettings: '"SOFT" 0, "WONK" 1' };
-const heroImage = {
-  backgroundImage: "linear-gradient(160.97deg, rgb(214, 237, 204) 0%, rgb(92, 153, 102) 83.333%)",
-};
 
 export function CookPage() {
   const navigate = useNavigate();
@@ -302,11 +300,7 @@ function SuggestionCard({ suggestion, busy, onSkip, onPrevious, onCook, onPrevie
 
   return (
     <article className="flex flex-col overflow-clip rounded-lg border border-border bg-surface shadow-[0px_8px_24px_0px_rgba(89,51,26,0.08)]">
-      <div className="flex h-[120px] items-center justify-center" style={heroImage}>
-        <span className="opacity-92">
-          <Icon name="leaf-hero" />
-        </span>
-      </div>
+      <RecipeImage recipeId={recipe.id} title={recipe.title} className="h-[180px]" />
       <div className="flex flex-col gap-[12px] p-[16px]">
         <div className="flex items-start gap-[10px]">
           <h2 className="min-w-px flex-1 font-display text-[22px] leading-[1.2] font-semibold" style={displayFont}>

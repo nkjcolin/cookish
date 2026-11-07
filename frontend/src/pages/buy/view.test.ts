@@ -4,7 +4,10 @@ import type { Schemas } from "../../api/client";
 import { groupByAisle } from "./view";
 
 function item(name: string, category: Schemas["IngredientCategory"]): Schemas["BasketItem"] {
-  return { id: name, ingredient_id: name, name, category, amount: "1", suggested_packs: null, needs_check: false };
+  return {
+    id: name, ingredient_id: name, name, category, amount: "1", suggested_packs: null, needs_check: false,
+    countable: false, purchase_unit: null, purchase_unit_size: null, purchase_unit_measure: null,
+  };
 }
 
 describe("groupByAisle", () => {

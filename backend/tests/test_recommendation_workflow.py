@@ -392,6 +392,8 @@ def test_missing_purchase_conversion_never_defaults_to_one_pack(setup):
     db.state["catalogue"] = replace(cat, purchases=purchases)
     basket = shopping(service)
     assert basket.items[0].suggested_packs is None
+    assert basket.items[0].countable
+    assert basket.items[0].purchase_unit_size is None
     assert_error(
         ErrorCode.VALIDATION,
         lambda: service.confirm_shop(
@@ -399,6 +401,33 @@ def test_missing_purchase_conversion_never_defaults_to_one_pack(setup):
         ),
     )
     assert db.stock_attempts == 0
+
+
+def test_incompatible_recipe_measure_requests_actual_purchase_count_then_replays(setup):
+    db, service, _ = setup
+    meal = recipe(ingredients=("egg",))
+    meal.ingredients[0].quantity, meal.ingredients[0].unit = 150, "g"
+    set_recipes(db, meal)
+    db.state["inventory"][HOUSEHOLD] = []
+    basket = shopping(service)
+    item = basket.items[0]
+    assert item.countable and item.suggested_packs is None
+    assert (item.purchase_unit, item.purchase_unit_size, item.purchase_unit_measure) == (
+        "tray",
+        10,
+        "pcs",
+    )
+    error = assert_error(
+        ErrorCode.VALIDATION,
+        lambda: service.confirm_shop(USER, basket.id, bought(basket), uid("missing-actual")),
+    )
+    assert error.message == "Enter the actual pack count"
+    assert db.stock_attempts == 0
+    body, key = bought(basket, packs=2), uid("actual-count")
+    result = service.confirm_shop(USER, basket.id, body, key)
+    assert result.items[0].count == 20 and result.items[0].unit == "pcs"
+    assert service.confirm_shop(USER, basket.id, body, key) == result
+    assert db.stock_attempts == 1
 
 
 def test_shop_state_purchase_and_not_bought_lines(setup):

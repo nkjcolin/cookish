@@ -503,6 +503,11 @@ export interface components {
             amount: string;
             category: components["schemas"]["IngredientCategory"];
             /**
+             * Countable
+             * @description Whether confirmation requires a numeric purchase count.
+             */
+            countable: boolean;
+            /**
              * Id
              * Format: uuid
              */
@@ -520,8 +525,23 @@ export interface components {
              */
             needs_check: boolean;
             /**
+             * Purchase Unit
+             * @description Frozen purchase unit, e.g. pack or piece.
+             */
+            purchase_unit: string | null;
+            /**
+             * Purchase Unit Measure
+             * @description Measure of that quantity, e.g. pcs or g.
+             */
+            purchase_unit_measure: string | null;
+            /**
+             * Purchase Unit Size
+             * @description Quantity in one purchase unit; no recipe-to-purchase conversion is implied.
+             */
+            purchase_unit_size: number | null;
+            /**
              * Suggested Packs
-             * @description null for state-tracked ingredients.
+             * @description null for state-tracked items or when the purchase count needs user input.
              */
             suggested_packs: number | null;
         };
@@ -541,7 +561,7 @@ export interface components {
             bought: boolean;
             /**
              * Packs
-             * @description Defaults to the suggested number.
+             * @description Actual purchase-unit count for countable items. Uses the suggestion if omitted; required when that suggestion is null. Omit for state-tracked items.
              */
             packs?: number | null;
         };

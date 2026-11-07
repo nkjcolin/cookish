@@ -47,7 +47,17 @@ class BasketItem(ResponseModel):
     name: str
     category: IngredientCategory
     amount: str = Field(description='Display text, e.g. "2 packs" or "1 bunch".')
-    suggested_packs: int | None = Field(description="null for state-tracked ingredients.")
+    countable: bool = Field(description="Whether confirmation requires a numeric purchase count.")
+    purchase_unit: str | None = Field(description="Frozen purchase unit, e.g. pack or piece.")
+    purchase_unit_size: float | None = Field(
+        description="Quantity in one purchase unit; no recipe-to-purchase conversion is implied."
+    )
+    purchase_unit_measure: str | None = Field(
+        description="Measure of that quantity, e.g. pcs or g."
+    )
+    suggested_packs: int | None = Field(
+        description="null for state-tracked items or when the purchase count needs user input."
+    )
     needs_check: bool = Field(description='Stock is uncertain: show "Check at home".')
 
 
@@ -66,7 +76,11 @@ class BoughtLine(RequestModel):
     basket_item_id: UUID
     bought: bool
     packs: Annotated[int, Field(ge=1, le=50)] | None = Field(
-        default=None, description="Defaults to the suggested number."
+        default=None,
+        description=(
+            "Actual purchase-unit count for countable items. Uses the suggestion if omitted; "
+            "required when that suggestion is null. Omit for state-tracked items."
+        ),
     )
 
 

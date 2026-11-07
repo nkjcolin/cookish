@@ -64,6 +64,10 @@ class Purchase:
     amount: str
     suggested_packs: int | None
     needs_check: bool
+    countable: bool
+    purchase_unit: str | None
+    purchase_unit_size: float | None
+    purchase_unit_measure: str | None
     # Fraction of a pack left over; different physical units are never added.
     surplus_packs: float = 0.0
 

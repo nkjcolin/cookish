@@ -34,6 +34,48 @@ _KINDS = {
     Confirmation: "confirmation",
 }
 _ADAPTERS = {kind: TypeAdapter(kind) for kind in _KINDS}
+_BASKET_PURCHASE_FIELDS = {
+    "countable",
+    "purchase_unit",
+    "purchase_unit_size",
+    "purchase_unit_measure",
+}
+
+
+def _upgrade_basket_purchase_metadata(payload):
+    """Expose existing frozen metadata in pre-field version-1 basket responses.
+
+    Do not default countability or consult today's catalogue. Only the complete
+    old response shape can be upgraded; partial new metadata remains invalid.
+    Build new dictionaries so reading never mutates the stored planning evidence.
+    """
+    if not isinstance(payload, dict) or not isinstance(payload.get("response"), dict):
+        return payload
+    response = payload["response"]
+    if not isinstance(response.get("items"), list):
+        return payload
+    items = []
+    for item in response["items"]:
+        if not isinstance(item, dict):
+            items.append(item)
+            continue
+        present = item.keys() & _BASKET_PURCHASE_FIELDS
+        if present == _BASKET_PURCHASE_FIELDS:
+            items.append(item)
+            continue
+        if present:
+            raise ValueError("Basket purchase response metadata is incomplete")
+        try:
+            ingredient = payload["ingredients"][item["ingredient_id"]]
+            purchase = payload["purchases"][item["ingredient_id"]]
+            metadata = {
+                "countable": ingredient["countable"],
+                **{name: purchase[name] for name in _BASKET_PURCHASE_FIELDS - {"countable"}},
+            }
+        except (KeyError, TypeError) as error:
+            raise ValueError("Basket has no frozen purchase metadata") from error
+        items.append({**item, **metadata})
+    return {**payload, "response": {**response, "items": items}}
 
 
 def _fields(value):
@@ -103,6 +145,16 @@ def _check_consistency(value) -> None:
             raise ValueError("Basket ingredient metadata has mismatched IDs")
         if value.purchases.keys() != value.ingredients.keys():
             raise ValueError("Basket purchase and ingredient metadata do not match")
+        for item in value.response.items:
+            ingredient = value.ingredients.get(item.ingredient_id)
+            purchase = value.purchases.get(item.ingredient_id)
+            if ingredient is None or purchase is None:
+                raise ValueError("Basket item has no frozen purchase metadata")
+            if item.countable != ingredient.countable or any(
+                getattr(item, name) != getattr(purchase, name)
+                for name in _BASKET_PURCHASE_FIELDS - {"countable"}
+            ):
+                raise ValueError("Basket response differs from its frozen purchase metadata")
         item_ids = {item.id for item in value.response.items}
         if len(item_ids) != len(value.response.items):
             raise ValueError("Basket contains duplicate item IDs")
@@ -144,8 +196,9 @@ def load_snapshot[T](snapshot: object, expected_type: type[T]) -> T:
     """Decode a complete snapshot, rejecting unsupported versions and record kinds.
 
     ValueError includes Pydantic ValidationError for invalid persisted contents.
-    None/legacy rows are intentionally rejected; the adapter can map those to a
+    Null/unversioned rows are intentionally rejected; the adapter can map those to a
     restart-session error without inventing history or resetting learned taste.
+    Older version-1 basket responses gain purchase fields from their own snapshots.
     """
     if expected_type not in _KINDS:
         raise TypeError("Unsupported recommendation snapshot type")
@@ -156,6 +209,8 @@ def load_snapshot[T](snapshot: object, expected_type: type[T]) -> T:
     if snapshot["kind"] != _KINDS[expected_type]:
         raise ValueError("Unexpected recommendation snapshot kind")
     payload = snapshot["payload"]
+    if expected_type is BasketRow:
+        payload = _upgrade_basket_purchase_metadata(payload)
     encoded = json.dumps(payload, allow_nan=False)
     decoded = _ADAPTERS[expected_type].validate_json(encoded, strict=True)
     _check_complete(payload, decoded)
