@@ -134,9 +134,10 @@ Do not infer conversion percentages from 6–8 convenience-sampled participants.
 ## Cost and handoff
 
 The [cost assumptions and calculator](../eval/business_case/README.md) separate
-published Singapore AWS rates from assumed workloads and an unselected model
-provider. It reports cost per active household, per active login and per paying
-household, including the free-household subsidy. Role 3 supplies measured cloud
+published Singapore AWS rates from assumed workloads and model-provider charges
+that have not been replaced with measured usage. It reports cost per active
+household, per active login and per paying household, including the free-household
+subsidy. Role 3 supplies measured cloud
 usage and the on-premise comparison; Role 4 supplies model tokens, retries and
 cost per import. No price, cost or conversion assumption here is a measured result.
 

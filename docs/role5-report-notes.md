@@ -4,8 +4,8 @@ Cookish uses deterministic recipe ranking and small household preference updates
 Its pure recommendation engines are tested independently of the web interface.
 Recipe details, household stars and the optional use-first endpoint use the existing
 database services; Cook/Shop sessions, cooking confirmations and rating endpoints
-now use the SQL repository. The migration and updated backend still need deployment
-and checks on AWS. The explanations below describe the implemented source. [1,2]
+now use the SQL repository. The migration, updated backend and frontend are deployed.
+Core Cook/Shop checks passed on AWS on 7 November 2026. [1,2]
 
 ## Recommendations before any feedback exists
 
@@ -25,9 +25,9 @@ times does not multiply this penalty, and the recipe remains eligible. [2,3]
 If the kitchen is empty, the Cook engine can return a fallback recipe whose missing
 essentials are explicitly marked. This does not mean it is ready to cook: the
 workflow checks essential stock before selection. If no recipe satisfies the
-required constraints, it returns no result. The frontend route from missing stock
-to adding ingredients or shopping still needs work. The source now uses real
-sessions, but the complete first-use experience has not been verified on AWS. [1,2,4]
+required constraints, it returns no result. Missing-stock suggestions now open a
+read-only recipe preview with Buy/Kitchen links. This first-use path was verified
+on AWS; it does not bypass the stock checks required before cooking. [1,2,4]
 
 Shop can plan meals for an empty kitchen because purchasable ingredients go on the
 shopping list. It excludes meals requiring unavailable non-buyable essentials such
@@ -110,14 +110,15 @@ The separate real-catalogue review found missing non-buyable essentials in three
 of seven Shop probes before the fix and none afterward. These are development
 checks, not evidence of user satisfaction, reduced waste or production elasticity. [4,8]
 
-The merged SQL integration passed 549 backend tests, including 20 SQL workflow
-tests and migration preservation; frontend and AI jobs also passed. These results
-predate the protein/history additions and do not verify deployment. [2,9]
+PR #26 passed 606 backend tests, 38 frontend tests and the AI job. The suite includes
+SQL workflow and migration checks. Separate AWS checks verified recipe preview,
+canonical inventory entry, purchase persistence, cooking deductions, Maybe feedback
+and undo. These are functional checks, not participant evaluation. [2,9]
 
 Thirty **held-out scenarios** are reserved for independent authorship and final
 evaluation after an implementation freeze. They must remain unseen during development
 so the final check measures performance on cases the rules were not adjusted to pass.
-No held-out pass result is claimed. Deployed Cook/Shop testing is also still required. [8]
+No held-out pass result is claimed. [8]
 
 An **idempotency key** identifies one intended stock-changing action: retrying the
 same request should return the previous result rather than apply it twice. A
@@ -142,7 +143,8 @@ the same transaction as session and feedback updates. [2]
    [Role 2 freshness calculations](../backend/app/services/freshness.py).
 8. [Development and held-out evaluation protocol](../eval/reco_scenarios/README.md)
    and [planner-fix development results](../eval/reco_scenarios/results/shop-essential-fix.json).
-9. [SQL integration CI at `f313566`, 7 November 2026](https://github.com/nkjcolin/cookish/actions/runs/42342203535).
+9. [PR #26: tested and deployed integration fixes](https://github.com/nkjcolin/cookish/pull/26), with the earlier
+   [SQL integration CI](https://github.com/nkjcolin/cookish/actions/runs/42342203535).
 
 The separate [business-case draft](business-case.md) contains the market,
 competitor and pricing references. Its assumed infrastructure/model costs still

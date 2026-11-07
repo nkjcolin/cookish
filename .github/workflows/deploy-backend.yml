@@ -1,0 +1,282 @@
+name: Deploy backend
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  eligible:
+    if: >-
+      github.repository == 'nkjcolin/cookish' &&
+      vars.COOKISH_BACKEND_DEPLOY_ROLE_ARN != '' &&
+      ((github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') ||
+       (github.event_name == 'workflow_run' && github.event.workflow_run.event == 'push' &&
+        github.event.workflow_run.conclusion == 'success' &&
+        github.event.workflow_run.head_repository.full_name == 'nkjcolin/cookish'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      actions: read
+      contents: read
+    outputs:
+      sha: ${{ steps.ci.outputs.sha }}
+      ci_run: ${{ steps.ci.outputs.ci_run }}
+      ci_attempt: ${{ steps.ci.outputs.ci_attempt }}
+    steps:
+      - name: Require successful CI for the current main commit
+        id: ci
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          import json, os, urllib.request
+
+          base = 'https://api.github.com/repos/nkjcolin/cookish'
+          def get(path):
+              request = urllib.request.Request(base + path, headers={
+                  'Authorization': 'Bearer ' + os.environ['GH_TOKEN'],
+                  'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28'})
+              with urllib.request.urlopen(request, timeout=30) as response:
+                  return json.load(response)
+
+          with open(os.environ['GITHUB_EVENT_PATH']) as stream:
+              event = json.load(stream)
+          sha = event['workflow_run']['head_sha'] if os.environ['GITHUB_EVENT_NAME'] == 'workflow_run' else os.environ['GITHUB_SHA']
+          if get('/git/ref/heads/main')['object']['sha'] != sha:
+              print('Skipping an older main commit; a newer commit will deploy after its CI passes.')
+              raise SystemExit(0)
+          runs = get('/actions/workflows/ci.yml/runs?branch=main&event=push&head_sha=' + sha + '&per_page=20')['workflow_runs']
+          if not runs:
+              raise SystemExit('No main-branch CI run for this commit')
+          run = runs[0]
+          if (run['head_sha'], run['head_branch'], run['event'], run['status'], run['conclusion']) != (sha, 'main', 'push', 'completed', 'success'):
+              raise SystemExit('The latest CI attempt for this commit has not passed')
+          jobs = get(f"/actions/runs/{run['id']}/attempts/{run['run_attempt']}/jobs?per_page=100")['jobs']
+          if any(not any(job['name'] == name and job['conclusion'] == 'success' for job in jobs) for name in ('backend', 'ai', 'frontend')):
+              raise SystemExit('Backend, AI and frontend CI jobs must all pass')
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as stream:
+              stream.write(f"sha={sha}\nci_run={run['id']}\nci_attempt={run['run_attempt']}\n")
+          print('Eligible tested commit: ' + sha)
+          PY
+
+  deploy:
+    needs: eligible
+    if: needs.eligible.outputs.sha != ''
+    # Gate first: an ineligible CI completion must not replace a valid queued release.
+    # Never cancel a deployment midway through its database migration.
+    concurrency:
+      group: cookish-backend-production
+      cancel-in-progress: false
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      actions: read
+      contents: read
+      id-token: write
+    env:
+      AWS_REGION: ap-southeast-1
+      AWS_DEFAULT_REGION: ap-southeast-1
+      AWS_RETRY_MODE: standard
+      AWS_MAX_ATTEMPTS: "3"
+      SOURCE_SHA: ${{ needs.eligible.outputs.sha }}
+      CI_RUN: ${{ needs.eligible.outputs.ci_run }}
+      CI_ATTEMPT: ${{ needs.eligible.outputs.ci_attempt }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ env.SOURCE_SHA }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+      - uses: astral-sh/setup-uv@d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86 # v5
+        with:
+          enable-cache: false
+      - name: Build the tested Linux ARM64 package and migration expectation
+        run: |
+          test "$(git rev-parse HEAD)" = "$SOURCE_SHA"
+          python infra/build_backend_lambda.py --source-ref "$SOURCE_SHA" --architecture arm64 --output-dir .aws-sam/github-release
+          uv run --project backend --frozen --no-dev python - <<'PY'
+          import json, os, sys
+          from pathlib import Path
+          sys.path.insert(0, 'backend')
+          from seed.seed import read_ingredients, read_recipes, INGREDIENTS_CSV, RECIPES_DIR
+          root = Path('.aws-sam/github-release')
+          manifest = json.loads(next(root.glob('cookish-backend-*.json')).read_text())
+          ingredients, problems = read_ingredients(INGREDIENTS_CSV)
+          recipes, links, recipe_problems = read_recipes(RECIPES_DIR, ingredients)
+          assert not problems + recipe_problems, 'Seed validation failed'
+          assert manifest['source_commit'] == os.environ['SOURCE_SHA']
+          assert (len(ingredients), len(recipes)) == (manifest['ingredient_rows'], manifest['recipe_files'])
+          expected = {'revision': manifest['migration_head'], 'seed': {
+              'ingredients': len(ingredients), 'recipes': len(recipes),
+              'variants': sum(recipe['base_recipe_id'] is not None for recipe in recipes),
+              'recipe_ingredients': len(links)}}
+          (root / 'migration-expectation.json').write_text(json.dumps(expected, indent=2) + '\n')
+          PY
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: backend-release-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .aws-sam/github-release/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 14
+      - name: Obtain short-lived AWS credentials
+        uses: aws-actions/configure-aws-credentials@7474bc4690e29a8392af63c5b98e7449536d5c3a # v4
+        with:
+          role-to-assume: ${{ vars.COOKISH_BACKEND_DEPLOY_ROLE_ARN }}
+          aws-region: ap-southeast-1
+          allowed-account-ids: "534444203105"
+          role-duration-seconds: 900
+          role-session-name: CookishDeploy-${{ github.run_id }}
+          # Narrow this session even if the pre-existing role has broader policies.
+          inline-session-policy: >-
+            {"Version":"2012-10-17","Statement":[{"Effect":"Allow",
+            "Action":["lambda:GetFunction","lambda:GetFunctionConfiguration","lambda:UpdateFunctionCode","lambda:InvokeFunction"],
+            "Resource":["arn:aws:lambda:ap-southeast-1:534444203105:function:cookish-api",
+            "arn:aws:lambda:ap-southeast-1:534444203105:function:cookish-migrate"]}]}
+      - name: Prepare the code-only backup and rollout helper
+        run: |
+          cat > "$RUNNER_TEMP/cookish-deploy.py" <<'PY'
+          import base64, hashlib, json, os, re, subprocess, sys, urllib.request
+          from pathlib import Path
+
+          RELEASE = Path('.aws-sam/github-release')
+          BACKUP = Path('.aws-sam/deploy-backup')
+          RESULT = Path('.aws-sam/deploy-result')
+          EXPECTED_HANDLERS = {'cookish-migrate': 'app.migrate.handler', 'cookish-api': 'app.lambda_handler.handler'}
+          CONFIG_FIELDS = ('Runtime', 'Handler', 'Architectures', 'Role', 'Environment', 'VpcConfig', 'Layers',
+                           'Timeout', 'MemorySize', 'KMSKeyArn', 'TracingConfig', 'EphemeralStorage')
+
+          def aws(*args):
+              result = subprocess.run(['aws', *args, '--region', 'ap-southeast-1', '--output', 'json', '--no-cli-pager',
+                                       '--cli-connect-timeout', '10', '--cli-read-timeout', '150'],
+                                      capture_output=True, text=True, timeout=180)
+              if result.returncode:
+                  code = re.search(r'An error occurred \(([^)]+)\)', result.stderr)
+                  raise RuntimeError(f"AWS {args[1]} failed: {code.group(1) if code else 'CLI failure'}")
+              return json.loads(result.stdout) if result.stdout.strip() else {}
+
+          def config_hash(config):
+              selected = {key: config.get(key) for key in CONFIG_FIELDS}
+              return hashlib.sha256(json.dumps(selected, sort_keys=True).encode()).hexdigest()
+
+          def ready(config, function):
+              assert config['FunctionArn'] == f'arn:aws:lambda:ap-southeast-1:534444203105:function:{function}'
+              assert config['Runtime'] == 'python3.12' and config['Architectures'] == ['arm64']
+              assert config['Handler'] == EXPECTED_HANDLERS[function] and config['PackageType'] == 'Zip'
+              assert config['State'] == 'Active' and config.get('LastUpdateStatus', 'Successful') == 'Successful'
+
+          def check_latest_ci():
+              def get(path):
+                  request = urllib.request.Request('https://api.github.com/repos/nkjcolin/cookish' + path, headers={
+                      'Authorization': 'Bearer ' + os.environ['GH_TOKEN'], 'Accept': 'application/vnd.github+json',
+                      'X-GitHub-Api-Version': '2022-11-28'})
+                  with urllib.request.urlopen(request, timeout=30) as response:
+                      return json.load(response)
+              sha = os.environ['SOURCE_SHA']
+              assert get('/git/ref/heads/main')['object']['sha'] == sha, 'Main advanced; do not start an outdated deployment'
+              runs = get('/actions/workflows/ci.yml/runs?branch=main&event=push&head_sha=' + sha + '&per_page=20')['workflow_runs']
+              assert runs, 'CI run disappeared'
+              run = runs[0]
+              assert (str(run['id']), str(run['run_attempt']), run['status'], run['conclusion']) == (
+                  os.environ['CI_RUN'], os.environ['CI_ATTEMPT'], 'completed', 'success'), 'CI attempt changed'
+
+          def backup():
+              assert aws('sts', 'get-caller-identity')['Account'] == '534444203105'
+              BACKUP.mkdir(parents=True)
+              state = {}
+              for function in EXPECTED_HANDLERS:
+                  reply = aws('lambda', 'get-function', '--function-name', function)
+                  config = reply['Configuration']
+                  ready(config, function)
+                  # The signed URL and the complete configuration stay in process memory only.
+                  try:
+                      with urllib.request.urlopen(reply['Code']['Location'], timeout=60) as response:
+                          code = response.read(50 * 1024 * 1024 + 1)
+                  except Exception:
+                      raise RuntimeError('Could not download function code backup') from None
+                  assert len(code) <= 50 * 1024 * 1024, 'Existing ZIP exceeds the supported direct-upload size'
+                  digest = base64.b64encode(hashlib.sha256(code).digest()).decode()
+                  assert digest == config['CodeSha256'], 'Backup hash mismatch'
+                  (BACKUP / f'{function}-before.zip').write_bytes(code)
+                  state[function] = {'revision_id': config['RevisionId'], 'code_sha256': digest,
+                                     'configuration_sha256': config_hash(config)}
+              (BACKUP / 'state.json').write_text(json.dumps(state, indent=2) + '\n')
+
+          def rollout():
+              manifest = json.loads(next(RELEASE.glob('cookish-backend-*.json')).read_text())
+              package = next(RELEASE.glob('cookish-backend-*.zip'))
+              archive_digest = hashlib.sha256(package.read_bytes()).hexdigest()
+              assert archive_digest == manifest['archive_sha256'] and manifest['source_commit'] == os.environ['SOURCE_SHA']
+              assert package.stat().st_size <= 50 * 1024 * 1024
+              wanted_hash = base64.b64encode(bytes.fromhex(archive_digest)).decode()
+              state = json.loads((BACKUP / 'state.json').read_text())
+              expected = json.loads((RELEASE / 'migration-expectation.json').read_text())
+              RESULT.mkdir(parents=True)
+              # Final guard before the first mutation. Once started, finish the ordered release.
+              check_latest_ci()
+              for function in ('cookish-migrate', 'cookish-api'):
+                  aws('lambda', 'update-function-code', '--function-name', function, '--zip-file', f'fileb://{package.resolve()}',
+                      '--revision-id', state[function]['revision_id'])
+                  aws('lambda', 'wait', 'function-updated-v2', '--function-name', function)
+                  config = aws('lambda', 'get-function-configuration', '--function-name', function)
+                  ready(config, function)
+                  assert config['CodeSha256'] == wanted_hash, 'Deployed ZIP hash differs'
+                  assert config_hash(config) == state[function]['configuration_sha256'], 'Function configuration changed'
+                  if function == 'cookish-migrate':
+                      payload_path = Path(os.environ['RUNNER_TEMP']) / 'migration-response.json'
+                      reply = aws('lambda', 'invoke', '--function-name', function, '--invocation-type', 'RequestResponse',
+                                  '--payload', '{}', '--cli-binary-format', 'raw-in-base64-out', str(payload_path))
+                      assert reply.get('StatusCode') == 200 and 'FunctionError' not in reply, 'Migration invocation failed'
+                      actual = json.loads(payload_path.read_text())
+                      assert actual == expected, 'Migration revision or catalogue counts differ from the tested source'
+                      (RESULT / 'migration.json').write_text(json.dumps(actual, indent=2) + '\n')
+                  else:
+                      event = {'version': '2.0', 'routeKey': 'GET /api/health', 'rawPath': '/api/health', 'rawQueryString': '',
+                               'headers': {'host': 'deployment-check'}, 'requestContext': {'http': {
+                                   'method': 'GET', 'path': '/api/health', 'sourceIp': '127.0.0.1', 'protocol': 'HTTP/1.1'}},
+                               'isBase64Encoded': False}
+                      payload_path = Path(os.environ['RUNNER_TEMP']) / 'health-response.json'
+                      reply = aws('lambda', 'invoke', '--function-name', function, '--invocation-type', 'RequestResponse',
+                                  '--payload', json.dumps(event), '--cli-binary-format', 'raw-in-base64-out', str(payload_path))
+                      assert reply.get('StatusCode') == 200 and 'FunctionError' not in reply, 'API invocation failed'
+                      health = json.loads(payload_path.read_text())
+                      assert health.get('statusCode') == 200 and json.loads(health.get('body', '{}')) == {'status': 'ok'}
+              result = {'source_commit': os.environ['SOURCE_SHA'], 'code_sha256': wanted_hash,
+                        'migration': expected, 'api_health': 'ok', 'configuration_changed': False}
+              (RESULT / 'deployment.json').write_text(json.dumps(result, indent=2) + '\n')
+              with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as stream:
+                  stream.write(f"Deployed backend `{os.environ['SOURCE_SHA']}` to API and migrate.\n\n")
+                  stream.write('ZIP hashes, unchanged configuration, database migration/seed and API health verified.\n')
+
+          if __name__ == '__main__':
+              {'backup': backup, 'rollout': rollout}[sys.argv[1]]()
+          PY
+          python "$RUNNER_TEMP/cookish-deploy.py" backup
+      - name: Preserve the previous ZIPs before changing AWS
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: backend-code-backup-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .aws-sam/deploy-backup/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 14
+      - name: Deploy migration, verify database, then deploy API
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python "$RUNNER_TEMP/cookish-deploy.py" rollout
+      - name: Preserve verified rollout results
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: backend-rollout-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .aws-sam/deploy-result/
+          include-hidden-files: true
+          if-no-files-found: ignore
+          retention-days: 14

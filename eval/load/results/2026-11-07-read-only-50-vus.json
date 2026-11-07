@@ -1,0 +1,530 @@
+{
+  "schema_version": 1,
+  "run_date": "2026-11-07",
+  "profile": "read_only_elasticity",
+  "status": "Completed; client, Lambda concurrency/error/throttle, and RDS pressure evidence captured",
+  "source_commit": "c55ff3b9b298d553524f65640588dea03299279f",
+  "merged_main_commit": "b5b78fcb75266f9995c6a07d33bc8ffb7b196039",
+  "script": "eval/load/sessions.js",
+  "script_sha256": "b9e22cdf5e269a56ff7f7f973f85f8d9f36670a80d0f19e01917a5b937a8c03e",
+  "k6_version": "2.3.0",
+  "k6_exit_code": 0,
+  "generator": {
+    "platform": "Windows",
+    "location": "Singapore",
+    "cpu_network_headroom": "Not recorded"
+  },
+  "region": "ap-southeast-1",
+  "api_runtime": {
+    "language": "python3.12",
+    "architecture": "arm64",
+    "memory_mb": 512
+  },
+  "workload": {
+    "households": 1,
+    "identity": "One pre-existing authenticated household; same pre-obtained token shared by all VUs",
+    "requests_per_loop": 2,
+    "routes": [
+      "GET /api/inventory",
+      "GET /api/recipes/{id}"
+    ],
+    "recipe_selection": "One fixed seeded recipe; identifier omitted",
+    "think_seconds": 2,
+    "request_timeout_seconds": 10,
+    "loop_cap": 6000,
+    "provider_calls": 0,
+    "intentional_mutations": 0
+  },
+  "timing": {
+    "reported_start_utc": "2026-11-07T06:50:08.214Z",
+    "finished_utc": "2026-11-07T06:56:48.484Z",
+    "configured_seconds": 400,
+    "k6_test_run_duration_ms": 400497.5805,
+    "first_workload_metric_utc": "2026-11-07T06:50:08.313Z",
+    "last_workload_metric_utc": "2026-11-07T06:56:46.481Z"
+  },
+  "totals": {
+    "completed_read_loops": 5100,
+    "workload_requests": 10200,
+    "preflight_requests": 2,
+    "all_requests": 10202,
+    "unexpected_status_or_invalid_json": 0,
+    "http_status_counts": {
+      "200": 10202
+    },
+    "peak_observed_vus": 50,
+    "workload_latency": {
+      "samples": 10200,
+      "p50_ms": 34.07745,
+      "p95_ms": 45.411025,
+      "p99_ms": 53.411088,
+      "max_ms": 4996.3046
+    }
+  },
+  "route_latency": {
+    "inventory": {
+      "samples": 5100,
+      "p50_ms": 30.4711,
+      "p95_ms": 39.380075,
+      "p99_ms": 49.207473,
+      "max_ms": 3483.7055
+    },
+    "recipe": {
+      "samples": 5100,
+      "p50_ms": 37.20465,
+      "p95_ms": 47.34283,
+      "p99_ms": 55.846331,
+      "max_ms": 4996.3046
+    }
+  },
+  "phases": [
+    {
+      "name": "baseline",
+      "start_utc": "2026-11-07T06:50:08.214Z",
+      "end_utc": "2026-11-07T06:51:08.214Z",
+      "configured_seconds": 60,
+      "target_vus": 5,
+      "observed_vus_min": 5,
+      "observed_vus_max": 5,
+      "requests": 282,
+      "requests_per_configured_second": 4.7,
+      "completed_read_loops": 141,
+      "http_status_counts": {
+        "200": 282
+      },
+      "request_errors": 0,
+      "latency": {
+        "samples": 282,
+        "p50_ms": 39.27385,
+        "p95_ms": 89.265725,
+        "p99_ms": 630.300642,
+        "max_ms": 4996.3046
+      }
+    },
+    {
+      "name": "ramp_mid",
+      "start_utc": "2026-11-07T06:51:08.214Z",
+      "end_utc": "2026-11-07T06:51:38.214Z",
+      "configured_seconds": 30,
+      "target_vus": 25,
+      "observed_vus_min": 5,
+      "observed_vus_max": 24,
+      "requests": 436,
+      "requests_per_configured_second": 14.533333,
+      "completed_read_loops": 218,
+      "http_status_counts": {
+        "200": 436
+      },
+      "request_errors": 0,
+      "latency": {
+        "samples": 436,
+        "p50_ms": 36.51225,
+        "p95_ms": 45.895375,
+        "p99_ms": 55.696065,
+        "max_ms": 325.3281
+      }
+    },
+    {
+      "name": "mid",
+      "start_utc": "2026-11-07T06:51:38.214Z",
+      "end_utc": "2026-11-07T06:52:38.214Z",
+      "configured_seconds": 60,
+      "target_vus": 25,
+      "observed_vus_min": 25,
+      "observed_vus_max": 25,
+      "requests": 1448,
+      "requests_per_configured_second": 24.133333,
+      "completed_read_loops": 724,
+      "http_status_counts": {
+        "200": 1448
+      },
+      "request_errors": 0,
+      "latency": {
+        "samples": 1448,
+        "p50_ms": 34.70695,
+        "p95_ms": 44.825105,
+        "p99_ms": 53.298579,
+        "max_ms": 262.2384
+      }
+    },
+    {
+      "name": "ramp_peak",
+      "start_utc": "2026-11-07T06:52:38.214Z",
+      "end_utc": "2026-11-07T06:53:08.214Z",
+      "configured_seconds": 30,
+      "target_vus": 50,
+      "observed_vus_min": 25,
+      "observed_vus_max": 49,
+      "requests": 1098,
+      "requests_per_configured_second": 36.6,
+      "completed_read_loops": 547,
+      "http_status_counts": {
+        "200": 1098
+      },
+      "request_errors": 0,
+      "latency": {
+        "samples": 1098,
+        "p50_ms": 34.31335,
+        "p95_ms": 46.09756,
+        "p99_ms": 54.4513,
+        "max_ms": 2510.9189
+      }
+    },
+    {
+      "name": "peak",
+      "start_utc": "2026-11-07T06:53:08.214Z",
+      "end_utc": "2026-11-07T06:55:08.214Z",
+      "configured_seconds": 120,
+      "target_vus": 50,
+      "observed_vus_min": 50,
+      "observed_vus_max": 50,
+      "requests": 5803,
+      "requests_per_configured_second": 48.358333,
+      "completed_read_loops": 2901,
+      "http_status_counts": {
+        "200": 5803
+      },
+      "request_errors": 0,
+      "latency": {
+        "samples": 5803,
+        "p50_ms": 33.3699,
+        "p95_ms": 44.56552,
+        "p99_ms": 49.634312,
+        "max_ms": 239.2877
+      }
+    },
+    {
+      "name": "ramp_down",
+      "start_utc": "2026-11-07T06:55:08.214Z",
+      "end_utc": "2026-11-07T06:55:38.214Z",
+      "configured_seconds": 30,
+      "target_vus": 5,
+      "observed_vus_min": 7,
+      "observed_vus_max": 50,
+      "requests": 816,
+      "requests_per_configured_second": 27.2,
+      "completed_read_loops": 410,
+      "http_status_counts": {
+        "200": 816
+      },
+      "request_errors": 0,
+      "latency": {
+        "samples": 816,
+        "p50_ms": 33.17515,
+        "p95_ms": 44.46645,
+        "p99_ms": 59.501595,
+        "max_ms": 94.9043
+      }
+    },
+    {
+      "name": "recovery",
+      "start_utc": "2026-11-07T06:55:38.214Z",
+      "end_utc": "2026-11-07T06:56:38.214Z",
+      "configured_seconds": 60,
+      "target_vus": 5,
+      "observed_vus_min": 5,
+      "observed_vus_max": 5,
+      "requests": 289,
+      "requests_per_configured_second": 4.816667,
+      "completed_read_loops": 145,
+      "http_status_counts": {
+        "200": 289
+      },
+      "request_errors": 0,
+      "latency": {
+        "samples": 289,
+        "p50_ms": 35.0077,
+        "p95_ms": 41.93632,
+        "p99_ms": 50.009532,
+        "max_ms": 341.2157
+      }
+    },
+    {
+      "name": "stop",
+      "start_utc": "2026-11-07T06:56:38.214Z",
+      "end_utc": "2026-11-07T06:56:48.214Z",
+      "configured_seconds": 10,
+      "target_vus": 0,
+      "observed_vus_min": 2,
+      "observed_vus_max": 5,
+      "requests": 28,
+      "requests_per_configured_second": 2.8,
+      "completed_read_loops": 14,
+      "http_status_counts": {
+        "200": 28
+      },
+      "request_errors": 0,
+      "latency": {
+        "samples": 28,
+        "p50_ms": 34.94825,
+        "p95_ms": 38.332185,
+        "p99_ms": 39.991324,
+        "max_ms": 40.5958
+      }
+    }
+  ],
+  "thresholds": [
+    {
+      "metric": "api_latency_ms{phase:baseline}",
+      "rule": "p(95)>=0",
+      "passed": true
+    },
+    {
+      "metric": "api_latency_ms{phase:recovery}",
+      "rule": "p(95)>=0",
+      "passed": true
+    },
+    {
+      "metric": "workflows_completed{phase:peak}",
+      "rule": "count>0",
+      "passed": true
+    },
+    {
+      "metric": "api_latency_ms{route:inventory}",
+      "rule": "p(95)<2000",
+      "passed": true
+    },
+    {
+      "metric": "api_latency_ms{route:recipe}",
+      "rule": "p(95)<2000",
+      "passed": true
+    },
+    {
+      "metric": "api_latency_ms{phase:mid}",
+      "rule": "p(95)>=0",
+      "passed": true
+    },
+    {
+      "metric": "workflows_completed{phase:recovery}",
+      "rule": "count>0",
+      "passed": true
+    },
+    {
+      "metric": "workflows_completed",
+      "rule": "count>0",
+      "passed": true
+    },
+    {
+      "metric": "api_latency_ms{phase:peak}",
+      "rule": "p(95)>=0",
+      "passed": true
+    },
+    {
+      "metric": "api_error_rate",
+      "rule": "rate<0.01",
+      "passed": true
+    }
+  ],
+  "cloudwatch": {
+    "lambda_concurrent_executions": {
+      "statistic": "Maximum",
+      "period_seconds": 60,
+      "namespace": "AWS/Lambda",
+      "function": "cookish-api",
+      "data": [
+        {
+          "timestamp_utc": "2026-11-07T06:48:00Z",
+          "maximum": 1
+        },
+        {
+          "timestamp_utc": "2026-11-07T06:49:00Z",
+          "maximum": 1
+        },
+        {
+          "timestamp_utc": "2026-11-07T06:50:00Z",
+          "maximum": 5
+        },
+        {
+          "timestamp_utc": "2026-11-07T06:51:00Z",
+          "maximum": 3
+        },
+        {
+          "timestamp_utc": "2026-11-07T06:52:00Z",
+          "maximum": 4
+        },
+        {
+          "timestamp_utc": "2026-11-07T06:53:00Z",
+          "maximum": 6
+        },
+        {
+          "timestamp_utc": "2026-11-07T06:54:00Z",
+          "maximum": 5
+        },
+        {
+          "timestamp_utc": "2026-11-07T06:55:00Z",
+          "maximum": 5
+        },
+        {
+          "timestamp_utc": "2026-11-07T06:56:00Z",
+          "maximum": 1
+        }
+      ],
+      "interpretation": "Observed active invocation concurrency increased from 1 in pre-load minutes to 6, then returned to 1 in the recovery/stop minute. Initial 5-VU baseline minute already peaked at 5. This is limited parallel-serving evidence, not 50 execution environments or proof of full application scalability."
+    },
+    "other_server_metrics_status": "Lambda invocation/error/throttle and RDS connection/CPU/freeable-memory exports captured; API Gateway and server-duration exports not included",
+    "window_aggregate": {
+      "window_start_utc": "2026-11-07T06:50:00Z",
+      "window_end_exclusive_utc": "2026-11-07T06:57:00Z",
+      "period_seconds": 60,
+      "lambda_invocations_sum": 10203,
+      "lambda_errors_sum": 0,
+      "lambda_throttles_sum": 0,
+      "rds_connections_max": 5,
+      "rds_cpu_max_percent": 8.883333333333333,
+      "rds_freeable_memory_min_bytes": 192069632,
+      "rds_freeable_memory_min_mib": 183.171875,
+      "interpretation": "The exported minute buckets show zero Lambda Errors and Throttles, up to 5 RDS connections, CPU under 9%, and at least 183.17 MiB freeable memory during the load-window buckets. They are not a full database capacity/soak test. Minute-bucket invocation count is one above client requests; no exact reconciliation or exclusive attribution to this run is claimed."
+    },
+    "minute_series": [
+      {
+        "timestamp_utc": "2026-11-07T06:48:00Z",
+        "lambda_concurrent_executions_max": 1,
+        "lambda_invocations_sum": 5,
+        "lambda_errors_sum": 0,
+        "lambda_throttles_sum": 0,
+        "rds_connections_max": 1,
+        "rds_cpu_average_percent": 3.990516262606024,
+        "rds_cpu_max_percent": 3.990516262606024,
+        "rds_freeable_memory_min_bytes": 205631488
+      },
+      {
+        "timestamp_utc": "2026-11-07T06:49:00Z",
+        "lambda_concurrent_executions_max": 1,
+        "lambda_invocations_sum": 22,
+        "lambda_errors_sum": 0,
+        "lambda_throttles_sum": 0,
+        "rds_connections_max": 1,
+        "rds_cpu_average_percent": 3.861196638096031,
+        "rds_cpu_max_percent": 3.861196638096031,
+        "rds_freeable_memory_min_bytes": 203485184
+      },
+      {
+        "timestamp_utc": "2026-11-07T06:50:00Z",
+        "lambda_concurrent_executions_max": 5,
+        "lambda_invocations_sum": 192,
+        "lambda_errors_sum": 0,
+        "lambda_throttles_sum": 0,
+        "rds_connections_max": 4,
+        "rds_cpu_average_percent": 5.524493031795043,
+        "rds_cpu_max_percent": 5.524493031795043,
+        "rds_freeable_memory_min_bytes": 194572288
+      },
+      {
+        "timestamp_utc": "2026-11-07T06:51:00Z",
+        "lambda_concurrent_executions_max": 3,
+        "lambda_invocations_sum": 790,
+        "lambda_errors_sum": 0,
+        "lambda_throttles_sum": 0,
+        "rds_connections_max": 4,
+        "rds_cpu_average_percent": 4.422788605697151,
+        "rds_cpu_max_percent": 4.422788605697151,
+        "rds_freeable_memory_min_bytes": 195084288
+      },
+      {
+        "timestamp_utc": "2026-11-07T06:52:00Z",
+        "lambda_concurrent_executions_max": 4,
+        "lambda_invocations_sum": 1497,
+        "lambda_errors_sum": 0,
+        "lambda_throttles_sum": 0,
+        "rds_connections_max": 4,
+        "rds_cpu_average_percent": 6.152488469287509,
+        "rds_cpu_max_percent": 6.152488469287509,
+        "rds_freeable_memory_min_bytes": 199610368
+      },
+      {
+        "timestamp_utc": "2026-11-07T06:53:00Z",
+        "lambda_concurrent_executions_max": 6,
+        "lambda_invocations_sum": 2752,
+        "lambda_errors_sum": 0,
+        "lambda_throttles_sum": 0,
+        "rds_connections_max": 5,
+        "rds_cpu_average_percent": 6.831489915419649,
+        "rds_cpu_max_percent": 6.831489915419649,
+        "rds_freeable_memory_min_bytes": 193310720
+      },
+      {
+        "timestamp_utc": "2026-11-07T06:54:00Z",
+        "lambda_concurrent_executions_max": 5,
+        "lambda_invocations_sum": 2902,
+        "lambda_errors_sum": 0,
+        "lambda_throttles_sum": 0,
+        "rds_connections_max": 5,
+        "rds_cpu_average_percent": 7.870601967650493,
+        "rds_cpu_max_percent": 7.870601967650493,
+        "rds_freeable_memory_min_bytes": 192303104
+      },
+      {
+        "timestamp_utc": "2026-11-07T06:55:00Z",
+        "lambda_concurrent_executions_max": 5,
+        "lambda_invocations_sum": 1804,
+        "lambda_errors_sum": 0,
+        "lambda_throttles_sum": 0,
+        "rds_connections_max": 5,
+        "rds_cpu_average_percent": 8.883333333333333,
+        "rds_cpu_max_percent": 8.883333333333333,
+        "rds_freeable_memory_min_bytes": 192339968
+      },
+      {
+        "timestamp_utc": "2026-11-07T06:56:00Z",
+        "lambda_concurrent_executions_max": 1,
+        "lambda_invocations_sum": 266,
+        "lambda_errors_sum": 0,
+        "lambda_throttles_sum": 0,
+        "rds_connections_max": 5,
+        "rds_cpu_average_percent": 4.48314868416675,
+        "rds_cpu_max_percent": 4.48314868416675,
+        "rds_freeable_memory_min_bytes": 192069632
+      },
+      {
+        "timestamp_utc": "2026-11-07T06:57:00Z",
+        "rds_connections_max": 5,
+        "rds_cpu_average_percent": 4.235380433876373,
+        "rds_cpu_max_percent": 4.235380433876373,
+        "rds_freeable_memory_min_bytes": 195276800
+      },
+      {
+        "timestamp_utc": "2026-11-07T06:58:00Z",
+        "rds_connections_max": 5,
+        "rds_cpu_average_percent": 3.5901109519208343,
+        "rds_cpu_max_percent": 3.5901109519208343,
+        "rds_freeable_memory_min_bytes": 193507328
+      },
+      {
+        "timestamp_utc": "2026-11-07T06:59:00Z",
+        "rds_connections_max": 6,
+        "rds_cpu_average_percent": 3.9269634817408705,
+        "rds_cpu_max_percent": 3.9269634817408705,
+        "rds_freeable_memory_min_bytes": 188207104
+      }
+    ],
+    "sanitized_csv": "2026-11-07-read-only-50-vus-cloudwatch.csv",
+    "post_run_context": "RDS connections remained 5 through 06:58 and reached 6 at 06:59; these later samples do not show connection teardown and are not attributed solely to the test."
+  },
+  "method": {
+    "percentiles": "Linear interpolation at index (n-1)*p after sorting; stable-phase p95 reconciled with k6 summary",
+    "phase_membership": "Request phase tag assigned at request start; read-loop completion tagged at completion. Counts can cross phase boundaries.",
+    "phase_throughput": "Requests tagged to phase divided by configured phase seconds",
+    "vu_phase_membership": "Gauge timestamps compared with reported start and configured phase boundaries",
+    "client_latency": "k6 HTTP duration: sending+waiting+receiving; excludes blocked/connect/TLS setup and token acquisition",
+    "cloudwatch_alignment": "One-minute CloudWatch buckets do not align exactly with phase boundaries; concurrency is an active-execution metric, not a retained-environment count"
+  },
+  "limitations": [
+    "One household and one repeatedly requested recipe; no multi-household isolation/load claim",
+    "Read-only workload; no Cook/Shop ranking, refinement or confirmations, no inventory writes, no AI calls",
+    "Pre-obtained authentication token; sign-in acquisition not tested",
+    "400-second schedule; not the specified 30-minute soak",
+    "No generator headroom measurement",
+    "Client long-tail requests are not classified as cold starts without Lambda initialization logs",
+    "No measured operating-cost or database-capacity claim"
+  ],
+  "source_files": {
+    "summary_sha256": "7eb453ceaa786ad3fee74943e2000c5c4bd9d02639d8656f9d144f187039e75a",
+    "points_sha256": "02c2742dbca3f0d3138276b6ed75ae401eea4806996aa34c5d4c6cc8daa8e10c",
+    "concurrency_csv_sha256": "0bc3d77bfc2e802a11e4a822a3579e59d5767590e3a88e28f3716b7ecc3ce4ff",
+    "lambda_csv_sha256": "8800a5d901f59c2dcae10e53df0552bf7d631092959c69d04247d2a4851b5fb8",
+    "connections_csv_sha256": "e1f6c6421586e0d2422380781bc65e7ba3b71ccc90754ea7fde228b1d6602134",
+    "cpu_csv_sha256": "c17e4a6f8f9949457139a8e6a774d0327ebcac84d2cd919b89fb04be9a8fb7d8",
+    "memory_csv_sha256": "35493ebc1e08dfaa1fcaa38d764cf5ba2449cbb880c12ffea5ec5b4f6d26e6e4"
+  },
+  "privacy": "Only aggregate counts, metrics and source-code provenance included; no tokens, account IDs, household IDs or recipe identifiers."
+}
