@@ -39,7 +39,10 @@ export function useCookStep(sessionId: string | undefined) {
         // The session has expired: carry on in a new one held to the same conditions.
         const current = queryClient.getQueryData<Suggestion>(SUGGESTION_KEY);
         if (!isNotFound(error) || !current) throw error;
-        return startCookSession(mergeConstraints(current, step.kind === "adjust" ? step.body : null));
+        return startCookSession({
+          ...mergeConstraints(current, step.kind === "adjust" ? step.body : null),
+          skipPreviousRecipe: step.kind === "next",
+        });
       }
     },
     onSuccess: (suggestion) => queryClient.setQueryData(SUGGESTION_KEY, suggestion),
@@ -143,30 +146,60 @@ export function useFinishCooking() {
   };
 }
 
-export type CookConstraints = { people: number; tags: Schemas["CookTag"][]; maxMinutes: number | null };
+export type CookConstraints = {
+  sourceSessionId?: string;
+  skipPreviousRecipe?: boolean;
+  people: number;
+  tags: Schemas["CookTag"][];
+  maxMinutes: number | null;
+  maxDifficulty: number | null;
+};
+
+function tighten(existing: number | null, requested: number | null | undefined) {
+  return requested == null ? existing : existing === null ? requested : Math.min(existing, requested);
+}
 
 /** The conditions the session is held to, with an adjustment (if any) added on top. */
 export function mergeConstraints(suggestion: Suggestion, adjust: Schemas["CookAdjust"] | null): CookConstraints {
   const applied = suggestion.applied_constraints;
+  let maxMinutes = tighten(applied.max_minutes, adjust?.max_minutes);
+  let maxDifficulty = tighten(applied.max_difficulty, adjust?.max_difficulty);
+  // A newly requested relative nudge refers to the dish the user saw, not the
+  // first dish a replacement session happens to rank. Historical tags are labels.
+  if (adjust?.tags?.includes("quicker")) maxMinutes = tighten(maxMinutes, Math.max(0, suggestion.recipe.total_minutes - 10));
+  if (adjust?.tags?.includes("easier")) maxDifficulty = tighten(maxDifficulty, Math.max(0, suggestion.recipe.difficulty - 1));
   return {
+    sourceSessionId: suggestion.session_id,
     people: adjust?.people ?? suggestion.people,
     tags: [...new Set([...applied.tags, ...(adjust?.tags ?? [])])],
-    maxMinutes: adjust?.max_minutes ?? applied.max_minutes,
+    maxMinutes,
+    maxDifficulty,
   };
 }
 
-/** Starts a new session held to exactly these conditions. */
-async function startCookSession(constraints: CookConstraints): Promise<Suggestion> {
-  const first = unwrap(await api.POST("/api/cook/sessions", { body: { people: constraints.people } }));
-  if (constraints.tags.length === 0 && constraints.maxMinutes === null) return first;
-  const body: Schemas["CookAdjust"] = { tags: constraints.tags };
-  if (constraints.maxMinutes !== null) body.max_minutes = constraints.maxMinutes;
-  return unwrap(
-    await api.POST("/api/cook/sessions/{session_id}/adjust", {
-      params: { path: { session_id: first.session_id } },
-      body,
-    }),
-  );
+/** Removing a relative label also removes the limit that label represents. */
+export function dropCookTag(constraints: CookConstraints, tag: Schemas["CookTag"]): CookConstraints {
+  return {
+    ...constraints,
+    tags: constraints.tags.filter((value) => value !== tag),
+    maxMinutes: tag === "quicker" ? null : constraints.maxMinutes,
+    maxDifficulty: tag === "easier" ? null : constraints.maxDifficulty,
+  };
+}
+
+/** Omit constraints only for Reset, which returns to household preference defaults. */
+async function startCookSession(input: CookConstraints | Pick<CookConstraints, "people">): Promise<Suggestion> {
+  const body: Schemas["CookSessionCreate"] = { people: input.people };
+  if ("tags" in input) {
+    if (input.sourceSessionId) body.previous_session_id = input.sourceSessionId;
+    if (input.skipPreviousRecipe) body.skip_previous_recipe = true;
+    body.constraints = {
+      tags: input.tags,
+      max_minutes: input.maxMinutes,
+      max_difficulty: input.maxDifficulty,
+    };
+  }
+  return unwrap(await api.POST("/api/cook/sessions", { body }));
 }
 
 /**

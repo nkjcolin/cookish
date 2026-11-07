@@ -37,6 +37,11 @@ class ShopSessionCreate(RequestModel):
 
 class ShopAdjust(RequestModel):
     tags: list[ShopTag] = Field(default_factory=list)
+    replace_tags: bool = Field(
+        default_factory=lambda: False,
+        description="Replace the current keywords with tags, including an empty list to clear them."
+        " Otherwise tags are added to the current keywords.",
+    )
     people: People | None = None
     meals: Meals | None = None
 
@@ -75,6 +80,11 @@ class Basket(ResponseModel):
     meals: int
     status: BasketStatus
     applied_tags: list[ShopTag]
+    requested_recipe_ids: list[UUID] = Field(
+        default_factory=list,
+        description="Recipes explicitly requested for this basket; "
+        "preserve when restarting a session.",
+    )
     planned_meals: list[RecipeSummary] = Field(description="Example meals the basket covers.")
     items: list[BasketItem]
 

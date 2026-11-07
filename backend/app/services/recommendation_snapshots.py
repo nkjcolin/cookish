@@ -75,7 +75,16 @@ def _upgrade_basket_purchase_metadata(payload):
         except (KeyError, TypeError) as error:
             raise ValueError("Basket has no frozen purchase metadata") from error
         items.append({**item, **metadata})
-    return {**payload, "response": {**response, "items": items}}
+    return {
+        **payload,
+        "response": {
+            **response,
+            "items": items,
+            # Old basket responses did not expose requested pins. Do not infer them
+            # from planned meals, which also include automatically selected dishes.
+            "requested_recipe_ids": response.get("requested_recipe_ids", []),
+        },
+    }
 
 
 def _fields(value):
@@ -208,8 +217,17 @@ def _upgrade(kind, payload):
             return {
                 **payload,
                 "history": [
-                    {**item, "available_nudges": []}
-                    if isinstance(item, dict) and "available_nudges" not in item
+                    {
+                        **item,
+                        "available_nudges": item.get("available_nudges", []),
+                        "ingredients": [
+                            {**line, "countable": line.get("countable")}
+                            if isinstance(line, dict)
+                            else line
+                            for line in item["ingredients"]
+                        ],
+                    }
+                    if isinstance(item, dict) and isinstance(item.get("ingredients"), list)
                     else item
                     for item in history
                 ],

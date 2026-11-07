@@ -40,10 +40,14 @@ def new_shop_session(
 
 
 def adjust_shop(session: ShopSession, patch: ShopAdjust) -> ShopSession:
-    tags = tuple(dict.fromkeys((*session.tags, *patch.tags)))
+    tags = tuple(dict.fromkeys(patch.tags if patch.replace_tags else (*session.tags, *patch.tags)))
     # An explicit meal count wins; each deliberate cover-more tap otherwise adds one.
     meals = session.meals if patch.meals is None else patch.meals
-    if patch.meals is None and ShopTag.COVER_MORE_MEALS in patch.tags:
+    if (
+        patch.meals is None
+        and ShopTag.COVER_MORE_MEALS in patch.tags
+        and (not patch.replace_tags or ShopTag.COVER_MORE_MEALS not in session.tags)
+    ):
         meals = min(7, meals + 1)
     return replace(
         session,
@@ -208,6 +212,13 @@ def plan_shop(
     safe = filter_recipes(
         recipes, HardConstraints.from_preferences(prefs, session.strict_max_minutes), catalogue
     )
+    unavailable = tuple(
+        recipe_id
+        for recipe_id in session.pinned_recipe_ids
+        if recipe_id not in {meal.id for meal in safe}
+    )
+    if unavailable:
+        return ShopPlan(session, (), (), {}, unavailable_recipe_ids=unavailable)
     if not safe:
         return ShopPlan(session, (), (), {})
     missing = {
@@ -225,7 +236,7 @@ def plan_shop(
         key: meta.model_copy(update={"perishable": True}) for key, meta in catalogue.items()
     }
 
-    def can_supply_nonbuyable_essentials(meals):
+    def nonbuyable_shortfalls(meals):
         required = [
             meal.model_copy(
                 update={
@@ -242,21 +253,35 @@ def plan_shop(
         ]
         lines, _ = _aggregate_ingredients(required, session.people)
         if not lines:
-            return True
+            return ()
         aggregate = meals[0].model_copy(update={"servings": session.people, "ingredients": lines})
-        return all(
-            line.status == IngredientStatus.HAVE
+        return tuple(
+            line.name
             for line in assess_ingredients(
                 aggregate, inventory, shop_catalogue, session.people, as_of=as_of, config=config
             )
+            if line.status != IngredientStatus.HAVE
         )
 
+    def can_supply_nonbuyable_essentials(meals):
+        return not nonbuyable_shortfalls(meals)
+
+    order = {recipe_id: index for index, recipe_id in enumerate(session.pinned_recipe_ids)}
+    pinned = tuple(sorted((m for m in safe if m.id in order), key=lambda m: order[m.id]))
+    required_at_home = nonbuyable_shortfalls(pinned)
+    if required_at_home:
+        return ShopPlan(
+            session,
+            (),
+            (),
+            {},
+            unavailable_recipe_ids=session.pinned_recipe_ids,
+            required_at_home=required_at_home,
+        )
     safe = [meal for meal in safe if can_supply_nonbuyable_essentials((meal,))]
     if not safe:
         return ShopPlan(session, (), (), {})
-    # Recipes the user asked for come first, in their order, while still eligible.
-    order = {recipe_id: index for index, recipe_id in enumerate(session.pinned_recipe_ids)}
-    pinned = tuple(sorted((m for m in safe if m.id in order), key=lambda m: order[m.id]))
+    # Recipes the user asked for come first, in their order.
 
     def shopping_need(meal):
         """2: something to buy; 1: only stock to check at home; 0: the kitchen covers it."""
@@ -389,6 +414,7 @@ def to_basket(plan: ShopPlan, session_id: UUID, basket_id: UUID) -> Basket:
         meals=len(plan.planned_meals),
         status=BasketStatus.SUGGESTED,
         applied_tags=list(plan.session.tags),
+        requested_recipe_ids=list(plan.session.pinned_recipe_ids),
         planned_meals=[
             RecipeSummary.model_validate(meal.model_dump()) for meal in plan.planned_meals
         ],

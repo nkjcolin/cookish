@@ -42,6 +42,11 @@ export function mealName(now: Date): "breakfast" | "lunch" | "dinner" {
 
 export type IngredientLine = { tone: "ok" | "ask"; text: string };
 
+/** A known counted shortage cannot be confirmed as a cooked meal. */
+export function needsRestock(line: Schemas["SuggestionIngredient"]): boolean {
+  return line.essential && (line.status === "missing" || (line.status === "low" && line.countable !== false));
+}
+
 /**
  * The short stock summary under a suggestion. Staples are assumed and not listed;
  * anything uncertain is said plainly so the user is not surprised at the stove.

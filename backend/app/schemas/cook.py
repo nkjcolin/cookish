@@ -56,8 +56,45 @@ class ConsumptionOutcome(StrEnum):
     NOT_USED = "not_used"
 
 
+class CookSessionConstraints(RequestModel):
+    """Absolute soft limits for a restart, not a list of commands to run again."""
+
+    tags: list[CookTag] = Field(
+        default_factory=list,
+        description="Already applied tags. Quicker/easier label the supplied absolute limits;"
+        " they do not reduce those limits again.",
+    )
+    max_minutes: Annotated[int, Field(ge=0, le=240)] | None = Field(
+        default=None, description="Absolute time limit; null removes the soft time limit."
+    )
+    max_difficulty: Annotated[int, Field(ge=0, le=3)] | None = Field(
+        default=None, description="Absolute difficulty limit; null removes the soft limit."
+    )
+
+
 class CookSessionCreate(RequestModel):
     people: People | None = Field(default=None, description="Defaults to the last choice.")
+    previous_session_id: UUID | None = Field(
+        default=None,
+        description="Carry skipped recipes and any strict time bound from this household's"
+        " previous session. Does not restore history or a selected meal.",
+    )
+    skip_previous_recipe: bool = Field(
+        default_factory=lambda: False,
+        description="When recovering a Not tonight request, also skip the previous session's"
+        " current recipe. Requires previous_session_id.",
+    )
+    constraints: CookSessionConstraints | None = Field(
+        default=None,
+        description="Restore explicit soft constraints in one ranking. Omit to start from"
+        " household preferences. Household safety constraints are always applied.",
+    )
+
+    @model_validator(mode="after")
+    def _skip_has_previous_session(self) -> Self:
+        if self.skip_previous_recipe and self.previous_session_id is None:
+            raise ValueError("skip_previous_recipe requires previous_session_id")
+        return self
 
 
 class CookAdjust(RequestModel):
@@ -87,6 +124,10 @@ class SuggestionIngredient(ResponseModel):
     amount: str = Field(description="Display text, already scaled to `people`.")
     essential: bool
     status: IngredientStatus
+    countable: bool | None = Field(
+        default=None,
+        description="Whether stock is counted. Null only for older saved suggestions.",
+    )
 
 
 class StockCheck(ResponseModel):

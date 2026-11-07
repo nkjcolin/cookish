@@ -11,7 +11,7 @@ import { Icon } from "../components/Icon";
 import { RecipeImage } from "../components/RecipeImage";
 import { Tag } from "../components/Tag";
 import { formatCount } from "../lib/count";
-import { TASTE_TAG_LABELS, difficultyLabel } from "./cook/view";
+import { TASTE_TAG_LABELS, difficultyLabel, needsRestock } from "./cook/view";
 import { WhatsLeftSheet } from "./cook/WhatsLeftSheet";
 
 type Status = Schemas["IngredientStatus"];
@@ -38,7 +38,7 @@ export function RecipePage({ preview = false }: { preview?: boolean }) {
 
   const summary = dish.recipe;
   const scaled = suggestion?.recipe.id === summary.id ? suggestion.ingredients : null;
-  const missingEssentials = scaled?.some((line) => line.essential && line.status === "missing");
+  const missingEssentials = scaled?.some(needsRestock);
 
   function goToBuy() {
     shopForRecipe.mutate(
@@ -94,7 +94,7 @@ export function RecipePage({ preview = false }: { preview?: boolean }) {
 
       {preview && missingEssentials && (
         <p className="text-[13px] text-ink-muted">
-          Get the missing ingredients first. If you already have them, update your kitchen.
+          Get enough of the missing or low ingredients first. If you already have them, update your kitchen.
         </p>
       )}
 

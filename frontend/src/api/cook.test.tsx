@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { api, type Schemas } from "./client";
-import { SUGGESTION_KEY, useCookStep, useCookSuggestion } from "./cook";
+import { dropCookTag, mergeConstraints, SUGGESTION_KEY, useCookStep, useCookSuggestion } from "./cook";
 import { useUpdateInventoryItem } from "./queries";
 
 function suggestion(sessionId: string): Schemas["Suggestion"] {
@@ -43,10 +43,29 @@ describe("useCookStep", () => {
     const shown = await step.mutateAsync({ kind: "next" });
 
     expect(shown.session_id).toBe("new");
-    expect(post).toHaveBeenCalledWith("/api/cook/sessions", { body: { people: 3 } });
-    expect(post).toHaveBeenLastCalledWith("/api/cook/sessions/{session_id}/adjust", {
-      params: { path: { session_id: "new" } },
-      body: { tags: ["quicker"], max_minutes: 30 },
+    expect(post).toHaveBeenLastCalledWith("/api/cook/sessions", {
+      body: {
+        people: 3,
+        previous_session_id: "old",
+        skip_previous_recipe: true,
+        constraints: { tags: ["quicker"], max_minutes: 30, max_difficulty: null },
+      },
+    });
+    expect(post).toHaveBeenCalledTimes(2);
+  });
+
+  it("does not skip the old dish when recovering an adjustment", async () => {
+    const { step, post } = setUp({
+      "/api/cook/sessions/{session_id}/adjust": notFound,
+      "/api/cook/sessions": { data: suggestion("new") },
+    });
+    await step.mutateAsync({ kind: "adjust", body: { people: 4 } });
+    expect(post).toHaveBeenLastCalledWith("/api/cook/sessions", {
+      body: {
+        people: 4,
+        previous_session_id: "old",
+        constraints: { tags: ["quicker"], max_minutes: 30, max_difficulty: null },
+      },
     });
   });
 
@@ -55,6 +74,34 @@ describe("useCookStep", () => {
     const { step } = setUp({ "/api/cook/sessions/{session_id}/next": stale });
 
     await expect(step.mutateAsync({ kind: "next" })).rejects.toThrow("Busy");
+  });
+});
+
+describe("restoring constraints", () => {
+  const current = {
+    ...suggestion("old"),
+    recipe: { total_minutes: 30, difficulty: 2 },
+    applied_constraints: { tags: ["quicker", "easier", "less_oil"], max_minutes: 30, max_difficulty: 2 },
+  } as Schemas["Suggestion"];
+
+  it("keeps achieved absolute limits without reapplying historical nudges", () => {
+    expect(mergeConstraints(current, null)).toEqual({
+      sourceSessionId: "old", people: 3, tags: ["quicker", "easier", "less_oil"], maxMinutes: 30, maxDifficulty: 2,
+    });
+  });
+
+  it("calculates only new relative requests against the recipe the user actually saw", () => {
+    expect(mergeConstraints(current, { tags: ["quicker", "easier"] })).toEqual({
+      sourceSessionId: "old", people: 3, tags: ["quicker", "easier", "less_oil"], maxMinutes: 20, maxDifficulty: 1,
+    });
+    expect(mergeConstraints(current, { max_minutes: 60, max_difficulty: 3 })).toMatchObject({ maxMinutes: 30, maxDifficulty: 2 });
+  });
+
+  it("removes the relevant numeric restriction when a relative tag is dropped", () => {
+    const conditions = mergeConstraints(current, null);
+    expect(dropCookTag(conditions, "quicker")).toMatchObject({ tags: ["easier", "less_oil"], maxMinutes: null, maxDifficulty: 2 });
+    expect(dropCookTag(conditions, "easier")).toMatchObject({ tags: ["quicker", "less_oil"], maxMinutes: 30, maxDifficulty: null });
+    expect(dropCookTag(conditions, "less_oil")).toMatchObject({ tags: ["quicker", "easier"], maxMinutes: 30, maxDifficulty: 2 });
   });
 });
 

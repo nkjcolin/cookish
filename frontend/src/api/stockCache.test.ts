@@ -1,7 +1,7 @@
 import { QueryClient } from "@tanstack/react-query";
 import { describe, expect, it } from "vitest";
 
-import { BASKET_KEY, CART_KEY, invalidateAfterStockChange } from "./stockCache";
+import { BASKET_KEY, CART_KEY, CART_REVIEW_KEY, invalidateAfterStockChange } from "./stockCache";
 
 function clientWith(cart: string[]) {
   const client = new QueryClient();
@@ -19,6 +19,13 @@ describe("invalidateAfterStockChange", () => {
 
   it("keeps a basket that is being shopped from", async () => {
     const client = clientWith(["item"]);
+    await invalidateAfterStockChange(client);
+    expect(client.getQueryState(BASKET_KEY)?.isInvalidated).toBe(false);
+  });
+
+  it("keeps an explicitly reviewed empty cart instead of silently replacing its basket", async () => {
+    const client = clientWith([]);
+    client.setQueryData(CART_REVIEW_KEY, { hasMadeSelection: true, quantityReviewIds: [] });
     await invalidateAfterStockChange(client);
     expect(client.getQueryState(BASKET_KEY)?.isInvalidated).toBe(false);
   });

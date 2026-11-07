@@ -27,11 +27,11 @@ export function AdjustBasketSheet({ basket, onApply, onClose }: AdjustBasketShee
   const [tags, setTags] = useState<ShopTag[]>(basket.applied_tags);
 
   function apply() {
-    // Adjustments accumulate on the server, so only what changed here is sent.
-    const adjust: ShopAdjust = { tags: tags.filter((tag) => !basket.applied_tags.includes(tag)) };
+    const tagsChanged = tags.length !== basket.applied_tags.length || tags.some((tag) => !basket.applied_tags.includes(tag));
+    const adjust: ShopAdjust = tagsChanged ? { tags, replace_tags: true } : {};
     if (meals !== basket.meals) adjust.meals = meals;
     if (people !== basket.people) adjust.people = people;
-    const changed = adjust.tags!.length > 0 || adjust.meals !== undefined || adjust.people !== undefined;
+    const changed = tagsChanged || adjust.meals !== undefined || adjust.people !== undefined;
     if (changed) onApply(adjust);
     onClose();
   }

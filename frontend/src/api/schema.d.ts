@@ -469,6 +469,11 @@ export interface components {
              */
             planned_meals: components["schemas"]["RecipeSummary"][];
             /**
+             * Requested Recipe Ids
+             * @description Recipes explicitly requested for this basket; preserve when restarting a session.
+             */
+            requested_recipe_ids?: string[];
+            /**
              * Session Id
              * Format: uuid
              */
@@ -645,13 +650,46 @@ export interface components {
          * @enum {string}
          */
         CookRecordStatus: "selected" | "confirmed" | "abandoned";
+        /**
+         * CookSessionConstraints
+         * @description Absolute soft limits for a restart, not a list of commands to run again.
+         */
+        CookSessionConstraints: {
+            /**
+             * Max Difficulty
+             * @description Absolute difficulty limit; null removes the soft limit.
+             */
+            max_difficulty?: number | null;
+            /**
+             * Max Minutes
+             * @description Absolute time limit; null removes the soft time limit.
+             */
+            max_minutes?: number | null;
+            /**
+             * Tags
+             * @description Already applied tags. Quicker/easier label the supplied absolute limits; they do not reduce those limits again.
+             */
+            tags?: components["schemas"]["CookTag"][];
+        };
         /** CookSessionCreate */
         CookSessionCreate: {
+            /** @description Restore explicit soft constraints in one ranking. Omit to start from household preferences. Household safety constraints are always applied. */
+            constraints?: components["schemas"]["CookSessionConstraints"] | null;
             /**
              * People
              * @description Defaults to the last choice.
              */
             people?: number | null;
+            /**
+             * Previous Session Id
+             * @description Carry skipped recipes and any strict time bound from this household's previous session. Does not restore history or a selected meal.
+             */
+            previous_session_id?: string | null;
+            /**
+             * Skip Previous Recipe
+             * @description When recovering a Not tonight request, also skip the previous session's current recipe. Requires previous_session_id.
+             */
+            skip_previous_recipe?: boolean;
         };
         /**
          * CookTag
@@ -1165,6 +1203,11 @@ export interface components {
             meals?: number | null;
             /** People */
             people?: number | null;
+            /**
+             * Replace Tags
+             * @description Replace the current keywords with tags, including an empty list to clear them. Otherwise tags are added to the current keywords.
+             */
+            replace_tags?: boolean;
             /** Tags */
             tags?: components["schemas"]["ShopTag"][];
         };
@@ -1313,6 +1356,11 @@ export interface components {
              * @description Display text, already scaled to `people`.
              */
             amount: string;
+            /**
+             * Countable
+             * @description Whether stock is counted. Null only for older saved suggestions.
+             */
+            countable?: boolean | null;
             /** Essential */
             essential: boolean;
             /**
@@ -1900,6 +1948,8 @@ export interface operations {
             query: {
                 q: string;
                 limit?: number;
+                /** @description Resolve this catalogue ID exactly, ignoring q when supplied. */
+                ingredient_id?: string | null;
             };
             header?: never;
             path?: never;

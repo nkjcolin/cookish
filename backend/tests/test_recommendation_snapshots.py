@@ -186,6 +186,17 @@ def test_legacy_nudge_upgrade_does_not_hide_other_missing_history_fields(records
         load_snapshot(wire, CookSessionRow)
 
 
+def test_old_cook_history_marks_countability_unknown_without_guessing_or_mutating(records):
+    wire = dump_snapshot(records["cook_session"])
+    for suggestion in wire["payload"]["history"]:
+        for ingredient in suggestion["ingredients"]:
+            del ingredient["countable"]
+    original = deepcopy(wire)
+    restored = load_snapshot(wire, CookSessionRow)
+    assert all(line.countable is None for item in restored.history for line in item.ingredients)
+    assert wire == original
+
+
 def test_learning_roundtrip_preserves_order_for_edited_saturated_rating():
     state = LearningState(HOUSEHOLD)
     meal = recipe("liked")

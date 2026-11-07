@@ -44,7 +44,7 @@ export function BuyPage() {
         <button
           type="button"
           aria-label="Adjust basket"
-          disabled={!basket}
+          disabled={!basket || adjust.isPending}
           onClick={() => setAdjusting(true)}
           className="flex size-[40px] shrink-0 items-center justify-center rounded-pill border border-border bg-surface"
         >
@@ -82,7 +82,7 @@ export function BuyPage() {
           {basket.applied_tags.length > 0 && (
             <div className="flex flex-wrap content-start items-start gap-[8px]">
               {basket.applied_tags.map((tag) => (
-                <Chip key={tag} selected onClick={() => setAdjusting(true)}>
+                <Chip key={tag} selected disabled={adjust.isPending} onClick={() => setAdjusting(true)}>
                   {SHOP_TAG_LABELS[tag]}
                 </Chip>
               ))}
@@ -93,7 +93,7 @@ export function BuyPage() {
             {(Object.keys(SHOP_TAG_LABELS) as ShopTag[])
               .filter((tag) => !basket.applied_tags.includes(tag))
               .map((tag) => (
-                <Chip key={tag} suggested onClick={() => adjust.mutate({ tags: [tag] })}>
+                <Chip key={tag} suggested disabled={adjust.isPending} onClick={() => adjust.mutate({ tags: [tag] })}>
                   {SHOP_TAG_LABELS[tag]}
                 </Chip>
               ))}
@@ -121,8 +121,8 @@ export function BuyPage() {
               </p>
               <p className="text-[12px] text-ink-muted">in your cart</p>
             </div>
-            <Button className="min-w-px flex-1" onClick={() => navigate("/buy/confirm")}>
-              I’m done shopping
+            <Button className="min-w-px flex-1" disabled={adjust.isPending} onClick={() => navigate("/buy/confirm")}>
+              {adjust.isPending ? "Updating list…" : "I’m done shopping"}
             </Button>
           </div>
 

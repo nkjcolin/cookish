@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 
 import type { Schemas } from "../api/client";
 import { useMe, useSavePreferences } from "../api/queries";
+import { BottomBar } from "../components/BottomBar";
+import { Button } from "../components/Button";
 import { Chip } from "../components/Chip";
 import { Icon, type IconName } from "../components/Icon";
 import {
@@ -41,9 +43,11 @@ export function PreferencesPage() {
   const save = useSavePreferences();
   const [editingRules, setEditingRules] = useState(false);
   const [openRow, setOpenRow] = useState<Row | null>(null);
+  const [draft, setDraft] = useState<Update | null>(null);
+  const [saved, setSaved] = useState(false);
 
   const stored = me.data?.preferences;
-  const prefs: Update = stored
+  const prefs: Update = draft ?? (stored
     ? {
         allergens: stored.allergens,
         diets: stored.diets,
@@ -54,14 +58,22 @@ export function PreferencesPage() {
         max_difficulty: stored.max_difficulty,
         household_size: stored.household_size,
       }
-    : DEFAULTS;
+    : DEFAULTS);
 
-  const change = (patch: Partial<Update>) => save.mutate({ ...prefs, ...patch });
+  function change(patch: Partial<Update>) {
+    setDraft((current) => ({ ...(current ?? prefs), ...patch }));
+    setSaved(false);
+  }
+
+  function persist() {
+    if (!draft) return;
+    save.mutate(draft, { onSuccess: () => { setDraft(null); setSaved(true); } });
+  }
   const toggleRow = (row: Row) => setOpenRow((open) => (open === row ? null : row));
   const rules = [...prefs.diets.map((d) => DIET_LABELS[d]), ...prefs.allergens.map((a) => ALLERGEN_LABELS[a])];
 
   return (
-    <div className="flex flex-col gap-[16px]">
+    <div className="flex flex-col gap-[16px] pb-[40px]">
       <div className="flex items-center justify-between">
         <Link
           to="/more"
@@ -82,7 +94,7 @@ export function PreferencesPage() {
       )}
 
       {me.data && (
-        <>
+        <fieldset disabled={save.isPending} className="flex min-w-0 flex-col gap-[16px] disabled:opacity-70">
           <h2 className={sectionTitle}>Hard rules</h2>
           <section className={`${card} flex flex-col gap-[12px] p-[16px]`}>
             <div className="flex items-center gap-[8px]">
@@ -222,7 +234,21 @@ export function PreferencesPage() {
               </Chip>
             ))}
           </section>
-        </>
+        </fieldset>
+      )}
+      {me.data && (
+        <BottomBar>
+          <div className="flex flex-col gap-[8px]">
+            {draft ? (
+              <p className="text-[12px] text-ink-muted">Unsaved changes. Saving refreshes Cook and Buy and clears shopping-list ticks.</p>
+            ) : saved ? (
+              <p role="status" className="text-[12px] text-fresh">Preferences saved.</p>
+            ) : null}
+            <Button className="w-full" onClick={persist} disabled={!draft || save.isPending}>
+              {save.isPending ? "Saving…" : "Save preferences"}
+            </Button>
+          </div>
+        </BottomBar>
       )}
     </div>
   );

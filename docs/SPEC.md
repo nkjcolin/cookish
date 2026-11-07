@@ -486,6 +486,8 @@ Starting weights are hand-set; keep them in one config file and report them. The
 
 The suggested nudge buttons come from `Suggestion.available_nudges`, calculated by trying those same patches against the current catalogue and household snapshot. Show an option only if it returns a different recipe satisfying the requested change; hide requests already satisfied by the current dish. This keeps the adjustment rules unchanged while avoiding impossible options such as Easier on a difficulty-1 dish. If a later tag request has no result, reject it without saving its failed restrictions so the current suggestion remains usable.
 
+Explicit relaxation and expired-session recovery use a new session with the achieved absolute time/difficulty limits. Saved Quicker/Easier tags are not applied a second time. A household-owned `previous_session_id` preserves skipped dishes and strict limits during recovery; Reset clears adjustments and skips. Saving household preferences refreshes Cook and Buy, with the interface explaining that the shopping list and ticks will reset.
+
 *Step 5 — learning from feedback.* Keep `taste_weights` as a small map from feature (taste tag, cuisine, main-protein category) to weight. Ratings arrive only after a meal has been cooked: on Like add +η to the recipe's features, on Dislike subtract η, on Maybe (or no rating) do nothing, and clip to a fixed range. "Not this" changes no weights — people skip for many reasons — and only keeps that recipe out of the rest of the session. Cooking a recipe without rating it adds a small +η/4. This is simple, explainable, and enough to test the first hypothesis. Optional: a per-household logistic regression or a Thompson-sampling bandit over the same features.
 
 *Freshness gate (applied in step 2, before scoring).* The report promises that uncertain ingredients are checked or excluded, never promoted. For each batch:
@@ -512,6 +514,8 @@ A recipe whose essential ingredient is only available in `check` batches is stil
    - *Uncertain stock* (`unknown`, stale confirmation, or batches waiting on a freshness check): never silently removed. The item stays on the list with `needs_check = true`, shown as "Check at home".
 5. There are no prices, no totals and no budget. The report states that Cookish does not offer budget management.
 6. Tags: `more_vegetables`, `longer_lasting` (prefer ingredients with long shelf life), `cover_more_meals`.
+
+Requested recipe IDs must remain in the plan. If a requested recipe fails a hard gate or needs a non-buyable essential such as cooked rice, return an explanation instead of substituting another dish. Basket adjustments preserve ticked ingredients across regenerated item IDs and require an actual-quantity review where counted needs change. `ShopAdjust.replace_tags=true` replaces the keyword list, including an empty list; ordinary nudge requests remain additive.
 
 **Use-first estimate** (Role 2 computes `use_first` when inventory is read; Role 5 computes `days_left` and `urgency` from it when scoring)
 

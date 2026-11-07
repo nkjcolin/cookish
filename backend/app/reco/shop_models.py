@@ -88,6 +88,9 @@ class ShopPlan:
     score_terms: dict[str, float]
     # No plan because every eligible meal can already be cooked from the kitchen.
     all_stocked: bool = False
+    # Requested dishes must never silently disappear from a successful plan.
+    unavailable_recipe_ids: tuple[UUID, ...] = ()
+    required_at_home: tuple[str, ...] = ()
 
     @property
     def score(self) -> float:
