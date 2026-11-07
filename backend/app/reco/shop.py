@@ -174,7 +174,17 @@ def shopping_list(
             amount = f"Check at home — {amount}"
         result.append(
             Purchase(
-                ingredient_id, meta.canonical_name, spec.category, amount, packs, uncertain, surplus
+                ingredient_id=ingredient_id,
+                name=meta.canonical_name,
+                category=spec.category,
+                amount=amount,
+                suggested_packs=packs,
+                needs_check=uncertain,
+                countable=meta.countable,
+                purchase_unit=spec.purchase_unit,
+                purchase_unit_size=spec.purchase_unit_size,
+                purchase_unit_measure=spec.purchase_unit_measure,
+                surplus_packs=surplus,
             )
         )
     return ShoppingList(tuple(result), at_home)
@@ -391,6 +401,10 @@ def to_basket(plan: ShopPlan, session_id: UUID, basket_id: UUID) -> Basket:
                 amount=item.amount,
                 suggested_packs=item.suggested_packs,
                 needs_check=item.needs_check,
+                countable=item.countable,
+                purchase_unit=item.purchase_unit,
+                purchase_unit_size=item.purchase_unit_size,
+                purchase_unit_measure=item.purchase_unit_measure,
             )
             for item in plan.items
         ],

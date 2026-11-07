@@ -10,7 +10,7 @@ import { CookPage } from "./CookPage";
 import { RecipePage } from "./RecipePage";
 
 const recipe: Schemas["Recipe"] = {
-  id: "salad",
+  id: "719b4fca-2889-4389-a4f7-8605dee34c48",
   title: "Chickpea salad",
   cuisine: "other",
   difficulty: 1,
@@ -81,25 +81,27 @@ afterEach(() => {
 describe("recipe browsing and cooking", () => {
   it("lets an empty kitchen read the recipe and go shopping without selecting or confirming a meal", async () => {
     const { client, get, post } = setup(suggestion("missing"));
+    const suggestedImage = screen.getByRole("img", { name: /illustrative serving of cucumber/i }).getAttribute("src");
 
     expect(screen.queryByRole("button", { name: "Cook this" })).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "View recipe" }));
 
     expect(await screen.findByText(recipe.steps[0]!)).toBeInTheDocument();
     expect(screen.getByRole("heading", { level: 1, name: recipe.title })).toBeInTheDocument();
+    expect(screen.getByRole("img", { name: /illustrative serving of cucumber/i })).toHaveAttribute("src", suggestedImage);
     expect(screen.getByText("400 g")).toBeInTheDocument();
     expect(screen.getByText("Serves 4")).toBeInTheDocument();
     expect(screen.getByText("Need to buy")).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "I cooked this" })).not.toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Update kitchen" })).toHaveAttribute("href", "/more/kitchen");
-    expect(get).toHaveBeenCalledWith("/api/recipes/{recipe_id}", { params: { path: { recipe_id: "salad" } } });
+    expect(get).toHaveBeenCalledWith("/api/recipes/{recipe_id}", { params: { path: { recipe_id: recipe.id } } });
     expect(post).not.toHaveBeenCalled();
     expect(client.getQueryData<Schemas["CookRecord"]>(COOK_RECORD_KEY)?.id).toBe("older-record");
 
     fireEvent.click(screen.getByRole("button", { name: "Go to Buy" }));
     expect(await screen.findByRole("heading", { name: "Shopping list" })).toBeInTheDocument();
     // The basket is planned around this recipe, for the people it was suggested for.
-    expect(post).toHaveBeenCalledWith("/api/shop/sessions", { body: { recipe_ids: ["salad"], people: 4 } });
+    expect(post).toHaveBeenCalledWith("/api/shop/sessions", { body: { recipe_ids: [recipe.id], people: 4 } });
     expect(client.getQueryData(BASKET_KEY)).toBeDefined();
   });
 
@@ -115,8 +117,11 @@ describe("recipe browsing and cooking", () => {
 
   it("still selects a stocked recipe before offering the cooking confirmation", async () => {
     const { post } = setup(suggestion("have"));
+    const suggestedImage = screen.getByRole("img", { name: /illustrative serving of cucumber/i }).getAttribute("src");
     fireEvent.click(screen.getByRole("button", { name: "Cook this" }));
-    fireEvent.click(await screen.findByRole("button", { name: "I cooked this" }));
+    const confirm = await screen.findByRole("button", { name: "I cooked this" });
+    expect(screen.getByRole("img", { name: /illustrative serving of cucumber/i })).toHaveAttribute("src", suggestedImage);
+    fireEvent.click(confirm);
     expect(await screen.findByRole("heading", { name: "Nice! What’s left?" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Update kitchen" })).toBeInTheDocument();
     expect(post).toHaveBeenCalledExactlyOnceWith("/api/cook/sessions/{session_id}/select", {

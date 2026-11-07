@@ -392,6 +392,8 @@ def test_missing_purchase_conversion_never_defaults_to_one_pack(setup):
     db.state["catalogue"] = replace(cat, purchases=purchases)
     basket = shopping(service)
     assert basket.items[0].suggested_packs is None
+    assert basket.items[0].countable
+    assert basket.items[0].purchase_unit_size is None
     assert_error(
         ErrorCode.VALIDATION,
         lambda: service.confirm_shop(
@@ -399,6 +401,30 @@ def test_missing_purchase_conversion_never_defaults_to_one_pack(setup):
         ),
     )
     assert db.stock_attempts == 0
+
+
+@pytest.mark.parametrize("packs", [None, 2])
+def test_incompatible_recipe_measure_preserves_actual_or_unknown_quantity_and_replays(setup, packs):
+    db, service, _ = setup
+    meal = recipe(ingredients=("egg",))
+    meal.ingredients[0].quantity, meal.ingredients[0].unit = 150, "g"
+    set_recipes(db, meal)
+    db.state["inventory"][HOUSEHOLD] = []
+    basket = shopping(service)
+    item = basket.items[0]
+    assert item.countable and item.suggested_packs is None
+    assert (item.purchase_unit, item.purchase_unit_size, item.purchase_unit_measure) == (
+        "tray",
+        10,
+        "pcs",
+    )
+    body, key = bought(basket, packs=packs), uid("actual-or-unknown-count")
+    result = service.confirm_shop(USER, basket.id, body, key)
+    assert result.items[0].count == (None if packs is None else 20)
+    assert result.items[0].unit == (None if packs is None else "pcs")
+    assert db.state["baskets"][HOUSEHOLD, basket.id].actual_lines[0].packs == packs
+    assert service.confirm_shop(USER, basket.id, body, key) == result
+    assert db.stock_attempts == 1
 
 
 def test_counted_purchase_without_a_pack_count_is_kept_with_an_unknown_amount(setup):

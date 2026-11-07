@@ -1,0 +1,609 @@
+{
+  "generated_on": "2026-11-07",
+  "generator": "OpenAI built-in image_gen tool",
+  "purpose": "Illustrative servings based on the seed recipes; not photographs of meals cooked or tested by the project team.",
+  "optimization": {
+    "format": "WebP",
+    "width": 960,
+    "quality": 82
+  },
+  "assets": [
+    {
+      "file": "frontend/public/recipes/bee-hoon-cabbage.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 61040,
+      "recipes": [
+        {
+          "id": "48daffdb-9a7e-4645-b7bd-dc3b575080b2",
+          "slug": "bee-hoon-cabbage"
+        }
+      ],
+      "prompt": "Use case: photorealistic-natural. Create one landscape food photograph for Cookish's recipe \"Cabbage and carrot bee hoon\". Subject and precise dish details: Dry thin white rice vermicelli tossed with shredded cabbage and orange carrot matchsticks; lightly soy-coloured, no egg or meat. Style: simple home-cooked food, appetizing realistic cooked food textures, warm natural window light, ivory matte ceramic bowl or plate on a warm off-white tabletop, subtle shadows, 45-degree overhead view. Center the complete dish with breathing room; compose for both a wide recipe card and a taller recipe header. Keep the full serving in frame. No text, labels, collage, logos, watermark, people, utensils, extra dishes, or unlisted decorative garnish. Show only the described ingredients; use a small side of white rice in the same plate or serving where specified, and omit rice if not specified. This is one image asset, not a collage."
+    },
+    {
+      "file": "frontend/public/recipes/bee-hoon-egg.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 63728,
+      "recipes": [
+        {
+          "id": "88e3e915-9e9a-4d66-8520-90c4efb34f8a",
+          "slug": "bee-hoon-egg"
+        }
+      ],
+      "prompt": "Use case: photorealistic-natural. Create one landscape food photograph for Cookish's recipe \"Egg, cabbage and carrot bee hoon\". Subject and precise dish details: Dry thin rice vermicelli with cabbage, carrot matchsticks and clearly visible fully set scrambled-egg pieces. Style: simple home-cooked food, appetizing realistic cooked food textures, warm natural window light, ivory matte ceramic bowl or plate on a warm off-white tabletop, subtle shadows, 45-degree overhead view. Center the complete dish with breathing room; compose for both a wide recipe card and a taller recipe header. Keep the full serving in frame. No text, labels, collage, logos, watermark, people, utensils, extra dishes, or unlisted decorative garnish. Show only the described ingredients; use a small side of white rice in the same plate or serving where specified, and omit rice if not specified. This is one image asset, not a collage."
+    },
+    {
+      "file": "frontend/public/recipes/cabbage-carrot-egg-fried-rice.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 65842,
+      "recipes": [
+        {
+          "id": "84caffd7-90b8-4d20-878c-c266f7fa6a87",
+          "slug": "cabbage-carrot-egg-fried-rice"
+        }
+      ],
+      "prompt": "Use case: photorealistic-natural. Create one landscape food photograph for Cookish's recipe \"Egg fried rice with extra cabbage and carrot\". Subject and precise dish details: Loose fried-rice grains, scrambled egg, abundant shredded cabbage, diced carrot and green peas; vegetables visibly more plentiful than the base egg fried rice. Style: simple home-cooked food, appetizing realistic cooked food textures, warm natural window light, ivory matte ceramic bowl or plate on a warm off-white tabletop, subtle shadows, 45-degree overhead view. Center the complete dish with breathing room; compose for both a wide recipe card and a taller recipe header. Keep the full serving in frame. No text, labels, collage, logos, watermark, people, utensils, extra dishes, or unlisted decorative garnish. Show only the described ingredients; use a small side of white rice in the same plate or serving where specified, and omit rice if not specified. This is one image asset, not a collage."
+    },
+    {
+      "file": "frontend/public/recipes/cabbage-tofu-stir-fry.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 47136,
+      "recipes": [
+        {
+          "id": "2173bce1-8bbd-40ee-be78-e80627d8ba07",
+          "slug": "cabbage-tofu-stir-fry"
+        },
+        {
+          "id": "79093e58-6ac3-46ab-adee-c948efc5b880",
+          "slug": "cabbage-tofu-stir-fry-less-oil"
+        }
+      ],
+      "prompt": "Use case: photorealistic-natural. Create one landscape food photograph for Cookish's recipe \"Cabbage and tofu rice bowls with less oil\". Subject and precise dish details: Cooked white rice topped with tender pale cabbage and firm tofu cubes. A normal serving image cannot establish how much oil was used. Style: simple home-cooked food, appetizing realistic cooked food textures, warm natural window light, ivory matte ceramic bowl or plate on a warm off-white tabletop, subtle shadows, 45-degree overhead view. Center the complete dish with breathing room; compose for both a wide recipe card and a taller recipe header. Keep the full serving in frame. No text, labels, collage, logos, watermark, people, utensils, extra dishes, or unlisted decorative garnish. Show only the described ingredients; use a small side of white rice in the same plate or serving where specified, and omit rice if not specified. This is one image asset, not a collage."
+    },
+    {
+      "file": "frontend/public/recipes/chicken-broccoli-stir-fry.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 72000,
+      "recipes": [
+        {
+          "id": "5380fd71-a373-4bed-8474-7f0d8e46cb43",
+          "slug": "chicken-broccoli-stir-fry"
+        }
+      ],
+      "prompt": "Use case: photorealistic-natural. Create one landscape food photograph for Cookish's recipe \"Chicken and broccoli stir-fry with rice\". Subject and precise dish details: Cooked white rice alongside bite-size boneless chicken pieces and bright-green broccoli florets in a light soy-ginger sauce; no tofu. Style: simple home-cooked food, appetizing realistic cooked food textures, warm natural window light, ivory matte ceramic bowl or plate on a warm off-white tabletop, subtle shadows, 45-degree overhead view. Center the complete dish with breathing room; compose for both a wide recipe card and a taller recipe header. Keep the full serving in frame. No text, labels, collage, logos, watermark, people, utensils, extra dishes, or unlisted decorative garnish. Show only the described ingredients; use a small side of white rice in the same plate or serving where specified, and omit rice if not specified. This is one image asset, not a collage."
+    },
+    {
+      "file": "frontend/public/recipes/chicken-rice-porridge.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 40680,
+      "recipes": [
+        {
+          "id": "1d920435-f931-4d7b-91d2-86d184e31e3b",
+          "slug": "chicken-rice-porridge"
+        }
+      ],
+      "prompt": "Use case: photorealistic-natural. Create one landscape food photograph for Cookish's recipe \"Ginger chicken rice porridge\". Subject and precise dish details: Soft pale rice congee with fully cooked thin chicken strips, ginger and optional sliced spring onion; thick spoonable porridge, not dry rice. Style: simple home-cooked food, appetizing realistic cooked food textures, warm natural window light, ivory matte ceramic bowl or plate on a warm off-white tabletop, subtle shadows, 45-degree overhead view. Center the complete dish with breathing room; compose for both a wide recipe card and a taller recipe header. Keep the full serving in frame. No text, labels, collage, logos, watermark, people, utensils, extra dishes, or unlisted decorative garnish. Show only the described ingredients; use a small side of white rice in the same plate or serving where specified, and omit rice if not specified. This is one image asset, not a collage."
+    },
+    {
+      "file": "frontend/public/recipes/chicken-vegetable-fried-rice.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 78736,
+      "recipes": [
+        {
+          "id": "5189d7a4-b3b0-4bbb-90f3-0622f193d72a",
+          "slug": "chicken-vegetable-fried-rice"
+        }
+      ],
+      "prompt": "Use case: photorealistic-natural. Create one landscape food photograph for Cookish's recipe \"Chicken, egg and vegetable fried rice\". Subject and precise dish details: Loose fried rice with small chicken pieces, scrambled egg, diced carrot and green peas; chicken must be visible. Style: simple home-cooked food, appetizing realistic cooked food textures, warm natural window light, ivory matte ceramic bowl or plate on a warm off-white tabletop, subtle shadows, 45-degree overhead view. Center the complete dish with breathing room; compose for both a wide recipe card and a taller recipe header. Keep the full serving in frame. No text, labels, collage, logos, watermark, people, utensils, extra dishes, or unlisted decorative garnish. Show only the described ingredients; use a small side of white rice in the same plate or serving where specified, and omit rice if not specified. This is one image asset, not a collage."
+    },
+    {
+      "file": "frontend/public/recipes/chickpea-tomato-curry.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 65170,
+      "recipes": [
+        {
+          "id": "785f4606-ac45-4a26-b915-a47a0eab08ae",
+          "slug": "chickpea-tomato-curry"
+        }
+      ],
+      "prompt": "Use case: photorealistic-natural. Create one landscape food photograph for Cookish's recipe \"Chickpea and tomato curry with rice\". Subject and precise dish details: Whole chickpeas in a thick red-orange tomato-onion curry with a separate serving of white rice; no coconut cream or meat. Style: simple home-cooked food, appetizing realistic cooked food textures, warm natural window light, ivory matte ceramic bowl or plate on a warm off-white tabletop, subtle shadows, 45-degree overhead view. Center the complete dish with breathing room; compose for both a wide recipe card and a taller recipe header. Keep the full serving in frame. No text, labels, collage, logos, watermark, people, utensils, extra dishes, or unlisted decorative garnish. Show only the described ingredients; use a small side of white rice in the same plate or serving where specified, and omit rice if not specified. This is one image asset, not a collage."
+    },
+    {
+      "file": "frontend/public/recipes/chye-sim-egg-bee-hoon.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 48536,
+      "recipes": [
+        {
+          "id": "ecbccf1f-44c2-448b-a25f-2695250fe976",
+          "slug": "chye-sim-egg-bee-hoon"
+        }
+      ],
+      "prompt": "Use case: photorealistic-natural. One landscape food photograph for Cookish's \"Chye sim and egg bee hoon soup\". Precise dish: Clear noodle soup containing thin white rice vermicelli, chye sim stems and leaves, and fine fully set egg ribbons; not boiled egg halves. Realistic home-cooked food with appetizing natural textures, warm window light, matte ivory ceramic plate or bowl, warm off-white table, subtle shadows, 45-degree overhead view. Center complete serving with breathing room for wide card and taller header crops. No text, collage, logo, watermark, people, utensils, extra dishes or unlisted decorative garnishes. White rice only where specified, in same serving/plate. Show the exact protein described."
+    },
+    {
+      "file": "frontend/public/recipes/coconut-chicken-curry.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 49780,
+      "recipes": [
+        {
+          "id": "f7c59407-af6a-4501-8f26-ce7668147f45",
+          "slug": "coconut-chicken-curry"
+        }
+      ],
+      "prompt": "Use case: photorealistic-natural. One landscape food photograph for Cookish's \"Coconut chicken and vegetable curry with rice\". Precise dish: Creamy turmeric-orange coconut curry with bite-size chicken, sliced carrot and short long-bean pieces, served with white rice; no tofu. Realistic home-cooked food with appetizing natural textures, warm window light, matte ivory ceramic plate or bowl, warm off-white table, subtle shadows, 45-degree overhead view. Center complete serving with breathing room for wide card and taller header crops. No text, collage, logo, watermark, people, utensils, extra dishes or unlisted decorative garnishes. White rice only where specified, in same serving/plate. Show the exact protein described."
+    },
+    {
+      "file": "frontend/public/recipes/coconut-tofu-curry.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 44494,
+      "recipes": [
+        {
+          "id": "5bd66173-7561-4c71-965d-ee17a8c8ebed",
+          "slug": "coconut-tofu-curry"
+        }
+      ],
+      "prompt": "Use case: photorealistic-natural. One landscape food photograph for Cookish's \"Coconut tofu and vegetable curry with rice\". Precise dish: Creamy turmeric-orange coconut curry with firm tofu cubes, sliced carrot and short long-bean pieces, served with white rice; no chicken. Realistic home-cooked food with appetizing natural textures, warm window light, matte ivory ceramic plate or bowl, warm off-white table, subtle shadows, 45-degree overhead view. Center complete serving with breathing room for wide card and taller header crops. No text, collage, logo, watermark, people, utensils, extra dishes or unlisted decorative garnishes. White rice only where specified, in same serving/plate. Show the exact protein described."
+    },
+    {
+      "file": "frontend/public/recipes/cucumber-tomato-chickpea-salad.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 67538,
+      "recipes": [
+        {
+          "id": "719b4fca-2889-4389-a4f7-8605dee34c48",
+          "slug": "cucumber-tomato-chickpea-salad"
+        }
+      ],
+      "prompt": "Use case: photorealistic-natural. One landscape food photograph for Cookish's \"Cucumber, tomato and chickpea rice salad\". Precise dish: A mixed rice salad with cooked white rice, chickpeas, diced cucumber and diced tomato in a light lemon dressing; no lettuce or feta. Realistic home-cooked food with appetizing natural textures, warm window light, matte ivory ceramic plate or bowl, warm off-white table, subtle shadows, 45-degree overhead view. Center complete serving with breathing room for wide card and taller header crops. No text, collage, logo, watermark, people, utensils, extra dishes or unlisted decorative garnishes. White rice only where specified, in same serving/plate. Show the exact protein described."
+    },
+    {
+      "file": "frontend/public/recipes/egg-fried-rice.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 56618,
+      "recipes": [
+        {
+          "id": "82837c0b-d649-4fe6-aa5b-196c64459b28",
+          "slug": "egg-fried-rice"
+        }
+      ],
+      "prompt": "Use case: photorealistic-natural. Asset type: Cookish recipe serving illustration, single landscape food photograph, not a collage.\nSubject: Egg fried rice with vegetables. Loose golden-white fried rice with scrambled egg, small carrot dice and green peas, optionally sliced spring onion; no chicken or tofu.\nStyle: realistic natural home-cooked meal, warm soft window light, ivory matte ceramic bowl or plate on an off-white table, 45-degree overhead view. Complete centered dish with generous breathing room for both wide and tall crops. Food texture must be believable and each specified protein identifiable.\nConstraints: show only the specified meal. Rice only when specified. No people, hands, text, logos, watermarks, utensils, extra garnishes, unrelated sides or decorative ingredients. No parsley, coriander, sesame seeds, cheese or nuts unless explicitly in the dish description."
+    },
+    {
+      "file": "frontend/public/recipes/fish-tomato-soup.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 43538,
+      "recipes": [
+        {
+          "id": "61456d3b-fc96-4bef-91b5-f54dce95fed7",
+          "slug": "fish-tomato-soup"
+        }
+      ],
+      "prompt": "Use case: photorealistic-natural. Asset type: Cookish recipe serving illustration, single landscape food photograph, not a collage.\nSubject: Fish and tomato vermicelli soup. Clear broth with white rice vermicelli, opaque cod chunks, softened red tomato wedges and spring onion; no whole fish or shellfish.\nStyle: realistic natural home-cooked meal, warm soft window light, ivory matte ceramic bowl or plate on an off-white table, 45-degree overhead view. Complete centered dish with generous breathing room for both wide and tall crops. Food texture must be believable and each specified protein identifiable.\nConstraints: show only the specified meal. Rice only when specified. No people, hands, text, logos, watermarks, utensils, extra garnishes, unrelated sides or decorative ingredients. No parsley, coriander, sesame seeds, cheese or nuts unless explicitly in the dish description."
+    },
+    {
+      "file": "frontend/public/recipes/garlic-water-spinach.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 49844,
+      "recipes": [
+        {
+          "id": "c3f44203-7245-430e-ad1b-52428f6cfed3",
+          "slug": "garlic-water-spinach"
+        }
+      ],
+      "prompt": "Use case: photorealistic-natural. Asset type: Cookish recipe serving illustration, single landscape food photograph, not a collage.\nSubject: Garlic water spinach and tofu rice bowls. White rice with stir-fried water-spinach hollow stems and dark green leaves, firm tofu cubes and small garlic pieces; not spinach puree.\nStyle: realistic natural home-cooked meal, warm soft window light, ivory matte ceramic bowl or plate on an off-white table, 45-degree overhead view. Complete centered dish with generous breathing room for both wide and tall crops. Food texture must be believable and each specified protein identifiable.\nConstraints: show only the specified meal. Rice only when specified. No people, hands, text, logos, watermarks, utensils, extra garnishes, unrelated sides or decorative ingredients. No parsley, coriander, sesame seeds, cheese or nuts unless explicitly in the dish description."
+    },
+    {
+      "file": "frontend/public/recipes/ginger-chicken-rice.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 44954,
+      "recipes": [
+        {
+          "id": "85d5ed52-10d6-4769-8bc5-435decbd08d8",
+          "slug": "ginger-chicken-rice"
+        },
+        {
+          "id": "bd2118d6-393b-413f-b7e6-b3116b108437",
+          "slug": "ginger-chicken-rice-less-oil"
+        }
+      ],
+      "prompt": "Use case: photorealistic-natural. Asset type: Cookish recipe serving illustration, single landscape food photograph, not a collage.\nSubject: Ginger chicken and bok choy rice with less oil. Rice cooked together with bite-size chicken and chopped bok choy, then gently mixed. A serving image cannot establish the oil reduction.\nStyle: realistic natural home-cooked meal, warm soft window light, ivory matte ceramic bowl or plate on an off-white table, 45-degree overhead view. Complete centered dish with generous breathing room for both wide and tall crops. Food texture must be believable and each specified protein identifiable.\nConstraints: show only the specified meal. Rice only when specified. No people, hands, text, logos, watermarks, utensils, extra garnishes, unrelated sides or decorative ingredients. No parsley, coriander, sesame seeds, cheese or nuts unless explicitly in the dish description."
+    },
+    {
+      "file": "frontend/public/recipes/ginger-chicken-soup.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 41270,
+      "recipes": [
+        {
+          "id": "c67a5a88-4c59-4498-a8c6-b76b4e30257e",
+          "slug": "ginger-chicken-soup"
+        }
+      ],
+      "prompt": "Use case: photorealistic-natural. Asset type: Cookish recipe serving illustration, single landscape food photograph, not a collage.\nSubject: Ginger chicken and potato soup. Clear ginger soup with cooked chicken chunks, potato cubes, carrot rounds and sliced spring onion; no noodles or rice in the bowl.\nStyle: realistic natural home-cooked meal, warm soft window light, ivory matte ceramic bowl or plate on an off-white table, 45-degree overhead view. Complete centered dish with generous breathing room for both wide and tall crops. Food texture must be believable and each specified protein identifiable.\nConstraints: show only the specified meal. Rice only when specified. No people, hands, text, logos, watermarks, utensils, extra garnishes, unrelated sides or decorative ingredients. No parsley, coriander, sesame seeds, cheese or nuts unless explicitly in the dish description."
+    },
+    {
+      "file": "frontend/public/recipes/lemon-pepper-chicken.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 47726,
+      "recipes": [
+        {
+          "id": "f81dd997-b06c-48ce-87ec-43727f62e023",
+          "slug": "lemon-pepper-chicken"
+        }
+      ],
+      "prompt": "Use case: photorealistic-natural. Asset type: Cookish recipe serving illustration, single landscape food photograph, not a collage.\nSubject: Lemon pepper chicken with potatoes and carrots. Cooked boneless chicken strips beside boiled potato cubes and carrot rounds with lemon-pepper pan juices; no rice, bread or roast chicken drumsticks.\nStyle: realistic natural home-cooked meal, warm soft window light, ivory matte ceramic bowl or plate on an off-white table, 45-degree overhead view. Complete centered dish with generous breathing room for both wide and tall crops. Food texture must be believable and each specified protein identifiable.\nConstraints: show only the specified meal. Rice only when specified. No people, hands, text, logos, watermarks, utensils, extra garnishes, unrelated sides or decorative ingredients. No parsley, coriander, sesame seeds, cheese or nuts unless explicitly in the dish description."
+    },
+    {
+      "file": "frontend/public/recipes/lemon-pepper-fish.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 55126,
+      "recipes": [
+        {
+          "id": "6c1f5f1d-bf31-48d5-8ea1-ce2572a89897",
+          "slug": "lemon-pepper-fish"
+        }
+      ],
+      "prompt": "Use case: photorealistic-natural. Asset type: Cookish recipe serving illustration, single landscape food photograph, not a collage.\nSubject: Lemon pepper fish with potatoes and carrots. Opaque pan-cooked cod fillet beside boiled potato cubes and carrot rounds with lemon zest and light pepper; no salmon or rice.\nStyle: realistic natural home-cooked meal, warm soft window light, ivory matte ceramic bowl or plate on an off-white table, 45-degree overhead view. Complete centered dish with generous breathing room for both wide and tall crops. Food texture must be believable and each specified protein identifiable.\nConstraints: show only the specified meal. Rice only when specified. No people, hands, text, logos, watermarks, utensils, extra garnishes, unrelated sides or decorative ingredients. No parsley, coriander, sesame seeds, cheese or nuts unless explicitly in the dish description."
+    },
+    {
+      "file": "frontend/public/recipes/lentil-spinach-dhal.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 48412,
+      "recipes": [
+        {
+          "id": "445528bb-43c7-432d-a06f-859645a43ab0",
+          "slug": "lentil-spinach-dhal"
+        }
+      ],
+      "prompt": "Use case: photorealistic-natural. Asset type: Cookish recipe serving illustration, single landscape food photograph, not a collage.\nSubject: Red lentil and spinach dhal with rice. Soft orange-red lentil dhal with tomato and visibly wilted green spinach, served beside white rice; no whole chickpeas.\nStyle: realistic natural home-cooked meal, warm soft window light, ivory matte ceramic bowl or plate on an off-white table, 45-degree overhead view. Complete centered dish with generous breathing room for both wide and tall crops. Food texture must be believable and each specified protein identifiable.\nConstraints: show only the specified meal. Rice only when specified. No people, hands, text, logos, watermarks, utensils, extra garnishes, unrelated sides or decorative ingredients. No parsley, coriander, sesame seeds, cheese or nuts unless explicitly in the dish description."
+    },
+    {
+      "file": "frontend/public/recipes/microwave-broccoli-chickpea-rice.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 46074,
+      "recipes": [
+        {
+          "id": "0c7bea35-103a-4199-b3cd-11cf607baf3f",
+          "slug": "microwave-broccoli-chickpea-rice"
+        }
+      ],
+      "prompt": "Use case: photorealistic-natural. Asset type: Cookish recipe serving illustration, single landscape food photograph, not a collage.\nSubject: Microwave broccoli and chickpea rice. A bowl of white rice mixed with broccoli florets and whole chickpeas, lightly dressed with lemon; no cheese, chicken or curry sauce.\nStyle: realistic natural home-cooked meal, warm soft window light, ivory matte ceramic bowl or plate on an off-white table, 45-degree overhead view. Complete centered dish with generous breathing room for both wide and tall crops. Food texture must be believable and each specified protein identifiable.\nConstraints: show only the specified meal. Rice only when specified. No people, hands, text, logos, watermarks, utensils, extra garnishes, unrelated sides or decorative ingredients. No parsley, coriander, sesame seeds, cheese or nuts unless explicitly in the dish description."
+    },
+    {
+      "file": "frontend/public/recipes/mushroom-omelette.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 56592,
+      "recipes": [
+        {
+          "id": "aa138433-2918-4a6f-b361-c1fe5eedeaaf",
+          "slug": "mushroom-omelette"
+        }
+      ],
+      "prompt": "Use case: photorealistic-natural. Asset type: Cookish recipe serving illustration, single landscape food photograph, not a collage.\nSubject: Mushroom omelette with rice. A fully set flat omelette with sliced shiitake mushrooms and spring onion, divided into wedges beside white rice; no melted cheese or runny egg.\nStyle: realistic natural home-cooked meal, warm soft window light, ivory matte ceramic bowl or plate on an off-white table, 45-degree overhead view. Complete centered dish with generous breathing room for both wide and tall crops. Food texture must be believable and each specified protein identifiable.\nConstraints: show only the specified meal. Rice only when specified. No people, hands, text, logos, watermarks, utensils, extra garnishes, unrelated sides or decorative ingredients. No parsley, coriander, sesame seeds, cheese or nuts unless explicitly in the dish description."
+    },
+    {
+      "file": "frontend/public/recipes/mushroom-rice-porridge.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 31740,
+      "recipes": [
+        {
+          "id": "ed9445a6-d029-4143-bbb5-22f64f133a2b",
+          "slug": "mushroom-rice-porridge"
+        }
+      ],
+      "prompt": "Use case: photorealistic-natural. Asset type: Cookish recipe serving illustration, single landscape food photograph, not a collage.\nSubject: Mushroom and tofu rice porridge. Pale thick rice congee with sliced shiitake mushrooms and white firm tofu cubes, optional spring onion; no chicken.\nStyle: realistic natural home-cooked meal, warm soft window light, ivory matte ceramic bowl or plate on an off-white table, 45-degree overhead view. Complete centered dish with generous breathing room for both wide and tall crops. Food texture must be believable and each specified protein identifiable.\nConstraints: show only the specified meal. Rice only when specified. No people, hands, text, logos, watermarks, utensils, extra garnishes, unrelated sides or decorative ingredients. No parsley, coriander, sesame seeds, cheese or nuts unless explicitly in the dish description."
+    },
+    {
+      "file": "frontend/public/recipes/potato-cauliflower-curry.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 46706,
+      "recipes": [
+        {
+          "id": "cd823518-b570-4185-ba71-b1d0cdde2adf",
+          "slug": "potato-cauliflower-curry"
+        }
+      ],
+      "prompt": "Use case: photorealistic-natural. Asset type: recipe photo for Cookish app. Dish: Potato and cauliflower curry with rice.\nSubject: Tomato-turmeric curry with potato cubes and cauliflower florets, served with white rice; no chickpeas, peas or coconut cream.\nStyle: natural home-cooked meal photographed in warm window light, on a single ivory matte ceramic bowl or plate on an off-white table. 45-degree overhead camera angle. Complete centered dish with breathing room suitable for wide and tall crops. Realistic food texture and portions.\nConstraints: Show only the specified ingredients and dish. Rice only when specified. No people, text, logos, watermarks, utensils, extra side dishes or extra garnish."
+    },
+    {
+      "file": "frontend/public/recipes/pumpkin-lentil-soup.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 35428,
+      "recipes": [
+        {
+          "id": "5e1d2eab-44fb-4882-bd2e-577b6e186a26",
+          "slug": "pumpkin-lentil-soup"
+        }
+      ],
+      "prompt": "Use case: photorealistic-natural. Asset type: recipe photo for Cookish app. Dish: Pumpkin, potato and red lentil soup.\nSubject: Chunky golden-orange soup with tender pumpkin and potato cubes and softened red lentils; not a smooth cream soup; no cream swirl or bread.\nStyle: natural home-cooked meal photographed in warm window light, on a single ivory matte ceramic bowl or plate on an off-white table. 45-degree overhead camera angle. Complete centered dish with breathing room suitable for wide and tall crops. Realistic food texture and portions.\nConstraints: Show only the specified ingredients and dish. Rice only when specified. No people, text, logos, watermarks, utensils, extra side dishes or extra garnish."
+    },
+    {
+      "file": "frontend/public/recipes/quicker-tomato-egg-rice.webp",
+      "width": 960,
+      "height": 720,
+      "bytes": 58320,
+      "recipes": [
+        {
+          "id": "eaacfdcd-aa3e-4fd9-9252-7602e8fedc65",
+          "slug": "quicker-tomato-egg-rice"
+        }
+      ],
+      "prompt": "Use case: photorealistic-natural. Asset type: recipe photo for Cookish app. Dish: Quick tomato and egg rice.\nSubject: Cooked rice mixed directly through softened tomato wedges and scrambled egg in one pan; tomato juices tint the grains, unlike a separate topping over plain rice.\nStyle: natural home-cooked meal photographed in warm window light, on a single ivory matte ceramic bowl or plate on an off-white table. 45-degree overhead camera angle. Complete centered dish with breathing room suitable for wide and tall crops. Realistic food texture and portions.\nConstraints: Show only the specified ingredients and dish. Rice only when specified. No people, text, logos, watermarks, utensils, extra side dishes or extra garnish."
+    },
+    {
+      "file": "frontend/public/recipes/red-lentil-dhal.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 45730,
+      "recipes": [
+        {
+          "id": "97f2ee52-db16-4544-80ba-11b117dcd4b0",
+          "slug": "red-lentil-dhal"
+        }
+      ],
+      "prompt": "Use case: photorealistic-natural. Asset type: recipe photo for Cookish app. Dish: Tomato and red lentil dhal with rice.\nSubject: Thick orange-red split-lentil dhal with softened tomato and onion served alongside white rice; no spinach leaves or whole chickpeas.\nStyle: natural home-cooked meal photographed in warm window light, on a single ivory matte ceramic bowl or plate on an off-white table. 45-degree overhead camera angle. Complete centered dish with breathing room suitable for wide and tall crops. Realistic food texture and portions.\nConstraints: Show only the specified ingredients and dish. Rice only when specified. No people, text, logos, watermarks, utensils, extra side dishes or extra garnish."
+    },
+    {
+      "file": "frontend/public/recipes/rice-cooker-bok-choy-tofu-rice.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 52354,
+      "recipes": [
+        {
+          "id": "a8fadb00-3dba-48b3-b7a8-5f9dc87f4a7e",
+          "slug": "rice-cooker-bok-choy-tofu-rice"
+        }
+      ],
+      "prompt": "Use case: photorealistic-natural. Asset type: recipe photo for Cookish app. Dish: Rice-cooker bok choy and tofu rice.\nSubject: Gently mixed cooked rice with plain pale tofu cubes and chopped bok choy stems and leaves; no browned fried-rice crust or egg.\nStyle: natural home-cooked meal photographed in warm window light, on a single ivory matte ceramic bowl or plate on an off-white table. 45-degree overhead camera angle. Complete centered dish with breathing room suitable for wide and tall crops. Realistic food texture and portions.\nConstraints: Show only the specified ingredients and dish. Rice only when specified. No people, text, logos, watermarks, utensils, extra side dishes or extra garnish."
+    },
+    {
+      "file": "frontend/public/recipes/rice-vermicelli-chicken-soup.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 42690,
+      "recipes": [
+        {
+          "id": "c3954096-77f8-49a4-a0c3-519390c4477d",
+          "slug": "rice-vermicelli-chicken-soup"
+        }
+      ],
+      "prompt": "Use case: photorealistic-natural. Asset type: recipe photo for Cookish app. Dish: Bok choy and chicken bee hoon soup.\nSubject: Clear light soy-ginger broth with thin white rice vermicelli, bite-size cooked chicken slices and bok choy; no tofu.\nStyle: natural home-cooked meal photographed in warm window light, on a single ivory matte ceramic bowl or plate on an off-white table. 45-degree overhead camera angle. Complete centered dish with breathing room suitable for wide and tall crops. Realistic food texture and portions.\nConstraints: Show only the specified ingredients and dish. Rice only when specified. No people, text, logos, watermarks, utensils, extra side dishes or extra garnish."
+    },
+    {
+      "file": "frontend/public/recipes/rice-vermicelli-tofu-soup.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 38342,
+      "recipes": [
+        {
+          "id": "202bfb57-26ca-4201-b935-7a7ea4db9785",
+          "slug": "rice-vermicelli-tofu-soup"
+        }
+      ],
+      "prompt": "Use case: photorealistic-natural. Asset type: recipe photo for Cookish app. Dish: Bok choy and tofu bee hoon soup.\nSubject: Clear light soy-ginger broth with thin white rice vermicelli, pale firm tofu cubes and bok choy; no chicken, mushroom or egg.\nStyle: natural home-cooked meal photographed in warm window light, on a single ivory matte ceramic bowl or plate on an off-white table. 45-degree overhead camera angle. Complete centered dish with breathing room suitable for wide and tall crops. Realistic food texture and portions.\nConstraints: Show only the specified ingredients and dish. Rice only when specified. No people, text, logos, watermarks, utensils, extra side dishes or extra garnish."
+    },
+    {
+      "file": "frontend/public/recipes/sambal-prawn.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 54322,
+      "recipes": [
+        {
+          "id": "bf7c533d-ae14-4e97-b0a5-fa05ef11a822",
+          "slug": "sambal-prawn"
+        }
+      ],
+      "prompt": "Use case: photorealistic-natural. Asset type: recipe photo for Cookish app. Dish: Chilli prawns with rice.\nSubject: Peeled cooked pink prawns coated in red tomato-chilli-onion sauce beside white rice; no shell-on giant prawns or tofu.\nStyle: natural home-cooked meal photographed in warm window light, on a single ivory matte ceramic bowl or plate on an off-white table. 45-degree overhead camera angle. Complete centered dish with breathing room suitable for wide and tall crops. Realistic food texture and portions.\nConstraints: Show only the specified ingredients and dish. Rice only when specified. No people, text, logos, watermarks, utensils, extra side dishes or extra garnish."
+    },
+    {
+      "file": "frontend/public/recipes/sambal-tofu.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 56662,
+      "recipes": [
+        {
+          "id": "c3729c50-e498-4026-94d0-a35154738ed9",
+          "slug": "sambal-tofu"
+        }
+      ],
+      "prompt": "Use case: photorealistic-natural. Asset type: recipe photo for Cookish app. Dish: Chilli tofu with rice.\nSubject: Firm tofu cubes with lightly golden edges coated in red tomato-chilli-onion sauce beside white rice; no prawns.\nStyle: natural home-cooked meal photographed in warm window light, on a single ivory matte ceramic bowl or plate on an off-white table. 45-degree overhead camera angle. Complete centered dish with breathing room suitable for wide and tall crops. Realistic food texture and portions.\nConstraints: Show only the specified ingredients and dish. Rice only when specified. No people, text, logos, watermarks, utensils, extra side dishes or extra garnish."
+    },
+    {
+      "file": "frontend/public/recipes/sesame-soba-egg.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 53902,
+      "recipes": [
+        {
+          "id": "bb825baf-2b21-466f-8709-03d9b8a3abcf",
+          "slug": "sesame-soba-egg"
+        }
+      ],
+      "prompt": "Use case: photorealistic-natural. Asset type: recipe photo for Cookish app. Dish: Sesame soba with egg and vegetables.\nSubject: Brown buckwheat soba noodles with thin cucumber strips and grated carrot, topped with quartered hard-boiled eggs with fully firm yolks; sesame-oil dressing, no sesame-seed garnish.\nStyle: natural home-cooked meal photographed in warm window light, on a single ivory matte ceramic bowl or plate on an off-white table. 45-degree overhead camera angle. Complete centered dish with breathing room suitable for wide and tall crops. Realistic food texture and portions.\nConstraints: Show only the specified ingredients and dish. Rice only when specified. No people, text, logos, watermarks, utensils, extra side dishes or extra garnish."
+    },
+    {
+      "file": "frontend/public/recipes/sesame-soba-tofu.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 49732,
+      "recipes": [
+        {
+          "id": "4a8e2e32-267d-4c29-a05c-179aa9f0ce24",
+          "slug": "sesame-soba-tofu"
+        }
+      ],
+      "prompt": "Use case: photorealistic-natural. Asset type: recipe photo for Cookish app. Dish: Sesame soba with tofu and vegetables.\nSubject: Brown buckwheat soba noodles with thin cucumber strips, grated carrot and plain pale firm tofu cubes; sesame-oil dressing, no egg or sesame-seed garnish.\nStyle: natural home-cooked meal photographed in warm window light, on a single ivory matte ceramic bowl or plate on an off-white table. 45-degree overhead camera angle. Complete centered dish with breathing room suitable for wide and tall crops. Realistic food texture and portions.\nConstraints: Show only the specified ingredients and dish. Rice only when specified. No people, text, logos, watermarks, utensils, extra side dishes or extra garnish."
+    },
+    {
+      "file": "frontend/public/recipes/steamed-egg.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 35046,
+      "recipes": [
+        {
+          "id": "9d5276e3-b3c1-4fb0-8825-7334f1b5dba8",
+          "slug": "steamed-egg"
+        }
+      ],
+      "prompt": "Use case: photorealistic-natural. Asset type: recipe image for a home cooking app. Make a single photorealistic photograph of Steamed egg with rice. Exact recipe appearance: Smooth pale-yellow fully set steamed egg custard with a little soy sauce and sliced spring onion, accompanied by white rice; no tofu or seafood. Warm window light, ivory matte ceramic bowl or plate on an off-white table, 45-degree overhead view, natural home-cooked textures. Complete centered dish with breathing room for wide and tall crops. No people, text, logos, watermarks, utensils, or extra garnish. Rice only where explicitly specified. One dish photograph, not a collage."
+    },
+    {
+      "file": "frontend/public/recipes/steamed-egg-tofu.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 39904,
+      "recipes": [
+        {
+          "id": "d3f3cc29-e09a-4f90-938f-21526f114c44",
+          "slug": "steamed-egg-tofu"
+        }
+      ],
+      "prompt": "Use case: photorealistic-natural. Asset type: recipe image for a home cooking app. Make a single photorealistic photograph of Steamed egg and tofu with rice. Exact recipe appearance: Smooth pale-yellow steamed egg custard with visible small tofu cubes, soy sauce and spring onion, accompanied by white rice; not a fried omelette. Warm window light, ivory matte ceramic bowl or plate on an off-white table, 45-degree overhead view, natural home-cooked textures. Complete centered dish with breathing room for wide and tall crops. No people, text, logos, watermarks, utensils, or extra garnish. Rice only where explicitly specified. One dish photograph, not a collage."
+    },
+    {
+      "file": "frontend/public/recipes/steamed-ginger-fish.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 46670,
+      "recipes": [
+        {
+          "id": "ab302fa5-3663-4431-b28c-f380b5b9b1f7",
+          "slug": "steamed-ginger-fish"
+        }
+      ],
+      "prompt": "Use case: photorealistic-natural. Asset type: recipe image for a home cooking app. Make a single photorealistic photograph of Steamed ginger cod with broccoli and rice. Exact recipe appearance: A steamed opaque cod fillet with ginger strips, tender broccoli florets and white rice; optional spring onion and light soy sauce; no crispy skin or red chilli garnish. Warm window light, ivory matte ceramic bowl or plate on an off-white table, 45-degree overhead view, natural home-cooked textures. Complete centered dish with breathing room for wide and tall crops. No people, text, logos, watermarks, utensils, or extra garnish. Rice only where explicitly specified. One dish photograph, not a collage."
+    },
+    {
+      "file": "frontend/public/recipes/tempeh-cabbage-stir-fry.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 50552,
+      "recipes": [
+        {
+          "id": "900f9630-7d36-4cad-9db6-1851bef26fd1",
+          "slug": "tempeh-cabbage-stir-fry"
+        }
+      ],
+      "prompt": "Use case: photorealistic-natural. Asset type: recipe image for a home cooking app. Make a single photorealistic photograph of Tempeh and cabbage stir-fry with rice. Exact recipe appearance: Golden tempeh cubes with visible soybean texture and soft cabbage strips in a light soy glaze, served with white rice; no long beans or tofu cubes. Warm window light, ivory matte ceramic bowl or plate on an off-white table, 45-degree overhead view, natural home-cooked textures. Complete centered dish with breathing room for wide and tall crops. No people, text, logos, watermarks, utensils, or extra garnish. Rice only where explicitly specified. One dish photograph, not a collage."
+    },
+    {
+      "file": "frontend/public/recipes/tempeh-long-bean-stir-fry.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 46734,
+      "recipes": [
+        {
+          "id": "404b4550-6cd6-4ee4-b79e-9b0b87161ece",
+          "slug": "tempeh-long-bean-stir-fry"
+        }
+      ],
+      "prompt": "Use case: photorealistic-natural. Asset type: recipe image for a home cooking app. Make a single photorealistic photograph of Tempeh and long bean stir-fry with rice. Exact recipe appearance: Golden tempeh cubes with visible soybean texture and short green long-bean segments in soy glaze, served with white rice; no cabbage. Warm window light, ivory matte ceramic bowl or plate on an off-white table, 45-degree overhead view, natural home-cooked textures. Complete centered dish with breathing room for wide and tall crops. No people, text, logos, watermarks, utensils, or extra garnish. Rice only where explicitly specified. One dish photograph, not a collage."
+    },
+    {
+      "file": "frontend/public/recipes/tofu-broccoli-stir-fry.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 54414,
+      "recipes": [
+        {
+          "id": "66ee604f-e55c-46a3-8d5f-a64e5e58085d",
+          "slug": "tofu-broccoli-stir-fry"
+        }
+      ],
+      "prompt": "Use case: photorealistic-natural. Asset type: recipe image for a home cooking app. Make a single photorealistic photograph of Tofu and broccoli stir-fry with rice. Exact recipe appearance: Lightly golden firm tofu cubes and green broccoli florets in a light soy-ginger sauce with white rice; no chicken. Warm window light, ivory matte ceramic bowl or plate on an off-white table, 45-degree overhead view, natural home-cooked textures. Complete centered dish with breathing room for wide and tall crops. No people, text, logos, watermarks, utensils, or extra garnish. Rice only where explicitly specified. One dish photograph, not a collage."
+    },
+    {
+      "file": "frontend/public/recipes/tofu-mushroom-rice.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 50950,
+      "recipes": [
+        {
+          "id": "109d8db0-0c6c-4229-b0fc-bf295cfb6eb7",
+          "slug": "tofu-mushroom-rice"
+        }
+      ],
+      "prompt": "Use case: photorealistic-natural. Asset type: recipe image for a home cooking app. Make a single photorealistic photograph of One-pot tofu and mushroom rice. Exact recipe appearance: One-pot rice gently mixed with pale tofu cubes, sliced brown shiitake mushrooms and ginger, optionally spring onion; no chicken or bok choy. Warm window light, ivory matte ceramic bowl or plate on an off-white table, 45-degree overhead view, natural home-cooked textures. Complete centered dish with breathing room for wide and tall crops. No people, text, logos, watermarks, utensils, or extra garnish. Rice only where explicitly specified. One dish photograph, not a collage."
+    },
+    {
+      "file": "frontend/public/recipes/tofu-mushroom-soup.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 47626,
+      "recipes": [
+        {
+          "id": "cec3641a-2ff2-44ae-b64c-8e59d69bea59",
+          "slug": "tofu-mushroom-soup"
+        }
+      ],
+      "prompt": "Use case: photorealistic-natural. Asset type: recipe image for a home cooking app. Make a single photorealistic photograph of Tofu, mushroom and cabbage noodle soup. Exact recipe appearance: Clear noodle soup with thin rice vermicelli, firm tofu cubes, sliced shiitake mushrooms and soft cabbage; no bok choy or meat. Warm window light, ivory matte ceramic bowl or plate on an off-white table, 45-degree overhead view, natural home-cooked textures. Complete centered dish with breathing room for wide and tall crops. No people, text, logos, watermarks, utensils, or extra garnish. Rice only where explicitly specified. One dish photograph, not a collage."
+    },
+    {
+      "file": "frontend/public/recipes/tofu-vegetable-fried-rice.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 53898,
+      "recipes": [
+        {
+          "id": "23c3cd8d-ad33-4891-b2ec-6c10a93a43cb",
+          "slug": "tofu-vegetable-fried-rice"
+        }
+      ],
+      "prompt": "Use case: photorealistic-natural. Asset type: recipe image for a home cooking app. Make a single photorealistic photograph of Tofu and vegetable fried rice. Exact recipe appearance: Loose fried rice with lightly golden tofu cubes, diced carrot and green peas; no egg pieces, chicken or cabbage. Warm window light, ivory matte ceramic bowl or plate on an off-white table, 45-degree overhead view, natural home-cooked textures. Complete centered dish with breathing room for wide and tall crops. No people, text, logos, watermarks, utensils, or extra garnish. Rice only where explicitly specified. One dish photograph, not a collage."
+    },
+    {
+      "file": "frontend/public/recipes/tomato-egg-stir-fry.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 57796,
+      "recipes": [
+        {
+          "id": "645a8d38-bfae-47f2-b00e-3ca6828a964e",
+          "slug": "tomato-egg-stir-fry"
+        },
+        {
+          "id": "45045a12-f142-4125-b594-34f486c75032",
+          "slug": "tomato-egg-stir-fry-less-oil"
+        }
+      ],
+      "prompt": "Use case: photorealistic-natural. Create one landscape food photograph for Cookish's recipe 'Tomato and egg rice bowls'. A shallow matte ivory ceramic bowl with freshly cooked white rice, topped with soft fully set scrambled egg curds and cooked red tomato wedges in a light tomato sauce, a little thinly sliced spring onion. Simple home-cooked Chinese dish. Warm natural window light, appetizing true food textures, off-white tabletop, subtle shadows, 45-degree overhead viewpoint, bowl centered and fully visible with small breathing room so the same photograph crops well at 16:9 and 3:2. No people, text, labels, logos, watermark, props, utensils, meat, sesame, or ingredients not listed. Generate as a project-ready raster food image, not a collage."
+    },
+    {
+      "file": "frontend/public/recipes/tomato-onion-omelette.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 59984,
+      "recipes": [
+        {
+          "id": "aef915ed-711e-41c8-9d1a-8c31f0cd51f8",
+          "slug": "tomato-onion-omelette"
+        }
+      ],
+      "prompt": "Use case: photorealistic-natural. Asset type: recipe image for a home cooking app. Make a single photorealistic photograph of Tomato and onion omelette with rice. Exact recipe appearance: Fully set flat omelette with visible tomato pieces and softened onion, divided into wedges beside white rice; no mushrooms or cheese. Warm window light, ivory matte ceramic bowl or plate on an off-white table, 45-degree overhead view, natural home-cooked textures. Complete centered dish with breathing room for wide and tall crops. No people, text, logos, watermarks, utensils, or extra garnish. Rice only where explicitly specified. One dish photograph, not a collage."
+    }
+  ]
+}

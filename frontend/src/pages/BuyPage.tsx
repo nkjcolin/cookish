@@ -6,6 +6,7 @@ import { useAdjustBasket, useBasket, useCart } from "../api/shop";
 import { Button } from "../components/Button";
 import { Chip } from "../components/Chip";
 import { Icon } from "../components/Icon";
+import { RecipeImage } from "../components/RecipeImage";
 import { Tag } from "../components/Tag";
 import { AdjustBasketSheet } from "./buy/AdjustBasketSheet";
 import { SHOP_TAG_LABELS, groupByAisle } from "./buy/view";
@@ -194,11 +195,9 @@ function ShoppingList({ basket, inCart, onToggle }: ShoppingListProps) {
 function Meals({ basket }: { basket: Basket }) {
   return (
     <ul className="flex flex-col gap-[10px]">
-      {basket.planned_meals.map((meal, index) => (
+      {basket.planned_meals.map((meal) => (
         <li key={meal.id} className="flex items-center gap-[12px] rounded-md border border-border bg-surface p-[14px]">
-          <span className="flex size-[26px] shrink-0 items-center justify-center rounded-pill bg-primary-soft text-[13px] font-bold text-primary">
-            {index + 1}
-          </span>
+          <RecipeImage recipeId={meal.id} title={meal.title} className="size-[72px] shrink-0 rounded-[10px]" />
           <div className="flex min-w-px flex-1 flex-col gap-[6px]">
             <p className="text-[15px] font-bold">{meal.title}</p>
             <div className="flex flex-wrap items-start gap-[6px]">

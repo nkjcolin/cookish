@@ -8,6 +8,7 @@ import type { CookedState } from "./cook/view";
 import { BottomBar } from "../components/BottomBar";
 import { Button } from "../components/Button";
 import { Icon } from "../components/Icon";
+import { RecipeImage } from "../components/RecipeImage";
 import { Tag } from "../components/Tag";
 import { formatCount } from "../lib/count";
 import { TASTE_TAG_LABELS, difficultyLabel } from "./cook/view";
@@ -16,9 +17,6 @@ import { WhatsLeftSheet } from "./cook/WhatsLeftSheet";
 type Status = Schemas["IngredientStatus"];
 
 const displayFont = { fontVariationSettings: '"SOFT" 0, "WONK" 1' };
-const heroImage = {
-  backgroundImage: "linear-gradient(149.47deg, rgb(255, 237, 184) 0%, rgb(229, 161, 56) 83.333%)",
-};
 const roundButton =
   "absolute top-[8px] flex size-[40px] items-center justify-center rounded-pill border border-border bg-surface";
 
@@ -55,10 +53,8 @@ export function RecipePage({ preview = false }: { preview?: boolean }) {
 
   return (
     <div className="flex flex-col gap-[18px]">
-      <div className="relative -mx-[20px] -mt-[16px] h-[230px] overflow-clip" style={heroImage}>
-        <span className="absolute top-[86px] left-1/2 -translate-x-1/2 opacity-90">
-          <Icon name="pot-hero" />
-        </span>
+      <div className="relative -mx-[20px] -mt-[16px] h-[230px] overflow-clip">
+        <RecipeImage recipeId={summary.id} title={summary.title} className="h-full w-full" />
         <Link to="/cook" aria-label="Back" className={`${roundButton} left-[20px]`}>
           <Icon name="chevron-left" />
         </Link>

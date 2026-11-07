@@ -126,6 +126,37 @@ def test_selected_consumption_keeps_original_batch_revisions_and_portions(record
     assert line.item.count == 10
 
 
+def test_older_basket_responses_recover_only_their_frozen_purchase_metadata(records):
+    original = records["basket"]
+    wire = dump_snapshot(original)
+    fields = ("countable", "purchase_unit", "purchase_unit_size", "purchase_unit_measure")
+    for item in wire["payload"]["response"]["items"]:
+        for name in fields:
+            del item[name]
+    unchanged = deepcopy(wire)
+    restored = load_snapshot(wire, type(original))
+    assert restored == original
+    assert wire == unchanged  # Loading does not rewrite original planning evidence.
+
+
+@pytest.mark.parametrize("field", ["countable", "purchase_unit_size"])
+def test_basket_response_cannot_disagree_with_frozen_purchase_metadata(records, field):
+    original = records["basket"]
+    wire = dump_snapshot(original)
+    item = wire["payload"]["response"]["items"][0]
+    item[field] = not item[field] if field == "countable" else 999
+    with pytest.raises(ValueError, match="frozen purchase metadata"):
+        load_snapshot(wire, type(original))
+
+
+def test_partial_new_basket_metadata_is_rejected_without_defaulting(records):
+    original = records["basket"]
+    wire = dump_snapshot(original)
+    del wire["payload"]["response"]["items"][0]["countable"]
+    with pytest.raises(ValueError, match="incomplete"):
+        load_snapshot(wire, type(original))
+
+
 def test_previous_history_and_current_cursor_survive_roundtrip(records):
     row = load_snapshot(dump_snapshot(records["cook_session"]), CookSessionRow)
     assert len(row.history) == 2

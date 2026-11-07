@@ -427,6 +427,10 @@ def basket(
             amount=amount,
             suggested_packs=packs,
             needs_check=check,
+            countable=ing.countable,
+            purchase_unit="pack" if ing.countable else None,
+            purchase_unit_size=1 if ing.countable else None,
+            purchase_unit_measure=ing.default_unit if ing.countable else None,
         )
 
     return Basket(

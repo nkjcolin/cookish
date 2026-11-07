@@ -170,6 +170,11 @@
           "category": {
             "$ref": "#/components/schemas/IngredientCategory"
           },
+          "countable": {
+            "description": "Whether the ingredient is tracked by a numeric quantity.",
+            "title": "Countable",
+            "type": "boolean"
+          },
           "id": {
             "format": "uuid",
             "title": "Id",
@@ -188,6 +193,42 @@
             "description": "Stock is uncertain: show \"Check at home\".",
             "title": "Needs Check",
             "type": "boolean"
+          },
+          "purchase_unit": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Frozen purchase unit, e.g. pack or piece.",
+            "title": "Purchase Unit"
+          },
+          "purchase_unit_measure": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Measure of that quantity, e.g. pcs or g.",
+            "title": "Purchase Unit Measure"
+          },
+          "purchase_unit_size": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Quantity in one purchase unit; no recipe-to-purchase conversion is implied.",
+            "title": "Purchase Unit Size"
           },
           "suggested_packs": {
             "anyOf": [
@@ -208,6 +249,10 @@
           "name",
           "category",
           "amount",
+          "countable",
+          "purchase_unit",
+          "purchase_unit_size",
+          "purchase_unit_measure",
           "suggested_packs",
           "needs_check"
         ],
@@ -246,7 +291,7 @@
                 "type": "null"
               }
             ],
-            "description": "Defaults to the suggested number.",
+            "description": "Actual purchase-unit count for countable items. Uses the suggestion if omitted; if neither is available, records an unknown amount. Omit for state-tracked items.",
             "title": "Packs"
           }
         },

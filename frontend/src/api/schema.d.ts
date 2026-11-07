@@ -503,6 +503,11 @@ export interface components {
             amount: string;
             category: components["schemas"]["IngredientCategory"];
             /**
+             * Countable
+             * @description Whether the ingredient is tracked by a numeric quantity.
+             */
+            countable: boolean;
+            /**
              * Id
              * Format: uuid
              */
@@ -519,6 +524,21 @@ export interface components {
              * @description Stock is uncertain: show "Check at home".
              */
             needs_check: boolean;
+            /**
+             * Purchase Unit
+             * @description Frozen purchase unit, e.g. pack or piece.
+             */
+            purchase_unit: string | null;
+            /**
+             * Purchase Unit Measure
+             * @description Measure of that quantity, e.g. pcs or g.
+             */
+            purchase_unit_measure: string | null;
+            /**
+             * Purchase Unit Size
+             * @description Quantity in one purchase unit; no recipe-to-purchase conversion is implied.
+             */
+            purchase_unit_size: number | null;
             /**
              * Suggested Packs
              * @description null for state-tracked ingredients, and for counted ones whose need is uncertain. Confirming a bought line without packs records it with an unknown amount.
@@ -541,7 +561,7 @@ export interface components {
             bought: boolean;
             /**
              * Packs
-             * @description Defaults to the suggested number.
+             * @description Actual purchase-unit count for countable items. Uses the suggestion if omitted; if neither is available, records an unknown amount. Omit for state-tracked items.
              */
             packs?: number | null;
         };
