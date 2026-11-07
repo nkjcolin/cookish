@@ -1,10 +1,11 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { renderHook } from "@testing-library/react";
+import { act, renderHook, waitFor } from "@testing-library/react";
 import type { ReactNode } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { api, type Schemas } from "./client";
-import { SUGGESTION_KEY, useCookStep } from "./cook";
+import { SUGGESTION_KEY, useCookStep, useCookSuggestion } from "./cook";
+import { useUpdateInventoryItem } from "./queries";
 
 function suggestion(sessionId: string): Schemas["Suggestion"] {
   return {
@@ -55,4 +56,28 @@ describe("useCookStep", () => {
 
     await expect(step.mutateAsync({ kind: "next" })).rejects.toThrow("Busy");
   });
+});
+
+it("refreshes stock on the next Cook visit without replacing the session during a quick check", async () => {
+  const queryClient = new QueryClient();
+  queryClient.setQueryData(SUGGESTION_KEY, suggestion("old"));
+  vi.spyOn(api, "PATCH").mockResolvedValue({ data: {} } as never);
+  const post = vi.spyOn(api, "POST").mockResolvedValue({ data: suggestion("fresh") } as never);
+  const wrapper = ({ children }: { children: ReactNode }) => (
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+  );
+  const active = renderHook(() => ({ session: useCookSuggestion(), update: useUpdateInventoryItem() }), { wrapper });
+
+  await act(() => active.result.current.update.mutateAsync({
+    itemId: "item",
+    body: { revision: 1, remaining_state: "enough" },
+  }));
+  expect(active.result.current.session.data?.session_id).toBe("old");
+  expect(post).not.toHaveBeenCalled();
+
+  active.unmount();
+  const returned = renderHook(useCookSuggestion, { wrapper });
+  await waitFor(() => expect(returned.result.current.data?.session_id).toBe("fresh"));
+  expect(post).toHaveBeenCalledExactlyOnceWith("/api/cook/sessions", { body: {} });
+  returned.unmount();
 });

@@ -14,14 +14,51 @@ ingredient, best match first. Ties go to the shorter name, and among typos to th
 Typing nothing lists the catalogue alphabetically, so the "add item" box has something to show.
 """
 
-from sqlalchemy import text
+import unicodedata
+from collections.abc import Iterable
+from uuid import UUID
 
+from sqlalchemy import select, text
+from sqlalchemy.orm import Session
+
+from app.db import models as m
 from app.db.session import transaction
 from app.schemas.catalogue import Ingredient, IngredientSearchResult
 
 # pg_trgm's own default: below this, two words are not treated as alike.
 TYPO_THRESHOLD = 0.3
 MAX_RESULTS = 100
+
+
+def _name_key(value: str) -> str:
+    return " ".join(unicodedata.normalize("NFKC", value).casefold().split())
+
+
+def match_exact_names(s: Session, names: Iterable[str]) -> dict[str, UUID]:
+    """Resolve reviewed names only when one catalogue ingredient matches exactly.
+
+    Search suggestions may be fuzzy; automatic inventory links must not be. Canonical
+    names and aliases have equal standing here, so a collision between ingredients is
+    left unresolved. Repeated aliases for the same ingredient are harmless.
+    """
+    keys = {name: _name_key(name) for name in names}
+    wanted = {key for key in keys.values() if key}
+    if not wanted:
+        return {}
+    matches: dict[str, set[UUID]] = {key: set() for key in wanted}
+    # The small shared catalogue is read once per add request, never cached across seeds.
+    rows = s.execute(select(m.Ingredient.id, m.Ingredient.canonical_name, m.Ingredient.aliases))
+    for ingredient_id, canonical_name, aliases in rows:
+        for label in (canonical_name, *(aliases or [])):
+            key = _name_key(label)
+            if key in matches:
+                matches[key].add(ingredient_id)
+    return {
+        name: next(iter(matches[key]))
+        for name, key in keys.items()
+        if key in matches and len(matches[key]) == 1
+    }
+
 
 _SEARCH = text(
     r"""

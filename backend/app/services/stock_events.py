@@ -68,6 +68,9 @@ class NewBatch:
 
     item: InventoryItemCreate
     source: ItemSource
+    # A name match identifies food, not the meaning of a quantity with no unit.
+    # Explicit catalogue selections retain the existing default-unit behavior.
+    use_default_unit: bool = True
 
 
 @dataclass(frozen=True)
@@ -340,8 +343,8 @@ def _new_item(
     if name is None:
         raise ApiError(ErrorCode.VALIDATION, "A free-text item needs a display_name")
     storage = spec.storage or (ingredient.default_storage if ingredient else None) or Storage.PANTRY
-    unit = spec.unit
-    if unit is None and spec.count is not None and ingredient is not None:
+    unit = _inventory_unit(spec.unit, ingredient)
+    if line.use_default_unit and unit is None and spec.count is not None and ingredient is not None:
         unit = ingredient.default_unit
     state = RemainingState(spec.remaining_state).value
     counted = ingredient is not None and ingredient.countable
@@ -362,6 +365,20 @@ def _new_item(
         last_confirmed_at=now,
         revision=1,
     )
+
+
+def _inventory_unit(unit: str | None, ingredient: m.Ingredient | None) -> str | None:
+    """Canonicalise count words only; never convert weights, volumes or packs."""
+    key = unit.strip().casefold() if unit is not None else None
+    if key in {"pcs", "piece", "pieces"}:
+        return "pcs"
+    if (
+        key in {"egg", "eggs"}
+        and ingredient is not None
+        and ingredient.canonical_name.strip().casefold() == "egg"
+    ):
+        return "pcs"
+    return unit
 
 
 def _ingredient(s: Session, ingredient_id: UUID) -> m.Ingredient:

@@ -174,6 +174,7 @@ export function CookPage() {
             onSkip={() => run({ kind: "next" })}
             onPrevious={() => run({ kind: "previous" })}
             onCook={cookThis}
+            onPreview={() => navigate("/cook/preview")}
           />
 
           <section className="flex flex-col gap-[10px]">
@@ -291,11 +292,13 @@ type SuggestionCardProps = {
   onSkip: () => void;
   onPrevious: () => void;
   onCook: () => void;
+  onPreview: () => void;
 };
 
-function SuggestionCard({ suggestion, busy, onSkip, onPrevious, onCook }: SuggestionCardProps) {
+function SuggestionCard({ suggestion, busy, onSkip, onPrevious, onCook, onPreview }: SuggestionCardProps) {
   const { recipe } = suggestion;
   const star = useStarRecipe();
+  const missingEssentials = suggestion.ingredients.some((line) => line.essential && line.status === "missing");
 
   return (
     <article className="flex flex-col overflow-clip rounded-lg border border-border bg-surface shadow-[0px_8px_24px_0px_rgba(89,51,26,0.08)]">
@@ -349,10 +352,20 @@ function SuggestionCard({ suggestion, busy, onSkip, onPrevious, onCook }: Sugges
           <Button variant="secondary" className="min-w-px flex-1" onClick={onSkip} disabled={busy}>
             Not tonight
           </Button>
-          <Button className="min-w-px flex-1" onClick={onCook} disabled={busy}>
-            Cook this
+          <Button className="min-w-px flex-1" onClick={missingEssentials ? onPreview : onCook} disabled={busy}>
+            {missingEssentials ? "View recipe" : "Cook this"}
           </Button>
         </div>
+        {!missingEssentials && (
+          <button
+            type="button"
+            onClick={onPreview}
+            disabled={busy}
+            className="self-center text-[13px] font-semibold text-primary disabled:opacity-50"
+          >
+            View recipe
+          </button>
+        )}
         {suggestion.has_previous && (
           <button
             type="button"
