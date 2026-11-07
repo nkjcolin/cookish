@@ -22,8 +22,8 @@ You are also the editor of the final report and slides.
 
 ## What already exists
 
-- **Every function above, as a stub** marked `STUB`, returning sample data from `app/mock.py`. The endpoints, the frontend and Role 5's code already call them.
-- **`session.py`**: `engine()` reads `DATABASE_URL` and is created once per process; `transaction()` is the context manager every service uses. SQLAlchemy 2 and the `psycopg` driver are installed. Alembic is not yet.
+- **Every function above, implemented against PostgreSQL.** The endpoints, the frontend and Role 5's code call them.
+- **`session.py`**: `engine()` reads `DATABASE_URL` and is created once per process; `transaction()` is the context manager every service uses. SQLAlchemy 2, the `psycopg` driver and Alembic are installed.
 - **`app/auth.py`** calls your `get_or_create_user` on every request, with the Cognito `sub` on AWS or a fixed development user locally.
 - **`app/clock.py`** for today's date in Singapore.
 - **Postgres 16** in `docker compose up`, empty, with `DATABASE_URL` set for the backend container.

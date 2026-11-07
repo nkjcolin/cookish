@@ -181,10 +181,10 @@ def test_the_demo_kitchen_gets_the_statuses_the_mock_kitchen_showed():
         ("Egg", 2.0): F.USE_SOON,
         ("Egg", 6.0): F.OK,
         ("Tomato", 3.0): F.OK,
-        ("Cabbage", None): F.USE_SOON,
+        ("Cabbage", 0.5): F.USE_SOON,
         ("Garlic", None): F.OK,
         ("Chicken thigh", None): F.CHECK,
-        ("Firm tofu", 1.0): F.OK,
+        ("Firm tofu", None): F.OK,
         ("Rice", None): F.OK,
     }
     assert {key: item.freshness_status for key, item in by_batch.items()} == expected

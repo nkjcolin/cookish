@@ -368,16 +368,19 @@ def _new_item(
 
 
 def _inventory_unit(unit: str | None, ingredient: m.Ingredient | None) -> str | None:
-    """Canonicalise count words only; never convert weights, volumes or packs."""
+    """Canonicalise count words only; never convert weights, volumes or packs.
+
+    For a food counted in pieces, its own name ("2 eggs", "1 cabbage") and "head" count too.
+    """
     key = unit.strip().casefold() if unit is not None else None
     if key in {"pcs", "piece", "pieces"}:
         return "pcs"
-    if (
-        key in {"egg", "eggs"}
-        and ingredient is not None
-        and ingredient.canonical_name.strip().casefold() == "egg"
-    ):
-        return "pcs"
+    if ingredient is not None and ingredient.default_unit == "pcs":
+        names = {
+            n.strip().casefold() for n in (ingredient.canonical_name, *(ingredient.aliases or []))
+        }
+        if key in {"head", "heads"} | names | {f"{n}s" for n in names} | {f"{n}es" for n in names}:
+            return "pcs"
     return unit
 
 

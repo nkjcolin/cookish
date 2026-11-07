@@ -156,7 +156,9 @@ def shopping_list(
                 else:
                     packs = needed_packs
                     amount = (
-                        f"{packs} × {spec.purchase_unit} "
+                        f"{packs} {spec.purchase_unit_measure}"
+                        if spec.purchase_unit_size == 1
+                        else f"{packs} × {spec.purchase_unit} "
                         f"({spec.purchase_unit_size:g} {spec.purchase_unit_measure} each)"
                     )
             else:

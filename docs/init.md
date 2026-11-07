@@ -18,17 +18,17 @@ Each role README says what you own, what already exists, what you may change and
 
 ## What exists now
 
-The whole app runs locally and every screen works, but **nothing behind the API is real yet**. The backend answers every request with fixed sample data. The work ahead is to replace that sample data with the real thing, one function at a time, without changing the shape of what is returned.
+Every screen works on real data, locally and on AWS. What remains is evaluation and the report (stage 4 below), and the gaps each role's README lists.
 
 | Part | State |
 |---|---|
 | API contract | Complete: 25 endpoints, defined in `backend/app/schemas/` and exported to [openapi.json](openapi.json) |
 | Frontend | Complete against the contract: every screen of the Figma design, plus a kitchen-history screen |
-| Backend | Every endpoint answers with sample data from `backend/app/mock.py`. The functions roles call across each other exist, with agreed signatures and stub bodies. No tables yet |
-| AI service | Runs, with a fake model that always returns the same three items |
-| Infrastructure | Nothing is deployed to AWS |
-| Evaluation | Empty folders in `eval/` |
-| CI | A GitHub Actions workflow for backend, ai and frontend; it has not run yet |
+| Backend | Every endpoint is real: PostgreSQL inventory and stock events, Cook and Shop recommendations with stored sessions, ratings and learning |
+| AI service | The school's SoClaaS model on AWS; an offline fake locally (`AI_PROVIDER=fake`) |
+| Infrastructure | Deployed in `ap-southeast-1` with SAM and Amplify; see [infra/README.md](../infra/README.md) |
+| Evaluation | In progress in `eval/` |
+| CI | Lints and tests backend, ai and frontend; on `main` it then migrates and deploys |
 
 ## Run it
 
@@ -69,9 +69,7 @@ Both Lambdas are ordinary FastAPI apps. On AWS, `app/lambda_handler.py` in each 
 ```
 routers/   thin HTTP handlers            Role 1 — do not edit
    │  calls exactly one function in
-services/  business logic                Roles 2 and 5 — replace the function bodies
-   │  today returns
-mock.py    fixed sample data             disappears as services become real
+services/  business logic                Roles 2 and 5
 ```
 
 - **Keep every service function's name, parameters and return type.** The routers and the frontend depend on them, and so do other roles' services.
@@ -141,14 +139,10 @@ Use `app.clock.today()` and `app.clock.now()`, never `date.today()` or `datetime
 
 Never commit a value that is a secret. The repository is public.
 
-### Things the stubs do on purpose
+### What is still fixed locally
 
-So that the frontend could be built, the sample data is not neutral. Do not be surprised by:
-
-- A kitchen with two batches of eggs, cabbage that is running low, chicken past its estimated date, and rice of unknown stock.
-- `POST /api/cook/sessions/{id}/adjust` returning `NO_RESULT` whenever the time limit is under 20 minutes.
-- Nothing being remembered: add an item and the kitchen still shows the same ingredients.
-- `/ai/parse-image` and `/ai/parse-items` always returning the same three items, one with low confidence.
+- Without a Cognito token, every request is made as one development user (`app/auth.py`).
+- When the backend runs on its own, without the ai service, `/ai/*` is answered by `app/services/ai_stub.py`, which always returns the same three items. `docker compose up` runs the real ai service instead, with its offline fake model.
 
 ### Decisions that differ from the preliminary report
 
@@ -163,7 +157,7 @@ So that the frontend could be built, the sample data is not neutral. Do not be s
 
 ## What comes next
 
-The work falls into four stages. Each stage can start before the previous one ends, but cannot finish before it.
+The work falls into four stages. Stages 1 to 3 are done; they are kept here as a record.
 
 **1. Real data, locally.**
 Role 5 writes the recipes, and from them Role 2 writes the ingredient catalogue, the tables and the seed loader. When this is done, `docker compose up` starts with a real catalogue and a demo kitchen, and the inventory endpoints read and write Postgres.

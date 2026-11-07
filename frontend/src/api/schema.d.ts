@@ -521,7 +521,7 @@ export interface components {
             needs_check: boolean;
             /**
              * Suggested Packs
-             * @description null for state-tracked ingredients.
+             * @description null for state-tracked ingredients, and for counted ones whose need is uncertain. Confirming a bought line without packs records it with an unknown amount.
              */
             suggested_packs: number | null;
         };

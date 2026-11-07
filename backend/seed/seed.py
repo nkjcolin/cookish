@@ -59,6 +59,7 @@ CSV_COLUMNS = [
     "purchase_unit",
     "purchase_unit_size",
     "purchase_unit_measure",
+    "grams_per_piece",
 ]
 SHELF_LIFE_BY_STORAGE = {
     "pantry": "shelf_life_days_pantry",
@@ -178,6 +179,19 @@ def read_ingredients(path: Path) -> tuple[list[dict[str, Any]], list[str]]:
             )
         if purchase_size is not None and purchase_size <= 0:
             problems.append(f"{where}: purchase_unit_size must be above 0")
+        if countable and purchase_measure is not None and purchase_measure != default_unit:
+            problems.append(
+                f"{where}: a counted ingredient is bought in its own unit ({default_unit}),"
+                f" not {purchase_measure}"
+            )
+
+        # How recipes written in grams are counted against a kitchen kept in pieces.
+        grams_per_piece = _decimal(raw["grams_per_piece"], where, problems, "grams_per_piece")
+        if grams_per_piece is not None:
+            if grams_per_piece <= 0:
+                problems.append(f"{where}: grams_per_piece must be above 0")
+            if not countable or default_unit != "pcs":
+                problems.append(f"{where}: grams_per_piece is only for ingredients counted in pcs")
 
         rows.append(
             {
@@ -195,6 +209,7 @@ def read_ingredients(path: Path) -> tuple[list[dict[str, Any]], list[str]]:
                 "purchase_unit": purchase_unit,
                 "purchase_unit_size": purchase_size,
                 "purchase_unit_measure": purchase_measure,
+                "grams_per_piece": grams_per_piece,
             }
         )
     return rows, problems
@@ -220,13 +235,15 @@ def _int(cell: str, column: str, where: str, problems: list[str]) -> int | None:
     return number
 
 
-def _decimal(cell: str, where: str, problems: list[str]) -> Decimal | None:
+def _decimal(
+    cell: str, where: str, problems: list[str], column: str = "purchase_unit_size"
+) -> Decimal | None:
     if not cell.strip():
         return None
     try:
         return Decimal(cell)
     except InvalidOperation:
-        problems.append(f"{where}: purchase_unit_size must be a number, got {cell!r}")
+        problems.append(f"{where}: {column} must be a number, got {cell!r}")
         return None
 
 
@@ -316,6 +333,16 @@ def read_recipes(
                 problems.append(f"{where}: {name} needs quantity and unit, or a coarse_amount")
             if quantity is not None and (not isinstance(quantity, int | float) or quantity <= 0):
                 problems.append(f"{where}: {name} quantity must be a number above 0")
+            # A counted ingredient is compared with the kitchen's count, so the recipe must be
+            # in the same unit, or in grams that grams_per_piece turns into pieces.
+            if quantity is not None and unit and ing["countable"]:
+                convertible = unit == "g" and ing["grams_per_piece"] is not None
+                if unit != ing["default_unit"] and not convertible:
+                    problems.append(
+                        f"{where}: {name} is counted in {ing['default_unit']}, so its amount"
+                        f" must be in {ing['default_unit']} (or g, with grams_per_piece set"
+                        f" in ingredients.csv), not {unit}"
+                    )
 
             diet_sets.append(set(ing["diet_flags"]))
             allergen_sets.append(set(ing["allergen_tags"]))

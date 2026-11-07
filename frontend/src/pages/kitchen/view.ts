@@ -1,4 +1,5 @@
 import type { Schemas } from "../../api/client";
+import { formatCount } from "../../lib/count";
 
 type Inventory = Schemas["Inventory"];
 type Group = Schemas["InventoryGroup"];
@@ -107,13 +108,16 @@ function amountOf(group: Group): KitchenRow["amount"] {
   if (group.countable && counted.length === group.batches.length) {
     const total = counted.reduce((sum, b) => sum + (b.count ?? 0), 0);
     const unit = counted[0]?.unit;
-    return { kind: "count", text: unit ? `${total} ${unit}` : `${total}` };
+    return { kind: "count", text: unit ? `${formatCount(total)} ${unit}` : formatCount(total) };
   }
   return { kind: "level", state: firstToUse(group.batches).remaining_state };
 }
 
 export function buildKitchenView(inventory: Inventory, today: Date): KitchenView {
+  // A used-up batch stays on record, for undo and so Cook knows it is gone, but is not
+  // something in the kitchen any more.
   const rows = inventory.groups
+    .map((group) => ({ ...group, batches: group.batches.filter((b) => b.remaining_state !== "out") }))
     .filter((group) => group.batches.length > 0)
     .map((group): KitchenRow => {
       const section = sectionOf(group.batches);

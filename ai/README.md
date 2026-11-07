@@ -20,7 +20,8 @@ API. Parts 1–11 of [implementation.md](implementation.md), with Part 8 revised
 after identifier removal, now include all routes, request deadlines, local test
 tools and Lambda container packaging. Part 12's evaluation runner and handoff
 documentation exist; formal accuracy, final model choice and deployment acceptance
-still require labelled data and live measurements. Nothing has been deployed to AWS.
+still require labelled data and live measurements. The service is deployed as the
+`cookish-ai` Lambda with `AI_PROVIDER=soclaas`; live requests on AWS have not been verified.
 
 Known limitation: live school-model checks have returned incorrect numeric
 quantities even when the unit was preserved. Draft quantities require review;

@@ -8,6 +8,7 @@ import { BottomBar } from "../components/BottomBar";
 import { Button } from "../components/Button";
 import { Icon } from "../components/Icon";
 import { Tag } from "../components/Tag";
+import { formatCount } from "../lib/count";
 import { TASTE_TAG_LABELS, difficultyLabel } from "./cook/view";
 import { WhatsLeftSheet } from "./cook/WhatsLeftSheet";
 
@@ -115,7 +116,9 @@ export function RecipePage({ preview = false }: { preview?: boolean }) {
               const amount =
                 line?.amount ??
                 ingredient.coarse_amount ??
-                (ingredient.quantity !== null ? `${ingredient.quantity} ${ingredient.unit ?? ""}`.trim() : "");
+                (ingredient.quantity !== null
+                  ? `${formatCount(ingredient.quantity)} ${ingredient.unit ?? ""}`.trim()
+                  : "");
               return (
                 <li
                   key={ingredient.ingredient_id}

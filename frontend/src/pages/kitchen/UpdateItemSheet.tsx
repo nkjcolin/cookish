@@ -7,6 +7,7 @@ import { Icon } from "../../components/Icon";
 import { Level } from "../../components/Level";
 import { Segmented } from "../../components/Segmented";
 import { Sheet } from "../../components/Sheet";
+import { countStep, formatCount, stepCount } from "../../lib/count";
 import { freshnessNote, lastConfirmedText } from "./view";
 
 type Batch = Schemas["InventoryItem"];
@@ -34,6 +35,7 @@ export function UpdateItemSheet({ name, batch, batchCount, onClose }: UpdateItem
   const tracksCount = batch.countable && batch.count !== null;
   const [state, setState] = useState<RemainingState>(batch.remaining_state);
   const [count, setCount] = useState(batch.count ?? 0);
+  const step = countStep(batch);
   const [storage, setStorage] = useState<Storage>(batch.storage);
   const update = useUpdateInventoryItem();
   const today = new Date();
@@ -85,13 +87,13 @@ export function UpdateItemSheet({ name, batch, batchCount, onClose }: UpdateItem
         <>
           <p className="text-[15px] font-bold">How many are left?</p>
           <div className="flex items-center justify-between rounded-md border border-border px-[14px] py-[12px]">
-            <StepButton label="One fewer" onClick={() => setCount((c) => Math.max(0, c - 1))} disabled={count <= 0}>
+            <StepButton label="Less" onClick={() => setCount((c) => stepCount(c, step, -1))} disabled={count <= 0}>
               −
             </StepButton>
             <p className="text-[15px] font-bold" aria-live="polite">
-              {count} {batch.unit}
+              {formatCount(count)} {batch.unit}
             </p>
-            <StepButton label="One more" onClick={() => setCount((c) => c + 1)}>
+            <StepButton label="More" onClick={() => setCount((c) => stepCount(c, step, 1))}>
               +
             </StepButton>
           </div>

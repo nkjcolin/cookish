@@ -169,6 +169,8 @@ class Ingredient(Base):
     purchase_unit: Mapped[str | None] = mapped_column(Text)  # e.g. "pack"
     purchase_unit_size: Mapped[Decimal | None] = mapped_column(Numeric)
     purchase_unit_measure: Mapped[str | None] = mapped_column(Text)  # g, ml or pcs
+    # Counted in pcs, used in recipes by the gram: how many grams one piece is.
+    grams_per_piece: Mapped[Decimal | None] = mapped_column(Numeric)
 
 
 class Recipe(Base):

@@ -59,14 +59,17 @@ Every row and every recipe carries a fixed UUID written in the file. Generate on
 ## ingredients.csv
 
 ```csv
-id,canonical_name,aliases,category,countable,default_unit,allergen_tags,diet_flags,shelf_life_days_pantry,shelf_life_days_fridge,shelf_life_days_freezer,default_storage,is_staple,purchase_unit,purchase_unit_size,purchase_unit_measure
-0f7d…,egg,eggs|telur,egg,true,pcs,egg,vegetarian|pescatarian|halal|no_pork|no_beef,,28,,fridge,false,tray,10,pcs
-4b21…,water spinach,kangkong|kang kong,produce,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,,3,,fridge,false,bunch,1,pcs
-9c03…,soy sauce,light soy sauce,condiment,false,,soy|gluten,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,365,,,pantry,true,bottle,500,ml
+id,canonical_name,aliases,category,countable,default_unit,allergen_tags,diet_flags,shelf_life_days_pantry,shelf_life_days_fridge,shelf_life_days_freezer,default_storage,is_staple,purchase_unit,purchase_unit_size,purchase_unit_measure,grams_per_piece
+0f7d…,egg,eggs|telur,egg,true,pcs,egg,vegetarian|pescatarian|halal|no_pork|no_beef,,28,,fridge,false,tray,10,pcs,
+24a3…,tomato,tomatoes,produce,true,pcs,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,5,7,60,fridge,false,piece,1,pcs,120
+4b21…,water spinach,kangkong|kang kong,produce,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,,3,,fridge,false,bunch,1,pcs,
+9c03…,soy sauce,light soy sauce,condiment,false,,soy|gluten,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,365,,,pantry,true,bottle,500,ml,
 ```
 
 - `|` separates the items of a list; an empty cell is null.
 - `countable` decides whether the kitchen tracks a count (eggs) or only a state (kangkong).
+- A counted ingredient is bought in the unit it is counted in (`purchase_unit_measure` equals `default_unit`), so a purchase adds to the count.
+- `grams_per_piece` is for ingredients counted in `pcs` that recipes weigh in grams. Recipe amounts become pieces, rounded up to a quarter: 200 g of an 800 g cabbage is ¼. The values are typical weights, not measurements. A counted ingredient in a recipe must use its `default_unit`, or `g` with `grams_per_piece` set; the loader rejects anything else.
 - `diet_flags` lists the diets the ingredient is suitable for. Recipes inherit them (C3).
 - Shelf-life days are estimates, for example from the USDA FoodKeeper data. Leave a storage empty if the ingredient is not kept there.
 
@@ -132,7 +135,7 @@ optional ones included).
 - **Not buyable:** an empty `purchase_unit` means the ingredient is not bought (water, cooked rice).
   Proposed with Role 5; there is no separate "buyable" column.
 - **Staples:** salt, black pepper, canola oil, sesame oil, soy sauce, water.
-- **Tracked by count:** egg, tomato, carrot, cucumber, lemon, onion, potato, firm tofu (packs). All others by state.
+- **Tracked by count, bought by the piece:** cabbage, broccoli, cauliflower, carrot, tomato, onion, potato, cucumber, lemon. Eggs are counted too, and bought by the tray of 10. All others by state, firm tofu included.
 - **Allergens and diets:** chicken carries no `halal` flag (it depends on how the product was slaughtered);
   coconut milk is not tagged `tree_nut`; soba is tagged `gluten`.
 - **Estimates:** shelf-life days and pack sizes are provisional, not yet checked against USDA FoodKeeper.

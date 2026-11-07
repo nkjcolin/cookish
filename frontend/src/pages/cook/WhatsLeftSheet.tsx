@@ -8,6 +8,7 @@ import { LEVEL_LABELS } from "../../components/Level";
 import { Segmented } from "../../components/Segmented";
 import { Sheet } from "../../components/Sheet";
 import { SheetHeader } from "../../components/SheetHeader";
+import { countStep, formatCount, stepCount } from "../../lib/count";
 
 type Outcome = Schemas["ConsumptionOutcome"];
 type Proposed = Schemas["ProposedConsumption"];
@@ -28,7 +29,7 @@ function proposedAnswer(line: Proposed): Answer {
 }
 
 function was(item: Schemas["InventoryItem"]): string {
-  if (item.count !== null) return `${item.count} ${item.unit ?? ""}`.trim();
+  if (item.count !== null) return `${formatCount(item.count)} ${item.unit ?? ""}`.trim();
   return LEVEL_LABELS[item.remaining_state];
 }
 
@@ -76,18 +77,18 @@ export function WhatsLeftSheet({ record, onDone, onClose }: WhatsLeftSheetProps)
             {"count" in answer ? (
               <div className="flex items-center justify-between">
                 <StepButton
-                  label={`One fewer ${item.display_name}`}
+                  label={`Less ${item.display_name}`}
                   disabled={answer.count <= 0}
-                  onClick={() => setAnswer(index, { count: answer.count - 1 })}
+                  onClick={() => setAnswer(index, { count: stepCount(answer.count, countStep(item), -1) })}
                 >
                   −
                 </StepButton>
                 <p className="text-[15px] font-bold" aria-live="polite">
-                  {answer.count} {item.unit} left
+                  {formatCount(answer.count)} {item.unit} left
                 </p>
                 <StepButton
-                  label={`One more ${item.display_name}`}
-                  onClick={() => setAnswer(index, { count: answer.count + 1 })}
+                  label={`More ${item.display_name}`}
+                  onClick={() => setAnswer(index, { count: stepCount(answer.count, countStep(item), 1) })}
                 >
                   +
                 </StepButton>

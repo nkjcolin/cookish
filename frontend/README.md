@@ -12,14 +12,14 @@ The design is in [SPEC.md](../docs/SPEC.md): **A7** for the API, **B1** for your
 | `backend/app/schemas/` | The API contract, as Pydantic models |
 | `backend/app/routers/`, `backend/app/main.py` | Thin HTTP handlers, one service call each |
 | `backend/app/errors.py`, `auth.py`, `clock.py`, `deps.py` | Shared backend plumbing |
-| `backend/app/mock.py` | The sample data the stubs return |
+| `backend/app/mock.py` | The local development user and demo data; not served on AWS |
 | `docs/openapi.json` | Generated from the schemas; never edited by hand |
 | `eval/user_study/` | Protocol, consent sheet, task script and results |
 
 ## What already exists
 
-- **The contract**: 25 endpoints, with stubs that answer every one of them.
-- **Every screen** of the Figma design, plus kitchen history, working against the stubs (see Screens below).
+- **The contract**: 25 endpoints, all backed by real logic.
+- **Every screen** of the Figma design, plus kitchen history, working against the real API (see Screens below).
 - **The behaviours agreed with Roles 2 and 5**, already built:
   - *Quick check.* Each question carries the batch it is about (`StockCheck.item`, `FreshnessCheck.item`), and the answer updates that batch with `PATCH`.
   - *"No, I don't have it"* records the batch as `out`, then asks for the next dish.
