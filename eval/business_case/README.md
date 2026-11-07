@@ -38,9 +38,9 @@ The files serve different purposes:
 
 Region: `ap-southeast-1`. Database: PostgreSQL `db.t4g.micro`, Single-AZ and 20 GB
 gp3. Lambda duration now uses **ARM64** prices, matching the API, AI and migration
-functions checked on 7 November 2026. The workload model retains **0.5 GB** for
-API and AI: API memory was verified at 512 MB, while AI memory remains an input
-to confirm. Migration is also 512 MB but its deployment-time invocations are not
+functions checked on 7 November 2026. The workload model uses **0.5 GB** for
+API and AI, matching the **512 MB verified for both functions** on that date.
+Migration is also 512 MB but its deployment-time invocations are not
 included in the monthly request scenarios. Architecture is a configuration fact;
 the durations, request counts and other usage inputs remain assumptions.
 
@@ -212,7 +212,7 @@ usage. Keep credits and allowances separate from gross consumption.
 
 | Owner | Required input |
 |---|---|
-| Role 3 | Confirm AI memory; recheck architecture/memory after configuration changes, plus Cognito tier, database/storage/networking and secrets-access configuration |
+| Role 3 | Recheck architecture/memory after configuration changes, plus Cognito tier, database/storage/networking and secrets-access configuration |
 | Roles 3 and 5 | Distinct active households, active accounts, free/paid split, new household share and import allowance definitions |
 | Role 3 | Requests by route, payload billing units, billed durations, cold starts, retries, build minutes and egress |
 | Roles 3 and 4 | Provider/model version, input/output tokens, image charges, failures, retries and billed cost per import |

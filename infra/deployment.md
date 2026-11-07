@@ -1,41 +1,40 @@
 # Backend Lambda packaging and rollout
 
-## Automatic backend deployment
+## Automatic deployment
 
-[Deploy backend](../.github/workflows/deploy-backend.yml) deploys the current
-`main` commit after its CI run succeeds. It checks that the backend, AI and
-frontend jobs all passed, then builds the exact tested commit for Python 3.12
-and ARM64. Older commits are skipped. Deployments run one at a time; a newer
-commit does not cancel a migration already in progress.
+The `deploy` job in [ci.yml](../.github/workflows/ci.yml) runs after the backend,
+AI and frontend checks pass for a push to `main`. It uses an ARM64 runner and the
+GitHub `aws` environment. Its OIDC subject is the repository's `environment:aws`
+subject, including the immutable repository-ID form; it is not a branch-subject
+role. The existing environment variables are:
 
-The workflow reuses the existing GitHub OIDC provider and role in account
-`534444203105`. Repository variable `COOKISH_BACKEND_DEPLOY_ROLE_ARN` is set to
-`arn:aws:iam::534444203105:role/github-actions-deploy-cookish`. Its trust allows
-only `nkjcolin/cookish` on `main`, with audience `sts.amazonaws.com`. No stored
-AWS access keys are needed. The workflow further limits its temporary session
-to reading, updating code and invoking `cookish-api` and `cookish-migrate` in
-Singapore. It does not change their configuration or deploy the AI/frontend.
+| Variable | Value |
+|---|---|
+| `AWS_DEPLOY_ROLE_ARN` | `arn:aws:iam::534444203105:role/github-actions-deploy-cookish` |
+| `SAM_STACK_NAME` | `cookish` |
+| `AMPLIFY_APP_ID` | `d146krzza1ana` |
 
-Before changing AWS, the job saves both existing ZIPs, verifies their hashes and
-records configuration hashes without saving environment values. Each update
-uses the observed Lambda `RevisionId`, so an intervening code or configuration
-change causes it to stop. It updates and invokes migrate first, requiring the
-exact schema revision and all four catalogue counts from the tested source.
-Only then does it update the API and invoke `/api/health`. Both deployed ZIP
-hashes and unchanged configuration are checked. The health probe checks Lambda
-runtime and routing; authenticated browser/Cognito/CORS checks remain separate.
+The job exports the frozen dependencies, copies the ingredient CSV into the AI
+package and runs `sam build`. It updates `cookish-migrate`, waits for that update,
+and invokes migrations/seeding. A Lambda `FunctionError` stops deployment. After
+that, `sam deploy` updates the existing stack, including API, AI and infrastructure.
+Finally it requests an Amplify build when `AMPLIFY_APP_ID` is configured. Starting
+that build is not evidence that the frontend build finished successfully.
 
-Open **GitHub Actions → Deploy backend** to inspect the result. Each run keeps
-three artifact groups for 14 days: the new package/manifest, the previous code
-ZIPs, and verified migration/deployment results. A successful workflow result,
-including `deployment.json`, is the evidence that the release completed.
+[Main CI run 42348319904, attempt 2](https://github.com/nkjcolin/cookish/actions/runs/42348319904)
+succeeded for commit `13c833f` on 7 November 2026. Backend tests passed 606 cases;
+frontend tests passed 38. Its deployment returned revision `6f2c8d471a90` and
+seed counts 42 ingredients, 48 recipes, 20 variants and 383 ingredient lines,
+then reported a successful `cookish` stack update and requested the frontend build.
 
-To retry after investigating a failure, choose **Run workflow → main**. This
-still requires passing CI for the current main commit; it cannot deploy an
-arbitrary ref or bypass checks. Removing the role-ARN repository variable
-disables future deployment jobs. Rollback is deliberate: use a verified previous
-ZIP and the function's current revision, and assess schema compatibility first.
-Restoring code does not undo a completed database migration.
+Deployments are serialized without cancelling an active job. To retry, inspect
+the current main commit's **CI** run and rerun its failed jobs after resolving the
+failure. Rerunning an old push can redeploy that older commit: the workflow does
+not have a latest-main-SHA guard. It also does not currently save code backups,
+assert the exact migration counts, compare ZIP hashes or protect updates with
+Lambda `RevisionId`. Those are manual checks below, not completed automation.
+Review SAM changes before merging infrastructure edits; this job can change the
+stack configuration as well as code. No second deployment pipeline is installed.
 
 ## Build a package locally
 
@@ -82,7 +81,7 @@ demo household. Schema changes still need their own rollback assessment; restori
 the previous ZIP does not undo a migration. This builder does not sign in to AWS,
 upload code, or change cloud configuration.
 
-On 7 November 2026, the ARM64 package built from `86ac258` was deployed to both
+During an earlier manual rollout on 7 November 2026, the ARM64 package built from `86ac258` was deployed to both
 functions. Its SHA256 was
 `75eb15c14487e51e937006719742d6a060903f8d0310ce4310a3bdb902359bcc`.
 The migration completed at `6f2c8d471a90` with 42 ingredients and 48 recipes. That

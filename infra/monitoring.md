@@ -7,10 +7,18 @@ verified as `cookish-db` (PostgreSQL, `db.t4g.micro`, single-AZ in Singapore).
 The previous dashboard source is retained locally under
 `private/release/backups/cookish-ops-before-20261107.json`.
 
-Two existing alarms were also checked: `cookish-api-gateway-5xx` and
-`cookish-api-errors`. Both were OK; each alarms when its error count is at least
-one in a five-minute period. Both currently have **no actions**, so no notification
-recipient is configured. This is a notification setup gap, not missing alarms.
+The existing `cookish-api-gateway-5xx` and `cookish-api-errors` alarms now have
+enabled ALARM-state actions targeting SNS topic `cookish-api-alerts`. Its email
+subscription is confirmed. Both alarms were OK when checked; their thresholds
+remain unchanged: Sum at least one, one datapoint within five minutes, with
+missing data treated as not breaching. Actual alarm notification delivery has
+not been tested.
+
+Two existing monthly budgets were also verified: `cookish-monthly-20` ($20) and
+`cookish-monthly-40` ($40). The $20 budget has an actual-cost alert above 100% of
+budget, but its console shows 0 of 1 email recipients verified. Its notification
+setup is therefore incomplete. The $40 budget's alert details remain unchecked;
+budget filters and actual delivery have not been verified.
 
 `cloudwatch-dashboard.json` is the reusable source template. Render it with verified resource IDs
 before applying it. The renderer does not contact AWS or deploy a dashboard.
@@ -77,5 +85,7 @@ different questions.
 
 No-data graphs are not zeroes. Check the account, region, resource dimension,
 time range and metric publication delay before interpreting them. Neither the authenticated read-only load profile nor the Cook/Shop session
-profile calls the AI service, so neither demonstrates AI scaling. These widgets do not configure alarm actions, budget alerts or AI timeout
-classification; those remain separate operational checks.
+profile calls the AI service, so neither demonstrates AI scaling. The dashboard
+source does not provision alarms, SNS subscriptions or budgets; those resources
+are configured separately. Alarm delivery, budget filters/recipients and AI
+timeout classification still need verification.

@@ -42,7 +42,7 @@ was not updated in this rollout.
 | Migration and catalogue seed | Expected revision and all counts returned |
 | Deployment automation | Existing `deploy` job in CI passed on main `13c833f`; see [recorded result and limits](deployment.md) |
 | Live core flow | Recipe preview, purchase persistence, stock deduction, feedback and undo verified |
-| Monitoring | [cookish-ops](monitoring.md) updated to 12 widgets; two existing alarms are OK but have no notification actions |
+| Monitoring | [cookish-ops](monitoring.md) has 12 widgets; both error alarms have enabled SNS actions and a confirmed email subscription. Actual alarm delivery remains untested |
 | Load evidence | 50-VU authenticated read test completed: 10,200 workload GETs, zero client errors; API concurrency rose from 1 to 6 and returned to 1. This does not test independent-household transactions or AI |
 
 The deployed entry points are:
@@ -70,8 +70,8 @@ The deployed entry points are:
 | HTTP API | `/api/{proxy+}` to `api`, `/ai/{proxy+}` to `ai`; Cognito JWT authorizer on both; CORS from the Amplify domain only; throttling |
 | Cognito user pool and app client | Email and password, email verification |
 | Amplify Hosting | Connected to the repository, builds `frontend/`, rewrites every non-file path to `/index.html` |
-| CloudWatch | Live dashboard and two error alarms verified; alarm notification actions remain unconfigured |
-| AWS Budgets | An alert that reaches the whole group |
+| CloudWatch | Live dashboard and two error alarms verified; enabled actions target `cookish-api-alerts`, whose email subscription is confirmed |
+| AWS Budgets | Existing $20/$40 monthly budgets. The $20 actual-cost >100% alert has 0/1 verified email recipients; $40 alert details and budget filters remain unchecked |
 
 ## What other roles expect from you
 
@@ -140,7 +140,7 @@ Follow [deployment.md](deployment.md). Code uploaded by hand is replaced by the 
 
 1. Extend the verified core browser flow with any remaining replay and failure-path checks. General grams-to-pieces conversion, independent held-out evaluation and AI outage behavior remain separate gaps.
 2. Keep checking the current main CI deployment and final Amplify build result; [deployment.md](deployment.md) distinguishes the successful SAM run from manual backup, hash and revision safeguards that are not automated.
-3. Configure notification actions for the two existing error alarms after agreeing a recipient, and verify the budget alert. The live dashboard now includes concurrency and database metrics.
+3. Verify actual alarm notification delivery and finish budget notification checks: the $20 budget recipient is unverified, while $40 alert details and budget filters remain unchecked. Both error alarms already target a confirmed SNS email subscription.
 4. Preserve the [completed 50-VU read-test evidence](../eval/load/results/2026-11-07-read-only-50-vus.md) and its workload limits. Independent-household recommendation/write load and the longer soak test remain; see [eval/load](../eval/load/).
 5. Fill in the cloud versus on-premise comparison using measured inputs, including ARM64 Lambda pricing and the Secrets Manager endpoint.
 
