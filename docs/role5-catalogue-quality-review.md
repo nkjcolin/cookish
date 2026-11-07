@@ -5,6 +5,24 @@ The current catalogue is large enough to expose important integration problems;
 adding more recipes is not the immediate priority. Resolve quantity checking and
 shopping completeness before user testing or freezing for held-out evaluation.
 
+## Status update: 7 November 2026
+
+The public Cook/Shop endpoints now use the SQL repository. The merged integration
+passed [CI at `f313566`](https://github.com/nkjcolin/cookish/actions/runs/42342203535)
+with 549 backend tests, including 20 SQL workflow tests and migration preservation.
+The migration and updated backend have not been deployed or checked on AWS.
+
+The later ranking changes add a seven-day recent-cooked penalty, refreshed before
+each Cook ranking, and protein features for new meal feedback. They use confirmed,
+unreverted consumption events and an explicit catalogue mapping respectively;
+see the [current integration handoff](role5-integration.md). These changes require
+their own CI run. They do not resolve quantity/unit handling or empty-stock UI
+navigation, and they do not establish user satisfaction or cooking quality.
+
+The findings and result counts below are historical development evidence. Their
+statements about mocked endpoints and pending history integration describe the
+reviewed baseline, not the current source. No held-out result is claimed.
+
 ## Follow-up: Shop non-buyable essentials fixed
 
 The [post-fix review](../eval/catalogue_quality/shop-essential-fix.json) retains

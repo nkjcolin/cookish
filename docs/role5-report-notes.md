@@ -4,8 +4,8 @@ Cookish uses deterministic recipe ranking and small household preference updates
 Its pure recommendation engines are tested independently of the web interface.
 Recipe details, household stars and the optional use-first endpoint use the existing
 database services; Cook/Shop sessions, cooking confirmations and rating endpoints
-still await persistence integration. The explanations below describe the implemented
-engine and identify where the complete user flow remains pending. [1,2]
+now use the SQL repository. The migration and updated backend still need deployment
+and checks on AWS. The explanations below describe the implemented source. [1,2]
 
 ## Recommendations before any feedback exists
 
@@ -17,12 +17,17 @@ preferences, effort and uncertainty. These initial weights are fixed configurati
 values, not values learned from prior users. Equal scores use a deterministic recipe
 ID tie-break, so no historical feedback needs to be invented. [1,3]
 
+For returning households, a recipe cooked within the last seven elapsed days gets
+a one-point repetition penalty. Cookish checks this before each ranking, using the
+successful consumption event's time. Undone meals are excluded. Cooking it several
+times does not multiply this penalty, and the recipe remains eligible. [2,3]
+
 If the kitchen is empty, the Cook engine can return a fallback recipe whose missing
 essentials are explicitly marked. This does not mean it is ready to cook: the
 workflow checks essential stock before selection. If no recipe satisfies the
 required constraints, it returns no result. The frontend route from missing stock
-to adding ingredients or shopping remains integration work; current mock session
-screens are not evidence of this complete first-use experience. [1,2,4]
+to adding ingredients or shopping still needs work. The source now uses real
+sessions, but the complete first-use experience has not been verified on AWS. [1,2,4]
 
 Shop can plan meals for an empty kitchen because purchasable ingredients go on the
 shopping list. It excludes meals requiring unavailable non-buyable essentials such
@@ -52,8 +57,10 @@ may still produce few or no suitable meals. [1,4,5]
 Learning belongs to the **household**, because its members share preferences,
 inventory and meal decisions. The report should therefore describe household weight
 updates rather than separate per-user models. A user's identity records who submitted
-an action. The implemented learning features are cuisine and taste tags; main-protein
-features require an agreed ingredient mapping and are not currently included. [1,6]
+an action. Learning uses cuisine, taste tags and protein categories. Eight catalogue
+ingredient IDs map to poultry, egg, soy, legume, fish and shellfish. Only essential
+ingredients contribute; a mixed meal may have several categories, each counted
+once. This is a culinary grouping, not a nutrition measurement. [1,6]
 
 After a confirmed cooked meal, its current feedback contributes the following amount
 to each of its distinct features. Weights are clipped to the range −2 to +2. [6]
@@ -66,18 +73,20 @@ to each of its distinct features. Weights are clipped to the range −2 to +2. [
 | Dislike | −0.25 |
 | Skipped or selected without cooking | 0 |
 
-The rating replaces the provisional contribution. For example, liking a Chinese
-recipe tagged `low_oil` adds 0.25 to each of `cuisine:chinese` and `tag:low_oil`,
-before clipping. A future recipe sharing both gains 0.5 preference points; one
-sharing only the cuisine gains 0.25. Other score components can still change which
-recipe wins, and allergy/diet/equipment restrictions run before scoring. [3,6]
+The rating replaces the provisional contribution. For example, liking a Chinese,
+low-oil egg recipe adds 0.25 to each of `cuisine:chinese`, `tag:low_oil` and
+`protein:egg`, before clipping. A future recipe sharing all three gains 0.75
+preference points. Other score components can still change which recipe wins,
+and allergy/diet/equipment restrictions run before scoring. [3,6]
 
 Repeated feedback for the same cooked record does not create another meal sample.
 Changing a rating replaces that record's evidence; the engine recomputes bounded
 weights in confirmation order so edits remain correct even after clipping. Starring
 is separate: it adds a configured +1 recipe preference bonus while starred and
-does not alter learned taste weights. Stars persist now; durable cooking-feedback
-integration remains pending. [1,2,3,6]
+does not alter learned taste weights. Both stars and cooking feedback persist in
+the database. Earlier meals recorded with cuisine/tags only keep those features
+when edited; protein learning applies to new confirmations without backfilling
+old rewards. [1,2,3,6]
 
 ## Use first and uncertainty
 
@@ -101,6 +110,10 @@ The separate real-catalogue review found missing non-buyable essentials in three
 of seven Shop probes before the fix and none afterward. These are development
 checks, not evidence of user satisfaction, reduced waste or production elasticity. [4,8]
 
+The merged SQL integration passed 549 backend tests, including 20 SQL workflow
+tests and migration preservation; frontend and AI jobs also passed. These results
+predate the protein/history additions and do not verify deployment. [2,9]
+
 Thirty **held-out scenarios** are reserved for independent authorship and final
 evaluation after an implementation freeze. They must remain unseen during development
 so the final check measures performance on cases the rules were not adjusted to pass.
@@ -110,24 +123,26 @@ An **idempotency key** identifies one intended stock-changing action: retrying t
 same request should return the previous result rather than apply it twice. A
 **revision check** compares the inventory version the client saw with the current
 version, rejecting stale changes instead of overwriting newer stock information.
-Role 2 provides stock-event handling; Role 5's eventual confirmation integration
-must use it in the same transaction as session and feedback updates. [2]
+Role 2 provides stock-event handling; Role 5's confirmation workflow uses it in
+the same transaction as session and feedback updates. [2]
 
 ## References
 
 1. [Role 5 implementation and ownership](../backend/app/reco/README.md).
 2. [Cook and Shop service integration](role5-integration.md) and
-   [storage proposal awaiting Role 2 agreement](role5-storage-proposal.md).
+   [implemented storage additions](role5-storage-proposal.md).
 3. [Cook ranking implementation](../backend/app/reco/cook.py) and
    [configured scoring weights](../backend/app/reco/config.py).
 4. [Real-catalogue quality review and Shop fix](role5-catalogue-quality-review.md),
    including the original and post-fix recorded results.
 5. [Recipe review pack, authorship, approval and concept references](recipe-review.md).
-6. [Household feedback-learning implementation](../backend/app/reco/learning.py).
+6. [Household feedback-learning implementation](../backend/app/reco/learning.py)
+   and [explicit protein mapping](../backend/app/reco/protein.py).
 7. [Role 5 use-first logic](../backend/app/reco/use_first.py) and
    [Role 2 freshness calculations](../backend/app/services/freshness.py).
 8. [Development and held-out evaluation protocol](../eval/reco_scenarios/README.md)
    and [planner-fix development results](../eval/reco_scenarios/results/shop-essential-fix.json).
+9. [SQL integration CI at `f313566`, 7 November 2026](https://github.com/nkjcolin/cookish/actions/runs/42342203535).
 
 The separate [business-case draft](business-case.md) contains the market,
 competitor and pricing references. Its assumed infrastructure/model costs still

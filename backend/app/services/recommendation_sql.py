@@ -7,6 +7,7 @@ the stock-event unique key still arbitrates races with manual inventory writes.
 
 from contextlib import contextmanager
 from dataclasses import replace
+from datetime import timedelta
 
 from sqlalchemy import event, select, update
 
@@ -28,6 +29,11 @@ from app.services.recommendation_repository import (
 )
 from app.services.recommendation_snapshots import dump_snapshot, load_snapshot
 from app.services.recommendation_workflow import RecommendationWorkflow
+
+# Policy: a completed meal counts as recent for seven elapsed days, including
+# the boundary. Confirmation time is authoritative; edits to ratings and the
+# original selection time do not extend this interval. Undone meals are excluded.
+RECENT_COOK_WINDOW = timedelta(days=7)
 
 
 def _conflict(message="Saved recommendation is unavailable; start a new session"):
@@ -86,6 +92,29 @@ class SqlRecommendationRepository:
     def catalogue(self, household_id):
         self._household(household_id)
         return self.inputs.catalogue(household_id)
+
+    def recent_recipe_ids(self, household_id, *, as_of):
+        self._household(household_id)
+        if as_of.tzinfo is None or as_of.utcoffset() is None:
+            raise ValueError("recent history needs a timezone-aware as_of")
+        return frozenset(
+            self.session.scalars(
+                select(m.CookRecord.recipe_id)
+                .join(m.StockEvent, m.StockEvent.id == m.CookRecord.stock_event_id)
+                .where(
+                    m.CookRecord.household_id == household_id,
+                    m.CookRecord.status == "confirmed",
+                    m.StockEvent.household_id == household_id,
+                    m.StockEvent.type == "consume",
+                    m.StockEvent.ref_type == "cook_session",
+                    m.StockEvent.ref_id == m.CookRecord.id,
+                    m.StockEvent.reverted_by_event_id.is_(None),
+                    m.StockEvent.created_at >= as_of - RECENT_COOK_WINDOW,
+                    m.StockEvent.created_at <= as_of,
+                )
+                .distinct()
+            )
+        )
 
     def remember(self, household_id, *, cook_people=None, shop_people=None, shop_meals=None):
         self._household(household_id)

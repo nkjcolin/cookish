@@ -22,6 +22,7 @@ from app.reco.models import (
     ScoreBreakdown,
     ScoredRecipe,
 )
+from app.reco.protein import protein_features
 from app.schemas.common import TasteTag
 from app.schemas.cook import (
     AppliedConstraints,
@@ -77,10 +78,9 @@ def filter_recipes(
 
 
 def recipe_features(recipe: Candidate) -> frozenset[str]:
-    # Protein category awaits authoritative ingredient metadata; no guesses from titles.
     return frozenset(
         [f"tag:{tag.value}" for tag in recipe.taste_tags] + [f"cuisine:{recipe.cuisine.value}"]
-    )
+    ) | protein_features(recipe)
 
 
 def _similarity(left: Candidate, right: Candidate) -> float:

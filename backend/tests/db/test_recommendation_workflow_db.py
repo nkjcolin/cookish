@@ -2,6 +2,7 @@
 
 from concurrent.futures import ThreadPoolExecutor
 from copy import deepcopy
+from dataclasses import replace
 from datetime import timedelta
 from threading import Barrier
 from uuid import UUID, uuid4
@@ -16,6 +17,7 @@ from app.db import models as m
 from app.db.session import transaction
 from app.errors import ApiError, ErrorCode
 from app.main import app
+from app.reco.learning import LearningState, taste_weights
 from app.schemas.common import Equipment, LabelDateKind, RemainingState
 from app.schemas.cook import (
     ConsumptionLine,
@@ -30,10 +32,11 @@ from app.schemas.inventory import InventoryItemCreate, InventoryItemsCreate, Inv
 from app.schemas.shop import BasketConfirm, BoughtLine, ShopAdjust, ShopSessionCreate
 from app.services import cook, identity, inventory, shop
 from app.services.recommendation_inputs import SqlRecommendationInputs
+from app.services.recommendation_snapshots import dump_snapshot, load_snapshot
 from seed.seed import seed
 
 RECIPE_ID = UUID("645a8d38-bfae-47f2-b00e-3ca6828a964e")
-FEATURES = {"cuisine:chinese", "tag:light", "tag:vegetable_rich"}
+FEATURES = {"cuisine:chinese", "tag:light", "tag:vegetable_rich", "protein:egg"}
 
 
 @pytest.fixture
@@ -520,3 +523,31 @@ def test_legacy_weights_without_evidence_are_not_silently_reset(kitchen):
     assert weights(user) == {"cuisine:chinese": 0.75}
     with transaction() as session:
         assert session.scalar(select(func.count()).select_from(m.PlanSession)) == 0
+
+
+def test_saved_legacy_feedback_stays_editable_without_backfilling_protein(kitchen):
+    user, _ = kitchen
+    record = selected(kitchen)
+    cook.confirm(user, record.id, consumption(record), uuid4())
+    legacy_features = frozenset(FEATURES - {"protein:egg"})
+    with transaction() as session:
+        stored = session.get(m.RecommendationLearning, user.household_id)
+        state = load_snapshot(stored.state, LearningState)
+        # Represent a confirmed meal saved by PR #24 before protein learning.
+        legacy = replace(state, meals=(replace(state.meals[0], features=legacy_features),))
+        stored.state = dump_snapshot(legacy)
+        session.get(m.Preferences, user.household_id).taste_weights = taste_weights(legacy)
+
+    cook.give_feedback(user, record.id, CookFeedback(rating=Rating.DISLIKE))
+    cook.give_feedback(user, record.id, CookFeedback(rating=Rating.DISLIKE))
+    assert weights(user) == dict.fromkeys(legacy_features, -0.25)
+    with transaction() as session:
+        state = load_snapshot(
+            session.get(m.RecommendationLearning, user.household_id).state, LearningState
+        )
+        assert state.meals[0].features == legacy_features
+        assert len(state.meals) == 1
+
+    new_record = selected(kitchen)
+    cook.confirm(user, new_record.id, consumption(new_record), uuid4())
+    assert weights(user)["protein:egg"] == 0.0625
