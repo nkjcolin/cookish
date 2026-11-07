@@ -12,6 +12,10 @@ from evaluation.catalogue_review import NOW as REVIEW_NOW
 from evaluation.catalogue_review import kitchens, load_catalogue, preferences
 from tests.reco_fixtures import CATALOGUE, NOW, PURCHASES, batch, prefs, recipe, uid
 
+# Egg is made non-buyable below; tomato gives a meal something to shop for, since a meal the
+# kitchen already covers is left to Cook.
+EGG_AND_TOMATO = ("egg", "tomato")
+
 
 def plan(meals, inventory=(), *, people=2, requested=3, **kwargs):
     purchases = {
@@ -61,17 +65,21 @@ def test_missing_nonbuyable_essential_is_filtered_before_family_and_candidate_li
 
 @pytest.mark.parametrize("people,stock,expected", [(2, 3, 1), (2, 6, 2), (4, 6, 1), (4, 12, 2)])
 def test_nonbuyable_counts_cover_the_whole_scaled_plan_once(people, stock, expected):
-    meals = [recipe("one"), recipe("two")]
+    meals = [recipe("one", ingredients=EGG_AND_TOMATO), recipe("two", ingredients=EGG_AND_TOMATO)]
     inventory = [batch(count=stock - 1), batch(key="second", count=1)]
     result = plan(meals, inventory, people=people, requested=2)
     assert len(result.planned_meals) == expected
-    assert not result.items
+    assert {item.ingredient_id for item in result.items} == {uid("tomato")}
     assert to_basket(result, uid("session"), uid("basket")).meals == expected
     assert result == plan(list(reversed(meals)), inventory, people=people, requested=2)
 
 
 def test_insufficient_shared_stock_uses_another_buyable_meal():
-    meals = [recipe("one"), recipe("two"), recipe("other", ingredients=("tomato",))]
+    meals = [
+        recipe("one", ingredients=EGG_AND_TOMATO),
+        recipe("two", ingredients=EGG_AND_TOMATO),
+        recipe("other", ingredients=("tomato",)),
+    ]
     result = plan(meals, [batch()], requested=2)
     assert len(result.planned_meals) == 2
     assert (
@@ -82,13 +90,17 @@ def test_insufficient_shared_stock_uses_another_buyable_meal():
 
 
 def test_uncertain_extra_batch_does_not_block_sufficient_confirmed_nonbuyable_stock():
-    result = plan([recipe()], [batch(), batch(key="unknown", count=None)])
+    meal = recipe(ingredients=EGG_AND_TOMATO)
+    result = plan([meal], [batch(), batch(key="unknown", count=None)])
     assert len(result.planned_meals) == 1
-    assert not result.items
+    assert {item.ingredient_id for item in result.items} == {uid("tomato")}
 
 
 def test_nonbuyable_combination_does_not_invent_conversion_between_recipe_units():
-    pieces, grams = recipe("pieces"), recipe("grams")
+    pieces, grams = (
+        recipe("pieces", ingredients=EGG_AND_TOMATO),
+        recipe("grams", ingredients=EGG_AND_TOMATO),
+    )
     grams.ingredients[0].unit = "g"
     result = plan([pieces, grams], [batch(), batch(key="grams", unit="g")], requested=2)
     assert len(result.planned_meals) == 1
@@ -118,7 +130,7 @@ def test_optional_nonbuyable_and_assumed_staple_do_not_block_plans():
 
 
 def test_optional_demand_does_not_consume_stock_reserved_for_essential_requirement():
-    essential = recipe("essential")
+    essential = recipe("essential", ingredients=EGG_AND_TOMATO)
     optional = recipe("optional", ingredients=("egg", "tomato"))
     optional.ingredients[0].essential = False
     result = plan([essential, optional], [batch()], requested=2)

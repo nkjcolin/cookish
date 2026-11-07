@@ -27,6 +27,12 @@ class BasketStatus(StrEnum):
 class ShopSessionCreate(RequestModel):
     people: People | None = Field(default=None, description="Defaults to the last choice.")
     meals: Meals | None = Field(default=None, description="Defaults to the last choice.")
+    recipe_ids: list[UUID] = Field(
+        default_factory=list,
+        max_length=7,
+        description="Recipes the plan must include, such as the one being viewed; the rest"
+        " are chosen as usual. meals is raised to at least this many.",
+    )
 
 
 class ShopAdjust(RequestModel):

@@ -27,11 +27,15 @@ def new_shop_session(
     meals: int | None = None,
     *,
     strict_max_minutes: int | None = None,
+    pinned: Sequence[UUID] = (),
 ) -> ShopSession:
+    pinned = tuple(dict.fromkeys(pinned))
+    meals = prefs.last_shop_meals if meals is None else meals
     return ShopSession(
         people=prefs.last_shop_people if people is None else people,
-        meals=prefs.last_shop_meals if meals is None else meals,
+        meals=min(7, max(meals, len(pinned))),
         strict_max_minutes=strict_max_minutes,
+        pinned_recipe_ids=pinned,
     )
 
 
@@ -44,7 +48,7 @@ def adjust_shop(session: ShopSession, patch: ShopAdjust) -> ShopSession:
     return replace(
         session,
         people=session.people if patch.people is None else patch.people,
-        meals=meals,
+        meals=max(meals, len(session.pinned_recipe_ids)),
         tags=tags,
     )
 
@@ -240,8 +244,30 @@ def plan_shop(
     safe = [meal for meal in safe if can_supply_nonbuyable_essentials((meal,))]
     if not safe:
         return ShopPlan(session, (), (), {})
+    # Recipes the user asked for come first, in their order, while still eligible.
+    order = {recipe_id: index for index, recipe_id in enumerate(session.pinned_recipe_ids)}
+    pinned = tuple(sorted((m for m in safe if m.id in order), key=lambda m: order[m.id]))
+
+    def needs_shopping(meal):
+        alone = shopping_list(
+            (meal,), inventory, catalogue, purchases, session.people, as_of=as_of, config=config
+        )
+        return bool(alone.items)
+
+    # Shop is for meals that need shopping, or at least a "check at home": one the kitchen
+    # already covers is Cook's to suggest, and choosing it would only empty the list.
+    pinned_families = {m.base_recipe_id or m.id for m in pinned}
+    open_meals = [
+        m
+        for m in safe
+        if m.id not in order
+        and (m.base_recipe_id or m.id) not in pinned_families
+        and needs_shopping(m)
+    ]
+    if not pinned and not open_meals:
+        return ShopPlan(session, (), (), {}, all_stocked=True)
     scores = {}
-    for meal in safe:
+    for meal in (*pinned, *open_meals):
         # Buyable stock, urgency and uncertainty do not affect preference ranking.
         scored = score_recipe(
             meal,
@@ -270,17 +296,17 @@ def plan_shop(
         scores[meal.id] = score
     # Keep the best variant in each family so the top K is not filled with one dish.
     families, candidates = set(), []
-    for meal in sorted(safe, key=lambda item: (-scores[item.id], str(item.id))):
+    for meal in sorted(open_meals, key=lambda item: (-scores[item.id], str(item.id))):
         family = meal.base_recipe_id or meal.id
         if family not in families:
             families.add(family)
             candidates.append(meal)
         if len(candidates) == shop_config.candidate_limit:
             break
-    target = min(session.meals, len(candidates))
+    target = min(max(0, session.meals - len(pinned)), len(candidates))
 
     def evaluate(indices):
-        chosen = tuple(candidates[index] for index in indices)
+        chosen = (*pinned, *(candidates[index] for index in indices))
         shopping = shopping_list(
             chosen, inventory, catalogue, purchases, session.people, as_of=as_of, config=config
         )
@@ -313,7 +339,8 @@ def plan_shop(
                 start = indices[-1] + 1 if indices else 0
                 for index in range(start, len(candidates) - (size - depth)):
                     combination = (*indices, index)
-                    if can_supply_nonbuyable_essentials(tuple(candidates[i] for i in combination)):
+                    meals = (*pinned, *(candidates[i] for i in combination))
+                    if can_supply_nonbuyable_essentials(meals):
                         expanded[combination] = evaluate(combination)
             if not expanded:
                 break
@@ -326,6 +353,8 @@ def plan_shop(
             )[: shop_config.beam_width]
         else:
             return beam[0][1]
+    if pinned and can_supply_nonbuyable_essentials(pinned):
+        return evaluate(())
     return ShopPlan(session, (), (), {})
 
 
