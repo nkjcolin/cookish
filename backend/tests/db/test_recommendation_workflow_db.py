@@ -317,6 +317,91 @@ def test_confirmation_rejects_key_reused_with_another_body_or_manual_event(kitch
     assert event_count("consume") == 1
 
 
+def test_manual_add_and_cook_confirmation_race_for_one_shared_key(kitchen):
+    user, _ = kitchen
+    record = selected(kitchen)
+    body, key = consumption(record), uuid4()
+    results = race(
+        [
+            lambda: inventory.add_items(
+                user,
+                InventoryItemsCreate(items=[InventoryItemCreate(display_name="Concurrent item")]),
+                key,
+            ),
+            lambda: cook.confirm(user, record.id, body, key),
+        ]
+    )
+    assert results.count(ErrorCode.CONFLICT) == 1
+    with transaction() as session:
+        events = list(
+            session.scalars(
+                select(m.StockEvent).where(
+                    m.StockEvent.household_id == user.household_id,
+                    m.StockEvent.idempotency_key == key,
+                )
+            )
+        )
+        assert len(events) == 1
+        stored = session.get(m.CookRecord, record.id)
+        replay = session.get(m.RecommendationConfirmation, (user.household_id, key))
+        if results[1] == ErrorCode.CONFLICT:
+            assert events[0].id == results[0].event.id
+            assert events[0].ref_type == "manual"
+            assert stored.status == "selected" and stored.stock_event_id is None
+            assert replay is None
+            assert session.get(m.RecommendationLearning, user.household_id) is None
+            assert not session.get(m.Preferences, user.household_id).taste_weights
+            for proposal in record.proposed_consumption:
+                batch = session.get(m.InventoryItem, proposal.item.id)
+                assert batch.revision == proposal.item.revision
+                assert batch.count == proposal.item.count
+        else:
+            assert events[0].id == results[1].event.id
+            assert events[0].type == "consume"
+            assert stored.status == "confirmed" and stored.stock_event_id == events[0].id
+            assert replay.stock_event_id == events[0].id
+            assert session.get(m.Preferences, user.household_id).taste_weights == dict.fromkeys(
+                FEATURES, 0.0625
+            )
+            assert (
+                session.scalar(
+                    select(func.count())
+                    .select_from(m.InventoryItem)
+                    .where(m.InventoryItem.display_name == "Concurrent item")
+                )
+                == 0
+            )
+
+
+def test_retry_after_later_stock_edit_and_feedback_replays_original_response(kitchen):
+    user, _ = kitchen
+    record = selected(kitchen)
+    body, key = consumption(record), uuid4()
+    original = cook.confirm(user, record.id, body, key)
+    original_json = original.model_dump(mode="json")
+    batch = next(item for item in original.items if item.countable)
+    edited = inventory.update_item(
+        user, batch.id, InventoryItemUpdate(revision=batch.revision, count=batch.count + 2), uuid4()
+    ).items[0]
+    cook.give_feedback(user, record.id, CookFeedback(rating=Rating.LIKE))
+    with transaction() as session:
+        evidence = deepcopy(session.get(m.RecommendationLearning, user.household_id).state)
+        feedback_count = session.scalar(select(func.count()).select_from(m.RecipeFeedback))
+
+    replay = cook.confirm(user, record.id, body, key)
+    assert replay.model_dump(mode="json") == original_json
+    replayed_batch = next(item for item in replay.items if item.id == batch.id)
+    assert replayed_batch.count != edited.count and replayed_batch.revision != edited.revision
+    assert event_count("consume") == 1 and event_count("adjust") == 1
+    with transaction() as session:
+        current = session.get(m.InventoryItem, batch.id)
+        assert current.count == edited.count and current.revision == edited.revision
+        assert session.get(m.RecommendationLearning, user.household_id).state == evidence
+        assert session.scalar(select(func.count()).select_from(m.RecipeFeedback)) == feedback_count
+        assert session.scalar(select(func.count()).select_from(m.RecommendationConfirmation)) == 1
+    assert weights(user) == dict.fromkeys(FEATURES, 0.25)
+
+
 def test_failure_after_stock_write_rolls_back_record_inventory_learning_and_replay(
     kitchen, monkeypatch
 ):

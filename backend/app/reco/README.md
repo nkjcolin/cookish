@@ -23,14 +23,22 @@ costs and user research are still required.
 
 ## What already exists
 
-- **Recipe details, household stars and use-first use the real database.** Cook/Shop
-  sessions and cooking confirmation/ratings still return sample data
-  from `app/mock.py` while their integration is pending.
+- **Cook/Shop services now use the SQL workflow.** Sessions, recipe selection,
+  confirmations and ratings call `RecommendationWorkflow` through
+  `SqlRecommendationRepository`; recipe details, stars and use-first also use
+  real database services. Apply migration `6f2c8d471a90` before deploying these
+  endpoints. The new integration has not yet been verified on AWS.
 - **Role 2's functions you call**, now implemented against PostgreSQL: household preferences, inventory snapshots and stock events. The agreed signatures are unchanged.
 - **`app/db/session.py`**: `transaction()`, one per request.
 - **`app/clock.py`**: today's date in Singapore.
 - **The recipe file format**, agreed with Role 2, in [seed/README.md](../../seed/README.md).
-- **The pure Cook/Shop engines and learning**, described below, tested independently of those service stubs.
+- **The pure Cook/Shop engines and learning**, described below, with separate engine, workflow and database tests.
+
+On 7 November 2026, Wenlong explicitly authorised the required database models
+and migration as an exception to the normal Role 2 ownership boundary. See the
+[storage handoff](../../../docs/role5-storage-proposal.md) for the added snapshots,
+learning evidence and confirmation replay records. This does not transfer
+ownership of unrelated inventory or database work.
 
 ## Implemented database reads and catalogue services
 
@@ -69,13 +77,13 @@ past the prior star event even if clocks tie or move backwards. Detail and the
 engine input reader use the same latest-event ordering. Other households' stars
 are isolated; household members share their household's state.
 
-No new database model or migration is needed. The PostgreSQL tests in
+Recipe details and stars themselves need no new database model or migration. The PostgreSQL tests in
 `tests/db/test_recipe_details_db.py` cover all 48 detail responses, HTTP star
 round trips, unknown/unreviewed IDs, household/member scope, concurrent updates,
 event ordering, and rollback. These endpoints require the seeded catalogue.
-Mock Cook/Shop cards still carry mock recipe IDs, which these real endpoints
-reject; the complete UI flow awaits real session integration. No mock-ID aliases
-or fabricated catalogue rows are introduced.
+The SQL Cook/Shop workflow now returns seeded catalogue IDs, including from
+selection, so its recipe details resolve against the same data. Legacy mock IDs
+remain invalid; no aliases or fabricated catalogue rows are introduced.
 
 ### Catalogue input reader
 
@@ -88,13 +96,12 @@ final implementation freeze.
 reviewed recipes and 42 authoritative ingredients, household stars, preferences
 and inventory in the caller's transaction. It supplies the existing pure engine
 types without guessing counts, pack conversions or missing safety metadata.
-It is the read portion of the future repository, not a complete session service.
+It is the read component used by `SqlRecommendationRepository`.
 
-The [storage proposal](../../../docs/role5-storage-proposal.md) lists the remaining
-snapshots, ordered learning evidence and confirmation replay storage for Role 2
-to review. Cook/Shop session, confirmation and rating endpoints remain mocked
-until that persistence layer is implemented. The proposal also records the
-catalogue mapping choices.
+The [storage handoff](../../../docs/role5-storage-proposal.md) records the implemented
+snapshots, ordered learning evidence, confirmation replay storage and catalogue
+mapping choices. The SQL adapter and versioned snapshot codecs are in
+`services/recommendation_sql.py` and `services/recommendation_snapshots.py`.
 
 `tests/test_recommendation_inputs.py` validates all delivered seed content at the
 mapping boundary. `tests/db/test_recommendation_inputs_db.py` exercises real
@@ -110,18 +117,17 @@ and classifies stock. `models.py` defines internal inputs and results;
 `config.py` contains all initial scoring weights. These modules perform no I/O,
 database access, live clock reads or session persistence.
 
-The **Cook/Shop session, confirmation and rating endpoints still return mocks**.
-Recipe detail, star/unstar and use-first are already database-backed. The pure
-basket and learning algorithms and a transaction-scoped service workflow are implemented. The
-[integration handoff](../../../docs/role5-integration.md) describes its repository
-port, tests and proposed snapshot storage. The database adapter, real feedback
-persistence and deployed recommendation flows remain to implement. The
+The **Cook/Shop session, confirmation and rating endpoints are wired to the SQL
+adapter**. The [integration handoff](../../../docs/role5-integration.md) describes
+the repository, snapshot validation and transactional confirmation/feedback
+storage. Deployment requires migration `6f2c8d471a90`; deployed recommendation
+flows remain to be verified. The
 [development scenario suite](../../../eval/reco_scenarios/README.md) now contains
 70 cases; the 30 independently authored held-out cases remain reserved.
 
 ### Inputs and integration
 
-The future service adapter supplies:
+The service adapter supplies:
 
 | Input | Required meaning |
 |---|---|
@@ -139,7 +145,7 @@ Main-protein learning features still need an agreed authoritative mapping. The e
 reads `tag:<tag>` and `cuisine:<cuisine>` weights. `learning.py` produces those
 weights from confirmed cooking and subsequent feedback.
 
-Typical service flow, once its repository adapter exists:
+Engine calls made within the persisted service workflow:
 
 ```python
 from app import clock
@@ -167,9 +173,9 @@ updated_session = adjust(result.session, adjustment_body, result.selected.recipe
 
 `suggest` returns a new session with the selected ID appended to its shown
 history. `skip_current` adds only the current ID to the excluded set; it does
-not train preferences. The service must persist and replay these states and
-implement expiry, transactions, concurrency and request retry handling.
-`previous` should replay the saved entry rather than call the engine again.
+not train preferences. The SQL workflow persists and replays these states,
+applies session expiry and serializes household mutations within a transaction.
+`previous` replays the saved entry rather than calling the engine again.
 
 ### Eligibility, stock and cold start
 
@@ -315,7 +321,7 @@ suggestion over the existing 50-pack confirmation limit is similarly flagged.
 **The service must resolve these cases or reject confirmation with an existing
 validation error; it must never treat null as a verified one-pack purchase.**
 The nullable public field is unchanged; this unresolved-counted-item behavior
-needs Role 1/2 integration review before wiring the flow.
+still needs Role 1/2 UI and quantity-resolution work; SQL wiring does not resolve it.
 
 `more_vegetables` adds +2 for `vegetable_rich`. `longer_lasting` adds up to +1
 from mean non-staple shelf life, capped at 30 days; unknown life earns zero.
@@ -371,16 +377,15 @@ information. Recipe identity/features for an existing entry cannot change.
 The current state starts from zero, rather than importing already clipped
 weights without their evidence.
 
-**Persistence handoff:** Role 2/5 must agree how to retain first-confirmation
-order, the feature snapshot and current rating for every confirmed cook record.
-Existing clipped `preferences.taste_weights` alone is insufficient for rating
-replacement. Persist the evidence and derived weights in one household-scoped
-transaction, with locking/revision checks to prevent concurrent lost updates.
-Load the record under the authenticated household and confirm its status
-before calling `learn`; the pure function is not an authorization layer.
+**Persistence:** the SQL adapter retains first-confirmation order, frozen
+features and current ratings in `recommendation_learning`. It saves the evidence,
+derived `preferences.taste_weights` and feedback events in the same household-scoped
+transaction. The workflow checks ownership and confirmed status before learning;
+the pure function is not an authorization layer. Legacy nonempty weights without
+evidence are rejected for an explicit migration decision rather than reset.
 Replaying evidence is linear in meal history and is acceptable for the
-prototype; later compaction must preserve rating-edit semantics. No migrations
-or public schema changes are included here.
+prototype; later compaction must preserve rating-edit semantics. The storage
+migration changes no public API schema.
 
 ### Validation and remaining work
 
@@ -424,10 +429,12 @@ They must remain unseen until a frozen implementation is evaluated, with the
 first result preserved and reported separately. See the scenario README for
 the protocol; no held-out pass claim is made.
 
-Still to implement: the database repository adapter for the implemented
-Cook/Shop workflow, real stock confirmation and retry-safe feedback persistence,
-the held-out evaluation and deployed evaluation. No synthetic metadata from
-tests or scenarios should be seeded as the authoritative ingredient catalogue.
+The SQL adapter, real stock confirmations and retry-safe feedback persistence
+passed [CI at `5c8ca30`](https://github.com/nkjcolin/cookish/actions/runs/42341902849):
+547 backend tests, including the new migration test and 18 SQL workflow tests;
+frontend and AI jobs also passed. This is PostgreSQL CI evidence, not an AWS
+journey test. Held-out and deployed evaluation remain pending. No synthetic
+test metadata should be seeded as the authoritative ingredient catalogue.
 
 ## What you may change, and what you must keep
 
@@ -437,7 +444,9 @@ tests or scenarios should be seeded as the authoritative ingredient catalogue.
 
 - The name, parameters and return type of every service function. The routers and the frontend call them.
 - The recipe file format: Role 2's loader reads it.
-- The table structure: Role 2 writes every migration, including for your tables. Ask for changes.
+- The table structure normally belongs to Role 2. Wenlong explicitly authorised
+  migration `6f2c8d471a90` and its models on 7 November 2026 to complete this
+  integration; future unrelated schema changes still require coordination.
 
 ## What the frontend expects from you
 
@@ -449,7 +458,7 @@ issues for agreement with Roles 1/2; this section does not claim a completed UI 
 - **Quick checks.** `Suggestion.needs_check` lists, for each essential ingredient of unknown stock, the batch to use first (`StockCheck.item`). `freshness_check` lists the batches whose `freshness_status` is `check`, with a reason. The frontend asks about exactly these before cooking and saves each answer on that batch with `PATCH /api/inventory/items/{id}`.
 - **"No, I don't have it".** The frontend records that batch as `out`, then calls `POST /cook/sessions/{id}/next`. The next suggestion must reflect the new stock. The `skipped` signal that `next` records must not change taste weights.
 - **Nothing fits.** Raise `ApiError(ErrorCode.NO_RESULT, …, {"relaxable": [...]})`. `relaxable` may contain only `"max_minutes"` and `"tags"`, and never a hard constraint. Shop returns fewer meals when possible. If no recipe remains after hard filtering and the non-buyable-essential stock gate, return `NO_RESULT` with an empty `relaxable`.
-- **Expiry.** A session expires 12 hours after it starts. New session operations and first confirmations require an unexpired session. A previously successful confirmation with the same key/request replays its saved response after expiry; ratings for confirmed records also remain available. These workflow semantics still require SQL persistence wiring.
+- **Expiry.** A session expires 12 hours after it starts. New session operations and first confirmations require an unexpired session. A previously successful confirmation with the same key/request replays its saved response after expiry; ratings for confirmed records also remain available. The SQL adapter persists the required response and learning evidence.
 - **People.** `people` defaults to the household's last choice and is written back when a session starts or changes; amounts in a suggestion are already scaled to it.
 
 ## Role 2's functions you call
@@ -543,9 +552,9 @@ Role 4 consumes the same authoritative catalogue.
 
 ## Remaining Role 5 work
 
-1. Agree the remaining snapshot, learning-evidence and retry-response storage
-   with Role 2. Role 2 implements models/migrations; Role 5 implements the SQL
-   repository and connects Cook/Shop session, confirmation and rating endpoints.
+1. Coordinate migration `6f2c8d471a90` and backend deployment with Role 3.
+   The SQL integration's PostgreSQL CI tests pass. Start fresh sessions after
+   deployment; legacy rows without snapshots require a restart.
 2. Resolve recipe quantity checks and counted shopping confirmation with Roles
    1/2, preserving uncertainty. Role 5 owns the recipe/engine behavior; UI and
    ingredient/schema changes remain with their respective owners.
@@ -554,7 +563,7 @@ Role 4 consumes the same authoritative catalogue.
 4. Freeze the completed implementation, obtain 30 independently authored unseen
    scenarios, and run the prepared held-out workflow. The 70 development cases
    and property tests are already available; held-out results must be separate.
-5. Verify Cook/Shop against real inventory on the deployed stack after integration.
+5. Verify Cook/Shop against real inventory on the deployed stack after migration.
    Finalise the report and pricing conclusions with Roles 3/4's measured costs.
 
 **Done when** all 100 scenarios pass, and Cook and Shop work on the deployed stack against real inventory.
