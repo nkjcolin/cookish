@@ -28,6 +28,7 @@ export function App() {
       <Route element={<AppLayout tabBar={false} />}>
         <Route path="/buy/confirm" element={<ConfirmPurchasePage />} />
         <Route path="/cook/recipe" element={<RecipePage />} />
+        <Route path="/cook/preview" element={<RecipePage preview />} />
         <Route path="/more/add/review" element={<ReviewDraftPage />} />
         <Route path="/more/preferences" element={<PreferencesPage />} />
       </Route>

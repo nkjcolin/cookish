@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { api, idempotencyKey, isNotFound, unwrap, type Schemas } from "./client";
+import { invalidateAfterStockChange } from "./stockCache";
 
 type Basket = Schemas["Basket"];
 
@@ -80,7 +81,7 @@ export function useConfirmBasket(basketId: string | undefined) {
           body: { lines },
         }),
       ),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["inventory"] }),
+    onSuccess: () => invalidateAfterStockChange(queryClient),
   });
 }
 

@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { api, idempotencyKey, unwrap, type Schemas } from "./client";
+import { invalidateAfterStockChange } from "./stockCache";
 
 export function useMe() {
   return useQuery({
@@ -26,7 +27,7 @@ export function useUpdateInventoryItem() {
           body,
         }),
       ),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["inventory"] }),
+    onSuccess: () => invalidateAfterStockChange(queryClient),
   });
 }
 
@@ -52,7 +53,7 @@ export function useAddInventoryItems() {
   return useMutation({
     mutationFn: async (body: Schemas["InventoryItemsCreate"]) =>
       unwrap(await api.POST("/api/inventory/items", { params: { header: idempotencyKey() }, body })),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["inventory"] }),
+    onSuccess: () => invalidateAfterStockChange(queryClient),
   });
 }
 
@@ -75,6 +76,6 @@ export function useUndoStockEvent() {
           params: { path: { event_id: eventId }, header: idempotencyKey() },
         }),
       ),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["inventory"] }),
+    onSuccess: () => invalidateAfterStockChange(queryClient),
   });
 }

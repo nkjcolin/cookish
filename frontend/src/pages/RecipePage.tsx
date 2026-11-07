@@ -20,21 +20,24 @@ const heroImage = {
 const roundButton =
   "absolute top-[8px] flex size-[40px] items-center justify-center rounded-pill border border-border bg-surface";
 
-/** The chosen dish: ingredients scaled to tonight's people, then the steps. */
-export function RecipePage() {
+/** Previewing a suggestion never creates a cook record or enables stock confirmation. */
+export function RecipePage({ preview = false }: { preview?: boolean }) {
   const navigate = useNavigate();
-  const record = useCookRecord();
+  const cachedRecord = useCookRecord();
+  const record = preview ? undefined : cachedRecord;
   const suggestion = useCurrentSuggestion();
-  const recipe = useRecipe(record?.recipe.id);
+  const dish = preview ? suggestion : record;
+  const recipe = useRecipe(dish?.recipe.id);
   const star = useStarRecipe();
   const finishCooking = useFinishCooking();
-  const [starred, setStarred] = useState(record?.recipe.starred ?? false);
+  const [starred, setStarred] = useState(dish?.recipe.starred ?? false);
   const [confirming, setConfirming] = useState(false);
 
-  if (!record) return <Navigate to="/cook" replace />;
+  if (!dish) return <Navigate to="/cook" replace />;
 
-  const summary = record.recipe;
+  const summary = dish.recipe;
   const scaled = suggestion?.recipe.id === summary.id ? suggestion.ingredients : null;
+  const missingEssentials = scaled?.some((line) => line.essential && line.status === "missing");
 
   function toggleStar() {
     star.mutate({ recipeId: summary.id, starred: !starred }, { onSuccess: (result) => setStarred(result.starred) });
@@ -83,11 +86,17 @@ export function RecipePage() {
         </div>
       </div>
 
+      {preview && missingEssentials && (
+        <p className="text-[13px] text-ink-muted">
+          Get the missing ingredients first. If you already have them, update your kitchen.
+        </p>
+      )}
+
       <div className="flex items-center justify-between">
         <h2 className="text-[18px] font-bold whitespace-nowrap">Ingredients</h2>
         <span className="flex items-center gap-[10px] rounded-pill border border-border bg-surface py-[4px] pr-[12px] pl-[12px]">
           <Icon name="users-sm" />
-          <span className="text-[13px] font-bold whitespace-nowrap">Serves {record.people}</span>
+          <span className="text-[13px] font-bold whitespace-nowrap">Serves {dish.people}</span>
         </span>
       </div>
 
@@ -137,12 +146,31 @@ export function RecipePage() {
       )}
 
       <BottomBar>
-        <Button className="w-full" onClick={() => setConfirming(true)}>
-          I cooked this
-        </Button>
+        {preview ? (
+          <div className="flex flex-col gap-[10px]">
+            {missingEssentials ? (
+              <>
+                <Button className="w-full" onClick={() => navigate("/buy")}>
+                  Go to Buy
+                </Button>
+                <Link to="/more/kitchen" className="text-center text-[14px] font-semibold text-primary">
+                  Update kitchen
+                </Link>
+              </>
+            ) : (
+              <Button className="w-full" onClick={() => navigate("/cook")}>
+                Back to suggestion
+              </Button>
+            )}
+          </div>
+        ) : (
+          <Button className="w-full" onClick={() => setConfirming(true)}>
+            I cooked this
+          </Button>
+        )}
       </BottomBar>
 
-      {confirming && (
+      {confirming && record && (
         <WhatsLeftSheet
           record={record}
           onClose={() => setConfirming(false)}

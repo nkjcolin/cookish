@@ -19,6 +19,7 @@ from app.schemas.inventory import (
     InventoryItemUpdate,
 )
 from app.schemas.stock_events import InventoryChange, StockEventType
+from app.services.catalogue import match_exact_names
 from app.services.stock_events import (
     ChangeBatch,
     NewBatch,
@@ -55,8 +56,18 @@ def list_inventory(user: CurrentUser) -> Inventory:
 def add_items(
     user: CurrentUser, body: InventoryItemsCreate, idempotency_key: UUID
 ) -> InventoryChange:
-    lines = [NewBatch(item=item, source=body.source) for item in body.items]
     with transaction() as s:
+        matches = match_exact_names(
+            s,
+            (item.display_name for item in body.items if item.ingredient_id is None),
+        )
+        lines = []
+        for item in body.items:
+            matched_id = matches.get(item.display_name) if item.ingredient_id is None else None
+            resolved = item.model_copy(update={"ingredient_id": matched_id}) if matched_id else item
+            lines.append(
+                NewBatch(item=resolved, source=body.source, use_default_unit=matched_id is None)
+            )
         return apply_stock_event(s, user, StockEventType.PURCHASE, lines, idempotency_key)
 
 

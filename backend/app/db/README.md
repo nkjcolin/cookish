@@ -52,6 +52,7 @@ Changing any of these is fine by agreement; see "Changing an agreement" in `docs
 class NewBatch:                 # a purchase, or an item added by hand
     item: InventoryItemCreate
     source: ItemSource
+    use_default_unit: bool = True  # false for a name-only match; missing units stay unknown
 
 @dataclass(frozen=True)
 class ChangeBatch:              # change or remove an existing batch
@@ -78,6 +79,23 @@ It must, inside the caller's transaction `s`:
 `CHANGEABLE_FIELDS` lists the keys `changes` may hold: `count`, `unit`, `remaining_state`, `storage`, `label_date`, `label_date_kind`, `display_name`, `freshness_confirmed_at`.
 
 Your own endpoints use it too: `add_items` is a `purchase` of `NewBatch` lines, `update_item` an `adjust` with one `ChangeBatch`, `delete_item` an `adjust` with `remove=True`.
+
+### Reviewed names added to inventory
+
+When a reviewed AI or manual item has no `ingredient_id`, `add_items` links it only
+if its display name matches exactly one catalogue ingredient's canonical name or
+alias. Matching normalises Unicode, case and whitespace. Unknown names and names
+shared by multiple ingredients stay free text; there is no fuzzy match, inferred
+plural, or backfill of existing batches. An explicit ingredient ID takes priority
+and must exist.
+
+The saved quantity is unchanged. On creation, `piece`/`pieces`/`pcs` become `pcs`;
+`egg`/`eggs` also become `pcs` only for the resolved canonical `egg` ingredient.
+Grams, millilitres and packs are not converted. A unit missing from a name-only
+match stays unknown, including tofu: identifying the food does not establish what
+one unit means. Explicit catalogue selections keep the existing default-unit rule.
+The normal stock-event path still handles retries and undo, and a retry returns
+its original event even if a catalogue alias has since changed.
 
 ### Role 5: reading the kitchen
 
