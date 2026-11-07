@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import type { Schemas } from "../api/client";
-import { useAddInventoryItems, useParsedItems, useParseImage } from "../api/queries";
+import { useAddInventoryItems, useParseImage, useParseItems } from "../api/queries";
 import { Button } from "../components/Button";
 import { Chip } from "../components/Chip";
 import { Icon, type IconName } from "../components/Icon";
@@ -16,16 +16,9 @@ type DraftItem = Schemas["DraftItem"];
 type ItemSource = Schemas["ItemSource"];
 
 const QUICK_ADD = ["Eggs", "Rice", "Onion", "Garlic", "Tofu", "Chicken thigh"];
-const TYPING_PAUSE_MS = 600;
 
-function useDebounced<T>(value: T, delayMs: number): T {
-  const [debounced, setDebounced] = useState(value);
-  useEffect(() => {
-    const timer = setTimeout(() => setDebounced(value), delayMs);
-    return () => clearTimeout(timer);
-  }, [value, delayMs]);
-  return debounced;
-}
+/** What the model read, and the exact text it read it from. */
+type Checked = { text: string; items: DraftItem[] };
 
 export function AddIngredientsPage() {
   const navigate = useNavigate();
@@ -36,20 +29,32 @@ export function AddIngredientsPage() {
   const receiptInput = useRef<HTMLInputElement>(null);
   const photoInput = useRef<HTMLInputElement>(null);
 
-  const parsed = useParsedItems(useDebounced(text.trim(), TYPING_PAUSE_MS), spoken ? "voice" : "typed");
+  const [checked, setChecked] = useState<Checked | null>(null);
+  const parseItems = useParseItems();
   const parseImage = useParseImage();
   const addItems = useAddInventoryItems();
 
   useEffect(() => () => stopListening.current(), []);
 
-  const draft: DraftItem[] = text.trim().length > 1 ? (parsed.data?.items ?? []) : [];
+  const trimmed = text.trim();
+  // A result belongs to the text it was read from: once the text changes, check again.
+  const upToDate = checked !== null && checked.text === trimmed;
+  const draft: DraftItem[] = upToDate ? checked.items : [];
   const source: ItemSource = spoken ? "voice" : "manual";
-  const reading = parseImage.isPending || (text.trim().length > 1 && parsed.isFetching);
-  const failure = parseImage.error ?? parsed.error ?? addItems.error;
+  const checkFailed = parseItems.isError && parseItems.variables?.text === trimmed;
+  const failure = parseImage.error ?? (checkFailed ? parseItems.error : null) ?? addItems.error;
 
   function type(value: string) {
     setText(value);
     setSpoken(false);
+  }
+
+  function check() {
+    const asked = trimmed;
+    parseItems.mutate(
+      { text: asked, source: spoken ? "voice" : "typed" },
+      { onSuccess: (result) => setChecked({ text: asked, items: result.items }) },
+    );
   }
 
   async function readImage(file: File | undefined, kind: Schemas["ImageKind"]) {
@@ -149,11 +154,23 @@ export function AddIngredientsPage() {
           />
         </div>
 
-        {reading && <p className="text-[12px] text-ink-muted">Reading…</p>}
+        <Button
+          variant="secondary"
+          className="w-full"
+          onClick={check}
+          disabled={trimmed.length < 2 || parseItems.isPending || upToDate}
+        >
+          {parseItems.isPending ? "Checking…" : "Check"}
+        </Button>
+
+        {parseImage.isPending && <p className="text-[12px] text-ink-muted">Reading…</p>}
         {failure && (
           <p role="alert" className="text-[13px] text-danger">
             {failure.message}. You can still type items one by one.
           </p>
+        )}
+        {upToDate && draft.length === 0 && (
+          <p className="text-[13px] text-ink-muted">No food found in that. Try naming the items.</p>
         )}
 
         {draft.length > 0 && (

@@ -12,7 +12,8 @@ low-confidence draft to an invented food identification.
 
 Resolve explicit number words and collective quantities. A stated package count
 can remain a package count ONLY if contents per package are not provided.
-Unstated amounts remain null. Never treat a price as a quantity. If no foods
+Unstated amounts remain null; vague words such as "some", "a few" or "a bit of"
+are not amounts, so their factors and unit are null. Never treat a price as a quantity. If no foods
 are mentioned, return {"items": []}.
 
 Extract quantity evidence; the application calculates total amounts. Return an

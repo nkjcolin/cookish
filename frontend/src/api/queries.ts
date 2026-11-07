@@ -31,13 +31,11 @@ export function useUpdateInventoryItem() {
   });
 }
 
-export function useParsedItems(text: string, source: Schemas["TextSource"]) {
-  return useQuery({
-    queryKey: ["parse-items", source, text],
-    queryFn: async () => unwrap(await api.POST("/ai/parse-items", { body: { text, source } })),
-    enabled: text.length > 1,
-    staleTime: Infinity,
-    retry: false,
+/** Reads a typed or spoken list. Only when the user asks: typing alone never calls the model. */
+export function useParseItems() {
+  return useMutation({
+    mutationFn: async (body: Schemas["ParseItemsRequest"]) =>
+      unwrap(await api.POST("/ai/parse-items", { body })),
   });
 }
 
