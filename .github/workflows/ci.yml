@@ -75,3 +75,75 @@ jobs:
       - run: pnpm lint
       - run: pnpm test
       - run: pnpm build
+
+  # After every push to main whose checks pass: deploy the stack, migrate the database, then
+  # build the frontend. The variables live in the `aws` environment (infra/README.md).
+  deploy:
+    needs: [backend, ai, frontend]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    # AWS trusts only jobs in this environment (infra/github-deploy-role.yaml).
+    environment: aws
+    # The Lambdas are arm64; building on arm64 packages the right native wheels (psycopg).
+    runs-on: ubuntu-24.04-arm
+    # A second push waits for the first deploy instead of racing it.
+    concurrency:
+      group: deploy-production
+      cancel-in-progress: false
+    permissions:
+      id-token: write
+      contents: read
+    env:
+      AWS_REGION: ap-southeast-1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install aws-sam-cli awscli
+
+      - name: Build
+        run: |
+          # sam build reads requirements.txt; the projects lock their dependencies with uv.
+          (cd backend && uv export --frozen --no-dev --no-hashes --no-header -o requirements.txt)
+          (cd ai && uv export --frozen --no-dev --no-hashes --no-header -o requirements.txt)
+          # The ai Lambda matches ingredients against the backend's catalogue (INGREDIENTS_CSV).
+          cp backend/seed/ingredients.csv ai/ingredients.csv
+          (cd infra && sam build)
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      # The schema must be migrated before the new API starts (infra/deployment.md), so the
+      # migrate Lambda gets this build's code and runs before sam deploy updates the API.
+      - name: Migrate and seed the database
+        run: |
+          (cd infra/.aws-sam/build/MigrateFunction && zip -qr "$RUNNER_TEMP/migrate.zip" .)
+          aws lambda update-function-code --function-name cookish-migrate \
+            --zip-file "fileb://$RUNNER_TEMP/migrate.zip" > /dev/null
+          aws lambda wait function-updated-v2 --function-name cookish-migrate
+          aws lambda invoke --function-name cookish-migrate --log-type Tail \
+            --cli-read-timeout 180 response.json > invoke.json
+          cat response.json; echo
+          if jq -e '.FunctionError' invoke.json > /dev/null; then
+            jq -r '.LogResult' invoke.json | base64 -d
+            exit 1
+          fi
+
+      - name: Deploy the stack
+        working-directory: infra
+        run: |
+          sam deploy \
+            --stack-name "${{ vars.SAM_STACK_NAME }}" \
+            --region "$AWS_REGION" \
+            --resolve-s3 \
+            --capabilities CAPABILITY_IAM \
+            --no-confirm-changeset \
+            --no-fail-on-empty-changeset
+
+      # Only when Amplify's own auto-build is turned off, so the frontend goes live after the API.
+      - name: Build the frontend
+        if: vars.AMPLIFY_APP_ID != ''
+        run: aws amplify start-job --app-id "${{ vars.AMPLIFY_APP_ID }}" --branch-name main --job-type RELEASE

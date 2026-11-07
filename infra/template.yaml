@@ -419,6 +419,8 @@ Resources:
           SOCLAAS_TIMEOUT_SECONDS: "60"
           SOCLAAS_API_KEY_SECRET_ARN: !Ref SoclaasApiKeySecretArn
           SOCLAAS_PHOTO_QUANTITY_MODE: instances
+          # Copied in from backend/seed/ by the deploy job before sam build.
+          INGREDIENTS_CSV: /var/task/ingredients.csv
 
       Policies:
         - AWSSecretsManagerGetSecretValuePolicy:

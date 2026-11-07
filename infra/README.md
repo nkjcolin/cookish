@@ -36,7 +36,7 @@ record their results separately. The AI function was not updated in this rollout
 | PR #25 CI | Backend 575 tests passed; frontend and AI jobs passed |
 | Backend code upload | Both migration and API succeeded |
 | Migration and catalogue seed | Expected revision and all counts returned |
-| Backend deployment automation | Still manual; CI currently only checks code |
+| Backend deployment automation | `deploy` job in CI; see “Automatic deployment” |
 | Load/elasticity evidence | Not collected yet |
 
 The deployed entry points are:
@@ -97,6 +97,31 @@ The template passes `SOCLAAS_API_KEY_SECRET_ARN` to the AI function and grants i
 
 RDS is in private subnets, so neither GitHub Actions nor a laptop can reach it. The `migrate` Lambda already runs inside the VPC. For a backend release, update its code first, invoke it with `{}`, and require the expected schema revision and catalogue counts before updating the API. It applies the migrations and seeds the production catalogue without a demo household. Do not start a new API release against an older schema.
 
+## Automatic deployment
+
+Every push to `main` whose CI checks pass runs the `deploy` job in [ci.yml](../.github/workflows/ci.yml), in the rollout order of [deployment.md](deployment.md): `sam build`; give `cookish-migrate` the new code and invoke it (migrations and seed); only then `sam deploy`, which updates the API, the AI function and the rest of the stack; finally, if configured, start the Amplify build. A failed migration stops the job before the API changes, with the Lambda's log in the job output.
+
+### One-time setup
+
+1. **Create the deploy role.** CloudFormation console, `ap-southeast-1` → Create stack → upload [github-deploy-role.yaml](github-deploy-role.yaml). Name it e.g. `github-deploy`. Set `AppStackName` to the name of the stack `template.yaml` is already deployed as: `cookish`. If IAM → Identity providers already lists `token.actions.githubusercontent.com`, paste its ARN into `ExistingOidcProviderArn`. Tick the IAM acknowledgement and create. Copy the `DeployRoleArn` output.
+2. **Tell GitHub.** Repository → Settings → Environments → `aws` → **Environment variables** (not secrets, and not repository variables: the job runs in the `aws` environment):
+
+   | Variable | Value |
+   |---|---|
+   | `AWS_DEPLOY_ROLE_ARN` | The `DeployRoleArn` output |
+   | `SAM_STACK_NAME` | `cookish` |
+   | `AMPLIFY_APP_ID` | Optional: `d146krzza1ana` |
+
+3. **Optional: order the frontend after the API.** Amplify builds on its own the moment `main` changes, even when tests fail, and can go live before the API it calls. To prevent that, turn off Amplify → the app → `main` → *Auto build*, and set `AMPLIFY_APP_ID`: the deploy job then starts the Amplify build after the database is migrated.
+
+The role can only be taken by jobs in this repository's `aws` environment. To keep other branches out, limit that environment's *Deployment branches* to `main`. GitHub names the repository by its numeric IDs in OIDC tokens when immutable subjects are on, so the template trusts both forms. The ARNs are not secret.
+
+To change the role later: CloudFormation → the `github-deploy` stack → Update → *Replace existing template* → upload the new file, keeping the parameters.
+
+### Deploying by hand
+
+Follow [deployment.md](deployment.md). Code uploaded by hand is replaced by the next automatic deploy from `main`.
+
 ## Things to plan for
 
 - **Packaging.** `sam build` for Python reads `requirements.txt`, but the projects use uv. Generate it during the build, for example `uv export --no-dev --no-hashes > requirements.txt`, or package each Lambda as a container image.
@@ -108,7 +133,7 @@ RDS is in private subnets, so neither GitHub Actions nor a laptop can reach it. 
 ## Remaining work
 
 1. Complete authenticated browser smoke tests on a dedicated test household, including stock confirmation, replay and feedback. Record actual results and any product gaps.
-2. Add deployment automation after checking the existing stack and the permissions available for GitHub OIDC. Packaging is separate from a verified automatic rollout.
+2. Confirm the first automatic deploy from `main` succeeds end to end (see “Automatic deployment”).
 3. Verify the live CloudWatch dashboard, alarms and budget alert. Add concurrency and database metrics needed to assess load; a JSON dashboard file alone is not evidence of a deployed dashboard.
 4. Run the bounded load test in [eval/load](../eval/load/) beyond 20 users. Correlate the run with Lambda concurrency and errors, API latency and database load; user count alone does not prove scale-out.
 5. Fill in the cloud versus on-premise comparison using measured inputs, including ARM64 Lambda pricing and the Secrets Manager endpoint.

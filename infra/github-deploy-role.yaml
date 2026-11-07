@@ -1,0 +1,104 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: >
+  One-time setup. Lets GitHub Actions deploy Cookish from the main branch without
+  long-lived AWS keys (GitHub OIDC). Create this stack once by hand; template.yaml is
+  deployed by CI from then on.
+
+Parameters:
+  GitHubRepo:
+    Type: String
+    Default: nkjcolin/cookish
+    Description: owner/name of the repository allowed to deploy
+  GitHubRepoImmutable:
+    Type: String
+    Default: nkjcolin@49198636/cookish@1412983308
+    Description: >
+      The same repository as GitHub names it in OIDC tokens when immutable subjects are on
+      (gh api repos/OWNER/REPO/actions/oidc/customization/sub, without the "repo:" prefix)
+  GitHubEnvironment:
+    Type: String
+    Default: aws
+    Description: Only jobs running in this GitHub environment can take the role
+  AppStackName:
+    Type: String
+    Description: Name of the existing stack that template.yaml is deployed as
+  ExistingOidcProviderArn:
+    Type: String
+    Default: ""
+    Description: >
+      Leave empty to create the GitHub OIDC provider. An account can hold only one, so if
+      IAM > Identity providers already lists token.actions.githubusercontent.com, paste its ARN.
+
+Conditions:
+  CreateProvider: !Equals [!Ref ExistingOidcProviderArn, ""]
+
+Resources:
+  GitHubOidcProvider:
+    Type: AWS::IAM::OIDCProvider
+    Condition: CreateProvider
+    Properties:
+      Url: https://token.actions.githubusercontent.com
+      ClientIdList:
+        - sts.amazonaws.com
+      ThumbprintList:
+        - 6938fd4d98bab03faadb97b34396831e3780aea1
+        - 1c58a3a8518e8759bf075b76b750d4f2df264fcd
+
+  DeployRole:
+    Type: AWS::IAM::Role
+    Properties:
+      # Fixed, and outside "${AppStackName}-*", so the role cannot edit its own permissions.
+      RoleName: github-actions-deploy-cookish
+      Description: Assumed by GitHub Actions to deploy Cookish
+      MaxSessionDuration: 3600
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !If
+                - CreateProvider
+                - !Ref GitHubOidcProvider
+                - !Ref ExistingOidcProviderArn
+            Action: sts:AssumeRoleWithWebIdentity
+            Condition:
+              StringEquals:
+                token.actions.githubusercontent.com:aud: sts.amazonaws.com
+                # Either subject format, so toggling immutable subjects does not break deploys.
+                token.actions.githubusercontent.com:sub:
+                  - !Sub "repo:${GitHubRepoImmutable}:environment:${GitHubEnvironment}"
+                  - !Sub "repo:${GitHubRepo}:environment:${GitHubEnvironment}"
+      # Everything SAM deploys (Lambda, API Gateway, RDS, VPC, Cognito, Secrets Manager,
+      # CloudFormation, the SAM artifact bucket, Amplify) except IAM.
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/PowerUserAccess
+      Policies:
+        # The Lambdas' execution roles, which CloudFormation names after the stack.
+        - PolicyName: manage-stack-roles
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - iam:CreateRole
+                  - iam:DeleteRole
+                  - iam:GetRole
+                  - iam:UpdateRole
+                  - iam:TagRole
+                  - iam:UntagRole
+                  - iam:ListRoleTags
+                  - iam:PassRole
+                  - iam:UpdateAssumeRolePolicy
+                  - iam:AttachRolePolicy
+                  - iam:DetachRolePolicy
+                  - iam:PutRolePolicy
+                  - iam:GetRolePolicy
+                  - iam:DeleteRolePolicy
+                  - iam:ListRolePolicies
+                  - iam:ListAttachedRolePolicies
+                Resource: !Sub "arn:aws:iam::${AWS::AccountId}:role/${AppStackName}-*"
+
+Outputs:
+  DeployRoleArn:
+    Description: Put this in the GitHub repository variable AWS_DEPLOY_ROLE_ARN
+    Value: !GetAtt DeployRole.Arn
