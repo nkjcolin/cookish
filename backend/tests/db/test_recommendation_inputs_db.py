@@ -1,5 +1,6 @@
 """Real catalogue -> engine integration, using the disposable Postgres fixture."""
 
+import math
 from datetime import timedelta
 from uuid import UUID, uuid4
 
@@ -41,7 +42,7 @@ def test_seeded_catalogue_runs_both_engines_and_preserves_purchase_uncertainty(s
         assert not catalogue.purchases[names["water"]].buyable
         assert not catalogue.purchases[names["cooked rice"]].buyable
         tomato = catalogue.purchases[names["tomato"]]
-        assert tomato.purchase_unit_measure == "pcs"  # never assume grams per tomato
+        assert tomato.purchase_unit_measure == "pcs"  # bought by the piece, like it is kept
         assert all(r.reviewed and not r.starred for r in catalogue.recipes)
 
         result = suggest(
@@ -66,24 +67,27 @@ def test_seeded_catalogue_runs_both_engines_and_preserves_purchase_uncertainty(s
         assert len(plan.planned_meals) == prefs.last_shop_meals
         assert all(line.ingredient_id in catalogue.ingredients for line in plan.items)
         assert names["water"] not in {line.ingredient_id for line in plan.items}
+        # Recipes weigh tomatoes in grams; grams_per_piece turns that into whole tomatoes to buy.
         tomato_meal = next(
             r
             for r in catalogue.recipes
-            if any(
-                line.ingredient_id == names["tomato"] and line.unit == "g" for line in r.ingredients
-            )
+            if any(line.ingredient_id == names["tomato"] for line in r.ingredients)
         )
+        needed = next(
+            line for line in tomato_meal.ingredients if line.ingredient_id == names["tomato"]
+        )
+        assert needed.unit == "pcs"
         shopping = shopping_list(
             [tomato_meal],
-            inventory,
+            [],
             catalogue.ingredients,
             catalogue.purchases,
             tomato_meal.servings,
             as_of=clock.now(),
         )
         tomato_line = next(line for line in shopping.items if line.ingredient_id == names["tomato"])
-        assert tomato_line.needs_check
-        assert tomato_line.suggested_packs is None
+        assert not tomato_line.needs_check
+        assert tomato_line.suggested_packs == math.ceil(needed.quantity)
 
 
 def test_unreviewed_recipes_never_enter_runtime_catalogue(seeded):

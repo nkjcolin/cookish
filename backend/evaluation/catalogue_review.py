@@ -27,6 +27,7 @@ from app.schemas.common import Allergen, Diet, Equipment
 from app.schemas.identity import Preferences
 from app.services.recommendation_inputs import (
     ingredient_metadata,
+    piece_weights,
     purchase_metadata,
     recipe_candidate,
 )
@@ -52,6 +53,7 @@ def load_catalogue():
             [m.RecipeIngredient(**line) for line in links if line["recipe_id"] == row["id"]],
             metadata,
             False,
+            piece_weights(orm.values()),
         )
         for row in recipes
         if row["reviewed"]

@@ -102,6 +102,9 @@ def test_add_links_names_without_reinterpreting_amounts(
     ("name", "unit", "expected"),
     [
         ("egg", "egg", "pcs"),
+        ("cabbage", "head", "pcs"),
+        ("cabbage", "Cabbage", "pcs"),
+        ("cabbage", "egg", "egg"),
         ("egg", "g", "g"),
         ("egg", "ml", "ml"),
         ("egg", "pack", "pack"),

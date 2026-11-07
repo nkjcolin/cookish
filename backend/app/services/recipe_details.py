@@ -11,7 +11,11 @@ from app.auth import CurrentUser
 from app.db import models as m
 from app.errors import ApiError, ErrorCode
 from app.schemas.recipes import Recipe, StarResult
-from app.services.recommendation_inputs import ingredient_metadata, recipe_candidate
+from app.services.recommendation_inputs import (
+    ingredient_metadata,
+    piece_weights,
+    recipe_candidate,
+)
 
 
 def _reviewed_recipe(session: Session, recipe_id: UUID) -> m.Recipe:
@@ -51,6 +55,7 @@ def read_recipe(session: Session, household_id: UUID, recipe_id: UUID) -> Recipe
         [line for line, _ in ingredients],
         {ingredient.id: ingredient_metadata(ingredient) for _, ingredient in ingredients},
         latest is not None and latest.signal == "starred",
+        piece_weights(ingredient for _, ingredient in ingredients),
     )
     return Recipe.model_validate(candidate.model_dump())
 

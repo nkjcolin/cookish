@@ -198,7 +198,7 @@
                 "type": "null"
               }
             ],
-            "description": "null for state-tracked ingredients.",
+            "description": "null for state-tracked ingredients, and for counted ones whose need is uncertain. Confirming a bought line without packs records it with an unknown amount.",
             "title": "Suggested Packs"
           }
         },

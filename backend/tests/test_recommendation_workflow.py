@@ -401,6 +401,26 @@ def test_missing_purchase_conversion_never_defaults_to_one_pack(setup):
     assert db.stock_attempts == 0
 
 
+def test_counted_purchase_without_a_pack_count_is_kept_with_an_unknown_amount(setup):
+    # The basket had no count to suggest and the shopper gave none: still record the purchase,
+    # rather than failing the whole basket over one line.
+    db, service, _ = setup
+    db.state["inventory"][HOUSEHOLD] = []
+    cat = db.state["catalogue"]
+    purchases = dict(cat.purchases)
+    purchases[uid("egg")] = purchases[uid("egg")].model_copy(
+        update={"purchase_unit": None, "purchase_unit_size": None, "purchase_unit_measure": None}
+    )
+    db.state["catalogue"] = replace(cat, purchases=purchases)
+    basket = shopping(service)
+    assert basket.items[0].suggested_packs is None
+    result = service.confirm_shop(USER, basket.id, bought(basket), uid("unknown-amount"))
+    assert result.items[0].ingredient_id == uid("egg")
+    assert result.items[0].count is None and result.items[0].unit is None
+    assert result.items[0].remaining_state == RemainingState.ENOUGH
+    assert db.state["baskets"][HOUSEHOLD, basket.id].actual_lines[0].packs is None
+
+
 def test_shop_state_purchase_and_not_bought_lines(setup):
     db, service, _ = setup
     set_recipes(db, recipe(ingredients=("tomato", "egg")))

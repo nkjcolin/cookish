@@ -47,7 +47,10 @@ class BasketItem(ResponseModel):
     name: str
     category: IngredientCategory
     amount: str = Field(description='Display text, e.g. "2 packs" or "1 bunch".')
-    suggested_packs: int | None = Field(description="null for state-tracked ingredients.")
+    suggested_packs: int | None = Field(
+        description="null for state-tracked ingredients, and for counted ones whose need is"
+        " uncertain. Confirming a bought line without packs records it with an unknown amount."
+    )
     needs_check: bool = Field(description='Stock is uncertain: show "Check at home".')
 
 
