@@ -421,6 +421,26 @@ def test_counted_purchase_without_a_pack_count_is_kept_with_an_unknown_amount(se
     assert db.state["baskets"][HOUSEHOLD, basket.id].actual_lines[0].packs is None
 
 
+def test_shop_plans_the_recipe_asked_for_and_keeps_it_through_adjustment(setup):
+    db, service, _ = setup
+    set_recipes(db, recipe("starred", starred=True), recipe("asked", ingredients=("tomato",)))
+    db.state["inventory"][HOUSEHOLD] = []
+    basket = service.start_shop(USER, ShopSessionCreate(meals=1, recipe_ids=[uid("asked")]))
+    assert [meal.id for meal in basket.planned_meals] == [uid("asked")]
+    adjusted = service.adjust_shop(USER, basket.session_id, ShopAdjust(people=4))
+    assert [meal.id for meal in adjusted.planned_meals] == [uid("asked")]
+
+
+def test_shop_says_so_when_every_meal_can_already_be_cooked(setup):
+    db, service, _ = setup
+    set_recipes(db, recipe("covered", ingredients=("tomato",)))
+    db.state["inventory"][HOUSEHOLD] = [batch("tomato")]
+    with pytest.raises(ApiError) as caught:
+        shopping(service)
+    assert caught.value.code == ErrorCode.NO_RESULT
+    assert caught.value.details["all_stocked"] is True
+
+
 def test_shop_state_purchase_and_not_bought_lines(setup):
     db, service, _ = setup
     set_recipes(db, recipe(ingredients=("tomato", "egg")))

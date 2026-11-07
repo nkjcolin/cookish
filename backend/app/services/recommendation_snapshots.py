@@ -140,6 +140,18 @@ def dump_snapshot(value) -> dict[str, Any]:
     return snapshot
 
 
+def _upgrade(kind, payload):
+    """Fill fields added after version 1 was first written, with the value they then meant.
+
+    Shop sessions gained pinned_recipe_ids: one saved before it pinned nothing.
+    """
+    if kind is ShopSessionRow and isinstance(payload, dict):
+        state = payload.get("state")
+        if isinstance(state, dict) and "pinned_recipe_ids" not in state:
+            return {**payload, "state": {**state, "pinned_recipe_ids": []}}
+    return payload
+
+
 def load_snapshot[T](snapshot: object, expected_type: type[T]) -> T:
     """Decode a complete snapshot, rejecting unsupported versions and record kinds.
 
@@ -155,7 +167,7 @@ def load_snapshot[T](snapshot: object, expected_type: type[T]) -> T:
         raise ValueError("Unsupported recommendation snapshot version")
     if snapshot["kind"] != _KINDS[expected_type]:
         raise ValueError("Unexpected recommendation snapshot kind")
-    payload = snapshot["payload"]
+    payload = _upgrade(expected_type, snapshot["payload"])
     encoded = json.dumps(payload, allow_nan=False)
     decoded = _ADAPTERS[expected_type].validate_json(encoded, strict=True)
     _check_complete(payload, decoded)

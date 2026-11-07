@@ -18,7 +18,11 @@ from app.schemas.cook import (
     Rating,
 )
 from app.schemas.shop import BasketConfirm, BoughtLine, ShopSessionCreate
-from app.services.recommendation_repository import Confirmation, CookSessionRow
+from app.services.recommendation_repository import (
+    Confirmation,
+    CookSessionRow,
+    ShopSessionRow,
+)
 from app.services.recommendation_snapshots import dump_snapshot, load_snapshot
 from app.services.recommendation_workflow import RecommendationWorkflow
 from tests.reco_fixtures import NOW, recipe, uid
@@ -174,6 +178,15 @@ def test_missing_default_fields_are_not_silently_recreated(records):
     del wire["payload"]["meals"]
     with pytest.raises(ValueError, match="missing"):
         load_snapshot(wire, LearningState)
+
+
+def test_a_shop_session_saved_before_pins_loads_with_none(records):
+    # The one field added after version 1 shipped: older sessions meant "nothing pinned".
+    wire = dump_snapshot(records["shop_session"])
+    del wire["payload"]["state"]["pinned_recipe_ids"]
+    loaded = load_snapshot(wire, ShopSessionRow)
+    assert loaded == records["shop_session"]
+    assert loaded.state.pinned_recipe_ids == ()
 
 
 @pytest.mark.parametrize("location", ["envelope", "dataclass", "response"])

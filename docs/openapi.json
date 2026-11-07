@@ -2041,6 +2041,16 @@
             ],
             "description": "Defaults to the last choice.",
             "title": "People"
+          },
+          "recipe_ids": {
+            "description": "Recipes the plan must include, such as the one being viewed; the rest are chosen as usual. meals is raised to at least this many.",
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "maxItems": 7,
+            "title": "Recipe Ids",
+            "type": "array"
           }
         },
         "title": "ShopSessionCreate",

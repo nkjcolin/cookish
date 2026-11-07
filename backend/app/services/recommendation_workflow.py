@@ -513,6 +513,12 @@ class RecommendationWorkflow:
             taste_weights=self._weights(repo, household),
         )
         if not plan.planned_meals:
+            if plan.all_stocked:
+                raise ApiError(
+                    ErrorCode.NO_RESULT,
+                    "Your kitchen already has what your usual meals need; Cook can suggest one",
+                    {"relaxable": [], "all_stocked": True},
+                )
             raise ApiError(ErrorCode.NO_RESULT, "No eligible recipes", {"relaxable": []})
         response = to_basket(plan, row.id, row.basket_id)
         # Insert the parent before its basket; both remain in the same transaction.
@@ -537,7 +543,12 @@ class RecommendationWorkflow:
                 self.new_id(),
                 user.household_id,
                 now + timedelta(hours=12),
-                new_shop_session(repo.preferences(user.household_id), body.people, body.meals),
+                new_shop_session(
+                    repo.preferences(user.household_id),
+                    body.people,
+                    body.meals,
+                    pinned=body.recipe_ids,
+                ),
                 self.new_id(),
                 user.user_id,
             )
