@@ -321,6 +321,8 @@ class PlanSession(Base):
     mode: Mapped[str] = mapped_column(Text)
     people: Mapped[int] = mapped_column(SmallInteger)
     constraints: Mapped[dict[str, Any]] = mapped_column(JSONB, server_default=text("'{}'::jsonb"))
+    # NULL marks a legacy session, whose historical responses cannot be reconstructed.
+    recommendation_state: Mapped[dict[str, Any] | None] = mapped_column(JSONB)
     adjustments: Mapped[list[Any]] = mapped_column(JSONB, server_default=text("'[]'::jsonb"))
     shown_recipe_ids: Mapped[list[UUID]] = mapped_column(
         ARRAY(Uuid), server_default=text("'{}'::uuid[]")
@@ -342,6 +344,8 @@ class CookRecord(Base):
     user_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"))
     people: Mapped[int] = mapped_column(SmallInteger)
     status: Mapped[str] = mapped_column(Text, server_default="selected")
+    selection_snapshot: Mapped[dict[str, Any] | None] = mapped_column(JSONB)
+    confirmation_snapshot: Mapped[dict[str, Any] | None] = mapped_column(JSONB)
     stock_event_id: Mapped[UUID | None] = mapped_column(ForeignKey("stock_events.id"))
     created_at: Mapped[datetime] = _created_at()
 
@@ -377,6 +381,7 @@ class Basket(Base):
     people: Mapped[int] = mapped_column(SmallInteger)
     meals: Mapped[int] = mapped_column(SmallInteger)
     status: Mapped[str] = mapped_column(Text, server_default="suggested")
+    planning_snapshot: Mapped[dict[str, Any] | None] = mapped_column(JSONB)
     stock_event_id: Mapped[UUID | None] = mapped_column(ForeignKey("stock_events.id"))
     created_at: Mapped[datetime] = _created_at()
 
@@ -404,3 +409,30 @@ class BasketItem(Base):
     reason: Mapped[str | None] = mapped_column(Text)
     actual_bought: Mapped[bool | None] = mapped_column(Boolean)
     actual_packs: Mapped[int | None] = mapped_column(SmallInteger)
+
+
+class RecommendationLearning(Base):
+    """Ordered, replaceable meal evidence used to derive household taste weights."""
+
+    __tablename__ = "recommendation_learning"
+
+    household_id: Mapped[UUID] = mapped_column(ForeignKey("households.id"), primary_key=True)
+    state: Mapped[dict[str, Any]] = mapped_column(JSONB)
+    updated_by: Mapped[UUID] = mapped_column(ForeignKey("users.id"))
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class RecommendationConfirmation(Base):
+    """Exact request/response replay, in the inventory event's idempotency namespace."""
+
+    __tablename__ = "recommendation_confirmations"
+    __table_args__ = (one_of("operation", ("cook", "shop")),)
+
+    household_id: Mapped[UUID] = mapped_column(ForeignKey("households.id"), primary_key=True)
+    idempotency_key: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
+    operation: Mapped[str] = mapped_column(Text)
+    target_id: Mapped[UUID] = mapped_column(Uuid)
+    request_json: Mapped[str] = mapped_column(Text)
+    response_snapshot: Mapped[dict[str, Any]] = mapped_column(JSONB)
+    stock_event_id: Mapped[UUID] = mapped_column(ForeignKey("stock_events.id"))
+    created_at: Mapped[datetime] = _created_at()
