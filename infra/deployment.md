@@ -14,8 +14,7 @@ role. The existing environment variables are:
 | `SAM_STACK_NAME` | `cookish` |
 | `AMPLIFY_APP_ID` | `d146krzza1ana` |
 
-The job exports the frozen dependencies, copies the ingredient CSV into the AI
-package and runs `sam build`. It updates `cookish-migrate`, waits for that update,
+The job exports the frozen dependencies and runs `sam build`. It updates `cookish-migrate`, waits for that update,
 and invokes migrations/seeding. A Lambda `FunctionError` stops deployment. After
 that, `sam deploy` updates the existing stack, including API, AI and infrastructure.
 Finally it requests an Amplify build when `AMPLIFY_APP_ID` is configured. Starting

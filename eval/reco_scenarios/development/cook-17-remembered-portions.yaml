@@ -52,7 +52,7 @@ expect:
   ingredient_status:
     egg: have
   amounts:
-    egg: 1.5 pcs
+    egg: 1½ pcs
     rice: 100 g
 adjustments: []
 taste_weights: {}

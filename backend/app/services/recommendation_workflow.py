@@ -513,6 +513,12 @@ class RecommendationWorkflow:
             taste_weights=self._weights(repo, household),
         )
         if not plan.planned_meals:
+            if plan.all_stocked:
+                raise ApiError(
+                    ErrorCode.NO_RESULT,
+                    "Your kitchen already has what your usual meals need; Cook can suggest one",
+                    {"relaxable": [], "all_stocked": True},
+                )
             raise ApiError(ErrorCode.NO_RESULT, "No eligible recipes", {"relaxable": []})
         response = to_basket(plan, row.id, row.basket_id)
         # Insert the parent before its basket; both remain in the same transaction.
@@ -537,7 +543,12 @@ class RecommendationWorkflow:
                 self.new_id(),
                 user.household_id,
                 now + timedelta(hours=12),
-                new_shop_session(repo.preferences(user.household_id), body.people, body.meals),
+                new_shop_session(
+                    repo.preferences(user.household_id),
+                    body.people,
+                    body.meals,
+                    pinned=body.recipe_ids,
+                ),
                 self.new_id(),
                 user.user_id,
             )
@@ -597,14 +608,17 @@ class RecommendationWorkflow:
                     _fail(ErrorCode.VALIDATION, "Ingredient is not a purchasable item")
                 count, unit, packs = None, None, None
                 if meta.countable:
-                    if pack.purchase_unit_size is None or pack.purchase_unit_measure is None:
-                        _fail(ErrorCode.VALIDATION, "Resolve purchase units before confirming")
                     packs = line.packs if line.packs is not None else item.suggested_packs
-                    if packs is None or not 1 <= packs <= 50:
-                        _fail(ErrorCode.VALIDATION, "Enter the actual pack count")
-                    count, unit = packs * pack.purchase_unit_size, pack.purchase_unit_measure
-                    if not math.isfinite(count):
-                        _fail(ErrorCode.VALIDATION, "Purchase quantity must be finite")
+                    # No count suggested or given: bought, amount unknown, as a receipt line
+                    # without a quantity. The kitchen asks for the count when it matters.
+                    if packs is not None:
+                        if pack.purchase_unit_size is None or pack.purchase_unit_measure is None:
+                            _fail(ErrorCode.VALIDATION, "Resolve purchase units before confirming")
+                        if not 1 <= packs <= 50:
+                            _fail(ErrorCode.VALIDATION, "Enter the actual pack count")
+                        count, unit = packs * pack.purchase_unit_size, pack.purchase_unit_measure
+                        if not math.isfinite(count):
+                            _fail(ErrorCode.VALIDATION, "Purchase quantity must be finite")
                 elif line.packs is not None:
                     _fail(ErrorCode.VALIDATION, "State-tracked purchases do not take numeric packs")
                 actual_lines.append(line.model_copy(deep=True, update={"packs": packs}))

@@ -508,7 +508,7 @@ def test_shop_confirmation_uses_saved_pack_conversion_and_replays(kitchen, legac
         assert line.actual_bought and line.actual_packs == 2
 
 
-def test_shop_grams_to_pieces_needs_actual_count_and_never_assumes_weight(kitchen):
+def test_shop_uses_seeded_piece_estimate_and_exposes_the_purchase_unit(kitchen):
     user, catalogue = kitchen
     basket = shop.start_session(user, ShopSessionCreate(meals=1))
     item = next(
@@ -516,21 +516,43 @@ def test_shop_grams_to_pieces_needs_actual_count_and_never_assumes_weight(kitche
         for item in basket.items
         if catalogue.ingredients[item.ingredient_id].canonical_name == "tomato"
     )
-    assert item.countable and item.suggested_packs is None
-    assert item.purchase_unit_measure == "pcs"
-    expect_error(
-        ErrorCode.VALIDATION,
-        lambda: shop.confirm_basket(
-            user, basket.id, purchase(basket, item.id, packs=None), uuid4()
-        ),
+    # The seed supplies 120 g per tomato: 300 g needs 2.5 pieces, bought as three.
+    assert item.countable and item.suggested_packs == 3
+    assert (item.purchase_unit, item.purchase_unit_size, item.purchase_unit_measure) == (
+        "piece",
+        1,
+        "pcs",
     )
-    assert event_count("purchase") == 0
-    body, key = purchase(basket, item.id, packs=3), uuid4()
+    body, key = purchase(basket, item.id, packs=None), uuid4()
     result = shop.confirm_basket(user, basket.id, body, key)
-    assert result.items[0].count == 3 * item.purchase_unit_size
+    assert result.items[0].count == 3
     assert result.items[0].unit == "pcs"
     assert shop.confirm_basket(user, basket.id, body, key) == result
     assert event_count("purchase") == 1
+
+
+@pytest.mark.parametrize("packs", [None, 3])
+def test_shop_without_piece_estimate_records_actual_or_unknown_quantity(kitchen, packs):
+    user, catalogue = kitchen
+    tomato_id = next(
+        key
+        for key, ingredient in catalogue.ingredients.items()
+        if ingredient.canonical_name == "tomato"
+    )
+    with transaction() as session:
+        session.get(m.Ingredient, tomato_id).grams_per_piece = None
+    basket = shop.start_session(user, ShopSessionCreate(meals=1))
+    item = next(item for item in basket.items if item.ingredient_id == tomato_id)
+    assert item.countable and item.suggested_packs is None
+    assert item.purchase_unit_size == 1 and item.purchase_unit_measure == "pcs"
+    body, key = purchase(basket, item.id, packs=packs), uuid4()
+    result = shop.confirm_basket(user, basket.id, body, key)
+    assert result.items[0].count == packs
+    assert result.items[0].unit == (None if packs is None else "pcs")
+    assert shop.confirm_basket(user, basket.id, body, key) == result
+    assert event_count("purchase") == 1
+    with transaction() as session:
+        assert session.get(m.BasketItem, item.id).actual_packs == packs
 
 
 def test_shop_adjust_abandons_old_basket_and_rejects_other_household(kitchen):

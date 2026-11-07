@@ -27,6 +27,12 @@ class BasketStatus(StrEnum):
 class ShopSessionCreate(RequestModel):
     people: People | None = Field(default=None, description="Defaults to the last choice.")
     meals: Meals | None = Field(default=None, description="Defaults to the last choice.")
+    recipe_ids: list[UUID] = Field(
+        default_factory=list,
+        max_length=7,
+        description="Recipes the plan must include, such as the one being viewed; the rest"
+        " are chosen as usual. meals is raised to at least this many.",
+    )
 
 
 class ShopAdjust(RequestModel):
@@ -47,7 +53,7 @@ class BasketItem(ResponseModel):
     name: str
     category: IngredientCategory
     amount: str = Field(description='Display text, e.g. "2 packs" or "1 bunch".')
-    countable: bool = Field(description="Whether confirmation requires a numeric purchase count.")
+    countable: bool = Field(description="Whether the ingredient is tracked by a numeric quantity.")
     purchase_unit: str | None = Field(description="Frozen purchase unit, e.g. pack or piece.")
     purchase_unit_size: float | None = Field(
         description="Quantity in one purchase unit; no recipe-to-purchase conversion is implied."
@@ -56,7 +62,8 @@ class BasketItem(ResponseModel):
         description="Measure of that quantity, e.g. pcs or g."
     )
     suggested_packs: int | None = Field(
-        description="null for state-tracked items or when the purchase count needs user input."
+        description="null for state-tracked ingredients, and for counted ones whose need is"
+        " uncertain. Confirming a bought line without packs records it with an unknown amount."
     )
     needs_check: bool = Field(description='Stock is uncertain: show "Check at home".')
 
@@ -79,7 +86,7 @@ class BoughtLine(RequestModel):
         default=None,
         description=(
             "Actual purchase-unit count for countable items. Uses the suggestion if omitted; "
-            "required when that suggestion is null. Omit for state-tracked items."
+            "if neither is available, records an unknown amount. Omit for state-tracked items."
         ),
     )
 

@@ -6,7 +6,7 @@ Cookish keeps a low-maintenance record of what is in your kitchen and answers tw
 
 ## Status
 
-The contract, the stubs and the whole frontend are in place; the backend still returns sample data. **Start with [docs/init.md](docs/init.md)**: it says where the project stands, the conventions everyone follows and what comes next, and points each role to the README in the folder they work in. The design decisions are in [docs/SPEC.md](docs/SPEC.md).
+Every screen runs on real data and is deployed at <https://main.d146krzza1ana.amplifyapp.com>; every push to `main` that passes CI deploys automatically ([infra/README.md](infra/README.md)). **Start with [docs/init.md](docs/init.md)**: it says where the project stands, the conventions everyone follows and what comes next, and points each role to the README in the folder they work in. The design decisions are in [docs/SPEC.md](docs/SPEC.md).
 
 ## Repository layout
 
@@ -44,4 +44,4 @@ Edits to `frontend/`, `backend/` and `ai/` reload automatically. To work on one 
 
 Your local database is yours alone. `docker compose down -v` wipes it and the next start gives you a clean one.
 
-Every endpoint currently returns fixed sample data. The API contract is [docs/openapi.json](docs/openapi.json); how to replace a stub with real logic is described in [backend/README.md](backend/README.md).
+The API contract is [docs/openapi.json](docs/openapi.json). Locally every request is made as one fixed development user, so no sign-in is needed.

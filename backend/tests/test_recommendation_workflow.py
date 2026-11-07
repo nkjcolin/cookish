@@ -403,7 +403,8 @@ def test_missing_purchase_conversion_never_defaults_to_one_pack(setup):
     assert db.stock_attempts == 0
 
 
-def test_incompatible_recipe_measure_requests_actual_purchase_count_then_replays(setup):
+@pytest.mark.parametrize("packs", [None, 2])
+def test_incompatible_recipe_measure_preserves_actual_or_unknown_quantity_and_replays(setup, packs):
     db, service, _ = setup
     meal = recipe(ingredients=("egg",))
     meal.ingredients[0].quantity, meal.ingredients[0].unit = 150, "g"
@@ -417,17 +418,53 @@ def test_incompatible_recipe_measure_requests_actual_purchase_count_then_replays
         10,
         "pcs",
     )
-    error = assert_error(
-        ErrorCode.VALIDATION,
-        lambda: service.confirm_shop(USER, basket.id, bought(basket), uid("missing-actual")),
-    )
-    assert error.message == "Enter the actual pack count"
-    assert db.stock_attempts == 0
-    body, key = bought(basket, packs=2), uid("actual-count")
+    body, key = bought(basket, packs=packs), uid("actual-or-unknown-count")
     result = service.confirm_shop(USER, basket.id, body, key)
-    assert result.items[0].count == 20 and result.items[0].unit == "pcs"
+    assert result.items[0].count == (None if packs is None else 20)
+    assert result.items[0].unit == (None if packs is None else "pcs")
+    assert db.state["baskets"][HOUSEHOLD, basket.id].actual_lines[0].packs == packs
     assert service.confirm_shop(USER, basket.id, body, key) == result
     assert db.stock_attempts == 1
+
+
+def test_counted_purchase_without_a_pack_count_is_kept_with_an_unknown_amount(setup):
+    # The basket had no count to suggest and the shopper gave none: still record the purchase,
+    # rather than failing the whole basket over one line.
+    db, service, _ = setup
+    db.state["inventory"][HOUSEHOLD] = []
+    cat = db.state["catalogue"]
+    purchases = dict(cat.purchases)
+    purchases[uid("egg")] = purchases[uid("egg")].model_copy(
+        update={"purchase_unit": None, "purchase_unit_size": None, "purchase_unit_measure": None}
+    )
+    db.state["catalogue"] = replace(cat, purchases=purchases)
+    basket = shopping(service)
+    assert basket.items[0].suggested_packs is None
+    result = service.confirm_shop(USER, basket.id, bought(basket), uid("unknown-amount"))
+    assert result.items[0].ingredient_id == uid("egg")
+    assert result.items[0].count is None and result.items[0].unit is None
+    assert result.items[0].remaining_state == RemainingState.ENOUGH
+    assert db.state["baskets"][HOUSEHOLD, basket.id].actual_lines[0].packs is None
+
+
+def test_shop_plans_the_recipe_asked_for_and_keeps_it_through_adjustment(setup):
+    db, service, _ = setup
+    set_recipes(db, recipe("starred", starred=True), recipe("asked", ingredients=("tomato",)))
+    db.state["inventory"][HOUSEHOLD] = []
+    basket = service.start_shop(USER, ShopSessionCreate(meals=1, recipe_ids=[uid("asked")]))
+    assert [meal.id for meal in basket.planned_meals] == [uid("asked")]
+    adjusted = service.adjust_shop(USER, basket.session_id, ShopAdjust(people=4))
+    assert [meal.id for meal in adjusted.planned_meals] == [uid("asked")]
+
+
+def test_shop_says_so_when_every_meal_can_already_be_cooked(setup):
+    db, service, _ = setup
+    set_recipes(db, recipe("covered", ingredients=("tomato",)))
+    db.state["inventory"][HOUSEHOLD] = [batch("tomato")]
+    with pytest.raises(ApiError) as caught:
+        shopping(service)
+    assert caught.value.code == ErrorCode.NO_RESULT
+    assert caught.value.details["all_stocked"] is True
 
 
 def test_shop_state_purchase_and_not_bought_lines(setup):

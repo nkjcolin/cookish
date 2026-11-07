@@ -1,12 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { api, idempotencyKey, isNotFound, unwrap, type Schemas } from "./client";
-import { invalidateAfterStockChange } from "./stockCache";
+import { BASKET_KEY, CART_KEY, invalidateAfterStockChange } from "./stockCache";
 
 type Basket = Schemas["Basket"];
-
-const BASKET_KEY = ["shop", "basket"];
-const CART_KEY = ["shop", "cart"];
 
 /** The current Shop session's basket. Starts on first visit, then stays in the cache. */
 export function useBasket() {
@@ -68,6 +65,22 @@ export function useCart(): { inCart: string[]; toggle: (itemId: string) => void 
         current.includes(itemId) ? current.filter((id) => id !== itemId) : [...current, itemId],
       ),
   };
+}
+
+/**
+ * "Go to Buy" from a recipe: a new basket that includes it, replacing the current one, so the
+ * list holds what this dish still needs.
+ */
+export function useShopForRecipe() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ recipeId, people }: { recipeId: string; people: number }) =>
+      unwrap(await api.POST("/api/shop/sessions", { body: { recipe_ids: [recipeId], people } })),
+    onSuccess: (basket) => {
+      queryClient.setQueryData(BASKET_KEY, basket);
+      queryClient.setQueryData(CART_KEY, []);
+    },
+  });
 }
 
 /** Adds what was actually bought to the kitchen. */

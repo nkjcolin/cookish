@@ -171,7 +171,7 @@
             "$ref": "#/components/schemas/IngredientCategory"
           },
           "countable": {
-            "description": "Whether confirmation requires a numeric purchase count.",
+            "description": "Whether the ingredient is tracked by a numeric quantity.",
             "title": "Countable",
             "type": "boolean"
           },
@@ -239,7 +239,7 @@
                 "type": "null"
               }
             ],
-            "description": "null for state-tracked items or when the purchase count needs user input.",
+            "description": "null for state-tracked ingredients, and for counted ones whose need is uncertain. Confirming a bought line without packs records it with an unknown amount.",
             "title": "Suggested Packs"
           }
         },
@@ -291,7 +291,7 @@
                 "type": "null"
               }
             ],
-            "description": "Actual purchase-unit count for countable items. Uses the suggestion if omitted; required when that suggestion is null. Omit for state-tracked items.",
+            "description": "Actual purchase-unit count for countable items. Uses the suggestion if omitted; if neither is available, records an unknown amount. Omit for state-tracked items.",
             "title": "Packs"
           }
         },
@@ -2086,6 +2086,16 @@
             ],
             "description": "Defaults to the last choice.",
             "title": "People"
+          },
+          "recipe_ids": {
+            "description": "Recipes the plan must include, such as the one being viewed; the rest are chosen as usual. meals is raised to at least this many.",
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "maxItems": 7,
+            "title": "Recipe Ids",
+            "type": "array"
           }
         },
         "title": "ShopSessionCreate",

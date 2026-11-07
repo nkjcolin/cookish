@@ -44,6 +44,8 @@ class ShopSession:
     meals: int = 3
     tags: tuple[ShopTag, ...] = ()
     strict_max_minutes: int | None = None
+    # Recipes the user asked for; always planned while they stay eligible.
+    pinned_recipe_ids: tuple[UUID, ...] = ()
 
     def __post_init__(self):
         for name, value, maximum in (("people", self.people, 12), ("meals", self.meals, 7)):
@@ -84,6 +86,8 @@ class ShopPlan:
     planned_meals: tuple[Candidate, ...]
     items: tuple[Purchase, ...]
     score_terms: dict[str, float]
+    # No plan because every eligible meal can already be cooked from the kitchen.
+    all_stocked: bool = False
 
     @property
     def score(self) -> float:

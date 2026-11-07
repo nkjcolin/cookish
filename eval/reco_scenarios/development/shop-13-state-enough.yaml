@@ -2,8 +2,9 @@ version: 1
 id: DEV-S13
 split: development
 mode: shop
-description: Recently confirmed enough tomato and rice satisfy a state-tracked meal; no grams are
-  subtracted or invented and the basket is empty.
+description: Recently confirmed enough tomato and rice satisfy a state-tracked meal without
+  subtracting or inventing grams, so it can be cooked now; Shop leaves it to Cook and plans
+  nothing to buy.
 categories:
 - state-enough
 - confirmed-at-home
@@ -19,8 +20,7 @@ request:
   people: 2
   meals: 1
 expect:
-  result: true
-  meal_count: 1
-  planned:
-  - tomato-rice
+  result: false
+  meal_count: 0
+  planned: []
   items: {}

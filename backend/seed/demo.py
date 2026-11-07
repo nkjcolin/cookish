@@ -14,7 +14,7 @@ It runs from the development Dockerfile only. The deployed stack signs people in
 and nobody there has the development user's id, so a demo household would be unreachable.
 
 Dates are set so the batches get the same freshness as the mock kitchen once freshness is
-computed on read: eggs and cabbage use soon, chicken is past its estimate, tofu has a use-by
+computed on read: eggs and half a cabbage use soon, chicken is past its estimate, tofu has a use-by
 label, and the rice stock is unknown.
 """
 
@@ -42,7 +42,7 @@ class DemoItem:
     key: str
     ingredient: str  # canonical_name in ingredients.csv
     display_name: str
-    count: int | None = None  # only for ingredients tracked by count
+    count: float | None = None  # only for ingredients tracked by count
     state: str = "enough"
     use_first_in_days: int | None = None  # aim for this use-first date, using the shelf life
     label_use_by_in_days: int | None = None  # a use-by date printed on the package
@@ -55,10 +55,10 @@ ITEMS = [
     DemoItem("egg-old", "egg", "Egg", count=2, use_first_in_days=2, source="receipt"),
     DemoItem("egg-new", "egg", "Egg", count=6, use_first_in_days=14, source="receipt"),
     DemoItem("tomato", "tomato", "Tomato", count=3, use_first_in_days=5),
-    DemoItem("cabbage", "cabbage", "Cabbage", state="low", use_first_in_days=1),
+    DemoItem("cabbage", "cabbage", "Cabbage", count=0.5, use_first_in_days=1),
     DemoItem("garlic", "garlic", "Garlic", use_first_in_days=25),
     DemoItem("chicken", "chicken thigh", "Chicken thigh", use_first_in_days=-1, source="photo"),
-    DemoItem("tofu", "firm tofu", "Firm tofu", count=1, label_use_by_in_days=4, source="voice"),
+    DemoItem("tofu", "firm tofu", "Firm tofu", label_use_by_in_days=4, source="voice"),
     DemoItem(
         "rice",
         "uncooked rice",
@@ -110,7 +110,7 @@ def build_items(
                 "household_id": DEMO_HOUSEHOLD_ID,
                 "ingredient_id": ing["id"],
                 "display_name": item.display_name,
-                "count": None if item.count is None else Decimal(item.count),
+                "count": None if item.count is None else Decimal(str(item.count)),
                 "unit": ing["default_unit"] if item.count is not None else None,
                 "remaining_state": item.state,
                 "storage": storage,

@@ -504,7 +504,7 @@ export interface components {
             category: components["schemas"]["IngredientCategory"];
             /**
              * Countable
-             * @description Whether confirmation requires a numeric purchase count.
+             * @description Whether the ingredient is tracked by a numeric quantity.
              */
             countable: boolean;
             /**
@@ -541,7 +541,7 @@ export interface components {
             purchase_unit_size: number | null;
             /**
              * Suggested Packs
-             * @description null for state-tracked items or when the purchase count needs user input.
+             * @description null for state-tracked ingredients, and for counted ones whose need is uncertain. Confirming a bought line without packs records it with an unknown amount.
              */
             suggested_packs: number | null;
         };
@@ -561,7 +561,7 @@ export interface components {
             bought: boolean;
             /**
              * Packs
-             * @description Actual purchase-unit count for countable items. Uses the suggestion if omitted; required when that suggestion is null. Omit for state-tracked items.
+             * @description Actual purchase-unit count for countable items. Uses the suggestion if omitted; if neither is available, records an unknown amount. Omit for state-tracked items.
              */
             packs?: number | null;
         };
@@ -1180,6 +1180,11 @@ export interface components {
              * @description Defaults to the last choice.
              */
             people?: number | null;
+            /**
+             * Recipe Ids
+             * @description Recipes the plan must include, such as the one being viewed; the rest are chosen as usual. meals is raised to at least this many.
+             */
+            recipe_ids?: string[];
         };
         /**
          * ShopTag

@@ -243,10 +243,10 @@ def test_variant_family_does_not_fill_multiple_meal_slots():
 
 
 def test_candidate_admission_ignores_stock_but_combination_score_uses_confirmed_stock():
-    first, second = sorted(
-        [recipe("a"), recipe("b", ingredients=("tomato",))], key=lambda meal: str(meal.id)
-    )
-    stocked = batch(second.ingredients[0].name)
+    first, second = sorted([recipe("a"), recipe("b")], key=lambda meal: str(meal.id))
+    # Both still need eggs; the one that loses the ID tie-break also uses tomato from home.
+    second = recipe(second.title, ingredients=("egg", "tomato"))
+    stocked = batch("tomato")
     result = plan(
         [first, second],
         [stocked],
@@ -256,6 +256,57 @@ def test_candidate_admission_ignores_stock_but_combination_score_uses_confirmed_
     assert result.planned_meals[0].id == first.id  # Pool admitted by preference, not stock.
     result = plan([first, second], [stocked], session=ShopSession(meals=1))
     assert result.planned_meals[0].id == second.id
+
+
+def test_a_meal_the_kitchen_already_covers_is_left_to_cook():
+    to_buy, covered = recipe("a"), recipe("b", ingredients=("tomato",))
+    result = plan([to_buy, covered], [batch("tomato")], session=ShopSession(meals=2))
+    assert [meal.id for meal in result.planned_meals] == [to_buy.id]
+    assert result.items
+
+    result = plan([covered], [batch("tomato")], session=ShopSession(meals=1))
+    assert result.planned_meals == () and result.all_stocked
+
+
+def test_meals_with_something_to_buy_beat_ones_that_only_need_a_check_at_home():
+    unsure = batch("tomato", remaining_state=RemainingState.UNKNOWN)
+    check_only = recipe("check-only", ingredients=("tomato",), starred=True)
+    to_buy = recipe("to-buy")
+    result = plan([check_only, to_buy], [unsure], session=ShopSession(meals=1))
+    assert [meal.id for meal in result.planned_meals] == [to_buy.id]
+
+    # With nothing else to buy for, a check is still worth a trip.
+    result = plan([check_only, to_buy], [unsure], session=ShopSession(meals=2))
+    assert {meal.id for meal in result.planned_meals} == {to_buy.id, check_only.id}
+    result = plan([check_only], [unsure], session=ShopSession(meals=1))
+    assert [meal.id for meal in result.planned_meals] == [check_only.id]
+    assert all(item.needs_check for item in result.items)
+
+
+def test_pinned_recipes_are_always_planned_first_and_the_rest_filled_as_usual():
+    starred = recipe("starred", starred=True)
+    asked = recipe("asked", ingredients=("tomato",))
+    other = recipe("other", cuisine=Cuisine.THAI)
+    session = ShopSession(meals=2, pinned_recipe_ids=(asked.id,))
+    result = plan([starred, asked, other], session=session)
+    assert result.planned_meals[0].id == asked.id
+    assert len(result.planned_meals) == 2
+    assert uid("tomato") in {item.ingredient_id for item in result.items}
+
+
+def test_a_pinned_recipe_is_planned_even_when_already_covered():
+    asked = recipe("asked", ingredients=("tomato",))
+    session = ShopSession(meals=1, pinned_recipe_ids=(asked.id,))
+    result = plan([asked, recipe("a")], [batch("tomato")], session=session)
+    assert [meal.id for meal in result.planned_meals] == [asked.id]
+
+
+def test_pins_raise_the_meal_count_and_survive_adjustment():
+    pins = (uid("x"), uid("y"), uid("x"))
+    session = new_shop_session(prefs(), 2, 1, pinned=pins)
+    assert session.pinned_recipe_ids == (uid("x"), uid("y")) and session.meals == 2
+    adjusted = adjust_shop(session, ShopAdjust(meals=1))
+    assert adjusted.pinned_recipe_ids == session.pinned_recipe_ids and adjusted.meals == 2
 
 
 def test_variety_and_pack_surplus_influence_combo_score():
@@ -400,6 +451,10 @@ def test_generated_plans_preserve_allergens_and_round_aggregate_counts(
     else:
         from math import ceil
 
+        if stock >= 3 * people / 2:
+            # Any one of these meals can be cooked from stock already: left to Cook.
+            assert not result.planned_meals and result.all_stocked
+            return
         expected = ceil(max(0, meals * 3 * people / 2 - stock) / 10)
         assert len(result.planned_meals) == meals
         assert sum(item.suggested_packs or 0 for item in result.items) == expected
