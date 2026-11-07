@@ -46,6 +46,21 @@ describe("buildKitchenView", () => {
     expect(row.amount).toEqual({ kind: "count", text: "8 pcs" });
   });
 
+  it("shows part pieces as fractions", () => {
+    const row = rowFor([batch({ count: 0.5, unit: "pcs" }), batch({ count: 1.25, unit: "pcs" })], true);
+
+    expect(row.amount).toEqual({ kind: "count", text: "1¾ pcs" });
+  });
+
+  it("leaves out used-up batches, and the ingredient once all of it is used up", () => {
+    const usedUp = batch({ count: 0, unit: "pcs", remaining_state: "out" });
+    const row = rowFor([usedUp, batch({ count: 2, unit: "pcs" })], true);
+
+    expect(row.amount).toEqual({ kind: "count", text: "2 pcs" });
+    expect(row.batchCount).toBe(1);
+    expect(buildKitchenView({ groups: [group("Cabbage", [usedUp], true)] }, TODAY).rows).toEqual([]);
+  });
+
   it("shows a level, never a number, when any batch has no count", () => {
     const row = rowFor([batch({ count: 2, unit: "pcs" }), batch({ remaining_state: "low" })], true);
 

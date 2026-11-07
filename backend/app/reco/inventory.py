@@ -27,9 +27,19 @@ def freshness_reason(item: InventoryItem) -> FreshnessReason:
     return FreshnessReason.NO_DATE
 
 
+def _quantity_text(quantity: float, unit: str | None) -> str:
+    """Pieces read as quarters ("¼ pcs", "1½ pcs"), since recipes use them a quarter at a time."""
+    quarters = quantity * 4
+    if unit != "pcs" or not float(quarters).is_integer():
+        return f"{quantity:g}"
+    whole, part = divmod(int(quarters), 4)
+    fraction = ("", "¼", "½", "¾")[part]
+    return fraction if whole == 0 and fraction else f"{whole}{fraction}"
+
+
 def display_amount(item: RecipeIngredient, factor: float, people: int, servings: int) -> str:
     if item.quantity is not None:
-        return f"{item.quantity * factor:g} {item.unit}"
+        return f"{_quantity_text(item.quantity * factor, item.unit)} {item.unit}"
     if factor == 1:
         return item.coarse_amount or ""
     # Never pretend natural-language amounts were numerically converted.
