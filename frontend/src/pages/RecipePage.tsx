@@ -3,6 +3,7 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 
 import type { Schemas } from "../api/client";
 import { useCookRecord, useCurrentSuggestion, useFinishCooking, useRecipe, useStarRecipe } from "../api/cook";
+import { useShopForRecipe } from "../api/shop";
 import type { CookedState } from "./cook/view";
 import { BottomBar } from "../components/BottomBar";
 import { Button } from "../components/Button";
@@ -31,6 +32,7 @@ export function RecipePage({ preview = false }: { preview?: boolean }) {
   const recipe = useRecipe(dish?.recipe.id);
   const star = useStarRecipe();
   const finishCooking = useFinishCooking();
+  const shopForRecipe = useShopForRecipe();
   const [starred, setStarred] = useState(dish?.recipe.starred ?? false);
   const [confirming, setConfirming] = useState(false);
 
@@ -39,6 +41,13 @@ export function RecipePage({ preview = false }: { preview?: boolean }) {
   const summary = dish.recipe;
   const scaled = suggestion?.recipe.id === summary.id ? suggestion.ingredients : null;
   const missingEssentials = scaled?.some((line) => line.essential && line.status === "missing");
+
+  function goToBuy() {
+    shopForRecipe.mutate(
+      { recipeId: summary.id, people: dish!.people },
+      { onSuccess: () => navigate("/buy") },
+    );
+  }
 
   function toggleStar() {
     star.mutate({ recipeId: summary.id, starred: !starred }, { onSuccess: (result) => setStarred(result.starred) });
@@ -153,8 +162,13 @@ export function RecipePage({ preview = false }: { preview?: boolean }) {
           <div className="flex flex-col gap-[10px]">
             {missingEssentials ? (
               <>
-                <Button className="w-full" onClick={() => navigate("/buy")}>
-                  Go to Buy
+                {shopForRecipe.error && (
+                  <p role="alert" className="text-[13px] text-danger">
+                    {shopForRecipe.error.message}
+                  </p>
+                )}
+                <Button className="w-full" onClick={goToBuy} disabled={shopForRecipe.isPending}>
+                  {shopForRecipe.isPending ? "Making a list…" : "Go to Buy"}
                 </Button>
                 <Link to="/more/kitchen" className="text-center text-[14px] font-semibold text-primary">
                   Update kitchen

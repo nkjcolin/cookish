@@ -1,7 +1,7 @@
 import { useState, type ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 
-import type { Schemas } from "../api/client";
+import { ApiError, type Schemas } from "../api/client";
 import { useAdjustBasket, useBasket, useCart } from "../api/shop";
 import { Button } from "../components/Button";
 import { Chip } from "../components/Chip";
@@ -26,7 +26,9 @@ export function BuyPage() {
   const [view, setView] = useState<View>("list");
   const [adjusting, setAdjusting] = useState(false);
 
-  const failure = session.error ?? adjust.error;
+  // Every meal Shop could plan can already be cooked from the kitchen: nothing to buy.
+  const allStocked = session.error instanceof ApiError && session.error.details.all_stocked === true;
+  const failure = allStocked ? adjust.error : (session.error ?? adjust.error);
   const ticked = basket ? basket.items.filter((item) => inCart.includes(item.id)).length : 0;
 
   return (
@@ -54,6 +56,17 @@ export function BuyPage() {
         <p role="alert" className="text-[13px] text-danger">
           {failure.message}
         </p>
+      )}
+      {allStocked && (
+        <div className="flex flex-col gap-[12px] rounded-lg border border-border bg-surface p-[16px]">
+          <p className="text-[15px] font-bold">Nothing to buy right now</p>
+          <p className="text-[14px] text-ink-muted">
+            Your kitchen already has what your usual meals need. Cook can suggest one to make tonight.
+          </p>
+          <Button className="w-full" onClick={() => navigate("/cook")}>
+            See what to cook
+          </Button>
+        </div>
       )}
 
       {basket && (

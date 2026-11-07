@@ -1160,6 +1160,11 @@ export interface components {
              * @description Defaults to the last choice.
              */
             people?: number | null;
+            /**
+             * Recipe Ids
+             * @description Recipes the plan must include, such as the one being viewed; the rest are chosen as usual. meals is raised to at least this many.
+             */
+            recipe_ids?: string[];
         };
         /**
          * ShopTag

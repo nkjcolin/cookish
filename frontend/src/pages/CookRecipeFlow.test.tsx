@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { api, type Schemas } from "../api/client";
 import { COOK_RECORD_KEY, SUGGESTION_KEY } from "../api/cook";
+import { BASKET_KEY } from "../api/stockCache";
 import { CookPage } from "./CookPage";
 import { RecipePage } from "./RecipePage";
 
@@ -97,6 +98,9 @@ describe("recipe browsing and cooking", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Go to Buy" }));
     expect(await screen.findByRole("heading", { name: "Shopping list" })).toBeInTheDocument();
+    // The basket is planned around this recipe, for the people it was suggested for.
+    expect(post).toHaveBeenCalledWith("/api/shop/sessions", { body: { recipe_ids: ["salad"], people: 4 } });
+    expect(client.getQueryData(BASKET_KEY)).toBeDefined();
   });
 
   it("also allows stocked recipes to be previewed without creating a cook record", async () => {
