@@ -22,7 +22,7 @@ Every screen works on real data, locally and on AWS. What remains is evaluation 
 
 | Part | State |
 |---|---|
-| API contract | Complete: 25 endpoints, defined in `backend/app/schemas/` and exported to [openapi.json](openapi.json) |
+| API contract | Complete: 26 endpoints, defined in `backend/app/schemas/` and exported to [openapi.json](openapi.json) |
 | Frontend | Complete against the contract: every screen of the Figma design, plus a kitchen-history screen |
 | Backend | Every endpoint is real: PostgreSQL inventory and stock events, Cook and Shop recommendations with stored sessions, ratings and learning |
 | AI service | The school's SoClaaS model on AWS; an offline fake locally (`AI_PROVIDER=fake`) |

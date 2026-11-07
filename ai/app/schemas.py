@@ -1,10 +1,8 @@
 """Request and response shapes for /ai/* — the part of the API contract this Lambda serves.
 
 A copy of backend/app/schemas/ai.py and the few definitions it uses from the other backend
-schema files. The backend owns the shared contract and generated frontend types.
-The user-requested removal of DraftItem.ingredient_id is an AI-only migration;
-tests/test_contract.py permits that removal and the added audio transcription
-endpoint pending the shared export.
+schema files. The backend owns the shared contract and generated frontend types;
+tests/test_contract.py fails if this copy drifts from docs/openapi.json.
 
 These endpoints only return drafts. Nothing reaches the inventory until the user has
 reviewed the draft and the frontend posts it to POST /api/inventory/items.

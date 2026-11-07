@@ -7,6 +7,8 @@ from app.schemas.ai import (
     InterpretResult,
     ParseImageRequest,
     ParseItemsRequest,
+    TranscribeAudioRequest,
+    TranscriptionResult,
 )
 from app.services import ai_stub
 
@@ -26,3 +28,8 @@ def parse_items(user: User, body: ParseItemsRequest) -> DraftResult:
 @router.post("/interpret")
 def interpret(user: User, body: InterpretRequest) -> InterpretResult:
     return ai_stub.interpret(body)
+
+
+@router.post("/transcribe-audio")
+def transcribe_audio(user: User, body: TranscribeAudioRequest) -> TranscriptionResult:
+    return ai_stub.transcribe_audio(body)

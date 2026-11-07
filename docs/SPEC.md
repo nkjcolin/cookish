@@ -221,6 +221,7 @@ Base path `/api` (served by `api` Lambda) and `/ai` (served by `ai` Lambda). All
 | `POST /ai/parse-image` | Compressed receipt or grocery photo → draft items | Role 4 |
 | `POST /ai/parse-items` | Text (typed, or a voice transcript) → draft items | Role 4 |
 | `POST /ai/interpret` | Free text → validated constraint patch (optional) | Role 4 |
+| `POST /ai/transcribe-audio` | Recorded audio → transcript, for browsers without the Web Speech API (optional) | Role 4 |
 
 **Conventions**
 

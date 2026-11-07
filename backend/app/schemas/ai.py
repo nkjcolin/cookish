@@ -5,10 +5,9 @@ reviewed the draft and the frontend posts it to POST /api/inventory/items.
 """
 
 from enum import StrEnum
-from typing import Annotated, Literal
-from uuid import UUID
+from typing import Annotated, Literal, Self
 
-from pydantic import Field
+from pydantic import Field, model_validator
 
 from app.schemas.common import RequestModel, ResponseModel, Storage
 from app.schemas.cook import CookAdjust
@@ -39,7 +38,6 @@ class ParseItemsRequest(RequestModel):
 
 class DraftItem(ResponseModel):
     raw_text: str | None = Field(description="What was read or heard, before normalisation.")
-    ingredient_id: UUID | None = Field(description="null if no confident catalogue match.")
     display_name: str
     count: float | None = Field(description="null = not stated; never guessed.")
     unit: str | None
@@ -59,3 +57,27 @@ class InterpretResult(ResponseModel):
     """Optional feature. The patch can only touch soft conditions (SPEC B4)."""
 
     adjust: CookAdjust
+
+
+class TranscribeAudioRequest(RequestModel):
+    media_type: Literal[
+        "audio/wav",
+        "audio/x-wav",
+        "audio/mpeg",
+        "audio/webm",
+        "audio/ogg",
+        "audio/mp4",
+        "audio/flac",
+    ]
+    audio_base64: Annotated[str, Field(min_length=1)]
+    language: Annotated[str, Field(pattern=r"^[a-z]{2}$")] | None = "en"
+
+
+class TranscriptionResult(ResponseModel):
+    text: Annotated[str, Field(min_length=1)]
+
+    @model_validator(mode="after")
+    def _nonempty_transcript(self) -> Self:
+        if not self.text.strip():
+            raise ValueError("The transcript must contain text")
+        return self

@@ -135,11 +135,7 @@ processed only in memory.
 
 **Yours to decide:** the model and provider, the prompts, image handling, matching, and everything inside `app/` other than the two copied files.
 
-**Keep:** request and error shapes and all response fields other than the
-user-requested removal of `DraftItem.ingredient_id`. That AI-only change is pending
-in the shared backend contract and frontend types (see below).
-The user-requested audio transcription route is also an AI-owned addition pending
-the shared OpenAPI export; the existing three route contracts remain checked.
+**Keep:** request, response and error shapes. They are checked against `docs/openapi.json` (see below).
 
 ## How the frontend uses you
 
@@ -814,26 +810,11 @@ The backend owns the API contract: `docs/openapi.json` is exported from `backend
 At the user's request, `DraftItem.ingredient_id` has been removed from both AI
 extraction routes, the fake provider, the school output schema and all extraction
 prompts. `confidence` now describes confidence in the food identification, not
-catalogue matching. This is a breaking response change relative to the current
-shared contract; frontend code must not assume this property exists.
+catalogue matching. This is a breakinDrafts carry no `ingredient_id`: the extraction routes, the fake provider, the school output schema and the prompts never ask for one. `confidence` describes how sure the model is of the food, not of a catalogue match. When the reviewed draft is saved, the backend matches each name to the catalogue.
 
-`tests/test_contract.py` compares the full AI contract while allowing precisely
-this approved field removal and the added `/ai/transcribe-audio` route. The original
-three routes still undergo full comparison. It does not claim exact shared-contract parity.
-Role 1 still needs to remove the field from the backend schema, re-export
-`docs/openapi.json`, regenerate frontend types and adapt review/confirmation logic.
-Those files are outside the `ai/`-only edit scope. All other contract differences
-remain test failures. Normal future changes follow the shared export workflow.
-The shared-contract owner also needs to export `TranscribeAudioRequest`,
-`TranscriptionResult` and the new audio route, regenerate frontend types, and wire
-recording/upload → transcription → voice parsing if server transcription is used.
+`tests/test_contract.py` compares every `/ai/*` path and every schema those paths use with `docs/openapi.json`, and fails on any difference. To change the contract, edit `backend/app/schemas/ai.py`, export `docs/openapi.json`, regenerate the frontend types, and copy the change into `app/schemas.py`. The frontend does not call `/ai/transcribe-audio` yet; it uses the browser's Web Speech API.
 
-`backend/app/services/ai_stub.py` answers `/ai/*` with the same fixed items when the backend runs on its own without this service.
-
-## The ingredient catalogue
-
-For synthetic receipt generation, `dataset/catalogs/ingridients.json` contains a
-frozen 2026-10-28 FairPrice snapshot: 41 products covering all 42 ingredient names
+t: 41 products covering all 42 ingredient names
 from 48 backend recipes, with tap water excluded. It records real product names,
 retailer stock descriptions, pack quantities, prices, source URLs and source
 recipe hashes. Cabbage head mass and chickpea drained mass remain explicitly

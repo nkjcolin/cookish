@@ -9,10 +9,12 @@ export function draftLabel(item: DraftItem): string {
   return `${item.display_name} · ${amount}`;
 }
 
-/** What a reviewed draft becomes when it is saved. Just bought, so there is enough; unknown amounts stay unknown. */
+/**
+ * What a reviewed draft becomes when it is saved. Just bought, so there is enough; unknown amounts stay unknown.
+ * The backend matches the name to the catalogue.
+ */
 export function toInventoryItems(draft: DraftItem[]): Schemas["InventoryItemCreate"][] {
   return draft.map((item) => ({
-    ingredient_id: item.ingredient_id,
     display_name: item.display_name,
     count: item.count,
     unit: item.count === null ? null : item.unit,

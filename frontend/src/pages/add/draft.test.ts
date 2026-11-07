@@ -6,7 +6,6 @@ import { draftLabel, isUncertain, toInventoryItems } from "./draft";
 function draft(overrides: Partial<Schemas["DraftItem"]> = {}): Schemas["DraftItem"] {
   return {
     raw_text: null,
-    ingredient_id: "egg",
     display_name: "Eggs",
     count: 6,
     unit: "pcs",
@@ -34,11 +33,10 @@ describe("toInventoryItems", () => {
     expect(item).toMatchObject({ count: null, unit: null });
   });
 
-  it("keeps free-text items that matched nothing in the catalogue", () => {
-    const [item] = toInventoryItems([draft({ ingredient_id: null, display_name: "Sambal", storage: null })]);
+  it("saves the name and leaves catalogue matching to the backend", () => {
+    const [item] = toInventoryItems([draft({ display_name: "Sambal", storage: null })]);
 
     expect(item).toEqual({
-      ingredient_id: null,
       display_name: "Sambal",
       count: 6,
       unit: "pcs",

@@ -134,6 +134,14 @@ ENDPOINTS = [
     ),
     ("POST", "/ai/parse-items", None, {"text": "two packs of tofu and some kangkong"}, False, 200),
     ("POST", "/ai/interpret", None, {"text": "something lighter"}, False, 200),
+    (
+        "POST",
+        "/ai/transcribe-audio",
+        None,
+        {"media_type": "audio/webm", "audio_base64": "aGVsbG8="},
+        False,
+        200,
+    ),
 ]
 
 IDS = [f"{e[0]} {e[1]}" for e in ENDPOINTS]

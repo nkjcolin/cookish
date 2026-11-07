@@ -5,7 +5,6 @@ ai service, so this module only answers when the backend runs on its own. It exi
 that one OpenAPI file covers the whole contract.
 """
 
-from app import mock
 from app.schemas.ai import (
     DraftItem,
     DraftResult,
@@ -13,18 +12,18 @@ from app.schemas.ai import (
     InterpretResult,
     ParseImageRequest,
     ParseItemsRequest,
+    TranscribeAudioRequest,
+    TranscriptionResult,
 )
 from app.schemas.common import Storage
 from app.schemas.cook import CookAdjust, CookTag
 
 
 def _draft() -> DraftResult:
-    ing = mock.INGREDIENTS
     return DraftResult(
         items=[
             DraftItem(
                 raw_text="FP FRESH EGGS 10S",
-                ingredient_id=ing["egg"].id,
                 display_name="Egg",
                 count=10,
                 unit="pcs",
@@ -33,7 +32,6 @@ def _draft() -> DraftResult:
             ),
             DraftItem(
                 raw_text="CABBAGE RND",
-                ingredient_id=ing["cabbage"].id,
                 display_name="Cabbage",
                 count=None,
                 unit=None,
@@ -42,7 +40,6 @@ def _draft() -> DraftResult:
             ),
             DraftItem(
                 raw_text="KKM SAMBAL 230G",
-                ingredient_id=None,
                 display_name="Sambal",
                 count=1,
                 unit="jar",
@@ -63,3 +60,7 @@ def parse_items(body: ParseItemsRequest) -> DraftResult:
 
 def interpret(body: InterpretRequest) -> InterpretResult:
     return InterpretResult(adjust=CookAdjust(tags=[CookTag.QUICKER], max_minutes=20))
+
+
+def transcribe_audio(body: TranscribeAudioRequest) -> TranscriptionResult:
+    return TranscriptionResult(text="two packs of tofu and some kangkong")

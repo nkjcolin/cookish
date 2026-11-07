@@ -8,7 +8,6 @@ import { AddIngredientsPage } from "./AddIngredientsPage";
 
 const onion: Schemas["DraftItem"] = {
   raw_text: "2 onions",
-  ingredient_id: null,
   display_name: "Onion",
   count: 2,
   unit: "pcs",

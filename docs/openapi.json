@@ -690,19 +690,6 @@
             "title": "Display Name",
             "type": "string"
           },
-          "ingredient_id": {
-            "anyOf": [
-              {
-                "format": "uuid",
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "null if no confident catalogue match.",
-            "title": "Ingredient Id"
-          },
           "raw_text": {
             "anyOf": [
               {
@@ -739,7 +726,6 @@
         },
         "required": [
           "raw_text",
-          "ingredient_id",
           "display_name",
           "count",
           "unit",
@@ -2536,6 +2522,62 @@
         "title": "TextSource",
         "type": "string"
       },
+      "TranscribeAudioRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "audio_base64": {
+            "minLength": 1,
+            "title": "Audio Base64",
+            "type": "string"
+          },
+          "language": {
+            "anyOf": [
+              {
+                "pattern": "^[a-z]{2}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": "en",
+            "title": "Language"
+          },
+          "media_type": {
+            "enum": [
+              "audio/wav",
+              "audio/x-wav",
+              "audio/mpeg",
+              "audio/webm",
+              "audio/ogg",
+              "audio/mp4",
+              "audio/flac"
+            ],
+            "title": "Media Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "media_type",
+          "audio_base64"
+        ],
+        "title": "TranscribeAudioRequest",
+        "type": "object"
+      },
+      "TranscriptionResult": {
+        "properties": {
+          "text": {
+            "minLength": 1,
+            "title": "Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "text"
+        ],
+        "title": "TranscriptionResult",
+        "type": "object"
+      },
       "UndoConflict": {
         "properties": {
           "display_name": {
@@ -2817,6 +2859,57 @@
           }
         },
         "summary": "Parse Items",
+        "tags": [
+          "ai"
+        ]
+      }
+    },
+    "/ai/transcribe-audio": {
+      "post": {
+        "operationId": "transcribe_audio",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TranscribeAudioRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TranscriptionResult"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Client Error"
+          },
+          "5XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Server Error"
+          }
+        },
+        "summary": "Transcribe Audio",
         "tags": [
           "ai"
         ]

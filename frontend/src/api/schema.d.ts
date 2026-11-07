@@ -55,6 +55,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/ai/transcribe-audio": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Transcribe Audio */
+        post: operations["transcribe_audio"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/cook/records/{record_id}/confirm": {
         parameters: {
             query?: never;
@@ -718,11 +735,6 @@ export interface components {
             /** Display Name */
             display_name: string;
             /**
-             * Ingredient Id
-             * @description null if no confident catalogue match.
-             */
-            ingredient_id: string | null;
-            /**
              * Raw Text
              * @description What was read or heard, before normalisation.
              */
@@ -1383,6 +1395,26 @@ export interface components {
          * @enum {string}
          */
         TextSource: "typed" | "voice";
+        /** TranscribeAudioRequest */
+        TranscribeAudioRequest: {
+            /** Audio Base64 */
+            audio_base64: string;
+            /**
+             * Language
+             * @default en
+             */
+            language: string | null;
+            /**
+             * Media Type
+             * @enum {string}
+             */
+            media_type: "audio/wav" | "audio/x-wav" | "audio/mpeg" | "audio/webm" | "audio/ogg" | "audio/mp4" | "audio/flac";
+        };
+        /** TranscriptionResult */
+        TranscriptionResult: {
+            /** Text */
+            text: string;
+        };
         /** UndoConflict */
         UndoConflict: {
             /** Display Name */
@@ -1545,6 +1577,48 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["DraftResult"];
+                };
+            };
+            /** @description Client Error */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Server Error */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    transcribe_audio: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TranscribeAudioRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TranscriptionResult"];
                 };
             };
             /** @description Client Error */

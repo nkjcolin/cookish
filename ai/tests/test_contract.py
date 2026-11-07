@@ -1,9 +1,7 @@
-"""Check shared drift, allowing the approved identifier removal and audio route.
+"""Check that this Lambda serves exactly the /ai part of the shared contract.
 
-Role 1 must remove DraftItem.ingredient_id from the shared schema/export/types.
-Until then, project precisely that removal onto the expected contract. Do not
-skip schema comparisons or permit any other differences.
-The separately tested audio route awaits export by the shared-contract owner.
+docs/openapi.json is generated from the backend's schemas, and app/schemas.py is a copy of
+them. Any difference in a path or a schema the /ai routes use fails here.
 """
 
 import json
@@ -30,14 +28,8 @@ def _referenced_schemas(node: Any, components: dict[str, Any], found: dict[str, 
             _referenced_schemas(value, components, found)
 
 
-def _ai_part(
-    spec: dict[str, Any], *, shared_only: bool = False
-) -> tuple[dict[str, Any], dict[str, Any]]:
-    paths = {
-        path: item
-        for path, item in spec["paths"].items()
-        if path.startswith("/ai/") and not (shared_only and path == "/ai/transcribe-audio")
-    }
+def _ai_part(spec: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
+    paths = {path: item for path, item in spec["paths"].items() if path.startswith("/ai/")}
     schemas: dict[str, Any] = {}
     _referenced_schemas(paths, spec["components"]["schemas"], schemas)
     return paths, schemas
@@ -47,25 +39,18 @@ def test_paths_match_the_contract() -> None:
     expected, _ = _ai_part(json.loads(CONTRACT.read_text()))
     actual, _ = _ai_part(app.openapi())
 
-    assert "/ai/transcribe-audio" in actual
-    actual.pop("/ai/transcribe-audio")
     assert actual == expected
 
 
-def test_schemas_match_contract_except_approved_identifier_removal() -> None:
+def test_schemas_match_the_contract() -> None:
     _, expected = _ai_part(json.loads(CONTRACT.read_text()))
-    _, actual = _ai_part(app.openapi(), shared_only=True)
-
-    item = expected["DraftItem"]
-    item["properties"].pop("ingredient_id", None)
-    item["required"] = [field for field in item["required"] if field != "ingredient_id"]
+    _, actual = _ai_part(app.openapi())
 
     assert sorted(actual) == sorted(expected)
     for name in expected:
         assert actual[name] == expected[name], name
 
 
-def test_draft_item_openapi_has_no_ingredient_identifier() -> None:
+def test_draft_item_has_no_ingredient_identifier() -> None:
     item = app.openapi()["components"]["schemas"]["DraftItem"]
     assert "ingredient_id" not in item["properties"]
-    assert "ingredient_id" not in item["required"]
