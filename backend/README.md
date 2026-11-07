@@ -31,7 +31,7 @@ uv run python scripts/export_openapi.py
 | `app/errors.py` | Role 1 | The one error format every endpoint returns |
 | `app/auth.py` | Role 1 | Who is calling: Cognito claims on AWS, a fixed development user locally |
 | `app/clock.py` | Role 1 | Today's date in Singapore; use it instead of `date.today()` |
-| `app/mock.py` | Role 1 | Sample data returned by the stubs |
+| `app/mock.py` | Role 1 | The development user's ID, the demo seed and `ai_stub.py`'s sample items; no endpoint serves it on AWS |
 | `app/lambda_handler.py` | Role 3 | Lambda entry point (`app.lambda_handler.handler`) |
 | `app/schemas/` | Role 1, reviewed by all | Pydantic models — the API contract |
 | `app/routers/` | Role 1 | Thin HTTP handlers; no business logic |
@@ -42,22 +42,19 @@ uv run python scripts/export_openapi.py
 | `seed/` | Roles 2 and 5 | `ingredients.csv`, `recipes/*.yaml`, loader |
 | `tests/` | everyone | pytest |
 
-## Filling in a stub
+## Changing a service
 
-Every endpoint already answers with fixed sample data from `app/mock.py`, so the frontend
-can be built before the real logic exists. Your job is to replace stub bodies, not to
-add routes.
+Every endpoint is backed by real logic in `app/services/`: `identity.py`, `catalogue.py`,
+`inventory.py` and `stock_events.py` (Role 2); `cook.py` and `shop.py` (Role 5).
 
-1. Find your functions: `app/services/identity.py`, `catalogue.py`, `inventory.py` and
-   `stock_events.py` (Role 2); `cook.py` and `shop.py` (Role 5). Each is marked `STUB`.
-2. Replace the body. Keep the function name, parameters and return type: the routers and
-   the frontend depend on them.
-3. Do not edit `app/routers/` or `app/schemas/`. If the contract has to change, raise it
+1. Keep each function's name, parameters and return type: the routers and the frontend
+   depend on them.
+2. Do not edit `app/routers/` or `app/schemas/`. If the contract has to change, raise it
    with Role 1 first, because it changes the generated frontend types.
-4. `tests/test_contract.py` calls every endpoint. It must still pass.
+3. `tests/test_contract.py` calls every endpoint. It must still pass.
 
-`app/services/ai_stub.py` is only a local stand-in for the `ai` Lambda that Role 4 builds
-in `/ai`; it shows the request and response shapes to implement.
+`app/services/ai_stub.py` is only a local stand-in for the `ai` service, used when the
+backend runs without it; on AWS and in `docker compose`, `/ai/*` goes to the real one.
 
 Requests that change inventory must carry an `Idempotency-Key` header (a UUID). The
 caller's identity comes from `app/auth.py`; locally it is always one development user.

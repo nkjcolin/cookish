@@ -95,7 +95,6 @@ Amplify and API Gateway have different domains. The frontend is built with `VITE
 |---|---|---|
 | `api`, `migrate` | `DB_SECRET_ARN` | The Secrets Manager secret holding the database credentials. Grant read access to it |
 | `ai` | `AI_PROVIDER` | `soclaas` in the current template; `fake` is the local fallback |
-| `ai` | `INGREDIENTS_CSV` | Path of the bundled `ingredients.csv` inside the package |
 
 The template passes `SOCLAAS_API_KEY_SECRET_ARN` to the AI function and grants it read access to that secret. Keep provider keys in Secrets Manager. Verify live configuration and a real provider request separately.
 
@@ -131,7 +130,6 @@ Follow [deployment.md](deployment.md). Code uploaded by hand is replaced by the 
 ## Things to plan for
 
 - **Packaging.** `sam build` for Python reads `requirements.txt`, but the projects use uv. Generate it during the build, for example `uv export --no-dev --no-hashes > requirements.txt`, or package each Lambda as a container image.
-- **The `ai` Lambda needs a file from `backend/`.** Copy `backend/seed/ingredients.csv` into the `ai` package during the build, and point `INGREDIENTS_CSV` at it.
 - **Native dependencies.** Both backend functions use ARM64, Python 3.12 (Amazon Linux 2023). Package matching Linux wheels, never Windows virtual-environment files. See [deployment.md](deployment.md) for the reproducible backend ZIP build and rollout checks.
 - **No long-lived AWS keys in GitHub.** Deploy with a GitHub OIDC role.
 - **Secrets Manager networking.** `api` and `migrate` run in private subnets and read `DB_SECRET_ARN` at runtime. Without a NAT gateway, the VPC therefore needs an interface endpoint for Secrets Manager (`com.amazonaws.ap-southeast-1.secretsmanager`). Include its fixed cost in the cloud cost model.

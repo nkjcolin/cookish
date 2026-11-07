@@ -107,8 +107,6 @@ jobs:
           # sam build reads requirements.txt; the projects lock their dependencies with uv.
           (cd backend && uv export --frozen --no-dev --no-hashes --no-header -o requirements.txt)
           (cd ai && uv export --frozen --no-dev --no-hashes --no-header -o requirements.txt)
-          # The ai Lambda matches ingredients against the backend's catalogue (INGREDIENTS_CSV).
-          cp backend/seed/ingredients.csv ai/ingredients.csv
           (cd infra && sam build)
 
       - uses: aws-actions/configure-aws-credentials@v4
