@@ -115,6 +115,11 @@ class Suggestion(ResponseModel):
     freshness_check: list[FreshnessCheck]
     has_previous: bool
     applied_constraints: AppliedConstraints
+    available_nudges: list[CookTag] = Field(
+        default_factory=list,
+        description="Nudges that currently return a different recipe meeting the requested change."
+        " Recomputed from the catalogue, stock and accumulated session constraints.",
+    )
 
 
 class ProposedConsumption(ResponseModel):

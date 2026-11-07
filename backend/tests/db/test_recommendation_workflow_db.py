@@ -25,6 +25,7 @@ from app.schemas.cook import (
     CookConfirm,
     CookFeedback,
     CookSessionCreate,
+    CookTag,
     Rating,
 )
 from app.schemas.identity import PreferencesUpdate
@@ -151,6 +152,7 @@ def test_http_suggestion_selection_details_confirmation_and_feedback_use_real_id
         assert started.status_code == 201, started.text
         suggestion = started.json()
         assert suggestion["recipe"]["id"] == str(RECIPE_ID)
+        assert suggestion["available_nudges"] == []  # Only one reviewed recipe is eligible.
         chosen = client.post(f"/api/cook/sessions/{suggestion['session_id']}/select")
         assert chosen.status_code == 201, chosen.text
         record = chosen.json()
@@ -228,6 +230,49 @@ def test_no_result_keeps_adjustment_and_skip_without_fabricating_history(kitchen
     # A successful read after the failed requests must still enforce the saved limit.
     expect_error(ErrorCode.CONFLICT, lambda: cook.select(user, first.session_id))
     assert not weights(user)
+
+
+@pytest.mark.parametrize(
+    "body",
+    [
+        CookAdjust(tags=[CookTag.EASIER], people=4),
+        CookAdjust(tags=[CookTag.MORE_PROTEIN], max_minutes=5, people=4),
+    ],
+)
+def test_impossible_tag_adjustment_rolls_back_persisted_snapshot_and_preferences(kitchen, body):
+    user, _ = kitchen
+    first = cook.start_session(user, CookSessionCreate(people=2))
+    with transaction() as session:
+        snapshot = deepcopy(session.get(m.PlanSession, first.session_id).recommendation_state)
+        people = session.get(m.Preferences, user.household_id).last_cook_people
+    expect_error(ErrorCode.CONFLICT, lambda: cook.adjust(user, first.session_id, body))
+    with transaction() as session:
+        row = session.get(m.PlanSession, first.session_id)
+        assert row.recommendation_state == snapshot
+        assert row.shown_recipe_ids == [RECIPE_ID]
+        assert row.position == 0
+        assert session.get(m.Preferences, user.household_id).last_cook_people == people
+    assert event_count("consume") == 0
+    assert not weights(user)
+
+
+def test_previous_loads_legacy_history_then_refreshes_availability(kitchen):
+    user, _ = kitchen
+    first = cook.start_session(user, CookSessionCreate(people=2))
+    cook.adjust(user, first.session_id, CookAdjust(people=3))
+    with transaction() as session:
+        row = session.get(m.PlanSession, first.session_id)
+        legacy = deepcopy(row.recommendation_state)
+        for suggestion in legacy["payload"]["history"]:
+            del suggestion["available_nudges"]
+        row.recommendation_state = legacy
+    previous = cook.previous_suggestion(user, first.session_id)
+    assert previous.people == 2
+    assert previous.recipe.id == first.recipe.id
+    assert previous.available_nudges == []
+    with transaction() as session:
+        saved = session.get(m.PlanSession, first.session_id).recommendation_state
+        assert all(item["available_nudges"] == [] for item in saved["payload"]["history"])
 
 
 def test_previous_replays_saved_recipe_and_portions_after_catalogue_changes(kitchen):

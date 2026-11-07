@@ -16,6 +16,7 @@ from app.errors import ApiError, ErrorCode
 from app.reco import (
     adjust,
     adjust_shop,
+    available_nudges,
     filter_recipes,
     learn,
     new_session,
@@ -106,7 +107,7 @@ class RecommendationWorkflow:
             _fail(ErrorCode.NOT_FOUND, "Learning state not found")
         return taste_weights(state)
 
-    def _suggest(self, repo, user, row, *, persist_no_result=False):
+    def _suggest(self, repo, user, row, *, persist_no_result=False, patch=None, prefs=None):
         # The unit of work has acquired the household lock. Use this time so a
         # confirmation committed while we waited is not mistaken for a future meal.
         now = self._now()
@@ -120,16 +121,34 @@ class RecommendationWorkflow:
             ),
         )
         catalogue = repo.catalogue(household)
+        inventory = repo.inventory(household)
+        prefs = repo.preferences(household) if prefs is None else prefs
+        weights = self._weights(repo, household)
+        if patch is not None:
+            candidate = next(
+                (meal for meal in catalogue.recipes if meal.id == row.state.current_recipe_id), None
+            )
+            if candidate is None:
+                _fail(ErrorCode.NOT_FOUND, "Recipe not found")
+            row = replace(row, state=adjust(row.state, patch, candidate))
         result = suggest(
             catalogue.recipes,
-            repo.inventory(household),
-            repo.preferences(household),
+            inventory,
+            prefs,
             row.state,
             catalogue.ingredients,
             as_of=now,
-            taste_weights=self._weights(repo, household),
+            taste_weights=weights,
         )
         if result.selected is None:
+            if patch is not None and patch.tags:
+                # A stale or combined nudge must not strand the session at an
+                # impossible relative limit. Raising here rolls back all writes.
+                _fail(
+                    ErrorCode.CONFLICT,
+                    "No recipe matches that nudge with your current choices. "
+                    "Try another nudge; your current suggestion is unchanged.",
+                )
             error = ApiError(
                 ErrorCode.NO_RESULT,
                 "Nothing fits all of that",
@@ -143,6 +162,17 @@ class RecommendationWorkflow:
             repo.remember(household, cook_people=row.state.people)
             return error
         response = to_suggestion(result, row.id)
+        response.available_nudges = list(
+            available_nudges(
+                catalogue.recipes,
+                inventory,
+                prefs,
+                result.session,
+                catalogue.ingredients,
+                as_of=now,
+                taste_weights=weights,
+            )
+        )
         # Previous moves the cursor; a new request appends, retaining the audit history.
         response.has_previous = bool(row.history)
         saved = replace(
@@ -158,16 +188,17 @@ class RecommendationWorkflow:
     def start_cook(self, user: CurrentUser, body: CookSessionCreate):
         now = self._now()
         with self.unit_of_work() as repo:
+            prefs = repo.preferences(user.household_id)
             row = CookSessionRow(
                 self.new_id(),
                 user.household_id,
                 now + timedelta(hours=12),
-                new_session(repo.preferences(user.household_id), body.people),
+                new_session(prefs, body.people),
                 (),
                 -1,
                 user.user_id,
             )
-            return self._suggest(repo, user, row)
+            return self._suggest(repo, user, row, prefs=prefs)
 
     def _cook_session(self, repo, user, session_id, now, *, allow_selected=False):
         row = _active(
@@ -181,21 +212,12 @@ class RecommendationWorkflow:
         now = self._now()
         with self.unit_of_work() as repo:
             row = self._cook_session(repo, user, session_id, now)
-            candidate = next(
-                (
-                    meal
-                    for meal in repo.catalogue(user.household_id).recipes
-                    if meal.id == row.state.current_recipe_id
-                ),
-                None,
-            )
-            if candidate is None:
-                _fail(ErrorCode.NOT_FOUND, "Recipe not found")
             result = self._suggest(
                 repo,
                 user,
-                replace(row, state=adjust(row.state, body, candidate)),
+                row,
                 persist_no_result=True,
+                patch=body,
             )
         if isinstance(result, ApiError):
             raise result
@@ -219,6 +241,7 @@ class RecommendationWorkflow:
         now = self._now()
         with self.unit_of_work() as repo:
             row = self._cook_session(repo, user, session_id, now)
+            now = self._now()
             if row.position <= 0:
                 _fail(ErrorCode.CONFLICT, "No previous suggestion")
             position = row.position - 1
@@ -234,14 +257,13 @@ class RecommendationWorkflow:
                 },
             )
             catalogue = repo.catalogue(user.household_id)
+            prefs = repo.preferences(user.household_id)
             candidate = next(
                 (meal for meal in catalogue.recipes if meal.id == response.recipe.id), None
             )
             if candidate is None:
                 _fail(ErrorCode.NOT_FOUND, "Recipe not found")
-            hard = HardConstraints.from_preferences(
-                repo.preferences(user.household_id), row.state.strict_max_minutes
-            )
+            hard = HardConstraints.from_preferences(prefs, row.state.strict_max_minutes)
             if not filter_recipes([candidate], hard, catalogue.ingredients) or any(
                 (meta := catalogue.ingredients.get(line.ingredient_id)) is None
                 or bool(meta.allergens & hard.allergens)
@@ -251,17 +273,30 @@ class RecommendationWorkflow:
                 _fail(
                     ErrorCode.CONFLICT, "Previous suggestion no longer meets household constraints"
                 )
+            restored_state = replace(
+                row.state,
+                people=response.people,
+                current_recipe_id=response.recipe.id,
+                anchor_recipe_id=None,
+                recent_recipe_ids=repo.recent_recipe_ids(user.household_id, as_of=now),
+            )
+            response.available_nudges = list(
+                available_nudges(
+                    catalogue.recipes,
+                    repo.inventory(user.household_id),
+                    prefs,
+                    restored_state,
+                    catalogue.ingredients,
+                    as_of=now,
+                    taste_weights=self._weights(repo, user.household_id),
+                )
+            )
             repo.save_cook_session(
                 user.household_id,
                 replace(
                     row,
                     position=position,
-                    state=replace(
-                        row.state,
-                        people=response.people,
-                        current_recipe_id=response.recipe.id,
-                        anchor_recipe_id=None,
-                    ),
+                    state=restored_state,
                 ),
             )
             repo.remember(user.household_id, cook_people=response.people)

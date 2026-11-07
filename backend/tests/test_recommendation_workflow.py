@@ -10,7 +10,7 @@ import pytest
 from app.auth import CurrentUser
 from app.errors import ApiError, ErrorCode
 from app.reco import taste_weights
-from app.schemas.common import Allergen, FreshnessStatus, ItemSource, RemainingState
+from app.schemas.common import Allergen, FreshnessStatus, ItemSource, RemainingState, TasteTag
 from app.schemas.cook import (
     ConsumptionLine,
     ConsumptionOutcome,
@@ -145,6 +145,94 @@ def test_no_result_retains_requested_adjustments_without_adding_history(setup):
         suggestion.recipe.id
         in db.state["cook_sessions"][HOUSEHOLD, suggestion.session_id].state.skipped_recipe_ids
     )
+
+
+def test_advertised_quicker_delivers_then_disappears_at_catalogue_floor(setup):
+    db, service, _ = setup
+    set_recipes(db, recipe("slow", starred=True), recipe("fast", total_minutes=20))
+    first = service.start_cook(USER, CookSessionCreate())
+    assert first.recipe.id == uid("slow")
+    assert CookTag.QUICKER in first.available_nudges
+    second = service.adjust_cook(USER, first.session_id, CookAdjust(tags=[CookTag.QUICKER]))
+    assert second.recipe.id == uid("fast")
+    assert second.recipe.total_minutes == first.recipe.total_minutes - 10
+    assert CookTag.QUICKER not in second.available_nudges
+    before = deepcopy(db.state)
+    error = assert_error(
+        ErrorCode.CONFLICT,
+        lambda: service.adjust_cook(USER, first.session_id, CookAdjust(tags=[CookTag.QUICKER])),
+    )
+    assert "current suggestion is unchanged" in error.message
+    assert db.state == before
+
+
+@pytest.mark.parametrize(
+    "patch",
+    [
+        CookAdjust(tags=[CookTag.EASIER]),
+        CookAdjust(people=4, max_minutes=5, tags=[CookTag.MORE_PROTEIN]),
+        CookAdjust(people=4, tags=[CookTag.LESS_OIL, CookTag.MORE_VEGETABLES]),
+    ],
+)
+def test_impossible_nudges_roll_back_constraints_history_people_and_learning(setup, patch):
+    db, service, _ = setup
+    set_recipes(
+        db,
+        recipe("oil", taste_tags=[TasteTag.LOW_OIL]),
+        recipe("veg", taste_tags=[TasteTag.VEGETABLE_RICH]),
+    )
+    first = service.start_cook(USER, CookSessionCreate())
+    before = deepcopy(db.state)
+    assert_error(ErrorCode.CONFLICT, lambda: service.adjust_cook(USER, first.session_id, patch))
+    assert db.state == before
+
+
+@pytest.mark.parametrize("tag", [CookTag.LESS_OIL, CookTag.MORE_PROTEIN])
+def test_unadvertised_valid_binary_nudge_still_accepts_manual_constraint_replay(setup, tag):
+    db, service, _ = setup
+    set_recipes(db, recipe("only", taste_tags=[TasteTag.LOW_OIL]))
+    first = service.start_cook(USER, CookSessionCreate())
+    assert first.available_nudges == []
+    second = service.adjust_cook(USER, first.session_id, CookAdjust(tags=[tag]))
+    assert second.recipe.id == first.recipe.id
+    assert second.applied_constraints.tags == [tag]
+    assert second.available_nudges == []
+    state = db.state["cook_sessions"][HOUSEHOLD, first.session_id].state
+    if tag == CookTag.MORE_PROTEIN:
+        # Protein remains a soft boost even when no eligible recipe has the tag.
+        assert state.boosted_tags == frozenset({TasteTag.HIGH_PROTEIN})
+        assert TasteTag.HIGH_PROTEIN not in state.required_tags
+
+
+def test_stale_advertised_nudge_rechecks_catalogue_without_saving_impossible_limits(setup):
+    db, service, _ = setup
+    slow, fast = recipe("slow", starred=True), recipe("fast", total_minutes=20)
+    set_recipes(db, slow, fast)
+    first = service.start_cook(USER, CookSessionCreate())
+    assert CookTag.QUICKER in first.available_nudges
+    set_recipes(db, slow)  # Another request can change the catalogue before this tap.
+    before = deepcopy(db.state)
+    assert_error(
+        ErrorCode.CONFLICT,
+        lambda: service.adjust_cook(USER, first.session_id, CookAdjust(tags=[CookTag.QUICKER])),
+    )
+    assert db.state == before
+
+
+def test_previous_recomputes_nudges_from_current_catalogue_not_saved_availability(setup):
+    db, service, _ = setup
+    slow, fast = recipe("slow", starred=True), recipe("fast", total_minutes=20)
+    set_recipes(db, slow, fast)
+    first = service.start_cook(USER, CookSessionCreate())
+    assert CookTag.QUICKER in first.available_nudges
+    service.adjust_cook(USER, first.session_id, CookAdjust(people=3))
+    set_recipes(db, slow)
+    previous = service.previous_cook(USER, first.session_id)
+    assert previous.recipe.id == first.recipe.id
+    assert previous.available_nudges == []
+    # Historical evidence stays frozen; only the returned current options are refreshed.
+    saved = db.state["cook_sessions"][HOUSEHOLD, first.session_id]
+    assert saved.history[0].available_nudges == first.available_nudges
 
 
 def test_selection_splits_counted_consumption_in_expiry_order_and_is_repeatable(setup):

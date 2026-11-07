@@ -261,8 +261,26 @@ Adjustments accumulate:
   satisfy all accumulated restrictions and boosted tags. Similarity otherwise
   contributes to scoring.
 
-At the minimum time/difficulty, Quicker/Easier can legitimately yield no result;
-the engine never loosens a restriction to fabricate an answer. Only
+Each suggestion exposes `available_nudges`. These are checked with the real
+catalogue, household constraints, inventory and scoring snapshot by trying the
+same adjustment and ranking that a tap would use. An option is offered only when
+that ranking returns a different recipe meeting the requested change. Binary
+tag requests already satisfied by the dish are not offered again; Quicker and
+Easier can be offered repeatedly while a qualifying improvement remains. More
+protein remains a scoring boost, but is advertised only when its predicted winner
+has `high_protein`. Availability is recalculated after ranking and when returning
+to a previous suggestion.
+
+The shortest catalogue recipe is 15 minutes and 44 of the 48 recipes have
+difficulty 1. The interface therefore hides Quicker/Easier when they cannot work,
+rather than advertising a five-minute or difficulty-zero recipe. If a stale or
+free-text request with tags has no result, the service returns `CONFLICT` without
+saving those failed adjustments. Valid tag requests still accumulate normally.
+Old stored Cook history gains an empty availability list on load; Previous
+recalculates it against the current household context.
+
+Numeric-only restrictions and skips can still produce `NO_RESULT`; the engine
+never loosens a restriction to fabricate an answer. Only
 `max_minutes` and `tags` can be returned in `relaxable`, and only when removing
 those soft filters actually restores a candidate after the hard gate. Difficulty
 caps and skipped IDs are not silently removed.

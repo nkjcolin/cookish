@@ -26,6 +26,7 @@ import { QuickCheckSheet } from "./cook/QuickCheckSheet";
 import {
   COOK_TAG_LABELS,
   TASTE_TAG_LABELS,
+  availableNudges,
   difficultyLabel,
   ingredientLines,
   mealName,
@@ -57,6 +58,7 @@ export function CookPage() {
   const now = new Date();
   const meal = mealName(now);
   const busy = step.isPending || select.isPending || interpret.isPending || restart.isPending;
+  const nudges = suggestion ? availableNudges(suggestion) : [];
   // "Nothing fits" is a state of its own (see NoMatch), not an error to report.
   const unlessNoResult = (error: Error | null) => (relaxableOf(error) ? null : error);
   const failure =
@@ -104,9 +106,13 @@ export function CookPage() {
     event.preventDefault();
     const text = request.trim();
     if (!text) return;
-    const { adjust } = await interpret.mutateAsync(text);
-    run({ kind: "adjust", body: adjust });
-    setRequest("");
+    try {
+      const { adjust } = await interpret.mutateAsync(text);
+      run({ kind: "adjust", body: adjust });
+      setRequest("");
+    } catch {
+      // The mutation error is shown above; keep the request available to edit.
+    }
   }
 
   return (
@@ -124,7 +130,7 @@ export function CookPage() {
         <button
           type="button"
           aria-label="Adjust"
-          disabled={!suggestion}
+          disabled={!suggestion || busy}
           onClick={() => setSheet("adjust")}
           className="flex size-[40px] shrink-0 items-center justify-center rounded-pill border border-border bg-surface"
         >
@@ -175,19 +181,23 @@ export function CookPage() {
             onPreview={() => navigate("/cook/preview")}
           />
 
-          <section className="flex flex-col gap-[10px]">
+          <section aria-label="Recipe nudges" className="flex flex-col gap-[10px]">
             <h2 className="text-[15px] font-bold whitespace-nowrap">Not quite? Nudge it</h2>
             <div className="-mx-[20px] flex items-start gap-[8px] overflow-x-auto px-[20px] [scrollbar-width:none]">
-              {(Object.keys(COOK_TAG_LABELS) as CookTag[]).map((tag) => (
+              {nudges.map((tag) => (
                 <Chip
                   key={tag}
-                  selected={suggestion.applied_constraints.tags.includes(tag)}
+                  suggested
+                  disabled={busy}
                   onClick={() => nudge(tag)}
                 >
                   {COOK_TAG_LABELS[tag]}
                 </Chip>
               ))}
             </div>
+            {nudges.length === 0 && (
+              <p className="text-[13px] text-ink-muted">No nudges fit this recipe right now. Try Not tonight or Adjust.</p>
+            )}
             <form
               onSubmit={(event) => void ask(event)}
               className="flex items-center gap-[8px] rounded-pill border border-border bg-surface py-[6px] pr-[6px] pl-[16px]"
@@ -196,7 +206,7 @@ export function CookPage() {
                 value={request}
                 onChange={(event) => setRequest(event.target.value)}
                 aria-label="Describe what you feel like"
-                placeholder="e.g. “something warm, not spicy”"
+                placeholder="e.g. “less oil”"
                 className="min-w-px flex-1 bg-transparent text-[14px] outline-none placeholder:text-ink-subtle"
               />
               <button
@@ -258,15 +268,15 @@ function Constraints({ suggestion, busy, onEdit, onReset }: ConstraintsProps) {
   return (
     <div className="-mx-[20px] flex items-start gap-[8px] overflow-x-auto px-[20px] [scrollbar-width:none]">
       {maxMinutes !== null && (
-        <Chip selected onClick={onEdit}>
+        <Chip selected disabled={busy} onClick={onEdit}>
           ≤ {maxMinutes} min
         </Chip>
       )}
-      <Chip onClick={onEdit}>
+      <Chip disabled={busy} onClick={onEdit}>
         {suggestion.people} {suggestion.people === 1 ? "person" : "people"}
       </Chip>
       {tags.map((tag) => (
-        <Chip key={tag} selected onClick={onEdit}>
+        <Chip key={tag} selected disabled={busy} onClick={onEdit}>
           {COOK_TAG_LABELS[tag]}
         </Chip>
       ))}

@@ -166,6 +166,26 @@ def test_previous_history_and_current_cursor_survive_roundtrip(records):
     assert row.history[0].recipe.id in row.state.skipped_recipe_ids
 
 
+def test_legacy_cook_history_loads_with_no_advertised_nudges_without_rewriting_evidence(records):
+    wire = dump_snapshot(records["cook_session"])
+    for suggestion in wire["payload"]["history"]:
+        del suggestion["available_nudges"]
+    original = deepcopy(wire)
+    restored = load_snapshot(wire, CookSessionRow)
+    assert all(suggestion.available_nudges == [] for suggestion in restored.history)
+    assert restored.state == records["cook_session"].state
+    assert restored.position == records["cook_session"].position
+    assert wire == original
+
+
+def test_legacy_nudge_upgrade_does_not_hide_other_missing_history_fields(records):
+    wire = dump_snapshot(records["cook_session"])
+    del wire["payload"]["history"][0]["available_nudges"]
+    del wire["payload"]["history"][0]["has_previous"]
+    with pytest.raises(ValueError, match="missing"):
+        load_snapshot(wire, CookSessionRow)
+
+
 def test_learning_roundtrip_preserves_order_for_edited_saturated_rating():
     state = LearningState(HOUSEHOLD)
     meal = recipe("liked")

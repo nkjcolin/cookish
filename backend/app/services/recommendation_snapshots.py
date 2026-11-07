@@ -196,11 +196,24 @@ def _upgrade(kind, payload):
     """Fill fields added after version 1 was first written, with the value they then meant.
 
     Shop sessions gained pinned_recipe_ids: one saved before it pinned nothing.
+    Cook history gained available_nudges: old entries advertise none until refreshed.
     """
     if kind is ShopSessionRow and isinstance(payload, dict):
         state = payload.get("state")
         if isinstance(state, dict) and "pinned_recipe_ids" not in state:
             return {**payload, "state": {**state, "pinned_recipe_ids": []}}
+    if kind is CookSessionRow and isinstance(payload, dict):
+        history = payload.get("history")
+        if isinstance(history, list):
+            return {
+                **payload,
+                "history": [
+                    {**item, "available_nudges": []}
+                    if isinstance(item, dict) and "available_nudges" not in item
+                    else item
+                    for item in history
+                ],
+            }
     return payload
 
 

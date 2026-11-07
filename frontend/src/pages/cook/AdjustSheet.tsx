@@ -8,8 +8,9 @@ import { Chip } from "../../components/Chip";
 import { Icon } from "../../components/Icon";
 import { Sheet } from "../../components/Sheet";
 import { SheetHeader } from "../../components/SheetHeader";
-import { ALLERGEN_LABELS, DIET_LABELS, EQUIPMENT_LABELS, summarise, toggled } from "../../lib/labels";
-import { COOK_TAG_LABELS, describeAdjust } from "./view";
+import { Tag } from "../../components/Tag";
+import { ALLERGEN_LABELS, DIET_LABELS, EQUIPMENT_LABELS, summarise } from "../../lib/labels";
+import { COOK_TAG_LABELS, availableNudges, describeAdjust } from "./view";
 
 type CookTag = Schemas["CookTag"];
 type CookAdjust = Schemas["CookAdjust"];
@@ -31,9 +32,10 @@ export function AdjustSheet({ suggestion, meal, onApply, onClose }: AdjustSheetP
   const interpret = useInterpret();
   const [people, setPeople] = useState(suggestion.people);
   const [maxMinutes, setMaxMinutes] = useState(applied.max_minutes);
-  const [tags, setTags] = useState<CookTag[]>(applied.tags);
+  const [tags, setTags] = useState<CookTag[]>([]);
   const [request, setRequest] = useState("");
   const [understood, setUnderstood] = useState<string | null>(null);
+  const nudges = availableNudges(suggestion);
 
   const prefs = me.data?.preferences;
   const always = prefs
@@ -48,16 +50,21 @@ export function AdjustSheet({ suggestion, meal, onApply, onClose }: AdjustSheetP
     event.preventDefault();
     const text = request.trim();
     if (!text) return;
-    const { adjust } = await interpret.mutateAsync(text);
-    setTags((current) => [...new Set([...current, ...(adjust.tags ?? [])])]);
-    if (adjust.max_minutes != null) setMaxMinutes(adjust.max_minutes);
-    if (adjust.people != null) setPeople(adjust.people);
-    setUnderstood(describeAdjust(adjust));
+    try {
+      const { adjust } = await interpret.mutateAsync(text);
+      // A typed request may combine nudges; the service validates the combination.
+      setTags(adjust.tags ?? []);
+      if (adjust.max_minutes != null) setMaxMinutes(adjust.max_minutes);
+      if (adjust.people != null) setPeople(adjust.people);
+      setUnderstood(describeAdjust(adjust));
+    } catch {
+      // The mutation error is shown below; leave the pending adjustment unchanged.
+    }
   }
 
   function apply() {
     // Adjustments accumulate on the server, so only what changed here is sent.
-    const adjust: CookAdjust = { tags: tags.filter((tag) => !applied.tags.includes(tag)) };
+    const adjust: CookAdjust = { tags };
     if (people !== suggestion.people) adjust.people = people;
     if (maxMinutes !== null && maxMinutes !== applied.max_minutes) adjust.max_minutes = maxMinutes;
     const changed = adjust.tags!.length > 0 || adjust.people !== undefined || adjust.max_minutes !== undefined;
@@ -82,13 +89,13 @@ export function AdjustSheet({ suggestion, meal, onApply, onClose }: AdjustSheetP
       <div className="flex flex-col gap-[8px]">
         <p className={sectionTitle}>Cooking for</p>
         <div className="flex items-center gap-[16px]">
-          <StepButton label="One fewer" disabled={people <= 1} onClick={() => setPeople(people - 1)}>
+          <StepButton label="One fewer" disabled={interpret.isPending || people <= 1} onClick={() => setPeople(people - 1)}>
             −
           </StepButton>
           <p className="text-[15px] font-bold" aria-live="polite">
             {people} {people === 1 ? "person" : "people"}
           </p>
-          <StepButton label="One more" disabled={people >= 12} onClick={() => setPeople(people + 1)}>
+          <StepButton label="One more" disabled={interpret.isPending || people >= 12} onClick={() => setPeople(people + 1)}>
             +
           </StepButton>
         </div>
@@ -98,23 +105,53 @@ export function AdjustSheet({ suggestion, meal, onApply, onClose }: AdjustSheetP
         <p className={sectionTitle}>Time</p>
         <div className="flex flex-wrap content-start items-start gap-[8px]">
           {TIME_LIMITS.map((minutes) => (
-            <Chip key={minutes} selected={maxMinutes === minutes} onClick={() => setMaxMinutes(minutes)}>
+            <Chip
+              key={minutes}
+              selected={maxMinutes === minutes}
+              disabled={interpret.isPending || (applied.max_minutes !== null && minutes > applied.max_minutes)}
+              onClick={() => setMaxMinutes(minutes)}
+            >
               ≤ {minutes} min
             </Chip>
           ))}
         </div>
+        {applied.max_minutes !== null && (
+          <p className="text-[12px] text-ink-muted">Current limit: {applied.max_minutes} min. For more time, change your cooking limit in Preferences.</p>
+        )}
       </div>
 
-      <div className="flex flex-col gap-[8px]">
+      {applied.tags.length > 0 && (
+        <div className="flex flex-col gap-[8px]">
+          <p className={sectionTitle}>Already applied</p>
+          <div className="flex flex-wrap gap-[8px]">
+            {applied.tags.map((tag) => <Tag key={tag}>{COOK_TAG_LABELS[tag]}</Tag>)}
+          </div>
+          <p className="text-[12px] text-ink-muted">Use Reset on the suggestion to remove these.</p>
+        </div>
+      )}
+
+      <section aria-label="Choose a nudge" className="flex flex-col gap-[8px]">
         <p className={sectionTitle}>Nudge</p>
+        <p className="text-[12px] text-ink-muted">Choose one change to try next.</p>
         <div className="flex flex-wrap content-start items-start gap-[8px]">
-          {(Object.keys(COOK_TAG_LABELS) as CookTag[]).map((tag) => (
-            <Chip key={tag} selected={tags.includes(tag)} onClick={() => setTags(toggled(tags, tag))}>
+          {nudges.map((tag) => (
+            <Chip
+              key={tag}
+              selected={tags.includes(tag)}
+              disabled={interpret.isPending}
+              onClick={() => {
+                setTags(tags.length === 1 && tags[0] === tag ? [] : [tag]);
+                setUnderstood(null);
+              }}
+            >
               {COOK_TAG_LABELS[tag]}
             </Chip>
           ))}
         </div>
-      </div>
+        {nudges.length === 0 && (
+          <p className="text-[13px] text-ink-muted">No nudges fit this recipe right now. You can still adjust the people or time.</p>
+        )}
+      </section>
 
       <form
         onSubmit={(event) => void ask(event)}
@@ -124,7 +161,7 @@ export function AdjustSheet({ suggestion, meal, onApply, onClose }: AdjustSheetP
           value={request}
           onChange={(event) => setRequest(event.target.value)}
           aria-label="Describe what you feel like"
-          placeholder="something warm, not spicy"
+          placeholder="e.g. “less oil”"
           className="min-w-px flex-1 bg-transparent text-[14px] font-medium outline-none placeholder:text-ink-subtle"
         />
         <button
@@ -149,7 +186,7 @@ export function AdjustSheet({ suggestion, meal, onApply, onClose }: AdjustSheetP
         </p>
       )}
 
-      <Button className="w-full shrink-0" onClick={apply}>
+      <Button className="w-full shrink-0" onClick={apply} disabled={interpret.isPending}>
         Update suggestion
       </Button>
     </Sheet>
