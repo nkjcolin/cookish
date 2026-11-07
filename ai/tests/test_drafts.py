@@ -74,3 +74,44 @@ def test_already_totalled_package_contents_are_not_multiplied_again():
     assert once == twice
     assert once.items[0].count == 450
     assert once.items[0].raw_text == item.raw_text
+
+
+@pytest.mark.parametrize(
+    "raw_text,count,unit",
+    [
+        ("some onion", 1, "some"),  # the model used the quantifier as a unit
+        ("some onion", 1, "pcs"),  # or guessed a count the user never gave
+        ("a few eggs", 3, "pcs"),
+        ("A handful of spinach", 1, "handful"),
+        ("onion", 1, "a bit"),
+    ],
+)
+def test_vague_amounts_stay_unknown(raw_text, count, unit):
+    item = DraftItem(
+        raw_text=raw_text,
+        display_name="Food",
+        count=count,
+        unit=unit,
+        storage=None,
+        confidence=0.9,
+    )
+    result = normalize_draft(DraftResult(items=[item])).items[0]
+    assert (result.count, result.unit) == (None, None)
+    assert result.raw_text == raw_text
+
+
+@pytest.mark.parametrize(
+    "raw_text,count,unit",
+    [("2 onions", 2, "pcs"), ("some 500g of rice", 500, "g"), ("handful bag 200g", 200, "g")],
+)
+def test_stated_amounts_are_kept(raw_text, count, unit):
+    item = DraftItem(
+        raw_text=raw_text,
+        display_name="Food",
+        count=count,
+        unit=unit,
+        storage=None,
+        confidence=0.9,
+    )
+    result = normalize_draft(DraftResult(items=[item])).items[0]
+    assert (result.count, result.unit) == (count, unit)
