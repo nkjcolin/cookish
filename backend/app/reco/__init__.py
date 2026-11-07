@@ -2,7 +2,9 @@
 
 from app.reco.cook import (
     adjust,
+    available_nudges,
     filter_recipes,
+    fulfils_nudge,
     new_session,
     recipe_features,
     score_recipe,
@@ -16,7 +18,9 @@ from app.reco.shop import adjust_shop, new_shop_session, plan_shop, shopping_lis
 __all__ = [
     "adjust",
     "adjust_shop",
+    "available_nudges",
     "filter_recipes",
+    "fulfils_nudge",
     "learn",
     "new_session",
     "new_shop_session",

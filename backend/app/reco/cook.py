@@ -306,6 +306,68 @@ def adjust(session: CookSession, patch: CookAdjust | CookTag, current: Candidate
     )
 
 
+def fulfils_nudge(
+    tag: CookTag, session: CookSession, current: Candidate, selected: Candidate | None
+) -> bool:
+    """Whether the actual winner meaningfully delivers a new requested adjustment."""
+    if selected is None or selected.id == current.id:
+        return False
+    if tag == CookTag.QUICKER:
+        return selected.total_minutes <= current.total_minutes - 10
+    if tag == CookTag.EASIER:
+        return selected.difficulty <= current.difficulty - 1
+    target = {
+        CookTag.LESS_OIL: TasteTag.LOW_OIL,
+        CookTag.MORE_PROTEIN: TasteTag.HIGH_PROTEIN,
+        CookTag.MORE_VEGETABLES: TasteTag.VEGETABLE_RICH,
+    }[tag]
+    if (
+        tag in session.tags
+        or target in current.taste_tags
+        or target in session.required_tags
+        or target in session.boosted_tags
+    ):
+        return False
+    return target in selected.taste_tags
+
+
+def available_nudges(
+    recipes: Sequence[Candidate],
+    inventory: Sequence[InventoryItem],
+    prefs: Preferences,
+    session: CookSession,
+    catalogue: Mapping[UUID, CatalogIngredient],
+    *,
+    as_of: datetime,
+    taste_weights: Mapping[str, float] | None = None,
+    config: ScoringConfig = DEFAULT_CONFIG,
+) -> tuple[CookTag, ...]:
+    """Dry-run each nudge against the exact ranking snapshot without saving anything.
+
+    Availability describes the actual selector, including stock fallback and
+    history penalties. More protein remains a boost, not an extra hard filter.
+    """
+    current = next((recipe for recipe in recipes if recipe.id == session.current_recipe_id), None)
+    if current is None:
+        return ()
+    available = []
+    for tag in CookTag:
+        result = suggest(
+            recipes,
+            inventory,
+            prefs,
+            adjust(session, tag, current),
+            catalogue,
+            as_of=as_of,
+            taste_weights=taste_weights,
+            config=config,
+        )
+        winner = result.selected.recipe if result.selected else None
+        if fulfils_nudge(tag, session, current, winner):
+            available.append(tag)
+    return tuple(available)
+
+
 def skip_current(session: CookSession) -> CookSession:
     if session.current_recipe_id is None:
         raise ValueError("session has no current recipe to skip")

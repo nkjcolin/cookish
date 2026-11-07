@@ -2322,6 +2322,14 @@
           "applied_constraints": {
             "$ref": "#/components/schemas/AppliedConstraints"
           },
+          "available_nudges": {
+            "description": "Nudges that currently return a different recipe meeting the requested change. Recomputed from the catalogue, stock and accumulated session constraints.",
+            "items": {
+              "$ref": "#/components/schemas/CookTag"
+            },
+            "title": "Available Nudges",
+            "type": "array"
+          },
           "freshness_check": {
             "items": {
               "$ref": "#/components/schemas/FreshnessCheck"

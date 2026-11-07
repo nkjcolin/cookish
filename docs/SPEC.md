@@ -247,6 +247,7 @@ Base path `/api` (served by `api` Lambda) and `/ai` (served by `ai` Lambda). All
     { "inventory_item_id": "…", "name": "chicken thigh", "reason": "past estimated use-first date" }
   ],
   "has_previous": true,            // whether "Previous one" is available
+  "available_nudges": ["less_oil"], // only nudges that produce a suitable different recipe now
   "people": 2,                     // ingredient amounts are already scaled to this
   "applied_constraints": { "max_minutes": 30, "tags": ["quicker"] }
 }
@@ -482,6 +483,8 @@ score = w_cov  · coverage            share of non-staple ingredients on hand
 Starting weights are hand-set; keep them in one config file and report them. The card does not show why a recipe was suggested, so no explanation text is generated.
 
 *Step 4 — adjustments.* Each tag is a deterministic patch to session constraints (`quicker` → `max_minutes = current − 10`; `less_oil` → require tag `low_oil`; `more_protein` → boost `high_protein`). Patches accumulate, so earlier choices are remembered. When re-ranking after an adjustment, add a **similarity bonus** towards the previously shown recipe (Jaccard similarity over ingredients and tags) so that only the requested dimension changes; prefer a stored variant of the same base recipe when one satisfies the patch.
+
+The suggested nudge buttons come from `Suggestion.available_nudges`, calculated by trying those same patches against the current catalogue and household snapshot. Show an option only if it returns a different recipe satisfying the requested change; hide requests already satisfied by the current dish. This keeps the adjustment rules unchanged while avoiding impossible options such as Easier on a difficulty-1 dish. If a later tag request has no result, reject it without saving its failed restrictions so the current suggestion remains usable.
 
 *Step 5 — learning from feedback.* Keep `taste_weights` as a small map from feature (taste tag, cuisine, main-protein category) to weight. Ratings arrive only after a meal has been cooked: on Like add +η to the recipe's features, on Dislike subtract η, on Maybe (or no rating) do nothing, and clip to a fixed range. "Not this" changes no weights — people skip for many reasons — and only keeps that recipe out of the rest of the session. Cooking a recipe without rating it adds a small +η/4. This is simple, explainable, and enough to test the first hypothesis. Optional: a per-household logistic regression or a Thompson-sampling bandit over the same features.
 

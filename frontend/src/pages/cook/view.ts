@@ -10,6 +10,13 @@ export const COOK_TAG_LABELS: Record<Schemas["CookTag"], string> = {
   more_vegetables: "More vegetables",
 };
 
+/** Only advertise server-checked actions; relative nudges may be repeated. */
+export function availableNudges(suggestion: Suggestion): Schemas["CookTag"][] {
+  return (suggestion.available_nudges ?? []).filter(
+    (tag) => tag === "quicker" || tag === "easier" || !suggestion.applied_constraints.tags.includes(tag),
+  );
+}
+
 export const TASTE_TAG_LABELS: Record<Schemas["TasteTag"], string> = {
   light: "Light",
   rich: "Rich",

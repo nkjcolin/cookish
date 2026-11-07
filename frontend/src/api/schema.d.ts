@@ -1284,6 +1284,11 @@ export interface components {
         /** Suggestion */
         Suggestion: {
             applied_constraints: components["schemas"]["AppliedConstraints"];
+            /**
+             * Available Nudges
+             * @description Nudges that currently return a different recipe meeting the requested change. Recomputed from the catalogue, stock and accumulated session constraints.
+             */
+            available_nudges?: components["schemas"]["CookTag"][];
             /** Freshness Check */
             freshness_check: components["schemas"]["FreshnessCheck"][];
             /** Has Previous */
