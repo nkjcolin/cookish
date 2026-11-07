@@ -129,6 +129,11 @@ def build_report(assumptions_path, rates_path):
         or snapshot["primary_region"] != "ap-southeast-1"
     ):
         raise ValueError("this rate snapshot covers Singapore AWS charges in USD")
+    if any(
+        assumptions["lambda_architecture"] != snapshot["rates"][key]["architecture"]
+        for key in ("lambda_gb_second", "lambda_request")
+    ):
+        raise ValueError("Lambda architecture must match the selected duration and request rates")
     rows = [
         calculate(assumptions, rates, count, assumptions["main_paid_share"], workload)
         for count in assumptions["active_households"]
@@ -144,6 +149,7 @@ def build_report(assumptions_path, rates_path):
         "version": 1,
         "as_of": assumptions["as_of"],
         "currency": "USD",
+        "lambda_architecture": assumptions["lambda_architecture"],
         "status": (
             "Planning estimate: published rates plus assumed usage; "
             "not measured or a capacity claim"

@@ -5,6 +5,9 @@ for the final report; the [research pack](business-case-research.md) retains
 the competitor table, review details and source dates. Cost and commercial
 assumptions require team review and later measurements.
 
+The cost figures below were updated on **7 November 2026** to use the verified
+ARM64 Lambda architecture. The market and competitor research dates are unchanged.
+
 ## Motivation and addressable audience
 
 Cookish targets Singapore households that regularly cook and manage shared
@@ -51,17 +54,17 @@ A model using published Singapore AWS rates and assumed usage gives the followin
 **gross monthly infrastructure estimates in USD**. The base case assumes two
 active login accounts per household, 10% paying households, 300 non-AI requests
 per household and ten imports per paying household each month. Model cost is
-assumed at US$0.01 per attempt with 1.1 attempts per import; the provider is not
-yet selected. Free-trial usage is included. [9]
+assumed at US$0.01 per attempt with 1.1 attempts per import; deployed-provider
+usage has not been costed here. Free-trial usage is included. [9]
 
 | Active households | Total/month | Per active household | Per active login | Allocated per paying household |
 |---:|---:|---:|---:|---:|
-| 100 | 34.56 | 0.346 | 0.173 | 3.456 |
-| 1,000 | 86.08 | 0.086 | 0.043 | 0.861 |
-| 10,000 | 601.27 | 0.060 | 0.030 | 0.601 |
+| 100 | 34.55 | 0.345 | 0.173 | 3.455 |
+| 1,000 | 85.96 | 0.086 | 0.043 | 0.860 |
+| 10,000 | 600.08 | 0.060 | 0.030 | 0.600 |
 
 Paying-household allocation includes supporting free households. At 1,000
-households, low/high usage assumptions produce **US$65.14–226.85/month**. Credits
+households, low/high usage assumptions produce **US$65.11–226.39/month**. Credits
 and free allowances are not deducted; fees, taxes, labor, acquisition and capacity
 upgrades are excluded. The 10,000-household calculation does not demonstrate that
 the specified micro database supports that load. Role 3's deployment measurements
@@ -70,7 +73,8 @@ cost or concluding commercial viability. [9]
 
 ## References
 
-Accessed 24 October 2026. Retain the references used in the final report itself;
+Accessed 24 October 2026; Lambda price records in reference 9 were refreshed on
+7 November 2026. Retain the references used in the final report itself;
 the longer research pack is supporting repository material.
 
 1. Singapore Department of Statistics. [Resident Households](https://www.singstat.gov.sg/find-data/explore-data-themes/households/resident-households), 2025 data, released 30 June 2026.
@@ -81,4 +85,4 @@ the longer research pack is supporting repository material.
 6. Cooklist Inc. [Google Play listing and reviews](https://play.google.com/store/apps/details?hl=en_US&id=com.cooklist.android), Heidi Wright review dated 29 June 2026.
 7. Plan to Eat. [A Digital Pantry Inventory: Does It Really Help?](https://learn.plantoeat.com/help/a-digital-pantry-inventory-does-it-really-help), updated 22 October 2025; removal date not established.
 8. Plan to Eat. [Pricing](https://www.plantoeat.com/pricing/), current website plans.
-9. Cookish Role 5. [Cost model, assumptions and AWS price sources](../eval/business_case/README.md), 24 October 2026, with [selected AWS rate records](../eval/business_case/aws-rates.json) and [reproducible results](../eval/business_case/results.json). AWS documents the [public bulk pricing API](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/using-the-aws-price-list-bulk-api.html).
+9. Cookish Role 5. [Cost model, assumptions and AWS price sources](../eval/business_case/README.md), Lambda assumptions updated 7 November 2026, with [selected AWS rate records](../eval/business_case/aws-rates.json) and [reproducible results](../eval/business_case/results.json). AWS documents the [public bulk pricing API](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/using-the-aws-price-list-bulk-api.html).

@@ -1,12 +1,13 @@
 {
   "version": 1,
-  "as_of": "2026-10-24",
+  "as_of": "2026-11-07",
   "status": "Illustrative planning assumptions, not measured usage, demand or capacity",
   "currency": "USD",
   "region": "ap-southeast-1",
+  "lambda_architecture": "arm64",
   "monthly_price_per_paying_household": 4.99,
   "active_households": [100, 1000, 10000],
-  "main_paid_share": 0.10,
+  "main_paid_share": 0.1,
   "paid_share_sensitivity": [0.05, 0.10, 0.20],
   "fixed": {
     "database_hours": 730,
@@ -22,7 +23,7 @@
     "lambda_memory_gb": 0.5,
     "monthly_active_accounts_per_household": 2,
     "free_trial_imports_once": 3,
-    "share_of_active_free_households_new_this_month": 0.10,
+    "share_of_active_free_households_new_this_month": 0.1,
     "proposed_paid_import_limit_per_month": 20,
     "outer_attempts_per_import": 1,
     "http_billing_units_per_ai_upload": 3,
@@ -59,9 +60,9 @@
       "model_attempts_per_import": 1.2,
       "ai_seconds_per_model_attempt": 15,
       "assumed_model_usd_per_attempt": 0.05,
-      "frontend_egress_gb": 0.10,
+      "frontend_egress_gb": 0.1,
       "other_internet_egress_gb": 0.05,
-      "log_ingestion_and_retention_gb": 0.010
+      "log_ingestion_and_retention_gb": 0.01
     }
   }
 }

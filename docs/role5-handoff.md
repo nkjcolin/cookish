@@ -3,9 +3,10 @@
 Status on 7 November 2026: the 48 reviewed recipes, Role 2's 42-row ingredient
 catalogue and seed loader are available. Cook/Shop sessions, selection,
 confirmation and feedback now call the real engines through the SQL repository.
-Recipe details, household stars and use-first remain database-backed. Apply the
-new `6f2c8d471a90` migration before deploying the integration; its AWS journey
-has not yet been verified. See the [service handoff](role5-integration.md).
+Recipe details, household stars and use-first remain database-backed. Migration
+`6f2c8d471a90` and the backend are deployed. PR #26 also deployed the recipe-preview
+and exact-name inventory matching fixes. The live core Cook/Shop flow has been
+verified; see the [service handoff](role5-integration.md) for scope and remaining work.
 
 Role 2's `ingredients.csv` is the authoritative ingredient source for Role 5
 recommendations and Role 4 matching. The request manifest records the original
@@ -60,8 +61,8 @@ rows and reads household preferences, inventory and stars in the caller's transa
 
 The recipe content handoff is approved by Wenlong and available to Role 2.
 All 48 review flags are true; the approval record identifies the exact recipe
-version and the user statement. Cooking trials and deployed Cook/Shop verification
-remain separate work. Future unreviewed additions should remain excluded from a release
+version and the user statement. Cooking trials remain separate work; the deployed
+core Cook/Shop flow was verified on 7 November 2026. Future unreviewed additions should remain excluded from a release
 until their review is recorded.
 
 ### Current ingredient policies and remaining quantity decisions
@@ -109,7 +110,7 @@ Service signatures, public API schemas and enum values remain unchanged.
 | Shop purchase metadata | The SQL reader supplies category, buyable flag, pack unit/size/measure and default-storage shelf-life estimate from the existing catalogue. Null/incompatible pack conversion retains a check item rather than inventing packs. Roles 1/2/5 still need to agree how the UI and confirmation flow resolve counted ingredients requiring a quantity check. Do not default these cases to one verified pack. |
 | Basket revisions | The SQL workflow persists `to_basket` item IDs and frozen purchase metadata. Each revision has a fresh basket UUID; confirmation uses its saved lines and Role 2's stock-event service. The pure planner does not mutate stock. |
 | First use, no ratings | The SQL-backed session uses actual preferences and inventory with fixed scoring defaults, zero learned weights and no history penalty. Missing essential stock still requires resolution before selection. |
-| First use, no inventory | Do not mark missing stock as available or fabricate an inventory batch for `StockCheck.item`. SPEC B5 permits missing-essential fallback suggestions; agree with Role 1 how their missing ingredients lead to adding stock or shopping before cooking. |
+| First use, no inventory | Missing-essential fallback suggestions now open a read-only recipe preview with Buy/Kitchen links. Viewing does not create a cook record, and selection still checks essential stock. The deployed first-use path was verified. |
 
 Role 2 normally owns database models, migrations and ingredient rows. On
 7 November 2026, Wenlong explicitly authorised the required recommendation
@@ -119,19 +120,21 @@ recommendation queries, serialization and service wiring.
 Changes to shared contracts follow the procedure in
 [`docs/init.md`](init.md#changing-an-agreement-between-roles).
 
-Remaining cross-role work includes matching AI-imported food to canonical
-ingredient IDs, resolving grams versus pieces/packs, and the empty-kitchen UI
-route from missing ingredients to adding stock or shopping. Protein features and
-the seven-day recent-meal policy are now implemented without public API or
-snapshot-format changes.
+PR #26 links new inventory entries to unique exact catalogue names or aliases;
+unknown or ambiguous names remain free text. Canonical egg counts and the
+empty-kitchen preview were verified live. General grams-to-pieces conversions,
+unresolved purchase quantities and any migration of old free-text rows remain
+separate decisions. Protein features and the seven-day recent-meal policy are
+implemented without public API or snapshot-format changes.
 
 ## Evaluation and report handoff
 
-The merged SQL integration passed [CI at `f313566`](https://github.com/nkjcolin/cookish/actions/runs/42342203535)
-on 7 November: 549 backend tests, including the new migration test and 20 SQL
-workflow tests. Frontend and AI jobs also passed. These results do not establish
-that the new migration/backend has been deployed or that the AWS user journey works.
-They predate the protein/history changes; those changes require their own CI run.
+The original SQL integration passed [CI at `f313566`](https://github.com/nkjcolin/cookish/actions/runs/42342203535),
+including migration preservation and 20 SQL workflow tests. The later
+[PR #26](https://github.com/nkjcolin/cookish/pull/26) passed 606 backend tests,
+38 frontend tests and the AI job. Separate live checks verified recipe preview,
+canonical inventory entry, purchase persistence, stock deduction, Maybe feedback
+and undo. These checks do not establish participant outcomes or the held-out result.
 
 The 70 development scenarios are implemented. The separate held-out runner has
 been rehearsed with copies of those development cases: 70 scenarios and 85 steps

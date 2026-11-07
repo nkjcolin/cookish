@@ -1,4 +1,6 @@
 {
+  "start": "-PT1H",
+  "periodOverride": "inherit",
   "widgets": [
     {
       "type": "text",
@@ -7,109 +9,432 @@
       "width": 24,
       "height": 2,
       "properties": {
-        "markdown": "# Cookish Operations Dashboard\nLambda and API Gateway health for the Cookish deployment."
+        "markdown": "# Cookish Operations Dashboard\nCompare a quiet baseline, load ramp, sustained traffic and recovery using the same UTC time range. Concurrent executions show simultaneous Lambda invocations, not total requests or test users. RDS graphs track database pressure."
       }
     },
     {
       "type": "metric",
       "x": 0,
       "y": 2,
+      "width": 12,
+      "height": 6,
+      "properties": {
+        "title": "API Lambda - Concurrent executions (maximum)",
+        "region": "${AWS_REGION}",
+        "accountId": "${ACCOUNT_ID}",
+        "view": "timeSeries",
+        "period": 60,
+        "stacked": false,
+        "yAxis": {
+          "left": {
+            "min": 0
+          }
+        },
+        "metrics": [
+          [
+            "AWS/Lambda",
+            "ConcurrentExecutions",
+            "FunctionName",
+            "cookish-api",
+            {
+              "stat": "Maximum"
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "type": "metric",
+      "x": 12,
+      "y": 2,
+      "width": 12,
+      "height": 6,
+      "properties": {
+        "title": "AI Lambda - Concurrent executions (maximum)",
+        "region": "${AWS_REGION}",
+        "accountId": "${ACCOUNT_ID}",
+        "view": "timeSeries",
+        "period": 60,
+        "stacked": false,
+        "yAxis": {
+          "left": {
+            "min": 0
+          }
+        },
+        "metrics": [
+          [
+            "AWS/Lambda",
+            "ConcurrentExecutions",
+            "FunctionName",
+            "cookish-ai",
+            {
+              "stat": "Maximum"
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "type": "metric",
+      "x": 0,
+      "y": 8,
       "width": 12,
       "height": 6,
       "properties": {
         "title": "API Lambda - Invocations / Errors / Throttles",
-        "region": "ap-southeast-1",
+        "region": "${AWS_REGION}",
         "view": "timeSeries",
-        "period": 300,
+        "period": 60,
         "metrics": [
-          ["AWS/Lambda", "Invocations", "FunctionName", "cookish-api", {"stat": "Sum"}],
-          ["AWS/Lambda", "Errors", "FunctionName", "cookish-api", {"stat": "Sum"}],
-          ["AWS/Lambda", "Throttles", "FunctionName", "cookish-api", {"stat": "Sum"}]
-        ]
+          [
+            "AWS/Lambda",
+            "Invocations",
+            "FunctionName",
+            "cookish-api",
+            {
+              "stat": "Sum"
+            }
+          ],
+          [
+            "AWS/Lambda",
+            "Errors",
+            "FunctionName",
+            "cookish-api",
+            {
+              "stat": "Sum"
+            }
+          ],
+          [
+            "AWS/Lambda",
+            "Throttles",
+            "FunctionName",
+            "cookish-api",
+            {
+              "stat": "Sum"
+            }
+          ]
+        ],
+        "accountId": "${ACCOUNT_ID}",
+        "stacked": false,
+        "yAxis": {
+          "left": {
+            "min": 0
+          }
+        }
       }
     },
     {
       "type": "metric",
       "x": 12,
-      "y": 2,
+      "y": 8,
       "width": 12,
       "height": 6,
       "properties": {
         "title": "API Lambda - p95 Duration",
-        "region": "ap-southeast-1",
+        "region": "${AWS_REGION}",
         "view": "timeSeries",
-        "period": 300,
+        "period": 60,
         "metrics": [
-          ["AWS/Lambda", "Duration", "FunctionName", "cookish-api", {"stat": "p95"}]
-        ]
+          [
+            "AWS/Lambda",
+            "Duration",
+            "FunctionName",
+            "cookish-api",
+            {
+              "stat": "p95"
+            }
+          ]
+        ],
+        "accountId": "${ACCOUNT_ID}",
+        "stacked": false,
+        "yAxis": {
+          "left": {
+            "min": 0
+          }
+        }
       }
     },
     {
       "type": "metric",
       "x": 0,
-      "y": 8,
+      "y": 14,
       "width": 12,
       "height": 6,
       "properties": {
         "title": "AI Lambda - Invocations / Errors / Throttles",
-        "region": "ap-southeast-1",
+        "region": "${AWS_REGION}",
         "view": "timeSeries",
-        "period": 300,
+        "period": 60,
         "metrics": [
-          ["AWS/Lambda", "Invocations", "FunctionName", "cookish-ai", {"stat": "Sum"}],
-          ["AWS/Lambda", "Errors", "FunctionName", "cookish-ai", {"stat": "Sum"}],
-          ["AWS/Lambda", "Throttles", "FunctionName", "cookish-ai", {"stat": "Sum"}]
-        ]
+          [
+            "AWS/Lambda",
+            "Invocations",
+            "FunctionName",
+            "cookish-ai",
+            {
+              "stat": "Sum"
+            }
+          ],
+          [
+            "AWS/Lambda",
+            "Errors",
+            "FunctionName",
+            "cookish-ai",
+            {
+              "stat": "Sum"
+            }
+          ],
+          [
+            "AWS/Lambda",
+            "Throttles",
+            "FunctionName",
+            "cookish-ai",
+            {
+              "stat": "Sum"
+            }
+          ]
+        ],
+        "accountId": "${ACCOUNT_ID}",
+        "stacked": false,
+        "yAxis": {
+          "left": {
+            "min": 0
+          }
+        }
       }
     },
     {
       "type": "metric",
       "x": 12,
-      "y": 8,
+      "y": 14,
       "width": 12,
       "height": 6,
       "properties": {
         "title": "AI Lambda - p95 Duration",
-        "region": "ap-southeast-1",
+        "region": "${AWS_REGION}",
         "view": "timeSeries",
-        "period": 300,
+        "period": 60,
         "metrics": [
-          ["AWS/Lambda", "Duration", "FunctionName", "cookish-ai", {"stat": "p95"}]
-        ]
+          [
+            "AWS/Lambda",
+            "Duration",
+            "FunctionName",
+            "cookish-ai",
+            {
+              "stat": "p95"
+            }
+          ]
+        ],
+        "accountId": "${ACCOUNT_ID}",
+        "stacked": false,
+        "yAxis": {
+          "left": {
+            "min": 0
+          }
+        }
       }
     },
     {
       "type": "metric",
       "x": 0,
-      "y": 14,
+      "y": 20,
       "width": 12,
       "height": 6,
       "properties": {
         "title": "API Gateway - Requests / 4xx / 5xx",
-        "region": "ap-southeast-1",
+        "region": "${AWS_REGION}",
         "view": "timeSeries",
-        "period": 300,
+        "period": 60,
         "metrics": [
-          ["AWS/ApiGateway", "Count", "ApiId", "cit4onmvhf", "Stage", "$default", {"stat": "Sum"}],
-          ["AWS/ApiGateway", "4xx", "ApiId", "cit4onmvhf", "Stage", "$default", {"stat": "Sum"}],
-          ["AWS/ApiGateway", "5xx", "ApiId", "cit4onmvhf", "Stage", "$default", {"stat": "Sum"}]
-        ]
+          [
+            "AWS/ApiGateway",
+            "Count",
+            "ApiId",
+            "${HTTP_API_ID}",
+            "Stage",
+            "$default",
+            {
+              "stat": "Sum"
+            }
+          ],
+          [
+            "AWS/ApiGateway",
+            "4xx",
+            "ApiId",
+            "${HTTP_API_ID}",
+            "Stage",
+            "$default",
+            {
+              "stat": "Sum"
+            }
+          ],
+          [
+            "AWS/ApiGateway",
+            "5xx",
+            "ApiId",
+            "${HTTP_API_ID}",
+            "Stage",
+            "$default",
+            {
+              "stat": "Sum"
+            }
+          ]
+        ],
+        "accountId": "${ACCOUNT_ID}",
+        "stacked": false,
+        "yAxis": {
+          "left": {
+            "min": 0
+          }
+        }
       }
     },
     {
       "type": "metric",
       "x": 12,
-      "y": 14,
+      "y": 20,
       "width": 12,
       "height": 6,
       "properties": {
         "title": "API Gateway - p95 Latency",
-        "region": "ap-southeast-1",
+        "region": "${AWS_REGION}",
         "view": "timeSeries",
-        "period": 300,
+        "period": 60,
         "metrics": [
-          ["AWS/ApiGateway", "Latency", "ApiId", "cit4onmvhf", "Stage", "$default", {"stat": "p95"}],
-          ["AWS/ApiGateway", "IntegrationLatency", "ApiId", "cit4onmvhf", "Stage", "$default", {"stat": "p95"}]
+          [
+            "AWS/ApiGateway",
+            "Latency",
+            "ApiId",
+            "${HTTP_API_ID}",
+            "Stage",
+            "$default",
+            {
+              "stat": "p95"
+            }
+          ],
+          [
+            "AWS/ApiGateway",
+            "IntegrationLatency",
+            "ApiId",
+            "${HTTP_API_ID}",
+            "Stage",
+            "$default",
+            {
+              "stat": "p95"
+            }
+          ]
+        ],
+        "accountId": "${ACCOUNT_ID}",
+        "stacked": false,
+        "yAxis": {
+          "left": {
+            "min": 0
+          }
+        }
+      }
+    },
+    {
+      "type": "metric",
+      "x": 0,
+      "y": 26,
+      "width": 8,
+      "height": 6,
+      "properties": {
+        "title": "RDS - Client connections (maximum)",
+        "region": "${AWS_REGION}",
+        "accountId": "${ACCOUNT_ID}",
+        "view": "timeSeries",
+        "period": 60,
+        "stacked": false,
+        "yAxis": {
+          "left": {
+            "min": 0
+          }
+        },
+        "metrics": [
+          [
+            "AWS/RDS",
+            "DatabaseConnections",
+            "DBInstanceIdentifier",
+            "${DB_INSTANCE_ID}",
+            {
+              "stat": "Maximum"
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "type": "metric",
+      "x": 8,
+      "y": 26,
+      "width": 8,
+      "height": 6,
+      "properties": {
+        "title": "RDS - CPU utilization",
+        "region": "${AWS_REGION}",
+        "accountId": "${ACCOUNT_ID}",
+        "view": "timeSeries",
+        "period": 60,
+        "stacked": false,
+        "yAxis": {
+          "left": {
+            "min": 0,
+            "max": 100
+          }
+        },
+        "metrics": [
+          [
+            "AWS/RDS",
+            "CPUUtilization",
+            "DBInstanceIdentifier",
+            "${DB_INSTANCE_ID}",
+            {
+              "stat": "Average",
+              "label": "Average CPU"
+            }
+          ],
+          [
+            "AWS/RDS",
+            "CPUUtilization",
+            "DBInstanceIdentifier",
+            "${DB_INSTANCE_ID}",
+            {
+              "stat": "Maximum",
+              "label": "Maximum CPU"
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "type": "metric",
+      "x": 16,
+      "y": 26,
+      "width": 8,
+      "height": 6,
+      "properties": {
+        "title": "RDS - Freeable memory (minimum)",
+        "region": "${AWS_REGION}",
+        "accountId": "${ACCOUNT_ID}",
+        "view": "timeSeries",
+        "period": 60,
+        "stacked": false,
+        "yAxis": {
+          "left": {
+            "min": 0
+          }
+        },
+        "metrics": [
+          [
+            "AWS/RDS",
+            "FreeableMemory",
+            "DBInstanceIdentifier",
+            "${DB_INSTANCE_ID}",
+            {
+              "stat": "Minimum"
+            }
+          ]
         ]
       }
     }

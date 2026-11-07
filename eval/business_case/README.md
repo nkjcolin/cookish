@@ -1,9 +1,10 @@
 # Cookish initial cost model
 
-**Planning estimate, 24 October 2026. All money in USD.** Published Singapore
+**Planning estimate; Lambda pricing corrected 7 November 2026. All money in USD.** Published Singapore
 AWS rates are combined with assumed usage. The model is not a bill, measured
 cost per user, capacity test, profit forecast or replacement for Role 3's
-cloud/on-premise comparison. The model provider remains unselected.
+cloud/on-premise comparison. Deployed-provider usage has not been costed here;
+model-provider charges remain assumptions.
 
 The [business case draft](../../docs/business-case.md) uses these estimates.
 The [research notes](../../docs/business-case-research.md) cover the market,
@@ -36,8 +37,12 @@ The files serve different purposes:
 ## Price basis and fixed monthly basket
 
 Region: `ap-southeast-1`. Database: PostgreSQL `db.t4g.micro`, Single-AZ and 20 GB
-gp3. Lambda duration uses **x86** prices with **0.5 GB** memory for both functions;
-the database's Graviton processor does not imply ARM Lambda pricing.
+gp3. Lambda duration now uses **ARM64** prices, matching the API, AI and migration
+functions checked on 7 November 2026. The workload model uses **0.5 GB** for
+API and AI, matching the **512 MB verified for both functions** on that date.
+Migration is also 512 MB but its deployment-time invocations are not
+included in the monthly request scenarios. Architecture is a configuration fact;
+the durations, request counts and other usage inputs remain assumptions.
 
 | Assumed fixed quantity | Published unit price | Monthly USD |
 |---|---:|---:|
@@ -62,8 +67,8 @@ change the selected deployment region.
 
 | Variable service | Rate used | Source |
 |---|---:|---|
-| Lambda x86 compute | 0.0000166667/GB-second | [AWS Lambda price list](https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AWSLambda/current/ap-southeast-1/index.json) |
-| Lambda invocation | 0.20/million | Same Lambda list |
+| Lambda ARM64 compute | 0.0000133334/GB-second | [AWS Lambda price list](https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AWSLambda/current/ap-southeast-1/index.json), checked 7 November 2026 |
+| Lambda ARM64 invocation | 0.20/million | Same Lambda list |
 | HTTP API | **1.25/million billing units** | [API Gateway Singapore list](https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonApiGateway/current/ap-southeast-1/index.json) |
 | Amplify data served | 0.15/GB | Amplify list above |
 | Other internet egress | 0.12/GB | [AWS data transfer list](https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AWSDataTransfer/current/ap-southeast-1/index.json) |
@@ -71,8 +76,10 @@ change the selected deployment region.
 | Secrets API call | 0.000005/call | Secrets list above |
 | Cognito Essentials | 0.015/monthly active user before allowances | [Cognito Singapore list](https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonCognito/current/ap-southeast-1/index.json) |
 
-Rate records in the snapshot were published between 11 September and 22 October
-2026. This model uses the applicable first paid tiers. Its largest example
+The Lambda source was refreshed to AWS's 30 October 2026 price-list publication;
+other service records retain their 24 October retrieval dates. The selected ARM64
+duration tier runs from zero to 7.5 billion GB-seconds/month; request pricing uses
+the ARM product record too. This model uses the applicable first paid tiers. Its largest example
 remains below those tier ceilings; do not extrapolate to arbitrary traffic
 without adding the relevant tiers.
 
@@ -150,9 +157,9 @@ student credits, discounts or tax are deducted or added.
 
 | Active households | Low monthly cost | Base monthly cost | High monthly cost | Base per active household | Base per active login | Base allocated per paying household |
 |---:|---:|---:|---:|---:|---:|---:|
-| 100 | 32.46 | 34.56 | 48.64 | 0.3456 | 0.1728 | 3.4557 |
-| 1,000 | 65.14 | 86.08 | 226.85 | 0.0861 | 0.0430 | 0.8608 |
-| 10,000 | 391.93 | 601.27 | 2,009.04 | 0.0601 | 0.0301 | 0.6013 |
+| 100 | 32.46 | 34.55 | 48.59 | 0.3455 | 0.1727 | 3.4546 |
+| 1,000 | 65.11 | 85.96 | 226.39 | 0.0860 | 0.0430 | 0.8596 |
+| 10,000 | 391.65 | 600.08 | 2,004.36 | 0.0600 | 0.0300 | 0.6001 |
 
 The 10,000-household row holds the small deployment constant to expose cost
 sensitivity. **It does not establish that one micro database supports that load.**
@@ -165,9 +172,9 @@ At 1,000 active households under base usage:
 
 | Paying share | Paying households | Monthly infrastructure | Cost allocated per paying household | Gross subscription revenue |
 |---:|---:|---:|---:|---:|
-| 5% | 50 | 80.70 | 1.61 | 249.50 |
-| 10% | 100 | 86.08 | 0.86 | 499.00 |
-| 20% | 200 | 96.82 | 0.48 | 998.00 |
+| 5% | 50 | 80.59 | 1.61 | 249.50 |
+| 10% | 100 | 85.96 | 0.86 | 499.00 |
+| 20% | 200 | 96.69 | 0.48 | 998.00 |
 
 These figures show conditional infrastructure coverage, not profit. At smaller
 scale or lower conversion, fixed costs and the subsidy to free households can
@@ -205,7 +212,7 @@ usage. Keep credits and allowances separate from gross consumption.
 
 | Owner | Required input |
 |---|---|
-| Role 3 | Region, actual Lambda architecture/memory, Cognito tier, database/storage/networking and secrets-access configuration |
+| Role 3 | Recheck architecture/memory after configuration changes, plus Cognito tier, database/storage/networking and secrets-access configuration |
 | Roles 3 and 5 | Distinct active households, active accounts, free/paid split, new household share and import allowance definitions |
 | Role 3 | Requests by route, payload billing units, billed durations, cold starts, retries, build minutes and egress |
 | Roles 3 and 4 | Provider/model version, input/output tokens, image charges, failures, retries and billed cost per import |

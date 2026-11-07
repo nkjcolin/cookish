@@ -9,10 +9,11 @@ This is no longer a request waiting for Role 2 implementation. Role 2 remains
 the normal owner of database models/migrations; Role 5 owns recommendation
 queries, serialization and service wiring. Public API schemas are unchanged.
 
-**Apply the migration before deploying the new backend.** PostgreSQL CI at
-`f313566` passed all 549 backend tests, including migration preservation and the
-20 new workflow tests. AWS deployment checks remain pending. These results cover
-the merged integration, before the later protein/history additions.
+**The migration and backend are deployed.** On 7 November 2026, the migration
+returned revision `6f2c8d471a90` and the expected catalogue counts. PR #26 passed
+606 backend tests, 38 frontend tests and the AI job; its API/frontend changes
+are live. Core Cook/Shop checks also passed, as recorded in the
+[service handoff](role5-integration.md).
 
 ## Available now
 
@@ -143,30 +144,31 @@ the input reader alone is not a concurrency guarantee.
 ## Migration, verification and remaining work
 
 The SQL repository, snapshot codecs and public endpoint wiring are implemented.
-Before releasing the backend, deploy the updated migration Lambda and invoke
-the existing `app.migrate.handler`, which applies Alembic revisions and seeds
-the production ingredient/recipe catalogue. Verify revision `6f2c8d471a90` and
-seed success first. Users must restart old sessions. Recipe detail/star queries
-retain their existing household locking and timestamp/ID ordering.
+The 7 November deployment invoked `app.migrate.handler` successfully before
+updating the API, verifying revision `6f2c8d471a90`, 42 ingredients and 48 recipes.
+Keep that migration-first order for future releases. Users must restart old sessions.
+Recipe detail/star queries retain their existing household locking and timestamp/ID ordering.
 
 The local non-database suite passed 391 tests. Offline migration upgrade and
 downgrade SQL render successfully. The new migration preservation test exercises
 legacy rows and weights in a disposable PostgreSQL database. It was skipped
 locally because PostgreSQL is unavailable, then ran successfully in
 [CI at `f313566`](https://github.com/nkjcolin/cookish/actions/runs/42342203535),
-alongside all 20 new SQL workflow tests (549 backend tests total). The subsequent
-protein/history changes require a separate CI run.
+alongside all 20 new SQL workflow tests (549 backend tests total). The later
+protein/history additions passed CI with PR #25; PR #26 then passed
+606 backend tests, including the new inventory-matching tests.
 
 Database verification must cover concurrent same/different-key confirmation, stock-event
 key races with manual writes, stale inventory revisions, selection retries,
 rating replacement after weight clipping, cross-household access, historical
 snapshot stability after recipe/pack edits and rollback after an injected
 post-stock-event failure. These checks complement the input-reader,
-recipe/star/use-first and pure workflow tests. No AWS migration or deployment
-has been performed by this implementation task.
+recipe/star/use-first and pure workflow tests. Separate live checks verified
+purchase persistence, stock deduction, Maybe feedback and undo after deployment;
+they do not replace the concurrency and failure-path tests above.
 
-The remaining product dependencies are ingredient-ID matching for AI imports,
-compatible inventory/recipe units, and the frontend's route from an empty-stock
-suggestion to adding ingredients or shopping. The held-out runner is prepared,
-but the final freeze, 30 independent unseen scenarios and deployed Cook/Shop
-checks remain separate evaluation work.
+New inventory entries now match unique exact catalogue names/aliases, and the
+empty-stock recipe preview links to Buy/Kitchen. Unknown or ambiguous names,
+old free-text rows and general grams-to-pieces conversions remain unresolved.
+The held-out runner is prepared, but the final freeze and 30 independent unseen
+scenarios remain separate evaluation work.

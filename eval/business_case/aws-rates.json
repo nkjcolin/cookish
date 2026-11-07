@@ -140,10 +140,10 @@
       "service": "AWSLambda",
       "region": "ap-southeast-1",
       "source_url": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AWSLambda/current/ap-southeast-1/index.json",
-      "version": "20261022183959",
-      "publicationDate": "2026-10-22T18:39:59Z",
-      "retrieved": "2026-10-24",
-      "source_sha256": "f49dd0bcb13ff044c910ab4d71a7e04531ce9c36de66bbf14ce7de65142ea89b",
+      "version": "20261030234255",
+      "publicationDate": "2026-10-30T23:42:55Z",
+      "retrieved": "2026-11-07",
+      "source_sha256": "e78a44366ee089abfeefeed91eabb0a3eadb7d8db28b1dc33c0ebdad45331e00",
       "selected": [
         {
           "sku": "67ZV6RMYY72YSRDC",
@@ -271,6 +271,39 @@
                   "rateCode": "36D3E7396ZKUSWWW.JRTCKXETXF.6YS6EN2CT7",
                   "description": "AWS Lambda - Total Requests - Asia Pacific (Singapore)",
                   "unit": "Request",
+                  "rateUSD": "0.0000002000",
+                  "beginRange": "0",
+                  "endRange": "Inf",
+                  "appliesTo": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "sku": "V5T5H5YEU5SUN3C2",
+          "productFamily": "Serverless",
+          "attributes": {
+            "servicecode": "AWSLambda",
+            "location": "Asia Pacific (Singapore)",
+            "locationType": "AWS Region",
+            "group": "AWS-Lambda-Requests-ARM",
+            "groupDescription": "Invocation call for a Lambda function for ARM",
+            "usagetype": "APS1-Request-ARM",
+            "operation": "",
+            "regionCode": "ap-southeast-1",
+            "servicename": "AWS Lambda"
+          },
+          "terms": [
+            {
+              "offerTermCode": "JRTCKXETXF",
+              "effectiveDate": "2026-10-01T00:00:00Z",
+              "termAttributes": {},
+              "dimensions": [
+                {
+                  "rateCode": "V5T5H5YEU5SUN3C2.JRTCKXETXF.6YS6EN2CT7",
+                  "description": "AWS Lambda - Total Requests for ARM - Asia Pacific (Singapore)",
+                  "unit": "Requests",
                   "rateUSD": "0.0000002000",
                   "beginRange": "0",
                   "endRange": "Inf",
@@ -1099,31 +1132,33 @@
       "endRange": "Inf"
     },
     "lambda_gb_second": {
-      "usd": "0.0000166667",
+      "usd": "0.0000133334",
       "unit": "Lambda-GB-Second",
-      "description": "AWS Lambda - Total Compute - Asia Pacific (Singapore)-Tier-1",
+      "description": "AWS Lambda - Total Compute for ARM - Asia Pacific (Singapore)-Tier-1",
       "service": "AWSLambda",
       "region": "ap-southeast-1",
-      "sku": "67ZV6RMYY72YSRDC",
-      "rateCode": "67ZV6RMYY72YSRDC.JRTCKXETXF.CUKFZ388N3",
+      "architecture": "arm64",
+      "sku": "KSD76ZR243WEPWRS",
+      "rateCode": "KSD76ZR243WEPWRS.JRTCKXETXF.6NBUNBXSC3",
       "source_url": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AWSLambda/current/ap-southeast-1/index.json",
-      "publicationDate": "2026-10-22T18:39:59Z",
-      "retrieved": "2026-10-24",
+      "publicationDate": "2026-10-30T23:42:55Z",
+      "retrieved": "2026-11-07",
       "effectiveDate": "2026-10-01T00:00:00Z",
       "beginRange": "0",
-      "endRange": "6000000000"
+      "endRange": "7500000000"
     },
     "lambda_request": {
       "usd": "0.0000002000",
-      "unit": "Request",
-      "description": "AWS Lambda - Total Requests - Asia Pacific (Singapore)",
+      "unit": "Requests",
+      "description": "AWS Lambda - Total Requests for ARM - Asia Pacific (Singapore)",
       "service": "AWSLambda",
       "region": "ap-southeast-1",
-      "sku": "36D3E7396ZKUSWWW",
-      "rateCode": "36D3E7396ZKUSWWW.JRTCKXETXF.6YS6EN2CT7",
+      "architecture": "arm64",
+      "sku": "V5T5H5YEU5SUN3C2",
+      "rateCode": "V5T5H5YEU5SUN3C2.JRTCKXETXF.6YS6EN2CT7",
       "source_url": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AWSLambda/current/ap-southeast-1/index.json",
-      "publicationDate": "2026-10-22T18:39:59Z",
-      "retrieved": "2026-10-24",
+      "publicationDate": "2026-10-30T23:42:55Z",
+      "retrieved": "2026-11-07",
       "effectiveDate": "2026-10-01T00:00:00Z",
       "beginRange": "0",
       "endRange": "Inf"
@@ -1323,5 +1358,6 @@
       "beginRange": "0",
       "endRange": "10240"
     }
-  }
+  },
+  "lambda_updated": "2026-11-07"
 }

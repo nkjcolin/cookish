@@ -2,8 +2,9 @@
 
 Status on 7 November 2026: the public Cook/Shop services now delegate to the
 real engines through a PostgreSQL repository. Wenlong authorized the required
-storage additions for this integration. The source changes have not been
-deployed to AWS; apply migration `6f2c8d471a90` before releasing the new backend.
+storage additions for this integration. Migration `6f2c8d471a90` and the updated
+backend are deployed. PR #26's frontend preview and exact-name inventory matching
+are also live. Core user-flow checks passed; see the verification section below.
 
 The implementation consists of:
 
@@ -38,12 +39,11 @@ additional persistence, migration or API fields.
 
 ## Workflow behavior
 
-These flows are implemented in the shared workflow and are now wired to SQL.
-At source `f313566`, [CI](https://github.com/nkjcolin/cookish/actions/runs/42342203535)
-passed all 549 backend tests, including the new migration test and 20 PostgreSQL
-workflow tests. Frontend and AI jobs also passed. This is database integration
-evidence, not verification of the deployed AWS journey or the later protein/history
-changes. The latter require their own CI run.
+These flows are implemented in the shared workflow and are wired to SQL.
+The original integration's [CI](https://github.com/nkjcolin/cookish/actions/runs/42342203535)
+included migration preservation and 20 PostgreSQL workflow tests. The later
+[PR #26](https://github.com/nkjcolin/cookish/pull/26) passed 606 backend tests,
+38 frontend tests and the AI job, including the protein/history additions.
 
 | Flow | Implemented behavior |
 |---|---|
@@ -187,28 +187,30 @@ unchanged:
 | `cook.select` / `confirm` / `give_feedback` | `select_cook` / `confirm_cook` / `feedback` |
 | `shop.start_session` / `adjust` / `confirm_basket` | `start_shop` / `adjust_shop` / `confirm_shop` |
 
-Before releasing the new backend:
+Verified on AWS on 7 November 2026:
 
-1. Keep CI green for the reviewed release commit. Source `f313566` passed 549
-   backend tests with PostgreSQL; the local non-database run passed 391 tests.
-   These are the merged integration's results, before the protein/history additions.
-2. Package the updated migration Lambda and invoke the existing
-   `app.migrate.handler`. Verify revision `6f2c8d471a90` and successful production
-   seeding before directing traffic to the new backend. The handler seeds the
-   catalogue and recipes, not the demo household.
-3. Deploy the backend, restart legacy browser sessions and verify the real
-   suggestion, details, selection, confirmation, feedback and purchase flows.
-   This change has not yet been deployed or smoke-tested on AWS.
+- Migration returned revision `6f2c8d471a90`, 42 ingredients, 48 recipes,
+  20 variants and 383 recipe ingredient lines. No demo household was seeded.
+- PR #26's API and frontend release is live. A new account completed onboarding,
+  received real Cook/Shop suggestions and opened the cold-start recipe preview.
+- A tofu purchase used its catalogue 300 g pack definition and persisted after
+  reload. New egg stock linked to canonical egg and used `pcs`.
+- Recipe selection, cooking/stock deduction, Maybe feedback and purchase/consumption
+  undo were exercised. Test stock was cleaned up afterward.
+
+Future backend releases should still update/invoke the migration function first,
+verify its schema/seed response, and then update the API. Restart legacy sessions
+with missing snapshots. See [deployment instructions](../infra/deployment.md).
 
 Known remaining gaps are separate from the completed source wiring:
 
-- A missing-stock fallback still cannot be selected until essentials are added
-  or checked. The frontend selects before opening recipe details, so an empty
-  kitchen can reach a selection conflict; Role 1's add-stock/shop navigation
-  remains necessary.
-- AI-imported free-text stock without catalogue IDs cannot satisfy canonical
-  recipe ingredients. Roles 1/2/4 still need to agree and implement matching.
+- Recipe preview now works before stock selection. Missing essentials still need
+  adding or checking before cooking; preview does not bypass that guard.
+- New inventory entries link only through unique exact canonical names or aliases.
+  Unknown/ambiguous names remain free text, and old rows are not backfilled.
 - Grams, pieces and packs require compatible metadata; no conversion is guessed.
-- Deployed latency/elasticity evidence and the 30 independent held-out cases
-  remain pending. Unseen evaluation follows the
-  [freeze protocol](../eval/reco_scenarios/README.md).
+- A 50-VU authenticated read test has run with zero client errors and observed
+  API concurrency growth/recovery. It does not test independent-household
+  recommendation transactions, stock writes or AI scaling; see the [recorded read-test result](../eval/load/results/2026-11-07-read-only-50-vus.md).
+- The final freeze and 30 independent held-out cases remain pending. Unseen
+  evaluation follows the [freeze protocol](../eval/reco_scenarios/README.md).
