@@ -18,8 +18,11 @@ Both existing monthly budgets, `cookish-monthly-20` ($20) and
 `cookish-monthly-40` ($40), were checked and saved with the user-approved email
 recipient added; the existing recipient was retained. Both cover the whole AWS
 account (no filters) and alert when actual cost exceeds 100% of the budget.
-The new recipient has not received the AWS Budgets verification email, so that
-verification remains pending. Budget alert delivery has not been tested.
+The new recipient remains unverified. The console's Send verification action
+was denied because the school role lacks `notifications-contacts:CreateEmailContact`,
+`notifications-contacts:SendActivationCode` and `notifications-contacts:ListEmailContacts`.
+An administrator for the school account must resolve or complete this verification;
+no IAM permissions were changed. Budget alert delivery has not been tested.
 
 `cloudwatch-dashboard.json` is the reusable source template. Render it with verified resource IDs
 before applying it. The renderer does not contact AWS or deploy a dashboard.
@@ -88,5 +91,6 @@ No-data graphs are not zeroes. Check the account, region, resource dimension,
 time range and metric publication delay before interpreting them. Neither the authenticated read-only load profile nor the Cook/Shop session
 profile calls the AI service, so neither demonstrates AI scaling. The dashboard
 source does not provision alarms, SNS subscriptions or budgets; those resources
-are configured separately. Actual alarm delivery, the new budget recipient's
-verification, budget alert delivery and AI timeout classification remain unchecked.
+are configured separately. Actual alarm delivery, budget alert delivery and AI timeout classification remain
+unchecked. The new budget recipient's verification is blocked by the permission
+denial above.

@@ -71,7 +71,7 @@ The deployed entry points are:
 | Cognito user pool and app client | Email and password, email verification |
 | Amplify Hosting | Connected to the repository, builds `frontend/`, rewrites every non-file path to `/index.html` |
 | CloudWatch | Live dashboard and two error alarms verified; enabled actions target `cookish-api-alerts`, whose email subscription is confirmed |
-| AWS Budgets | Both $20/$40 monthly budgets cover the whole account and alert on actual cost >100%. Approved recipient added to both, existing recipient retained; new recipient verification remains pending |
+| AWS Budgets | Both $20/$40 monthly budgets cover the whole account and alert on actual cost >100%. Approved recipient added to both, existing recipient retained; new recipient verification is blocked by missing `notifications-contacts` permissions |
 
 ## What other roles expect from you
 
@@ -140,7 +140,7 @@ Follow [deployment.md](deployment.md). Code uploaded by hand is replaced by the 
 
 1. Extend the verified core browser flow with any remaining replay and failure-path checks. General grams-to-pieces conversion, independent held-out evaluation and AI outage behavior remain separate gaps.
 2. Keep checking the current main CI deployment and final Amplify build result; [deployment.md](deployment.md) distinguishes the successful SAM run from manual backup, hash and revision safeguards that are not automated.
-3. Verify actual alarm notification delivery and complete the new email recipient's AWS Budgets verification when the email arrives. Both account-wide budget alerts are configured, but budget delivery is untested. Both error alarms already target a confirmed SNS email subscription.
+3. Verify actual alarm notification delivery. The school role was denied permission to send the new budget recipient's verification email; a school account administrator must resolve or complete verification (see [monitoring](monitoring.md)). Both account-wide budget alerts are configured, but budget delivery is untested. Both error alarms already target a confirmed SNS email subscription.
 4. Preserve the [completed 50-VU read-test evidence](../eval/load/results/2026-11-07-read-only-50-vus.md) and its workload limits. Independent-household recommendation/write load and the longer soak test remain; see [eval/load](../eval/load/).
 5. Fill in the cloud versus on-premise comparison using measured inputs, including ARM64 Lambda pricing and the Secrets Manager endpoint.
 
