@@ -1,4 +1,4 @@
-"""Every endpoint in SPEC A7 exists and its stub returns a body that fits the contract."""
+"""Endpoint inventory and contracts; persisted journeys have real-ID database tests."""
 
 from uuid import uuid4
 
@@ -148,6 +148,11 @@ REAL_DATABASE = {
     ("GET", "/api/recipes/{recipe_id}"),
     ("PUT", "/api/recipes/{recipe_id}/star"),
 }
+REAL_DATABASE.update(
+    (method, template)
+    for method, template, *_ in ENDPOINTS
+    if template.startswith(("/api/cook/", "/api/shop/"))
+)
 STUBS = [e for e in ENDPOINTS if (e[0], e[1]) not in REAL_DATABASE]
 STUB_IDS = [f"{e[0]} {e[1]}" for e in STUBS]
 
@@ -200,12 +205,8 @@ def test_committed_openapi_file_is_current() -> None:
     )
 
 
-def test_no_result_lists_what_can_be_relaxed() -> None:
+def test_unknown_cook_session_is_not_a_sample_suggestion() -> None:
     response = client.post(f"/api/cook/sessions/{ANY}/adjust", json={"max_minutes": 15})
 
     assert response.status_code == 404
-    assert response.json()["error"] == {
-        "code": "NO_RESULT",
-        "message": "Nothing fits all of that",
-        "details": {"relaxable": ["max_minutes", "tags"]},
-    }
+    assert response.json()["error"]["code"] == "NOT_FOUND"

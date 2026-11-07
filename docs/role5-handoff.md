@@ -1,12 +1,11 @@
 # Role 5: recipe catalogue and ingredient handoff
 
-Status after [PR #21](https://github.com/nkjcolin/cookish/pull/21) merged on
-5 November 2026: the 48 reviewed recipes, Role 2's 42-row ingredient catalogue
-and seed loader are available. Role 5's pure Cook/Shop engines, feedback learning,
-SQL input reader, recipe details, household stars and use-first endpoint are
-implemented. Cook/Shop session, confirmation and rating endpoints still use mocks
-pending the agreed persistence adapter. See the [service handoff](role5-integration.md)
-for that remaining work.
+Status on 7 November 2026: the 48 reviewed recipes, Role 2's 42-row ingredient
+catalogue and seed loader are available. Cook/Shop sessions, selection,
+confirmation and feedback now call the real engines through the SQL repository.
+Recipe details, household stars and use-first remain database-backed. Apply the
+new `6f2c8d471a90` migration before deploying the integration; its AWS journey
+has not yet been verified. See the [service handoff](role5-integration.md).
 
 Role 2's `ingredients.csv` is the authoritative ingredient source for Role 5
 recommendations and Role 4 matching. The request manifest records the original
@@ -61,7 +60,7 @@ rows and reads household preferences, inventory and stars in the caller's transa
 
 The recipe content handoff is approved by Wenlong and available to Role 2.
 All 48 review flags are true; the approval record identifies the exact recipe
-version and the user statement. Cooking trials and full Cook/Shop persistence
+version and the user statement. Cooking trials and deployed Cook/Shop verification
 remain separate work. Future unreviewed additions should remain excluded from a release
 until their review is recorded.
 
@@ -87,36 +86,49 @@ until their review is recorded.
   inputs. Use the delivered CSV aliases at runtime; Role 2 owns their mappings
   and Role 4 can report observed matching gaps.
 
-## Shared data decisions before service integration
+## Service integration and remaining shared decisions
 
-The [service integration handoff](role5-integration.md) now contains the implemented
-workflow and repository port, Role 5's adapter responsibilities, proposed storage
-for Role 2 and remaining Postgres workflow tests. Cook/Shop sessions, confirmations
-and ratings remain mocked. Recipe details, stars and use-first already use the
-database without the proposed migration.
+The [service integration handoff](role5-integration.md) describes the implemented
+workflow, SQL repository, versioned snapshots and PostgreSQL tests. The new
+migration stores session history, selection and basket snapshots, learning
+evidence and confirmation replay responses. Public Cook/Shop functions now use
+that storage rather than sample data. The migration must run before the new
+backend is used; existing snapshot-free sessions must be restarted.
 
 The table distinguishes implemented behavior from decisions still needing Roles
 1/2's agreement; it does not introduce shared contract changes.
-The existing service signatures, API schemas, enum values and migrations are
-unchanged by this handoff.
+Service signatures, public API schemas and enum values remain unchanged.
 
 | Topic | Proposed next step |
 |---|---|
 | Taste tags | Use the existing `TasteTag` values. `low_oil` means at most 5 ml total added cooking oil, including seasoning oils, per two servings. Reserve `high_protein` for explicit protein additions to a base recipe. `vegetable_rich` requires at least 300 g of the defined vegetable set per two servings. The [review guide](recipe-review.md) details these transparent authoring heuristics; they are culinary ranking features, and nutrition metrics or user-facing nutrition claims require separate work. |
-| Internal feedback state | Keep learned weights per household, as SPEC A6 requires. `get_preferences()` currently returns `Preferences`, which omits `taste_weights`. Agree internal database/repository access with Role 2; the public preferences response does not need to expose learned weights. |
+| Internal feedback state | Learned weights remain per household, as SPEC A6 requires. The SQL repository reads ordered learning evidence and updates `preferences.taste_weights` internally; the public preferences response still does not expose learned weights. |
 | Weight representation | Pure Cook/Shop default to an empty map and treat absent features as zero, using `tag:low_oil` and `cuisine:chinese` namespaces. Pure learning now produces this map. Agree how to derive main-protein features from ingredient metadata before adding them. |
-| Learning updates | Implemented policy: step 0.25, bounds −2 to +2; confirmed cooking gives provisional +0.0625. Like/Maybe/Dislike replace that meal's contribution with +0.25/0/−0.25. Retries are no-ops. Replay one evidence entry per cook record in first-confirmation order to handle changed ratings after clipping. Agree persistence of feature snapshots, order and current ratings; the clipped map alone cannot support exact replacement. See the [learning handoff](../backend/app/reco/README.md#feedback-learning-implemented-milestone). |
+| Learning updates | Implemented policy: step 0.25, bounds −2 to +2; confirmed cooking gives provisional +0.0625. Like/Maybe/Dislike replace that meal's contribution with +0.25/0/−0.25. Retries are no-ops. Persisted evidence retains frozen features, current ratings and first-confirmation order for replay after clipping. Legacy nonempty weights without evidence require an explicit migration decision. See the [learning handoff](../backend/app/reco/README.md#feedback-learning-implemented-milestone). |
 | Shop purchase metadata | The SQL reader supplies category, buyable flag, pack unit/size/measure and default-storage shelf-life estimate from the existing catalogue. Null/incompatible pack conversion retains a check item rather than inventing packs. Roles 1/2/5 still need to agree how the UI and confirmation flow resolve counted ingredients requiring a quantity check. Do not default these cases to one verified pack. |
-| Basket revisions | Persist `to_basket` item IDs, derived from basket UUID plus ingredient UUID. A revised basket needs a fresh saved UUID. Confirm only its saved lines and actual purchases through Role 2's stock-event service. The pure planner does not mutate stock. |
-| First use, no ratings | Implemented in the pure Cook engine: hard constraints, inventory and fixed scoring defaults with zero learned weights and no history penalty. The SQL reader supplies actual preferences/inventory; session endpoints still need the persistence adapter and workflow wiring. |
+| Basket revisions | The SQL workflow persists `to_basket` item IDs and frozen purchase metadata. Each revision has a fresh basket UUID; confirmation uses its saved lines and Role 2's stock-event service. The pure planner does not mutate stock. |
+| First use, no ratings | The SQL-backed session uses actual preferences and inventory with fixed scoring defaults, zero learned weights and no history penalty. Missing essential stock still requires resolution before selection. |
 | First use, no inventory | Do not mark missing stock as available or fabricate an inventory batch for `StockCheck.item`. SPEC B5 permits missing-essential fallback suggestions; agree with Role 1 how their missing ingredients lead to adding stock or shopping before cooking. |
 
-Role 2 still owns every database migration and ingredient row. Role 5 owns
-recipe content and queries for recommendation sessions, feedback and baskets.
+Role 2 normally owns database models, migrations and ingredient rows. On
+7 November 2026, Wenlong explicitly authorised the required recommendation
+storage additions as an exception so this integration could proceed. Unrelated
+inventory/schema changes remain with Role 2. Role 5 owns recipe content and the
+recommendation queries, serialization and service wiring.
 Changes to shared contracts follow the procedure in
 [`docs/init.md`](init.md#changing-an-agreement-between-roles).
 
+Remaining cross-role work includes matching AI-imported food to canonical
+ingredient IDs, resolving grams versus pieces/packs, and the empty-kitchen UI
+route from missing ingredients to adding stock or shopping. Main-protein features
+and the recent-cooked history window still need agreed mappings and policy.
+
 ## Evaluation and report handoff
+
+The SQL integration passed [CI at `5c8ca30`](https://github.com/nkjcolin/cookish/actions/runs/42341902849)
+on 7 November: 547 backend tests, including the new migration test and 18 SQL
+workflow tests. Frontend and AI jobs also passed. These results do not establish
+that the new migration/backend has been deployed or that the AWS user journey works.
 
 The 70 development scenarios are implemented. The separate held-out runner has
 been rehearsed with copies of those development cases: 70 scenarios and 85 steps

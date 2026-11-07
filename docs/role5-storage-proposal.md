@@ -1,10 +1,17 @@
-# Role 5 database integration: next migration proposal
+# Role 5 database integration: storage implementation
 
-Originally prepared 5 November 2026 against `main` at `a360567`; status notes
-updated after PR #21 merged at `a6d06a5`. **Proposed for Role 2 to
-review and implement; no migration or shared API change is included.** Role 2
-owns the database models and migrations. Role 5 owns the recommendation queries,
-serialization and endpoint wiring.
+Originally proposed on 5 November 2026 against `main` at `a360567`. On 7 November,
+Wenlong authorized the necessary storage changes alongside the Role 5 integration.
+The additions below are now implemented in the shared models and new migration
+[`6f2c8d471a90`](../backend/migrations/versions/6f2c8d471a90_recommendation_storage.py),
+following initial revision `d0ae2870ce7e`. The initial migration is unchanged.
+This is no longer a request waiting for Role 2 implementation. Role 2 remains
+the normal owner of database models/migrations; Role 5 owns recommendation
+queries, serialization and service wiring. Public API schemas are unchanged.
+
+**Apply the migration before deploying the new backend.** PostgreSQL CI at
+`5c8ca30` passed all 547 backend tests, including migration preservation and the
+18 new workflow tests. AWS deployment checks remain pending.
 
 ## Available now
 
@@ -12,13 +19,14 @@ serialization and endpoint wiring.
 [`recommendation_inputs.py`](../backend/app/services/recommendation_inputs.py)
 loads reviewed recipes, ingredient metadata, purchase definitions and household
 stars from the existing tables. It delegates preferences and inventory reads to
-Role 2, using the caller's SQLAlchemy transaction. It is a component of the future
-repository, not a complete implementation of `RecommendationRepository`.
+Role 2, using the caller's SQLAlchemy transaction. It is now used by
+[`SqlRecommendationRepository`](../backend/app/services/recommendation_sql.py),
+the complete persistence adapter for `RecommendationRepository`.
 
-The 42 ingredient rows and 48 approved recipes can now feed the pure engines.
-Cook/Shop session endpoints still use mocks until the remaining repository is
-implemented and tested. Recipe detail/star and use-first endpoints already use
-the existing database services; they do not require the proposed storage below.
+The 42 ingredient rows and 48 approved recipes feed the pure engines. Public
+Cook/Shop session, selection, confirmation and rating functions now call the SQL
+workflow rather than mocks. Recipe detail/star and use-first retain their
+existing database services and public signatures.
 
 Mapping choices in this reader:
 
@@ -49,14 +57,13 @@ Mapping choices in this reader:
   with its ID rather than getting a fabricated time. Missing or invalid safety
   and purchase metadata also fails validation.
 
-## Storage additions requested from Role 2
+## Implemented storage additions
 
-Use a **new migration**, leaving the merged initial migration unchanged. These
-fields correspond directly to the existing internal records in
+The **new migration** adds fields corresponding to the internal records in
 [`recommendation_repository.py`](../backend/app/services/recommendation_repository.py).
-Keep existing relational columns as the searchable identity/status fields.
+Existing relational columns remain the searchable identity/status fields.
 
-| Table | Proposed addition | Why |
+| Table | Addition | Why |
 |---|---|---|
 | `sessions` | `recommendation_state JSONB NULL` | Versioned Cook/Shop state; saved suggestion history; selected-record/current-basket link. Existing `constraints` and `shown_recipe_ids` alone cannot reproduce Previous or all accumulated engine state. |
 | `cook_records` | `selection_snapshot JSONB NULL` | Immutable Candidate and proposed consumption with original batch IDs, revisions, units and quantities; includes the selected public CookRecord response. |
@@ -65,36 +72,40 @@ Keep existing relational columns as the searchable identity/status fields.
 | new `recommendation_learning` | `household_id UUID PRIMARY KEY REFERENCES households`, `state JSONB NOT NULL`, `updated_by UUID REFERENCES users NOT NULL`, `updated_at TIMESTAMPTZ NOT NULL` | One ordered evidence collection per household: one entry per confirmed cook record with recipe ID, frozen features and current rating. Keep first-confirmation order across changed ratings. The clipped `preferences.taste_weights` map cannot reconstruct this. |
 | new `recommendation_confirmations` | `(household_id UUID, idempotency_key UUID)` composite primary key; `operation TEXT NOT NULL`; `target_id UUID NOT NULL`; `request_json TEXT NOT NULL`; `response_snapshot JSONB NOT NULL`; `stock_event_id UUID REFERENCES stock_events NOT NULL`; `created_at TIMESTAMPTZ NOT NULL` | Replay the exact successful response and compare the normalized request, not just the stock event's target IDs. Constrain operation to `cook` / `shop`; reference the household. |
 
-All JSON snapshots should carry `schema_version: 1`; Role 5 will encode/decode
-UUIDs, enums and timestamps explicitly, validate required fields and reject
-unknown versions. `recommendation_state` stores the complete CookSession or
-ShopSession state, plus the history/current links in the corresponding port
-record. Normal `sessions.position`, status, people and expiry remain consistent
-with that state. Store the expiry in `sessions.expires_at`, not a second mutable
-source of truth in each snapshot.
+[`recommendation_snapshots.py`](../backend/app/services/recommendation_snapshots.py)
+uses the envelope `{"schema_version": 1, "kind": "...", "payload": {...}}`.
+The payload is the complete typed port record, with UUIDs, enums and timestamps
+encoded as JSON values. The codec rejects missing or unexpected fields,
+unsupported versions, invalid types and inconsistent identities. Sets use
+stable ordering; history and meal-evidence order are preserved.
 
-The learning state is `{"schema_version": 1, "meals": [...]}`, preserving the
-MealEvidence array order and the learning configuration used to derive weights.
-Each entry contains `record_id`, `recipe_id`, `features` and `rating`. Keep
-feedback audit entries in `recipe_feedback`; do not treat retries or rating
-edits as additional meals. Save evidence, audit actor and derived weights in
-one transaction. A future larger-scale schema can normalize these entries;
-the project catalogue/workload does not yet require that complexity.
+`recommendation_state` contains the complete CookSessionRow or ShopSessionRow,
+including engine state, history and current links. The payload includes its
+recorded expiry, but repository reads override that value with the owning
+`sessions.expires_at`; the relational column remains authoritative. The adapter
+also checks snapshot identities and relevant relational fields before use.
+
+The learning envelope has `kind: "learning"`; its payload contains
+`household_id`, `meals` and `config`. Each meal contains `record_id`, `recipe_id`,
+frozen `features` and current `rating`. The adapter saves evidence, acting user,
+audit entries in `recipe_feedback` and derived `preferences.taste_weights` in
+one transaction. Retries and rating edits do not create additional meal evidence.
 
 Nullable snapshots allow existing rows through migration without inventing
-history. Legacy sessions/records/baskets missing required snapshots must be
-rejected by the new adapter, with a clear restart-session response; do not
-retroactively reconstruct them from today's inventory or recipe. Existing
-nonempty taste weights without evidence need an explicit migration/reset
-decision before learning writes are enabled; never silently erase them.
+history. The adapter rejects legacy sessions/records/baskets missing required
+snapshots with `CONFLICT` and a restart-session message. It does not reconstruct
+old responses from today's inventory or recipe. Existing nonempty taste weights
+without evidence block workflow learning loads, including new recommendations,
+until an explicit migration decision is made. The migration does not reset them.
 
-## Transaction and lock rules to confirm
+## Implemented transaction and lock rules
 
 1. Use the caller's transaction for all repository methods and
    `apply_stock_event`. Commit the event, target status, learning and replay
    response together, or roll them all back.
-2. For the first implementation, serialize Role 5 mutations on the household
-   row **before** session/record/basket/learning locks. This gives a lock even
+2. Serialize Role 5 mutations with `FOR NO KEY UPDATE` on the authenticated
+   household row **before** session/record/basket/learning locks. Check household
+   membership when constructing the repository. This gives a lock even
    before a learning or replay row exists, and a consistent order for feedback,
    selection, adjustment and confirmation. Different households remain parallel.
 3. The replay table is not a separate key namespace. Before confirmation,
@@ -102,7 +113,9 @@ decision before learning writes are enabled; never silently erase them.
    take Role 5's household lock, so after `apply_stock_event` returns, require
    a matching operation/target and reject a stock event not owned by this
    confirmation. Role 2's unique `(household_id, idempotency_key)` still arbitrates
-   races with manual writes. Never accept a replay for a different request body.
+   races with manual writes. The adapter tracks the newly inserted stock event
+   and rejects a competing operation's replay. Never accept a saved confirmation
+   for a different validated request body.
 4. Different keys must not confirm the same target twice. A confirmed status
    under lock rejects another key. Expired sessions cannot confirm for the first
    time; a previously successful matching replay remains available after expiry.
@@ -111,23 +124,37 @@ decision before learning writes are enabled; never silently erase them.
 
 Role 2 already supports empty stock-event line lists, revision checks and
 conflicting operation keys in the merged write path; no signature change is
-requested. Role 5 will update only its `last_*` fields and learned weights,
+requested. Role 5 updates only its `last_*` fields and learned weights,
 preserving user preferences. Selection and confirmation must re-read inventory;
 the input reader alone is not a concurrency guarantee.
 
-## Next implementation and verification
+## Migration, verification and remaining work
 
-After agreement and migration: complete the SQL repository, implement versioned
-snapshot codecs, then install `RecommendationWorkflow` behind the existing
-Cook/Shop functions. Recipe detail/star queries are already implemented against
-the existing tables in `services/recipe_details.py`; preserve their household
-locking and timestamp/ID ordering when integrating the full repository.
+The SQL repository, snapshot codecs and public endpoint wiring are implemented.
+Before releasing the backend, deploy the updated migration Lambda and invoke
+the existing `app.migrate.handler`, which applies Alembic revisions and seeds
+the production ingredient/recipe catalogue. Verify revision `6f2c8d471a90` and
+seed success first. Users must restart old sessions. Recipe detail/star queries
+retain their existing household locking and timestamp/ID ordering.
 
-Database tests must cover concurrent same/different-key confirmation, stock-event
+The local non-database suite passed 391 tests. Offline migration upgrade and
+downgrade SQL render successfully. The new migration preservation test exercises
+legacy rows and weights in a disposable PostgreSQL database. It was skipped
+locally because PostgreSQL is unavailable, then ran successfully in
+[CI at `5c8ca30`](https://github.com/nkjcolin/cookish/actions/runs/42341902849),
+alongside all 18 new SQL workflow tests (547 backend tests total).
+
+Database verification must cover concurrent same/different-key confirmation, stock-event
 key races with manual writes, stale inventory revisions, selection retries,
 rating replacement after weight clipping, cross-household access, historical
 snapshot stability after recipe/pack edits and rollback after an injected
-post-stock-event failure. These are additional to the current input-reader
-tests, recipe/star/use-first database tests and pure workflow tests. The held-out
-runner is prepared, but the final freeze, 30 independent unseen scenarios and
-deployed Cook/Shop checks stay separate final evaluation work.
+post-stock-event failure. These checks complement the input-reader,
+recipe/star/use-first and pure workflow tests. No AWS migration or deployment
+has been performed by this implementation task.
+
+The remaining product dependencies are ingredient-ID matching for AI imports,
+compatible inventory/recipe units, and the frontend's route from an empty-stock
+suggestion to adding ingredients or shopping. Across-session recent-cooked
+repetition still needs an agreed history window. The held-out runner is prepared,
+but the final freeze, 30 independent unseen scenarios and deployed Cook/Shop
+checks remain separate evaluation work.
