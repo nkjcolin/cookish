@@ -103,8 +103,9 @@ Service signatures, public API schemas and enum values remain unchanged.
 |---|---|
 | Taste tags | Use the existing `TasteTag` values. `low_oil` means at most 5 ml total added cooking oil, including seasoning oils, per two servings. Reserve `high_protein` for explicit protein additions to a base recipe. `vegetable_rich` requires at least 300 g of the defined vegetable set per two servings. The [review guide](recipe-review.md) details these transparent authoring heuristics; they are culinary ranking features, and nutrition metrics or user-facing nutrition claims require separate work. |
 | Internal feedback state | Learned weights remain per household, as SPEC A6 requires. The SQL repository reads ordered learning evidence and updates `preferences.taste_weights` internally; the public preferences response still does not expose learned weights. |
-| Weight representation | Pure Cook/Shop default to an empty map and treat absent features as zero, using `tag:low_oil` and `cuisine:chinese` namespaces. Pure learning now produces this map. Agree how to derive main-protein features from ingredient metadata before adding them. |
-| Learning updates | Implemented policy: step 0.25, bounds −2 to +2; confirmed cooking gives provisional +0.0625. Like/Maybe/Dislike replace that meal's contribution with +0.25/0/−0.25. Retries are no-ops. Persisted evidence retains frozen features, current ratings and first-confirmation order for replay after clipping. Legacy nonempty weights without evidence require an explicit migration decision. See the [learning handoff](../backend/app/reco/README.md#feedback-learning-implemented-milestone). |
+| Weight representation | Pure Cook/Shop default to an empty map and treat absent features as zero. Features use `tag:low_oil`, `cuisine:chinese` and `protein:soy` namespaces. The explicit [protein mapping](../backend/app/reco/protein.py) uses eight catalogue ingredient IDs and six categories: poultry, egg, soy, legume, fish and shellfish. Only essential lines contribute; mixed meals can have multiple categories, each counted once. This is a culinary feature, not a nutrition measurement. |
+| Learning updates | Implemented policy: step 0.25, bounds −2 to +2; confirmed cooking gives provisional +0.0625. Like/Maybe/Dislike replace that meal's contribution with +0.25/0/−0.25. Retries are no-ops. Persisted evidence retains frozen features, current ratings and first-confirmation order for replay after clipping. Earlier cuisine/tag-only evidence stays unchanged when edited; protein features apply to newly confirmed meals, with no backfill. Legacy nonempty weights without evidence require an explicit migration decision. See the [learning handoff](../backend/app/reco/README.md#feedback-learning-implemented-milestone). |
+| Recent meals | Before each Cook ranking, load confirmed meals from the last seven elapsed days, including the boundary. Use the matching consumption event's time, excluding undone/future events and other households. A recently cooked recipe gets one repetition penalty (−1 with the default weight), regardless of how often it was cooked. It remains eligible. |
 | Shop purchase metadata | The SQL reader supplies category, buyable flag, pack unit/size/measure and default-storage shelf-life estimate from the existing catalogue. Null/incompatible pack conversion retains a check item rather than inventing packs. Roles 1/2/5 still need to agree how the UI and confirmation flow resolve counted ingredients requiring a quantity check. Do not default these cases to one verified pack. |
 | Basket revisions | The SQL workflow persists `to_basket` item IDs and frozen purchase metadata. Each revision has a fresh basket UUID; confirmation uses its saved lines and Role 2's stock-event service. The pure planner does not mutate stock. |
 | First use, no ratings | The SQL-backed session uses actual preferences and inventory with fixed scoring defaults, zero learned weights and no history penalty. Missing essential stock still requires resolution before selection. |
@@ -120,15 +121,17 @@ Changes to shared contracts follow the procedure in
 
 Remaining cross-role work includes matching AI-imported food to canonical
 ingredient IDs, resolving grams versus pieces/packs, and the empty-kitchen UI
-route from missing ingredients to adding stock or shopping. Main-protein features
-and the recent-cooked history window still need agreed mappings and policy.
+route from missing ingredients to adding stock or shopping. Protein features and
+the seven-day recent-meal policy are now implemented without public API or
+snapshot-format changes.
 
 ## Evaluation and report handoff
 
-The SQL integration passed [CI at `5c8ca30`](https://github.com/nkjcolin/cookish/actions/runs/42341902849)
-on 7 November: 547 backend tests, including the new migration test and 18 SQL
+The merged SQL integration passed [CI at `f313566`](https://github.com/nkjcolin/cookish/actions/runs/42342203535)
+on 7 November: 549 backend tests, including the new migration test and 20 SQL
 workflow tests. Frontend and AI jobs also passed. These results do not establish
 that the new migration/backend has been deployed or that the AWS user journey works.
+They predate the protein/history changes; those changes require their own CI run.
 
 The 70 development scenarios are implemented. The separate held-out runner has
 been rehearsed with copies of those development cases: 70 scenarios and 85 steps

@@ -135,15 +135,27 @@ The service adapter supplies:
 | `dict[UUID, CatalogIngredient]` | Authoritative ingredient identity, allergens, diet flags, tracking mode, staple flag and a perishable classification. All fields are required. Missing metadata excludes the entire recipe, including optional ingredients. These internal fields do not change the public ingredient response. |
 | `list[InventoryItem]` | Household-scoped snapshot from `get_inventory_snapshot`; removed items excluded and freshness already computed by Role 2. Free-text/unmapped batches cannot satisfy a canonical ingredient. |
 | `Preferences` | Current household preferences; all requested diets and all required equipment must be satisfied. |
-| `CookSession` | People, accumulated constraints, shown/skipped/history IDs, and an optional explicitly strict time cap. New sessions use the remembered people count. |
-| `as_of` | A timezone-aware instant from `app.clock.now()`, passed once by the service. Scoring uses its Singapore date. |
+| `CookSession` | People, accumulated constraints, shown/skipped/history IDs, recent-cooked recipe IDs, and an optional explicitly strict time cap. New sessions use the remembered people count. |
+| `as_of` | A timezone-aware ranking instant from `app.clock.now()`, supplied by the service after acquiring the household lock. Scoring uses its Singapore date. |
 | `taste_weights` | Optional household feature map. An omitted map means zero learned preference. No history is invented. |
 
 `SqlRecommendationInputs` maps `CatalogIngredient.perishable` using Role 2's
 `PERISHABLE_CATEGORIES` and the stored ingredient category, not recipe names.
-Main-protein learning features still need an agreed authoritative mapping. The engine
-reads `tag:<tag>` and `cuisine:<cuisine>` weights. `learning.py` produces those
-weights from confirmed cooking and subsequent feedback.
+The engine reads `tag:<tag>`, `cuisine:<cuisine>` and `protein:<category>` weights.
+`learning.py` produces them from confirmed cooking and subsequent feedback.
+[`protein.py`](protein.py) maps eight stable catalogue ingredient IDs to six
+categories: chicken thigh to poultry; egg to egg; firm tofu and tempeh to soy;
+canned chickpea and red lentil to legume; cod fillet to fish; prawn to shellfish.
+Only essential ingredient lines contribute. Mixed meals can have several
+categories, each counted once; optional ingredients and unknown IDs add none.
+This is a culinary mapping, not a calculation of protein content or a nutrition claim.
+
+Before every Cook ranking, the SQL repository refreshes `recent_recipe_ids` from
+confirmed meals in the preceding seven elapsed days, including the boundary.
+It uses the matching consumption event's `created_at`, not selection or rating
+time, and excludes undone/future events and other households. Each recipe appears
+once in this set, regardless of how often it was cooked. The penalty reduces its
+score without excluding it. These inputs use existing storage and snapshot fields.
 
 Engine calls made within the persisted service workflow:
 
@@ -226,9 +238,9 @@ Initial coefficients in `config.py` are hand-set, not tuned evaluation results:
 |---|---|
 | Coverage | +3; mean over non-staples: have=1, low=0.5, otherwise=0 |
 | Expiry urgency | +1; mean of each non-staple's highest usable-batch urgency, `max(0, 1-days/4)` for nonnegative days only |
-| Preference | +1; learned feature sum, +0.5 matching cuisine, +1 star, −1 per disliked ingredient, +2 per boosted tag |
+| Preference | +1; sum of learned cuisine, taste-tag and protein-category weights, +0.5 matching cuisine, +1 star, −1 per disliked ingredient, +2 per boosted tag |
 | Effort | −0.5; average of time/preferred-time and difficulty/preferred-difficulty; defaults 60 minutes and difficulty 3 |
-| Repetition | −1 per membership in shown history and recent cooked history |
+| Repetition | −1 if shown in the session, plus −1 if cooked within the last seven elapsed days; repeated cooking does not multiply the latter |
 | Uncertain essentials | −1 each for unknown or check |
 | Similarity after adjustment | +0.5 times ingredient/tag Jaccard similarity to the prior recipe |
 
@@ -291,8 +303,9 @@ The algorithm is deterministic and bounded, with no optimality claim:
 3. Score combinations with preference/effort, +0.5 per shared non-staple
    occurrence beyond the first, +1 per ingredient with confirmed usable stock,
    +0.5 per additional cuisine, and −0.5 per leftover pack fraction.
-   Main-protein variety awaits authoritative metadata. Coefficients are hand-set
-   in `config.py`; these are not evaluation results.
+   Variety uses cuisines, as permitted by SPEC B5. Protein features affect learned
+   preference, without adding a separate protein-variety bonus. Coefficients are
+   hand-set in `config.py`; these are not evaluation results.
 4. Aggregate all ingredients, including optional ones and meal staples, scaled
    by people/recipe servings. Subtract each compatible confirmed counted batch
    once across the entire plan, then round the deficit up to whole packs.
@@ -358,10 +371,11 @@ ID, its unchanged recipe/features, confirmed status and optional rating;
 | Selected, skipped or abandoned | 0; a rating is rejected before confirmation |
 
 The step is 0.25 and each feature is clipped to [−2, +2]. A meal contributes to
-each distinct taste tag and its cuisine. A Like on a Chinese `low_oil` recipe,
-for example, increases `cuisine:chinese` and `tag:low_oil` by 0.25 each before
-clipping. A future recipe sharing both features gains 0.5 preference points;
-one sharing only the cuisine gains 0.25. Hard filters still run first.
+its cuisine, each distinct taste tag and each mapped essential protein category:
+`new_weight = min(2, max(-2, old_weight + contribution))`. For example, a Like on
+a Chinese `low_oil` egg recipe adds 0.25 to `cuisine:chinese`, `tag:low_oil` and
+`protein:egg`, before clipping. A future recipe sharing all three gains 0.75
+preference points; one sharing only the cuisine gains 0.25. Hard filters still run first.
 
 SPEC B5 mentions both no-rating neutrality and a small cooked-without-rating
 reward. The implemented interpretation is a **provisional cooking reward**:
@@ -376,6 +390,11 @@ each meal, because subtracting an old delta from a saturated weight loses
 information. Recipe identity/features for an existing entry cannot change.
 The current state starts from zero, rather than importing already clipped
 weights without their evidence.
+
+Existing evidence recorded before protein features retains its original cuisine
+and tags on rating edits or retries. No historical protein rewards are backfilled.
+A newly confirmed meal uses the protein mapping, including a later cooking of
+the same recipe. This preserves the existing snapshot format and public API.
 
 **Persistence:** the SQL adapter retains first-confirmation order, frozen
 features and current ratings in `recommendation_learning`. It saves the evidence,
@@ -430,10 +449,11 @@ first result preserved and reported separately. See the scenario README for
 the protocol; no held-out pass claim is made.
 
 The SQL adapter, real stock confirmations and retry-safe feedback persistence
-passed [CI at `5c8ca30`](https://github.com/nkjcolin/cookish/actions/runs/42341902849):
-547 backend tests, including the new migration test and 18 SQL workflow tests;
+passed [CI at `f313566`](https://github.com/nkjcolin/cookish/actions/runs/42342203535):
+549 backend tests, including the new migration test and 20 SQL workflow tests;
 frontend and AI jobs also passed. This is PostgreSQL CI evidence, not an AWS
-journey test. Held-out and deployed evaluation remain pending. No synthetic
+journey test, and predates the protein/history additions, which require their own
+CI run. Held-out and deployed evaluation remain pending. No synthetic
 test metadata should be seeded as the authoritative ingredient catalogue.
 
 ## What you may change, and what you must keep
@@ -558,12 +578,10 @@ Role 4 consumes the same authoritative catalogue.
 2. Resolve recipe quantity checks and counted shopping confirmation with Roles
    1/2, preserving uncertainty. Role 5 owns the recipe/engine behavior; UI and
    ingredient/schema changes remain with their respective owners.
-3. Agree the recent-cooked history window and main-protein feature mapping, then
-   supply those ranking inputs. Existing cuisine/tag learning is already implemented.
-4. Freeze the completed implementation, obtain 30 independently authored unseen
+3. Freeze the completed implementation, obtain 30 independently authored unseen
    scenarios, and run the prepared held-out workflow. The 70 development cases
    and property tests are already available; held-out results must be separate.
-5. Verify Cook/Shop against real inventory on the deployed stack after migration.
+4. Verify Cook/Shop against real inventory on the deployed stack after migration.
    Finalise the report and pricing conclusions with Roles 3/4's measured costs.
 
 **Done when** all 100 scenarios pass, and Cook and Shop work on the deployed stack against real inventory.

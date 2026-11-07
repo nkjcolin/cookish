@@ -28,6 +28,7 @@ class FakeDatabase:
                 deepcopy(PURCHASES),
             ),
             "learning": {household: LearningState(household) for household in (HOUSEHOLD, OTHER)},
+            "recent": {household: frozenset() for household in (HOUSEHOLD, OTHER)},
             "cook_sessions": {},
             "cook_records": {},
             "shop_sessions": {},
@@ -58,6 +59,11 @@ class FakeRepository:
     def catalogue(self, household_id):
         assert household_id in self.state["prefs"]
         return self.state["catalogue"]
+
+    def recent_recipe_ids(self, household_id, *, as_of):
+        # SQL query and time-window semantics are covered by PostgreSQL tests.
+        assert as_of.tzinfo is not None and as_of.utcoffset() is not None
+        return self.state["recent"][household_id]
 
     def learning(self, household_id):
         return self.state["learning"][household_id]

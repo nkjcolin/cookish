@@ -60,10 +60,19 @@ def learn(
     for index, previous in enumerate(state.meals):
         if previous.record_id != record_id:
             continue
-        if previous.recipe_id != recipe.id or previous.features != features:
+        # Before protein features were introduced, persisted evidence contained
+        # only cuisine/tags. Keep that frozen evidence on edits and retries;
+        # never retroactively award protein weights to an already counted meal.
+        # Evidence that already includes protein must still match exactly.
+        legacy_features = frozenset(f for f in features if not f.startswith("protein:"))
+        if previous.recipe_id != recipe.id or previous.features not in (
+            features,
+            legacy_features,
+        ):
             raise ValueError("a cook record's recipe/features cannot change")
         if rating is None or rating == previous.rating:
             return state
+        evidence = replace(previous, rating=rating)
         return replace(state, meals=(*state.meals[:index], evidence, *state.meals[index + 1 :]))
     return replace(state, meals=(*state.meals, evidence))
 

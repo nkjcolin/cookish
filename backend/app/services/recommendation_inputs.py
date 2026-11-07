@@ -1,8 +1,7 @@
 """Database reads for Role 5, using the caller's existing transaction.
 
-This is the input-loading portion of the repository, not a complete
-RecommendationRepository. Session, evidence and confirmation persistence still
-require the additions proposed in docs/role5-storage-proposal.md.
+SqlRecommendationRepository delegates its catalogue, preference and inventory
+reads here. Session, evidence and confirmation persistence live in that adapter.
 """
 
 from collections import defaultdict
@@ -27,7 +26,7 @@ class SqlRecommendationInputs:
     """Pass only the authenticated household ID, as with Role 2's read services.
 
     No commits, new transactions, inventory writes, or cached household state.
-    The eventual repository can delegate these three methods to this reader.
+    The SQL repository delegates these three methods to this reader.
     """
 
     def __init__(self, session: Session):

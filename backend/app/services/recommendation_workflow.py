@@ -106,8 +106,19 @@ class RecommendationWorkflow:
             _fail(ErrorCode.NOT_FOUND, "Learning state not found")
         return taste_weights(state)
 
-    def _suggest(self, repo, user, row, now, *, persist_no_result=False):
+    def _suggest(self, repo, user, row, *, persist_no_result=False):
+        # The unit of work has acquired the household lock. Use this time so a
+        # confirmation committed while we waited is not mistaken for a future meal.
+        now = self._now()
         household = user.household_id
+        # Refresh on every ranking: another household member may have cooked,
+        # undone a meal, or crossed the history window since this session began.
+        row = replace(
+            row,
+            state=replace(
+                row.state, recent_recipe_ids=repo.recent_recipe_ids(household, as_of=now)
+            ),
+        )
         catalogue = repo.catalogue(household)
         result = suggest(
             catalogue.recipes,
@@ -156,7 +167,7 @@ class RecommendationWorkflow:
                 -1,
                 user.user_id,
             )
-            return self._suggest(repo, user, row, now)
+            return self._suggest(repo, user, row)
 
     def _cook_session(self, repo, user, session_id, now, *, allow_selected=False):
         row = _active(
@@ -184,7 +195,6 @@ class RecommendationWorkflow:
                 repo,
                 user,
                 replace(row, state=adjust(row.state, body, candidate)),
-                now,
                 persist_no_result=True,
             )
         if isinstance(result, ApiError):
@@ -199,7 +209,6 @@ class RecommendationWorkflow:
                 repo,
                 user,
                 replace(row, state=skip_current(row.state)),
-                now,
                 persist_no_result=True,
             )
         if isinstance(result, ApiError):

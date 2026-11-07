@@ -39,14 +39,15 @@ additional persistence, migration or API fields.
 ## Workflow behavior
 
 These flows are implemented in the shared workflow and are now wired to SQL.
-At source `5c8ca30`, [CI](https://github.com/nkjcolin/cookish/actions/runs/42341902849)
-passed all 547 backend tests, including the new migration test and 18 PostgreSQL
+At source `f313566`, [CI](https://github.com/nkjcolin/cookish/actions/runs/42342203535)
+passed all 549 backend tests, including the new migration test and 20 PostgreSQL
 workflow tests. Frontend and AI jobs also passed. This is database integration
-evidence, not verification of the deployed AWS journey.
+evidence, not verification of the deployed AWS journey or the later protein/history
+changes. The latter require their own CI run.
 
 | Flow | Implemented behavior |
 |---|---|
-| Start Cook | Load household preferences, inventory, catalogue and learned weights; suggest; save history and remembered people in one transaction. |
+| Start Cook | Load household preferences, inventory, catalogue, learned weights and recent cooked meals; suggest; save history and remembered people in one transaction. |
 | Adjust / Not this | Apply accumulated adjustments or exclusions, then rerank using current household data. Valid restrictions/skips persist even when no recipe fits; no history entry is invented. Skips do not train taste weights. |
 | Previous | Move through saved suggestions without rescoring. Restore displayed portions, retain accumulated constraints, and recheck current hard constraints. Historical suggestions that no longer meet soft adjustments cannot be selected. |
 | Select | Recheck current hard/session constraints and essential stock; save a recipe snapshot and proposed batch consumption. Counted consumption follows earliest use-first date and spills into later batches. Repeated selection returns the existing record. |
@@ -54,6 +55,22 @@ evidence, not verification of the deployed AWS journey.
 | Feedback | Require a confirmed record in the household. Replace its learning evidence using the saved recipe features; retain who submitted the update. Ratings remain available after session expiry. |
 | Start / adjust Shop | Plan and save a basket with stable item IDs and purchase metadata. Each adjustment creates a fresh basket and marks the old one abandoned atomically. |
 | Confirm Shop | Validate the saved basket's line IDs and actual purchases. Convert counted packs using the saved pack definition; create new batches without merging old stock. Save resolved actual pack counts and a retry response. |
+
+Before every Cook ranking, the repository refreshes the household's recently
+cooked recipe IDs. The window is the preceding seven elapsed days, inclusive,
+using the successful consumption event's `created_at`. Only confirmed records
+with a matching same-household consumption event count. Undone and future events
+are excluded; selection time and later ratings do not extend the window. Each
+recipe receives one repetition penalty (−1 with the default weight), not one per
+meal. It remains eligible, and the separate shown-in-session penalty still applies.
+
+New meal evidence includes cuisine, taste tags and the explicit protein categories
+in [`protein.py`](../backend/app/reco/protein.py). Eight stable catalogue ingredient
+IDs map to poultry, egg, soy, legume, fish and shellfish. Only essential ingredients
+contribute; a mixed meal can have several categories, counted once each. Unknown
+IDs and optional ingredients add no protein feature. This is a culinary mapping,
+not a nutritional claim. Existing cuisine/tag-only evidence keeps its frozen
+features on edits and retries; no historical protein rewards are added.
 
 Sessions expire exactly 12 hours after creation. Adjusting a session does not
 extend its lifetime. Confirmation of an unconfirmed record/basket requires an
@@ -97,6 +114,7 @@ retain their creator's user ID. Reject foreign rows as `NOT_FOUND`.
 | `preferences(household_id)` | Call Role 2 `get_preferences(s, household_id)`. |
 | `inventory(household_id)` | Call Role 2 `get_inventory_snapshot(s, household_id)`, with freshness already computed. |
 | `catalogue(household_id)` | Role 5 queries the seeded recipes and ingredient tables. Resolve ingredient UUIDs, review flags, household stars, complete allergen/diet metadata and purchase conversions. |
+| `recent_recipe_ids(household_id, as_of=...)` | Read confirmed cook records and their matching, unreverted consumption events within the seven-day window. Refresh before each Cook ranking. |
 | `remember(...)` | Update only the requested `last_cook_people`, `last_shop_people`, `last_shop_meals` fields; do not overwrite other household preferences. |
 | Session / record / basket reads and saves | Role 5 queries Role 2's models. Lock existing rows before mutations; retain snapshots and history described below. |
 | `learning` / `save_learning(..., user_id=...)` | Load ordered confirmed-meal evidence and current ratings. Serialize updates per household; save evidence, acting user and derived `taste_weights` together. |
@@ -153,6 +171,9 @@ weights without ordered evidence cause `CONFLICT` when the workflow loads
 learning; they are not silently reset. Such households need an explicit data
 migration decision. New households start with empty learning state.
 
+The protein/history additions use existing fields and tables. They do not change
+the public API, Candidate schema or snapshot envelope version.
+
 ## Public wiring and deployment checks
 
 `recommendation_workflow(user)` constructs a unit-of-work factory bound to the
@@ -168,8 +189,9 @@ unchanged:
 
 Before releasing the new backend:
 
-1. Keep CI green for the reviewed release commit. Source `5c8ca30` passed 547
+1. Keep CI green for the reviewed release commit. Source `f313566` passed 549
    backend tests with PostgreSQL; the local non-database run passed 391 tests.
+   These are the merged integration's results, before the protein/history additions.
 2. Package the updated migration Lambda and invoke the existing
    `app.migrate.handler`. Verify revision `6f2c8d471a90` and successful production
    seeding before directing traffic to the new backend. The handler seeds the
@@ -187,7 +209,6 @@ Known remaining gaps are separate from the completed source wiring:
 - AI-imported free-text stock without catalogue IDs cannot satisfy canonical
   recipe ingredients. Roles 1/2/4 still need to agree and implement matching.
 - Grams, pieces and packs require compatible metadata; no conversion is guessed.
-- Across-session recent-cooked repetition needs an agreed history window.
 - Deployed latency/elasticity evidence and the 30 independent held-out cases
   remain pending. Unseen evaluation follows the
   [freeze protocol](../eval/reco_scenarios/README.md).

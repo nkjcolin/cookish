@@ -10,8 +10,9 @@ the normal owner of database models/migrations; Role 5 owns recommendation
 queries, serialization and service wiring. Public API schemas are unchanged.
 
 **Apply the migration before deploying the new backend.** PostgreSQL CI at
-`5c8ca30` passed all 547 backend tests, including migration preservation and the
-18 new workflow tests. AWS deployment checks remain pending.
+`f313566` passed all 549 backend tests, including migration preservation and the
+20 new workflow tests. AWS deployment checks remain pending. These results cover
+the merged integration, before the later protein/history additions.
 
 ## Available now
 
@@ -91,6 +92,17 @@ frozen `features` and current `rating`. The adapter saves evidence, acting user,
 audit entries in `recipe_feedback` and derived `preferences.taste_weights` in
 one transaction. Retries and rating edits do not create additional meal evidence.
 
+New confirmations now include protein features derived from the explicit catalogue
+mapping. Existing cuisine/tag-only evidence remains frozen when ratings change;
+no protein weights are backfilled. The snapshot version and fields are unchanged.
+
+Recent-cooked history needs no additional storage. The repository joins confirmed
+`cook_records` to matching, same-household consumption events and uses their
+`created_at` within the last seven elapsed days, inclusive. It excludes undone and
+future events and refreshes the result before every Cook ranking. Each recipe
+gets one repetition penalty, regardless of the number of meals in the window;
+selection and feedback dates do not extend it.
+
 Nullable snapshots allow existing rows through migration without inventing
 history. The adapter rejects legacy sessions/records/baskets missing required
 snapshots with `CONFLICT` and a restart-session message. It does not reconstruct
@@ -141,8 +153,9 @@ The local non-database suite passed 391 tests. Offline migration upgrade and
 downgrade SQL render successfully. The new migration preservation test exercises
 legacy rows and weights in a disposable PostgreSQL database. It was skipped
 locally because PostgreSQL is unavailable, then ran successfully in
-[CI at `5c8ca30`](https://github.com/nkjcolin/cookish/actions/runs/42341902849),
-alongside all 18 new SQL workflow tests (547 backend tests total).
+[CI at `f313566`](https://github.com/nkjcolin/cookish/actions/runs/42342203535),
+alongside all 20 new SQL workflow tests (549 backend tests total). The subsequent
+protein/history changes require a separate CI run.
 
 Database verification must cover concurrent same/different-key confirmation, stock-event
 key races with manual writes, stale inventory revisions, selection retries,
@@ -154,7 +167,6 @@ has been performed by this implementation task.
 
 The remaining product dependencies are ingredient-ID matching for AI imports,
 compatible inventory/recipe units, and the frontend's route from an empty-stock
-suggestion to adding ingredients or shopping. Across-session recent-cooked
-repetition still needs an agreed history window. The held-out runner is prepared,
+suggestion to adding ingredients or shopping. The held-out runner is prepared,
 but the final freeze, 30 independent unseen scenarios and deployed Cook/Shop
 checks remain separate evaluation work.
