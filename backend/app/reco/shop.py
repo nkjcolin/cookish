@@ -248,22 +248,25 @@ def plan_shop(
     order = {recipe_id: index for index, recipe_id in enumerate(session.pinned_recipe_ids)}
     pinned = tuple(sorted((m for m in safe if m.id in order), key=lambda m: order[m.id]))
 
-    def needs_shopping(meal):
+    def shopping_need(meal):
+        """2: something to buy; 1: only stock to check at home; 0: the kitchen covers it."""
         alone = shopping_list(
             (meal,), inventory, catalogue, purchases, session.people, as_of=as_of, config=config
         )
-        return bool(alone.items)
+        if any(not item.needs_check for item in alone.items):
+            return 2
+        return 1 if alone.items else 0
 
-    # Shop is for meals that need shopping, or at least a "check at home": one the kitchen
-    # already covers is Cook's to suggest, and choosing it would only empty the list.
+    # Shop always looks for something to buy, however full the kitchen: meals that need a
+    # purchase come first, ones that only need a check at home only fill what is left, and
+    # one the kitchen already covers is Cook's to suggest.
     pinned_families = {m.base_recipe_id or m.id for m in pinned}
-    open_meals = [
-        m
+    need = {
+        m.id: shopping_need(m)
         for m in safe
-        if m.id not in order
-        and (m.base_recipe_id or m.id) not in pinned_families
-        and needs_shopping(m)
-    ]
+        if m.id not in order and (m.base_recipe_id or m.id) not in pinned_families
+    }
+    open_meals = [m for m in safe if need.get(m.id, 0) > 0]
     if not pinned and not open_meals:
         return ShopPlan(session, (), (), {}, all_stocked=True)
     scores = {}
@@ -295,15 +298,23 @@ def plan_shop(
             score += shop_config.longer_lasting * sum(lives) / max(1, len(lives))
         scores[meal.id] = score
     # Keep the best variant in each family so the top K is not filled with one dish.
+    wanted = max(0, session.meals - len(pinned))
     families, candidates = set(), []
-    for meal in sorted(open_meals, key=lambda item: (-scores[item.id], str(item.id))):
-        family = meal.base_recipe_id or meal.id
-        if family not in families:
-            families.add(family)
-            candidates.append(meal)
-        if len(candidates) == shop_config.candidate_limit:
-            break
-    target = min(max(0, session.meals - len(pinned)), len(candidates))
+    for tier in (2, 1):
+        if tier == 1 and len(candidates) >= wanted:
+            break  # Enough meals with something to buy: check-only meals are not needed.
+        limit = shop_config.candidate_limit if tier == 2 else wanted
+        added = 0
+        meals = (m for m in open_meals if need[m.id] == tier)
+        for meal in sorted(meals, key=lambda item: (-scores[item.id], str(item.id))):
+            family = meal.base_recipe_id or meal.id
+            if family not in families:
+                families.add(family)
+                candidates.append(meal)
+                added += 1
+            if added == limit or (tier == 1 and len(candidates) == wanted):
+                break
+    target = min(wanted, len(candidates))
 
     def evaluate(indices):
         chosen = (*pinned, *(candidates[index] for index in indices))

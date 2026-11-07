@@ -268,6 +268,21 @@ def test_a_meal_the_kitchen_already_covers_is_left_to_cook():
     assert result.planned_meals == () and result.all_stocked
 
 
+def test_meals_with_something_to_buy_beat_ones_that_only_need_a_check_at_home():
+    unsure = batch("tomato", remaining_state=RemainingState.UNKNOWN)
+    check_only = recipe("check-only", ingredients=("tomato",), starred=True)
+    to_buy = recipe("to-buy")
+    result = plan([check_only, to_buy], [unsure], session=ShopSession(meals=1))
+    assert [meal.id for meal in result.planned_meals] == [to_buy.id]
+
+    # With nothing else to buy for, a check is still worth a trip.
+    result = plan([check_only, to_buy], [unsure], session=ShopSession(meals=2))
+    assert {meal.id for meal in result.planned_meals} == {to_buy.id, check_only.id}
+    result = plan([check_only], [unsure], session=ShopSession(meals=1))
+    assert [meal.id for meal in result.planned_meals] == [check_only.id]
+    assert all(item.needs_check for item in result.items)
+
+
 def test_pinned_recipes_are_always_planned_first_and_the_rest_filled_as_usual():
     starred = recipe("starred", starred=True)
     asked = recipe("asked", ingredients=("tomato",))
