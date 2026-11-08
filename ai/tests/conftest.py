@@ -1,3 +1,4 @@
+import asyncio
 import base64
 import os
 import wave
@@ -12,6 +13,20 @@ from app.matching import get_catalogue
 from app.model_client import get_client
 
 FIXTURES = Path(__file__).parent / "fixtures"
+
+
+@pytest.fixture
+def lambda_event_loop():
+    """Worker asyncio runners and Mangum live in separate Lambda processes on AWS.
+
+    Preserve the API runtime's loop when exercising both handlers in one pytest process.
+    """
+    try:
+        loop = asyncio.get_event_loop()
+    except RuntimeError:
+        loop = asyncio.new_event_loop()
+    yield
+    asyncio.set_event_loop(loop)
 
 
 @pytest.fixture(autouse=True)

@@ -17,6 +17,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "moto[dynamodb,s3,sqs]>=5,<6",
     "pytest>=8",
     "ruff>=0.6",
     "uvicorn>=0.30",

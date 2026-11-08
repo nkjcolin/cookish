@@ -4,7 +4,7 @@ You own assisted entry: turning a receipt photo, a grocery photo, or a typed or 
 
 The design is in [SPEC.md](../docs/SPEC.md), **B4**: the model options, the approach, and the evaluation.
 
-This folder is a small FastAPI app of its own, deployed as the `ai` Lambda. It runs outside the VPC so it can reach the model provider, and it never touches the database. Locally it runs like any FastAPI app. On AWS, API Gateway sends `/ai/*` here and [Mangum](https://mangum.fastapiexpert.com/) converts the Lambda event into a normal request (`app/lambda_handler.py`). Nothing else in the code knows it is on Lambda.
+This folder is a small FastAPI app of its own, deployed as the `ai` Lambda. It runs outside the VPC so it can reach the model provider, and it never connects to PostgreSQL. Locally it runs like any FastAPI app. On AWS, API Gateway sends `/ai/*` here and [Mangum](https://mangum.fastapiexpert.com/) converts the Lambda event into a normal request (`app/lambda_handler.py`). Nothing else in the code knows it is on Lambda.
 
 ## What you own
 
@@ -14,6 +14,13 @@ This folder is a small FastAPI app of its own, deployed as the `ai` Lambda. It r
 | `ai/eval/` | Evaluation tooling, manifests and local test data |
 
 ## What already exists
+
+Background image jobs are now implemented in source; AWS deployment remains to be verified.
+The frontend submits an image to a short-lived job endpoint and polls for its result.
+A separate worker reuses the existing prompts and extraction code with its own longer
+deadline. PostgreSQL is unchanged; temporary jobs use DynamoDB/S3 on AWS and a local
+SQLite/file store during development. See [IMAGE_JOBS.md](IMAGE_JOBS.md) for the flow,
+45-second local acceptance test, worker commands, retention and rollout steps.
 
 The service supports an offline fake and the school's image-capable Chat Completions
 API. Parts 1–11 of [implementation.md](implementation.md), with Part 8 revised
@@ -122,10 +129,13 @@ is never imported by the service and is excluded from Docker images. Local
 `eval/data/` and `output/` folders are ignored by Git. Shared input copies are
 published under [dataset/](dataset/README.md) and used by the default test paths.
 Both datasets and local outputs are excluded from Docker images. Live uploads are
-processed only in memory.
+processed in memory by the synchronous routes. Background jobs temporarily store images
+until completion/failure, with eventual lifecycle cleanup for abandoned uploads.
 
 | Endpoint | Input | Output |
 |---|---|---|
+| POST /ai/image-jobs | Image request plus UUID Idempotency-Key header | HTTP 202: ImageJobResponse |
+| GET /ai/image-jobs/{job_id} | Job ID; verified caller must own it | Status, completed draft, error and usage |
 | `POST /ai/parse-image` | `kind` (`receipt` or `photo`), `media_type`, `image_base64` | `DraftResult`: a list of `DraftItem` |
 | `POST /ai/parse-items` | `text`, `source` (`typed` or `voice`) | `DraftResult` |
 | `POST /ai/interpret` (optional) | `text`, such as "something lighter" | `InterpretResult`: a `CookAdjust` |
@@ -139,7 +149,7 @@ processed only in memory.
 
 ## How the frontend uses you
 
-- **Images** are compressed in the browser to a 1500-pixel long edge (`MAX_IMAGE_EDGE` in `frontend/src/lib/image.ts`) and sent as base64 in the request. They are never stored. Tell Role 1 if a different size works better for the model.
+- **Images** are compressed in the browser to a 1500-pixel long edge and sent as base64 to the image-job route. The browser polls for completion and resumes an acknowledged job after a same-tab reload. Run the separate local worker when testing the frontend; see [IMAGE_JOBS.md](IMAGE_JOBS.md).
 - **Voice** can use the existing browser Web Speech API, or a recording uploaded to
   `/ai/transcribe-audio`. Send either transcript to `/ai/parse-items` with
   `source: "voice"`. Recording/upload integration still belongs to the frontend
@@ -149,6 +159,11 @@ processed only in memory.
 - **Failure.** On `UPSTREAM_UNAVAILABLE` the frontend offers to try again or enter items by hand.
 
 ## Run it
+
+For image jobs with Docker, start the separate worker using the overlay from the repository
+root: docker compose -f docker-compose.yml -f ai/compose.jobs.yaml up --build.
+The original root Compose command alone does not start the image worker.
+See [IMAGE_JOBS.md](IMAGE_JOBS.md) for fake versus real provider configuration.
 
 Requires [uv](https://docs.astral.sh/uv/). `docker compose up` in the repository root also starts it, on port 8001.
 

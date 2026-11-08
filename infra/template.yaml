@@ -393,6 +393,136 @@ Resources:
   # AI Lambda
   # ---------------------------------------------------------
 
+  # Image jobs are isolated from CookishDb. The worker never connects to PostgreSQL.
+  AiJobImages:
+    Type: AWS::S3::Bucket
+    Properties:
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        IgnorePublicAcls: true
+        BlockPublicPolicy: true
+        RestrictPublicBuckets: true
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      LifecycleConfiguration:
+        Rules:
+          - Id: ExpireImageUploads
+            Status: Enabled
+            ExpirationInDays: 1
+            AbortIncompleteMultipartUpload:
+              DaysAfterInitiation: 1
+
+  AiJobImagesPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref AiJobImages
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: RequireTLS
+            Effect: Deny
+            Principal: "*"
+            Action: s3:*
+            Resource:
+              - !GetAtt AiJobImages.Arn
+              - !Sub "${AiJobImages.Arn}/*"
+            Condition:
+              Bool:
+                aws:SecureTransport: "false"
+
+  AiJobs:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: job_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: job_id
+          KeyType: HASH
+      SSESpecification:
+        SSEEnabled: true
+      TimeToLiveSpecification:
+        AttributeName: expires_at
+        Enabled: true
+
+  AiImageDeadLetterQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      SqsManagedSseEnabled: true
+      MessageRetentionPeriod: 1209600
+
+  AiImageQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      SqsManagedSseEnabled: true
+      VisibilityTimeout: 720 # six times the worker Lambda's 120-second timeout
+      MessageRetentionPeriod: 86400
+      RedrivePolicy:
+        deadLetterTargetArn: !GetAtt AiImageDeadLetterQueue.Arn
+        maxReceiveCount: 5
+
+  AiImageWorker:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: cookish-ai-worker
+      CodeUri: ../ai/
+      Handler: app.job_worker.handler
+      Runtime: python3.12
+      Architectures: [arm64]
+      MemorySize: 512
+      Timeout: 120
+      ReservedConcurrentExecutions: 2
+      Environment:
+        Variables:
+          AI_JOB_BACKEND: aws
+          AI_JOB_BUCKET: !Ref AiJobImages
+          AI_JOB_TABLE: !Ref AiJobs
+          AI_JOB_QUEUE_URL: !Ref AiImageQueue
+          AI_WORKER_TIMEOUT_SECONDS: "110"
+          AI_PROVIDER: soclaas
+          SOCLAAS_BASE_URL: https://soclaas-api.comp.nus.edu.sg/v1
+          SOCLAAS_MODEL: qwen3-vl:32b
+          SOCLAAS_IMAGE_MODEL: qwen3-vl:32b
+          SOCLAAS_OUTPUT_MODE: json_schema
+          SOCLAAS_MAX_OUTPUT_TOKENS: "4096"
+          SOCLAAS_PRICING_CACHE_SECONDS: "3600"
+          SOCLAAS_TIMEOUT_SECONDS: "90"
+          SOCLAAS_API_KEY_SECRET_ARN: !Ref SoclaasApiKeySecretArn
+          SOCLAAS_PHOTO_QUANTITY_MODE: instances
+      Policies:
+        - AWSSecretsManagerGetSecretValuePolicy:
+            SecretArn: !Ref SoclaasApiKeySecretArn
+        - S3ReadPolicy:
+            BucketName: !Ref AiJobImages
+        - Statement:
+            - Effect: Allow
+              Action: [dynamodb:GetItem, dynamodb:UpdateItem]
+              Resource: !GetAtt AiJobs.Arn
+            - Effect: Allow
+              Action: s3:DeleteObject
+              Resource: !Sub "${AiJobImages.Arn}/images/*"
+            - Effect: Allow
+              Action: sqs:ChangeMessageVisibility
+              Resource: !GetAtt AiImageQueue.Arn
+      Events:
+        ImageJobs:
+          Type: SQS
+          Properties:
+            Queue: !GetAtt AiImageQueue.Arn
+            BatchSize: 1
+            FunctionResponseTypes: [ReportBatchItemFailures]
+            ScalingConfig:
+              MaximumConcurrency: 2
+
+  AiImageWorkerLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${AiImageWorker}"
+      RetentionInDays: 14
+
   AiFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -415,12 +545,27 @@ Resources:
           SOCLAAS_OUTPUT_MODE: json_schema
           SOCLAAS_MAX_OUTPUT_TOKENS: "4096"
           SOCLAAS_PRICING_CACHE_SECONDS: "3600"
-          AI_REQUEST_TIMEOUT_SECONDS: "90"
+          AI_REQUEST_TIMEOUT_SECONDS: "27"
+          AI_JOB_BACKEND: aws
+          AI_JOB_BUCKET: !Ref AiJobImages
+          AI_JOB_TABLE: !Ref AiJobs
+          AI_JOB_QUEUE_URL: !Ref AiImageQueue
           SOCLAAS_TIMEOUT_SECONDS: "60"
           SOCLAAS_API_KEY_SECRET_ARN: !Ref SoclaasApiKeySecretArn
           SOCLAAS_PHOTO_QUANTITY_MODE: instances
 
       Policies:
+        - S3WritePolicy:
+            BucketName: !Ref AiJobImages
+        - SQSSendMessagePolicy:
+            QueueName: !GetAtt AiImageQueue.QueueName
+        - Statement:
+            - Effect: Allow
+              Action: [dynamodb:GetItem, dynamodb:PutItem, dynamodb:UpdateItem]
+              Resource: !GetAtt AiJobs.Arn
+            - Effect: Allow
+              Action: s3:DeleteObject
+              Resource: !Sub "${AiJobImages.Arn}/images/*"
         - AWSSecretsManagerGetSecretValuePolicy:
             SecretArn: !Ref SoclaasApiKeySecretArn
 

@@ -4,11 +4,14 @@ These endpoints only return drafts. Nothing reaches the inventory until the user
 reviewed the draft and the frontend posts it to POST /api/inventory/items.
 """
 
+from datetime import datetime
 from enum import StrEnum
 from typing import Annotated, Literal, Self
+from uuid import UUID
 
 from pydantic import Field, model_validator
 
+from app.errors import ErrorBody
 from app.schemas.common import RequestModel, ResponseModel, Storage
 from app.schemas.cook import CookAdjust
 
@@ -81,3 +84,27 @@ class TranscriptionResult(ResponseModel):
         if not self.text.strip():
             raise ValueError("The transcript must contain text")
         return self
+
+
+class ImageJobUsage(ResponseModel):
+    model: str | None = None
+    input_tokens: int | None = None
+    output_tokens: int | None = None
+    estimated_cost: str | None = None
+    known_input_tokens: int = 0
+    known_output_tokens: int = 0
+    known_estimated_cost: str | None = None
+    cost_status: str = "unknown"
+    cost_unit: str = "provider_dollars"
+
+
+class ImageJobResponse(ResponseModel):
+    job_id: UUID
+    kind: ImageKind
+    status: Literal["queued", "processing", "completed", "failed"]
+    created_at: datetime
+    expires_at: datetime
+    result: DraftResult | None = None
+    error: ErrorBody | None = None
+    usage: ImageJobUsage | None = None
+    poll_after_seconds: int = Field(default=2, ge=1)

@@ -59,6 +59,14 @@ pnpm build
 
 ## Talking to the backend
 
+Receipt and grocery uploads now use POST /ai/image-jobs followed by short status polls.
+The loading screen stays active while the separate worker calls the school model.
+A pending job ID/kind is kept in session storage to resume a same-tab reload; completed
+items still require the existing review/confirmation before inventory changes.
+For local image testing, point VITE_AI_PROXY_TARGET at the AI service and start its
+separate worker as described in [ai/IMAGE_JOBS.md](../ai/IMAGE_JOBS.md). Backend-only
+development returns a clear 503 for these contract declarations.
+
 `src/api/schema.d.ts` is generated from `../docs/openapi.json`. Regenerate it whenever the contract changes:
 
 ```bash

@@ -4,6 +4,40 @@
  */
 
 export interface paths {
+    "/ai/image-jobs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Submit Image Job */
+        post: operations["submit_image_job"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/ai/image-jobs/{job_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Image Job */
+        get: operations["get_image_job"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/ai/interpret": {
         parameters: {
             query?: never;
@@ -810,6 +844,71 @@ export interface components {
             /** Name */
             name: string;
         };
+        /** ImageJobResponse */
+        ImageJobResponse: {
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            error?: components["schemas"]["ErrorBody"] | null;
+            /**
+             * Expires At
+             * Format: date-time
+             */
+            expires_at: string;
+            /**
+             * Job Id
+             * Format: uuid
+             */
+            job_id: string;
+            kind: components["schemas"]["ImageKind"];
+            /**
+             * Poll After Seconds
+             * @default 2
+             */
+            poll_after_seconds: number;
+            result?: components["schemas"]["DraftResult"] | null;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "queued" | "processing" | "completed" | "failed";
+            usage?: components["schemas"]["ImageJobUsage"] | null;
+        };
+        /** ImageJobUsage */
+        ImageJobUsage: {
+            /**
+             * Cost Status
+             * @default unknown
+             */
+            cost_status: string;
+            /**
+             * Cost Unit
+             * @default provider_dollars
+             */
+            cost_unit: string;
+            /** Estimated Cost */
+            estimated_cost?: string | null;
+            /** Input Tokens */
+            input_tokens?: number | null;
+            /** Known Estimated Cost */
+            known_estimated_cost?: string | null;
+            /**
+             * Known Input Tokens
+             * @default 0
+             */
+            known_input_tokens: number;
+            /**
+             * Known Output Tokens
+             * @default 0
+             */
+            known_output_tokens: number;
+            /** Model */
+            model?: string | null;
+            /** Output Tokens */
+            output_tokens?: number | null;
+        };
         /**
          * ImageKind
          * @enum {string}
@@ -1473,6 +1572,90 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    submit_image_job: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ParseImageRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ImageJobResponse"];
+                };
+            };
+            /** @description Client Error */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Server Error */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    get_image_job: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                job_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ImageJobResponse"];
+                };
+            };
+            /** @description Client Error */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Server Error */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
     interpret: {
         parameters: {
             query?: never;

@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import type { Schemas } from "../api/client";
-import { useAddInventoryItems, useParseImage, useParseItems } from "../api/queries";
+import { useImageJobs } from "../api/imageJobs";
+import { useAddInventoryItems, useParseItems } from "../api/queries";
 import { Button } from "../components/Button";
 import { Chip } from "../components/Chip";
 import { Icon, type IconName } from "../components/Icon";
@@ -31,10 +32,23 @@ export function AddIngredientsPage() {
 
   const [checked, setChecked] = useState<Checked | null>(null);
   const parseItems = useParseItems();
-  const parseImage = useParseImage();
+  const imageJobs = useImageJobs();
+  const [preparingImage, setPreparingImage] = useState(false);
+  const [imageError, setImageError] = useState<Error | null>(null);
+  const reviewedJob = useRef<string | null>(null);
   const addItems = useAddInventoryItems();
 
   useEffect(() => () => stopListening.current(), []);
+
+  const completedJob = imageJobs.job;
+  useEffect(() => {
+    if (completedJob?.status !== "completed" || !completedJob.result
+      || reviewedJob.current === completedJob.job_id) return;
+    reviewedJob.current = completedJob.job_id;
+    try { sessionStorage.removeItem("cookish.pending-image-job"); } catch { /* Optional resume. */ }
+    const review: ReviewState = { items: completedJob.result.items, source: completedJob.kind };
+    navigate("/more/add/review", { state: review });
+  }, [completedJob, navigate]);
 
   const trimmed = text.trim();
   // A result belongs to the text it was read from: once the text changes, check again.
@@ -42,7 +56,8 @@ export function AddIngredientsPage() {
   const draft: DraftItem[] = upToDate ? checked.items : [];
   const source: ItemSource = spoken ? "voice" : "manual";
   const checkFailed = parseItems.isError && parseItems.variables?.text === trimmed;
-  const failure = parseImage.error ?? (checkFailed ? parseItems.error : null) ?? addItems.error;
+  const failure = imageError ?? imageJobs.error ?? (checkFailed ? parseItems.error : null) ?? addItems.error;
+  const imageBusy = preparingImage || imageJobs.active;
 
   function type(value: string) {
     setText(value);
@@ -59,13 +74,22 @@ export function AddIngredientsPage() {
 
   async function readImage(file: File | undefined, kind: Schemas["ImageKind"]) {
     if (!file) return;
-    const result = await parseImage.mutateAsync({
-      kind,
-      media_type: "image/jpeg",
-      image_base64: await compressImage(file),
-    });
-    const review: ReviewState = { items: result.items, source: kind };
-    navigate("/more/add/review", { state: review });
+    if (imageBusy) return;
+    setPreparingImage(true);
+    setImageError(null);
+    imageJobs.clear();
+    try {
+      await imageJobs.submit({
+        kind, media_type: "image/jpeg", image_base64: await compressImage(file),
+      });
+    } catch (error) {
+      setImageError(error instanceof Error ? error : new Error("The image could not be uploaded"));
+    } finally {
+      setPreparingImage(false);
+      // Selecting the same file again must still fire the input's change event.
+      if (receiptInput.current) receiptInput.current.value = "";
+      if (photoInput.current) photoInput.current.value = "";
+    }
   }
 
   function toggleListening() {
@@ -100,6 +124,7 @@ export function AddIngredientsPage() {
           title="Scan a receipt"
           detail="Best right after shopping"
           recommended
+          disabled={imageBusy}
           onClick={() => receiptInput.current?.click()}
         />
         <MethodRow
@@ -107,6 +132,7 @@ export function AddIngredientsPage() {
           tint="bg-info-soft"
           title="Photo of groceries or fridge"
           detail="We draft a list — you confirm"
+          disabled={imageBusy}
           onClick={() => photoInput.current?.click()}
         />
         {speechIsSupported() && (
@@ -163,7 +189,20 @@ export function AddIngredientsPage() {
           {parseItems.isPending ? "Checking…" : "Check"}
         </Button>
 
-        {parseImage.isPending && <p className="text-[12px] text-ink-muted">Reading…</p>}
+        {imageBusy && (
+          <p role="status" className="text-[12px] text-ink-muted">
+            {preparingImage ? "Preparing and uploading image…" : imageJobs.progress}
+            {" "}Larger grocery photos can take a minute or two.
+          </p>
+        )}
+        {imageJobs.pending && imageJobs.error && (
+          <div className="flex gap-[8px]">
+            {imageJobs.job?.status !== "failed" && (
+              <Button variant="secondary" onClick={imageJobs.refresh}>Check progress again</Button>
+            )}
+            <Button variant="secondary" onClick={imageJobs.clear}>Choose another image</Button>
+          </div>
+        )}
         {failure && (
           <p role="alert" className="text-[13px] text-danger">
             {failure.message}. You can still type items one by one.
@@ -213,14 +252,16 @@ type MethodRowProps = {
   title: string;
   detail: string;
   recommended?: boolean;
+  disabled?: boolean;
   onClick: () => void;
 };
 
-function MethodRow({ icon, tint, title, detail, recommended = false, onClick }: MethodRowProps) {
+function MethodRow({ icon, tint, title, detail, recommended = false, disabled = false, onClick }: MethodRowProps) {
   return (
     <button
       type="button"
       onClick={onClick}
+      disabled={disabled}
       className={`flex w-full items-center gap-[12px] rounded-md bg-surface p-[14px] text-left ${
         recommended ? "border-[1.5px] border-primary" : "border border-border"
       }`}

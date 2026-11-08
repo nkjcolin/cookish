@@ -1,8 +1,14 @@
 # AI Lambda packaging and platform handoff
 
-No AWS resources have been created or modified. This document is a handoff to the
-platform owner, not an automatic deployment script. All build/test tools operate
-locally unless someone separately publishes/deploys the image.
+The shared deployment uses SAM ZIP packages through GitHub Actions; see
+[infra/deployment.md](../infra/deployment.md). Container instructions below remain
+an optional packaging/test path, not a second owner of the live functions.
+The background worker and SAM resources are described in
+[IMAGE_JOBS.md](IMAGE_JOBS.md); its deadline is separate from the HTTP deadline.
+
+The background-job implementation has not created or modified AWS resources.
+Existing live infrastructure is documented by the platform owner in infra/.
+The optional build/test tools below operate locally unless separately deployed.
 
 ## Two different images
 
@@ -63,11 +69,12 @@ For explicitly enabled school testing, replace `-e AI_PROVIDER=fake` with
 Do not pass host AWS credentials or create a real secret merely to test fake mode.
 Local Secrets Manager behavior is covered by mocks, not real AWS calls.
 
-The request deadline is capped at 27 seconds for Lambda and at the invocation's
-remaining time minus one second. The platform's planned function timeout is 29
-seconds; this is a project setting, not AWS's maximum supported timeout. Slow
-school requests may return 503 and still consume provider quota. An aborted local
-wait does not guarantee the school server cancels its generation.
+The HTTP request deadline is capped at 27 seconds for Lambda and at the invocation's
+remaining time minus one second. The shared SAM template gives the API Lambda 120
+seconds of execution time, which does not extend the HTTP deadline. Image jobs use
+a separate worker with a 110-second budget; see IMAGE_JOBS.md. Slow synchronous school
+requests may return 503 and still consume provider quota. An aborted local wait does
+not guarantee that the school server cancels its generation.
 
 The emulator does not validate API Gateway authorization, IAM, deployed networking,
 real concurrency or end-to-end production latency. Those are deployment checks.

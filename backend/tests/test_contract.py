@@ -132,6 +132,8 @@ ENDPOINTS = [
         False,
         200,
     ),
+    ("POST", "/ai/image-jobs", None, {"kind": "photo", "image_base64": "test"}, True, 503),
+    ("GET", "/ai/image-jobs/{job_id}", f"/ai/image-jobs/{ANY}", None, False, 503),
     ("POST", "/ai/parse-items", None, {"text": "two packs of tofu and some kangkong"}, False, 200),
     ("POST", "/ai/interpret", None, {"text": "something lighter"}, False, 200),
     (

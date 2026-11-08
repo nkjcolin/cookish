@@ -1,0 +1,33 @@
+# From the repository root:
+# docker compose -f docker-compose.yml -f ai/compose.jobs.yaml up --build
+# Fake provider by default. Use --env-file ai/.env to explicitly select its provider.
+# This runs ordinary local processes and SQLite/files, not an AWS emulator.
+services:
+  ai:
+    env_file:
+      - path: ./ai/.env
+        required: false
+    environment:
+      AI_PROVIDER: ${AI_PROVIDER:-fake}
+      AI_JOB_BACKEND: local
+      AI_JOB_LOCAL_DIR: /app/output/jobs
+      AI_REQUEST_TIMEOUT_SECONDS: "27"
+
+  ai-worker:
+    build: ./ai
+    command: ["uv", "run", "--frozen", "python", "-m", "app.job_worker"]
+    env_file:
+      - path: ./ai/.env
+        required: false
+    environment:
+      AI_PROVIDER: ${AI_PROVIDER:-fake}
+      AI_JOB_BACKEND: local
+      AI_JOB_LOCAL_DIR: /app/output/jobs
+      AI_WORKER_TIMEOUT_SECONDS: "110"
+      SOCLAAS_TIMEOUT_SECONDS: "90"
+      INGREDIENTS_CSV: /seed/ingredients.csv
+    volumes:
+      - ./ai:/app
+      - ./backend/seed:/seed:ro
+    depends_on:
+      - ai

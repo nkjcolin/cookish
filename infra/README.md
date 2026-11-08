@@ -60,6 +60,13 @@ The deployed entry points are:
 
 ## Infrastructure design and checks
 
+Background image-job resources are implemented in the template but have not been deployed
+or verified on AWS by this change. They add cookish-ai-worker, a private S3 image bucket,
+a DynamoDB job table, an SQS queue and a failed-job queue. The existing RDS resource is
+unchanged. Review [the image-job rollout](../ai/IMAGE_JOBS.md) before merging to main.
+The HTTP AI deadline remains 27 seconds; the worker gets a separate 110-second application
+budget within a 120-second Lambda and uses a 90-second provider HTTP timeout.
+
 | Resource | Notes |
 |---|---|
 | VPC with two private subnets | Private subnets in two different Availability Zones. No NAT gateway. A Secrets Manager interface VPC endpoint is required if `api` and `migrate` retrieve `DB_SECRET_ARN` at runtime. |

@@ -1,17 +1,20 @@
 """The `ai` Lambda: assisted entry under /ai (SPEC A3, B4).
 
-It runs outside the VPC and never touches the database. API Gateway has already checked
+It runs outside the VPC and never touches PostgreSQL. API Gateway has already checked
 the caller's Cognito token before a request reaches it.
 """
 
 import logging
 from typing import Annotated
+from uuid import UUID
 
-from fastapi import APIRouter, Depends, FastAPI
+from fastapi import APIRouter, Depends, FastAPI, Header
 from fastapi.routing import APIRoute
 
-from app import parse
-from app.errors import ErrorResponse, register_error_handlers
+from app import image_jobs, parse
+from app.errors import ApiError, ErrorResponse, register_error_handlers
+from app.job_schemas import ImageJobResponse
+from app.job_store import JobStore, get_job_store
 from app.model_client import ModelClient, get_client
 from app.runtime import RequestMiddleware
 from app.schemas import (
@@ -33,6 +36,42 @@ logging.basicConfig(level=logging.INFO, format="%(message)s")
 Client = Annotated[ModelClient, Depends(get_client)]
 
 router = APIRouter(tags=["ai"])
+
+
+def job_store() -> JobStore:
+    try:
+        return get_job_store()
+    except Exception as exc:
+        raise image_jobs.storage_unavailable(exc) from None
+
+
+Store = Annotated[JobStore, Depends(job_store)]
+Owner = Annotated[str, Depends(image_jobs.job_owner)]
+
+
+@router.post("/image-jobs", status_code=202)
+def submit_image_job(
+    body: ParseImageRequest,
+    owner: Owner,
+    store: Store,
+    idempotency_key: Annotated[UUID, Header(alias="Idempotency-Key")],
+) -> ImageJobResponse:
+    try:
+        return image_jobs.submit_image_job(body, owner, idempotency_key, store)
+    except ApiError:
+        raise
+    except Exception as exc:
+        raise image_jobs.storage_unavailable(exc) from None
+
+
+@router.get("/image-jobs/{job_id}")
+def get_image_job(job_id: UUID, owner: Owner, store: Store) -> ImageJobResponse:
+    try:
+        return image_jobs.read_image_job(job_id, owner, store)
+    except ApiError:
+        raise
+    except Exception as exc:
+        raise image_jobs.storage_unavailable(exc) from None
 
 
 @router.post("/parse-image")
