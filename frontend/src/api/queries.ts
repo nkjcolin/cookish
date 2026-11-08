@@ -31,17 +31,6 @@ export function useUpdateInventoryItem() {
   });
 }
 
-export function useDeleteInventoryItem() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async ({ itemId, revision }: { itemId: string; revision: number }) =>
-      unwrap(await api.DELETE("/api/inventory/items/{item_id}", {
-        params: { path: { item_id: itemId }, query: { revision }, header: idempotencyKey() },
-      })),
-    onSuccess: () => invalidateAfterStockChange(queryClient),
-  });
-}
-
 /** Reads a typed or spoken list. Only when the user asks: typing alone never calls the model. */
 export function useParseItems() {
   return useMutation({

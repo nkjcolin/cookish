@@ -27,17 +27,14 @@ Kitchen improvements implemented in this branch:
   Escape dismisses it; clicking the photo keeps it open. A bounded browser-memory cache
   retains previews through processing. Confirming the draft releases its preview.
   Reloading the tab clears photo previews; acknowledged jobs and extracted drafts still work.
-- Kitchen History can edit the current remaining quantity or remove an individual batch.
-  Actions fetch the latest inventory revision and use the existing PATCH/DELETE APIs.
-  Changes create new reversible events; original submissions stay unchanged. Editing a
-  history item never changes another batch of the same ingredient. History, inventory
-  and recipe/shop caches refresh after corrections, removals and undo.
+- Kitchen History shows past stock changes and supports Undo. It has no quantity
+  editor or item-removal controls.
 - Bare rice now aliases uncooked rice in the seeded catalogue. Cooked rice and rice
   vermicelli remain distinct. This fixes future exact-name links; existing free-text
   rice entries need a separate confirmed correction.
 
-The history controls add no backend endpoint or database schema. The only backend
-change for these improvements is the catalogue alias and its regression test.
+These frontend improvements add no backend endpoint or database schema. The only
+backend change for these improvements is the catalogue alias and its regression test.
 
 - **The contract**: 25 endpoints, all backed by real logic.
 - **Every screen** of the Figma design, plus kitchen history, working against the real API (see Screens below).
