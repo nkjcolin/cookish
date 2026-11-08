@@ -22,7 +22,8 @@ Kitchen improvements implemented in this branch:
 
 - My Kitchen's search opens a focused input and filters loaded ingredient names,
   combining case-insensitive partial matching with the existing storage/status filters.
-- Receipt/photo review can enlarge the uploaded photo. Clicking the backdrop, Close or
+- Receipt/photo review shows a scaled-down thumbnail beside Your receipt/Your photo.
+  Clicking that card enlarges the same uploaded photo. Clicking the backdrop, Close or
   Escape dismisses it; clicking the photo keeps it open. A bounded browser-memory cache
   retains previews through processing. Confirming the draft releases its preview.
   Reloading the tab clears photo previews; acknowledged jobs and extracted drafts still work.

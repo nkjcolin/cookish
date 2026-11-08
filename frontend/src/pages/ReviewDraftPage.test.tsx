@@ -41,9 +41,15 @@ function setup(source: "photo" | "receipt", preview = true) {
 }
 
 describe("uploaded photo review", () => {
-  it.each(["photo", "receipt"] as const)("enlarges the %s and closes only when clicking outside it", (source) => {
+  it.each(["photo", "receipt"] as const)("shows a %s thumbnail before enlarging and retains it after closing", (source) => {
     setup(source);
     const trigger = screen.getByRole("button", { name: source === "receipt" ? "Your receipt" : "Your photo" });
+    const thumbnail = screen.getByRole("img", {
+      name: source === "receipt" ? "Uploaded receipt thumbnail" : "Uploaded grocery photo thumbnail",
+    });
+    expect(thumbnail).toBeVisible();
+    expect(thumbnail).toHaveAttribute("src", "blob:local-photo-preview");
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     trigger.focus();
     fireEvent.click(trigger);
     const dialog = screen.getByRole("dialog", { name: "Uploaded photo preview" });
@@ -53,6 +59,7 @@ describe("uploaded photo review", () => {
     expect(dialog).toBeInTheDocument();
     fireEvent.click(dialog);
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(thumbnail).toBeVisible();
     expect(trigger).toHaveFocus();
   });
 
@@ -71,6 +78,7 @@ describe("uploaded photo review", () => {
   it("keeps review usable when a reload has cleared the tab's preview", () => {
     setup("receipt", false);
     expect(screen.getByRole("button", { name: "Your receipt" })).toBeDisabled();
+    expect(screen.queryByRole("img", { name: "Uploaded receipt thumbnail" })).not.toBeInTheDocument();
     expect(screen.getByText(/Preview unavailable/)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Add 1 item to kitchen" })).toBeEnabled();
   });

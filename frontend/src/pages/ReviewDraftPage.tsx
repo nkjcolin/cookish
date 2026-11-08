@@ -74,8 +74,16 @@ function ReviewDraft({ review }: { review: ReviewState }) {
         onClick={() => setPreviewOpen(true)}
         className="flex items-center gap-[12px] rounded-md border border-border bg-surface p-[12px] text-left"
       >
-        <span className="flex h-[60px] w-[48px] shrink-0 items-center justify-center rounded-[8px] bg-surface-sunken">
-          <Icon name={kind === "receipt" ? "receipt" : "camera"} />
+        <span className="flex h-[60px] w-[48px] shrink-0 items-center justify-center overflow-hidden rounded-[8px] bg-surface-sunken">
+          {previewUrl ? (
+            <img
+              src={previewUrl}
+              alt={kind === "receipt" ? "Uploaded receipt thumbnail" : "Uploaded grocery photo thumbnail"}
+              className="h-full w-full object-contain"
+            />
+          ) : (
+            <Icon name={kind === "receipt" ? "receipt" : "camera"} />
+          )}
         </span>
         <span className="flex min-w-px flex-1 flex-col gap-[2px]">
           <span className="text-[14px] font-bold">{kind === "receipt" ? "Your receipt" : "Your photo"}</span>
