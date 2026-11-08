@@ -55,6 +55,21 @@ function firstToUse(batches: Batch[]): Batch {
   return pool.reduce((a, b) => ((a.est_use_first_date ?? "") <= (b.est_use_first_date ?? "") ? a : b));
 }
 
+// Added by Role 2 (inventory). A row lands in the "use-soon" section when ANY of its batches
+// needs attention (use soon, check or expired). The row's text used to come from the batch
+// that is used first, which can be a different batch, so the line under the name did not
+// explain why the row was listed. These helpers pick the batch that actually caused it.
+const SEVERITY: Record<string, number> = { expired: 3, use_soon: 2, check: 1 };
+
+/** The batch that put this row in the attention section: the most urgent one. */
+function attentionBatch(batches: Batch[]): Batch | null {
+  const flagged = batches.filter((b) => NEEDS_ATTENTION.has(b.freshness_status));
+  if (flagged.length === 0) return null;
+  return flagged.reduce((a, b) =>
+    (SEVERITY[b.freshness_status] ?? 0) > (SEVERITY[a.freshness_status] ?? 0) ? b : a,
+  );
+}
+
 function sectionOf(batches: Batch[]): KitchenSection {
   if (batches.every((b) => b.remaining_state === "unknown")) return "not-sure";
   if (batches.some((b) => NEEDS_ATTENTION.has(b.freshness_status))) return "use-soon";
@@ -89,6 +104,11 @@ export function freshnessNote(batch: Batch, today: Date): string | null {
 function detailOf(section: KitchenSection, batch: Batch, today: Date): { text: string; warning: boolean } {
   const storage = capitalise(batch.storage);
   if (section === "not-sure") return { text: lastConfirmedText(batch, today), warning: false };
+  // Role 2: a batch with no date and no estimate has status "check". Say so, instead of
+  // showing only the storage place, so the user can see why it is in this section.
+  if (section === "use-soon" && batch.est_use_first_date === null) {
+    return { text: `${storage} · no date, check it`, warning: true };
+  }
   if (section === "rest" || batch.est_use_first_date === null) return { text: storage, warning: false };
 
   const useFirst = parseDate(batch.est_use_first_date);
@@ -122,7 +142,9 @@ export function buildKitchenView(inventory: Inventory, today: Date): KitchenView
     .map((group): KitchenRow => {
       const section = sectionOf(group.batches);
       const editBatch = firstToUse(group.batches);
-      const detail = detailOf(section, editBatch, today);
+      // Role 2: explain the batch that needs attention, not just the one used first.
+      const explainer = section === "use-soon" ? (attentionBatch(group.batches) ?? editBatch) : editBatch;
+      const detail = detailOf(section, explainer, today);
       return {
         key: group.ingredient_id ?? `free:${group.name}`,
         name: group.name,
