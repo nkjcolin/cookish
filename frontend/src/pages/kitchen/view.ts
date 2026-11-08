@@ -150,8 +150,10 @@ export function buildKitchenView(inventory: Inventory, today: Date): KitchenView
   };
 }
 
-export function filterRows(rows: KitchenRow[], filter: KitchenFilter): KitchenRow[] {
-  if (filter === "all") return rows;
-  if (filter === "freezer") return rows.filter((r) => r.inFreezer);
-  return rows.filter((r) => r.section === filter);
+export function filterRows(rows: KitchenRow[], filter: KitchenFilter, query = ""): KitchenRow[] {
+  const needle = query.normalize("NFKC").trim().replace(/\s+/g, " ").toLowerCase();
+  return rows.filter((row) =>
+    (filter === "all" || (filter === "freezer" ? row.inFreezer : row.section === filter))
+    && row.name.normalize("NFKC").toLowerCase().includes(needle),
+  );
 }

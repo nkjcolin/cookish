@@ -19,6 +19,7 @@ export function invalidateAfterStockChange(queryClient: QueryClient) {
     queryClient.getQueryData<CartReview>(CART_REVIEW_KEY)?.hasMadeSelection === true;
   return Promise.all([
     queryClient.invalidateQueries({ queryKey: ["inventory"] }),
+    queryClient.invalidateQueries({ queryKey: ["stock-events"] }),
     queryClient.invalidateQueries({ queryKey: SUGGESTION_KEY, refetchType: "none" }),
     shopping ? null : queryClient.invalidateQueries({ queryKey: BASKET_KEY, refetchType: "none" }),
   ]);

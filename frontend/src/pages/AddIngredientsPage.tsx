@@ -46,7 +46,9 @@ export function AddIngredientsPage() {
       || reviewedJob.current === completedJob.job_id) return;
     reviewedJob.current = completedJob.job_id;
     try { sessionStorage.removeItem("cookish.pending-image-job"); } catch { /* Optional resume. */ }
-    const review: ReviewState = { items: completedJob.result.items, source: completedJob.kind };
+    const review: ReviewState = {
+      items: completedJob.result.items, source: completedJob.kind, imageJobId: completedJob.job_id,
+    };
     navigate("/more/add/review", { state: review });
   }, [completedJob, navigate]);
 

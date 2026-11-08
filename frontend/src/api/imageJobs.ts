@@ -2,6 +2,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
 import { api, ApiError, unwrap, type Schemas } from "./client";
+import { forgetImagePreview, rememberImagePreview } from "../lib/imagePreview";
 
 const STORAGE_KEY = "cookish.pending-image-job";
 type PendingJob = { jobId: string; kind: Schemas["ImageKind"] };
@@ -38,7 +39,8 @@ export function useImageJobs() {
       })),
     // React Query repeats the same variables/key if the acknowledgement was lost.
     retry: (count, error) => count < 1 && !(error instanceof ApiError && error.code !== "UPSTREAM_UNAVAILABLE"),
-    onSuccess: (job) => {
+    onSuccess: (job, { body }) => {
+      rememberImagePreview(job.job_id, body.media_type ?? "image/jpeg", body.image_base64);
       const next = { jobId: job.job_id, kind: job.kind };
       remember(next);
       setPending(next);
@@ -61,6 +63,7 @@ export function useImageJobs() {
   });
 
   function clear() {
+    if (pending) forgetImagePreview(pending.jobId);
     remember(null);
     setPending(null);
     submission.reset();

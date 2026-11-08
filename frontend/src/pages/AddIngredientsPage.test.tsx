@@ -5,7 +5,9 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { api, type Schemas } from "../api/client";
 import * as image from "../lib/image";
+import { forgetImagePreview } from "../lib/imagePreview";
 import { AddIngredientsPage } from "./AddIngredientsPage";
+import { ReviewDraftPage } from "./ReviewDraftPage";
 
 const onion: Schemas["DraftItem"] = {
   raw_text: "2 onions",
@@ -35,8 +37,10 @@ const checkButton = () => screen.getByRole("button", { name: "Check" });
 
 afterEach(() => {
   cleanup();
+  forgetImagePreview("d041df63-1dc7-4e36-a89a-0b8cd786cf72");
   sessionStorage.clear();
   vi.restoreAllMocks();
+  vi.unstubAllGlobals();
 });
 
 function ReviewDestination() {
@@ -44,6 +48,40 @@ function ReviewDestination() {
 }
 
 describe("AddIngredientsPage image jobs", () => {
+  it.each(["photo", "receipt"] as const)("retains the uploaded %s for an enlarged preview after the job completes", async (kind) => {
+    const OriginalURL = URL;
+    vi.stubGlobal("URL", class extends OriginalURL {
+      static createObjectURL = vi.fn(() => "blob:uploaded-image");
+      static revokeObjectURL = vi.fn();
+    });
+    const id = "d041df63-1dc7-4e36-a89a-0b8cd786cf72";
+    const queued = { job_id: id, kind, status: "queued", poll_after_seconds: 2 };
+    vi.spyOn(image, "compressImage").mockResolvedValue(btoa("uploaded-image"));
+    const post = vi.spyOn(api, "POST").mockResolvedValue({ data: queued } as never);
+    vi.spyOn(api, "GET").mockResolvedValue({
+      data: { ...queued, status: "completed", result: { items: [onion] } },
+    } as never);
+    render(
+      <QueryClientProvider client={new QueryClient()}>
+        <MemoryRouter initialEntries={["/more/add"]}>
+          <Routes>
+            <Route path="/more/add" element={<AddIngredientsPage />} />
+            <Route path="/more/add/review" element={<ReviewDraftPage />} />
+          </Routes>
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+    fireEvent.change(screen.getByLabelText(kind === "receipt" ? "Receipt photo" : "Photo of groceries or fridge", { selector: "input" }), {
+      target: { files: [new File(["image"], "uploaded.jpg", { type: "image/jpeg" })] },
+    });
+    const trigger = await screen.findByRole("button", { name: kind === "receipt" ? "Your receipt" : "Your photo" });
+    expect(trigger).toBeEnabled();
+    fireEvent.click(trigger);
+    expect(screen.getByRole("img", { name: "Uploaded receipt or grocery photo" })).toHaveAttribute("src", "blob:uploaded-image");
+    expect(post).toHaveBeenCalledTimes(1);
+    expect(sessionStorage.getItem("cookish.pending-image-job")).toBeNull();
+  });
+
   it("sends groceries to a job and opens review only after processing completes", async () => {
     const id = "d041df63-1dc7-4f26-a88b-9b25757b0037";
     const queued = { job_id: id, kind: "photo", status: "queued", poll_after_seconds: 2 };
@@ -70,7 +108,7 @@ describe("AddIngredientsPage image jobs", () => {
     await waitFor(() => expect(finish!).toBeTypeOf("function"));
     finish!({ data: { ...queued, status: "completed", result: { items: [onion] } } });
     const review = await screen.findByTestId("review");
-    expect(JSON.parse(review.textContent!)).toEqual({ items: [onion], source: "photo" });
+    expect(JSON.parse(review.textContent!)).toEqual({ items: [onion], source: "photo", imageJobId: id });
     const calls = post.mock.calls as unknown as [string, unknown][];
     expect(calls.some(([path]) => path === "/api/inventory/items")).toBe(false);
     expect(sessionStorage.getItem("cookish.pending-image-job")).toBeNull();

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { useInventory } from "../api/queries";
@@ -32,6 +32,10 @@ const roundButton =
 export function KitchenPage() {
   const inventory = useInventory();
   const [filter, setFilter] = useState<KitchenFilter>("all");
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const searchButton = useRef<HTMLButtonElement>(null);
+  const searchInput = useRef<HTMLInputElement>(null);
   const [editing, setEditing] = useState<KitchenRow | null>(null);
   const changed = useArrivalState<KitchenChanged>();
   const [showToast, setShowToast] = useState(changed !== null);
@@ -40,6 +44,12 @@ export function KitchenPage() {
     [inventory.data],
   );
 
+  function closeSearch() {
+    setQuery("");
+    setSearchOpen(false);
+    searchButton.current?.focus();
+  }
+
   return (
     <div className="flex flex-col gap-[14px]">
       <div className="flex items-center justify-between">
@@ -47,10 +57,40 @@ export function KitchenPage() {
           <Icon name="chevron-left" />
         </Link>
         <h1 className="text-[16px] font-bold whitespace-nowrap">My Kitchen</h1>
-        <button type="button" aria-label="Search" className={roundButton}>
-          <Icon name="search" />
+        <button
+          ref={searchButton}
+          type="button"
+          aria-label={searchOpen ? "Close search" : "Search"}
+          aria-expanded={searchOpen}
+          onClick={() => searchOpen ? closeSearch() : setSearchOpen(true)}
+          className={roundButton}
+        >
+          <Icon name={searchOpen ? "x" : "search"} />
         </button>
       </div>
+
+      {searchOpen && (
+        <form role="search" onSubmit={(event) => event.preventDefault()} className="flex items-center gap-[8px]">
+          <label htmlFor="kitchen-search" className="sr-only">Search kitchen</label>
+          <input
+            ref={searchInput}
+            id="kitchen-search"
+            type="search"
+            autoFocus
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            onKeyDown={(event) => { if (event.key === "Escape") closeSearch(); }}
+            placeholder="Search your kitchen"
+            className="min-w-px flex-1 rounded-md border border-border bg-surface px-[12px] py-[10px] text-[14px]"
+          />
+          {query && (
+            <button type="button" className="text-[13px] font-semibold text-primary" onClick={() => {
+              setQuery("");
+              searchInput.current?.focus();
+            }}>Clear</button>
+          )}
+        </form>
+      )}
 
       {inventory.isPending && <p className="text-[14px] text-ink-muted">Loading…</p>}
       {inventory.isError && (
@@ -84,7 +124,11 @@ export function KitchenPage() {
             </Chip>
           </div>
 
-          <Sections rows={filterRows(view.rows, filter)} onEdit={setEditing} />
+          <Sections
+            rows={filterRows(view.rows, filter, query)}
+            onEdit={setEditing}
+            emptyMessage={query.trim() ? "No matching ingredients. Try another name or filter." : "Nothing here."}
+          />
         </>
       )}
 
@@ -126,8 +170,12 @@ function CatchUpBanner({ days, toCheck, onStart }: { days: number; toCheck: numb
   );
 }
 
-function Sections({ rows, onEdit }: { rows: KitchenRow[]; onEdit: (row: KitchenRow) => void }) {
-  if (rows.length === 0) return <p className="text-[14px] text-ink-muted">Nothing here.</p>;
+function Sections({ rows, onEdit, emptyMessage }: {
+  rows: KitchenRow[];
+  onEdit: (row: KitchenRow) => void;
+  emptyMessage: string;
+}) {
+  if (rows.length === 0) return <p role="status" className="text-[14px] text-ink-muted">{emptyMessage}</p>;
 
   return SECTION_ORDER.map((section) => {
     const sectionRows = rows.filter((row) => row.section === section);

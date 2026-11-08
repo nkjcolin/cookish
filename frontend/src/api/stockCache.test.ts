@@ -29,4 +29,13 @@ describe("invalidateAfterStockChange", () => {
     await invalidateAfterStockChange(client);
     expect(client.getQueryState(BASKET_KEY)?.isInvalidated).toBe(false);
   });
+
+  it("refreshes history along with inventory after a correction, removal or undo", async () => {
+    const client = clientWith([]);
+    client.setQueryData(["inventory"], { groups: [] });
+    client.setQueryData(["stock-events"], { events: [] });
+    await invalidateAfterStockChange(client);
+    expect(client.getQueryState(["inventory"])?.isInvalidated).toBe(true);
+    expect(client.getQueryState(["stock-events"])?.isInvalidated).toBe(true);
+  });
 });

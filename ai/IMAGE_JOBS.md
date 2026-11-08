@@ -90,6 +90,11 @@ The frontend must point /ai at this service, rather than the backend's contract-
 stand-ins. A pending job ID/kind is kept in session storage so returning to Add Ingredients
 in the same tab resumes polling. Images and extraction results are not stored there.
 
+The browser also keeps a bounded, tab-local photo preview in memory for the review
+screen's enlarged preview. The router passes only its job ID, never photo bytes.
+Confirming the draft releases the preview; reloading the page clears browser-memory
+previews without preventing job-status recovery or ingredient review.
+
 ## Failure handling and retention
 
 - API Gateway's verified Cognito sub owns the job. HTTP handlers never accept an owner

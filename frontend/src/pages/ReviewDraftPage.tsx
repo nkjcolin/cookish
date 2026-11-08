@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 
 import { useAddInventoryItems } from "../api/queries";
 import { BottomBar } from "../components/BottomBar";
 import { Button } from "../components/Button";
 import { Icon } from "../components/Icon";
+import { PhotoPreviewDialog } from "../components/PhotoPreviewDialog";
 import { StorageTag } from "../components/Tag";
+import { forgetImagePreview, getImagePreview } from "../lib/imagePreview";
 import { draftLabel, isUncertain, toInventoryItems, type ReviewState } from "./add/draft";
 
 /** Rows shown before the rest are folded behind "+ N more". */
@@ -24,6 +26,9 @@ function ReviewDraft({ review }: { review: ReviewState }) {
   const [included, setIncluded] = useState(() => items.map(() => true));
   const [answered, setAnswered] = useState(() => items.map((item) => !isUncertain(item)));
   const [showAll, setShowAll] = useState(false);
+  const [previewUrl] = useState(() => getImagePreview(review.imageJobId));
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const closePreview = useCallback(() => setPreviewOpen(false), []);
 
   const kind = source === "receipt" ? "receipt" : "photo";
   const question = answered.findIndex((done) => !done);
@@ -40,7 +45,10 @@ function ReviewDraft({ review }: { review: ReviewState }) {
   }
 
   function save() {
-    addItems.mutate({ source, items: toInventoryItems(chosen) }, { onSuccess: () => navigate("/more/kitchen") });
+    addItems.mutate({ source, items: toInventoryItems(chosen) }, { onSuccess: () => {
+      if (review.imageJobId) forgetImagePreview(review.imageJobId);
+      navigate("/more/kitchen");
+    } });
   }
 
   return (
@@ -57,15 +65,28 @@ function ReviewDraft({ review }: { review: ReviewState }) {
         <span className="size-[40px]" />
       </div>
 
-      <div className="flex items-center gap-[12px] rounded-md border border-border bg-surface p-[12px]">
+      <button
+        type="button"
+        aria-label={kind === "receipt" ? "Your receipt" : "Your photo"}
+        aria-haspopup="dialog"
+        aria-expanded={previewOpen}
+        disabled={!previewUrl}
+        onClick={() => setPreviewOpen(true)}
+        className="flex items-center gap-[12px] rounded-md border border-border bg-surface p-[12px] text-left"
+      >
         <span className="flex h-[60px] w-[48px] shrink-0 items-center justify-center rounded-[8px] bg-surface-sunken">
           <Icon name={kind === "receipt" ? "receipt" : "camera"} />
         </span>
-        <div className="flex min-w-px flex-1 flex-col gap-[2px]">
-          <p className="text-[14px] font-bold">{kind === "receipt" ? "Your receipt" : "Your photo"}</p>
-          <p className="text-[12px] text-ink-muted">Nothing is saved until you confirm. The photo is not kept.</p>
-        </div>
-      </div>
+        <span className="flex min-w-px flex-1 flex-col gap-[2px]">
+          <span className="text-[14px] font-bold">{kind === "receipt" ? "Your receipt" : "Your photo"}</span>
+          <span className="text-[12px] text-ink-muted">
+            {previewUrl ? "Tap to enlarge. Items are added only when you confirm."
+              : "Preview unavailable after a reload or returning to a saved job. Your extracted items are still available."}
+          </span>
+        </span>
+      </button>
+
+      {previewOpen && previewUrl && <PhotoPreviewDialog src={previewUrl} onClose={closePreview} />}
 
       {question !== -1 && (
         <div className="flex flex-col gap-[10px] rounded-md bg-warn-soft p-[14px]">

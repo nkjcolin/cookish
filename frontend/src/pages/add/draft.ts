@@ -24,7 +24,12 @@ export function toInventoryItems(draft: DraftItem[]): Schemas["InventoryItemCrea
 }
 
 /** Handed from Add Ingredients to the review screen through router state. */
-export type ReviewState = { items: DraftItem[]; source: Schemas["ItemSource"] };
+export type ReviewState = {
+  items: DraftItem[];
+  source: Schemas["ItemSource"];
+  /** References a tab-local preview; photo bytes are never put into router history. */
+  imageJobId?: string;
+};
 
 /** Below this confidence the user is asked instead of trusted to notice. */
 const ASK_BELOW_CONFIDENCE = 0.6;

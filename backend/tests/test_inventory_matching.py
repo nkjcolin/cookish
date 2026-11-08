@@ -1,9 +1,11 @@
 """Conservative name links must never imply a quantity conversion."""
 
+import csv
 from contextlib import contextmanager
 from datetime import UTC, datetime
+from pathlib import Path
 from types import SimpleNamespace
-from uuid import uuid4
+from uuid import UUID, uuid4
 
 import pytest
 
@@ -40,6 +42,29 @@ def test_colliding_aliases_or_canonical_names_are_not_automatically_chosen():
 
 def test_empty_names_do_not_query_the_catalogue():
     assert match_exact_names(None, ["", "  "]) == {}
+
+
+def test_bought_rice_matches_uncooked_rice_without_merging_other_rice_ingredients():
+    """Exercise the shipped catalogue, not a duplicate alias fixture."""
+    source = Path(__file__).resolve().parents[1] / "seed" / "ingredients.csv"
+    with source.open() as file:
+        rows = list(csv.DictReader(file))
+    session = _session(
+        *((UUID(row["id"]), row["canonical_name"], row["aliases"].split("|")) for row in rows)
+    )
+    ids = {row["canonical_name"]: UUID(row["id"]) for row in rows}
+    matches = match_exact_names(
+        session,
+        ["Rice", "  RICE  ", "uncooked rice", "cooked rice", "rice vermicelli", "rice cake"],
+    )
+    assert matches == {
+        "Rice": ids["uncooked rice"],
+        "  RICE  ": ids["uncooked rice"],
+        "uncooked rice": ids["uncooked rice"],
+        "cooked rice": ids["cooked rice"],
+        "rice vermicelli": ids["rice vermicelli"],
+    }
+    assert ids["cooked rice"] != ids["uncooked rice"]
 
 
 @pytest.mark.parametrize(
