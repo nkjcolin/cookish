@@ -1,43 +1,43 @@
-id,canonical_name,aliases,category,countable,default_unit,allergen_tags,diet_flags,shelf_life_days_pantry,shelf_life_days_fridge,shelf_life_days_freezer,default_storage,is_staple,purchase_unit,purchase_unit_size,purchase_unit_measure,grams_per_piece
-def4868c-7923-489e-9de2-ae1bbccdfc7f,black pepper,ground black pepper,condiment,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,730,,,pantry,true,jar,50,g,
-9928fde3-c038-443f-921d-18c1d6417a83,bok choy,pak choi|pak choy,produce,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,,2,,fridge,false,pack,250,g,
-94ded1f7-001c-4c9c-a2c7-b54126d16232,broccoli,,produce,true,pcs,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,,3,,fridge,false,piece,1,pcs,300
-a1b7b4c1-230e-45b5-b5b3-0e487847eca4,cabbage,white cabbage|green cabbage,produce,true,pcs,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,,7,,fridge,false,piece,1,pcs,800
-103e91ce-f810-493f-b9db-4a4d8e3d3bff,canned chickpea,canned chickpeas|tinned chickpeas,pantry,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,730,3,,pantry,false,can,240,g,
-61a56c2d-8579-4041-a9ff-056a68c5d78d,carrot,carrots,produce,true,pcs,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,,14,,fridge,false,piece,1,pcs,75
-fea84315-02bc-421f-b457-ed972bf4e5e8,cauliflower,,produce,true,pcs,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,,3,,fridge,false,piece,1,pcs,500
-4d2b490d-740c-44da-859a-e78d578c7691,chicken thigh,boneless chicken thigh,meat,false,,,no_pork|no_beef,,1,270,fridge,false,pack,500,g,
-d9288306-fdd8-4283-afa2-8599ae9baa5c,chilli paste,plain chilli paste,condiment,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,365,180,,pantry,false,jar,200,g,
-5885489c-39d7-4520-9ea0-e26a7d28175f,chye sim,choy sum|cai xin,produce,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,,2,,fridge,false,pack,250,g,
-d9378eac-e318-409e-98fd-4b5247778796,coconut milk,unsweetened coconut milk,pantry,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,730,4,,pantry,false,can,400,ml,
-368d4a6b-d357-4431-8960-b8fb3c85707a,cooked rice,cooked white rice,grain,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,,4,180,fridge,false,,,,
-5658536e-bdbd-4014-801a-25600405adac,cucumber,cucumbers,produce,true,pcs,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,,4,,fridge,false,piece,1,pcs,300
-0af113ed-05ae-41d1-afe9-970307fcb697,cumin powder,ground cumin,condiment,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,1095,,,pantry,false,jar,50,g,
-4ec6f234-be95-4bf6-a25c-53d8bf6dc9f3,egg,eggs|chicken egg|telur,egg,true,pcs,egg,vegetarian|pescatarian|halal|no_pork|no_beef,,21,,fridge,false,tray,10,pcs,
-3524a936-adb8-4288-9416-a710e209a9a9,firm tofu,tau kwa|dou gan,other,false,,soy,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,,7,150,fridge,false,pack,300,g,
-edea5fcb-ab87-4046-aa3f-9f402f917022,fresh shiitake mushroom,fresh shiitake mushrooms,produce,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,,3,,fridge,false,pack,150,g,
-2f463af8-3dd6-4997-8e17-3eae7b217b88,frozen pea,frozen peas|frozen green peas,frozen,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,,,240,freezer,false,bag,500,g,
-60b35466-0fbe-4c3c-887d-0caea4e94251,garlic,garlic clove|garlic cloves,produce,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,30,,,pantry,false,pack,100,g,
-a655f8e8-ab31-4ff5-a6dd-97dbe08d1f27,ginger,fresh ginger,produce,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,,14,180,fridge,false,pack,100,g,
-5e25c7b9-4021-425a-abae-c61cb1983d02,lemon,lemons,produce,true,pcs,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,10,10,,fridge,false,piece,1,pcs,
-0a4e073a-1506-4a02-bea2-bd0c755807f0,long bean,long beans|yardlong bean|yardlong beans,produce,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,,3,,fridge,false,bunch,250,g,
-ec9de120-8b4d-4a94-8b3b-0a3aa905b25a,canola oil,,pantry,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,365,,,pantry,true,bottle,1000,ml,
-dd3ef5c1-a806-4402-9818-41e8ff737f09,onion,onions,produce,true,pcs,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,30,60,,pantry,false,piece,1,pcs,150
-aed930e9-a15c-44e5-88df-a45283a3be8e,potato,potatoes,produce,true,pcs,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,30,7,,pantry,false,piece,1,pcs,200
-c85abe69-7e4f-49dc-90fc-ee20f029b021,prawn,prawns|shrimp,seafood,false,,shellfish,pescatarian|halal|no_pork|no_beef,,1,180,fridge,false,pack,250,g,
-ef9fc22b-5194-4fa4-b687-e6aed2840776,pumpkin,,produce,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,60,5,,fridge,false,pack,500,g,
-6ba08b2f-d19d-4a0d-b68f-f4e2364c1566,red lentil,red lentils|split red lentils|masoor dal,pantry,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,365,,,pantry,false,bag,500,g,
-707cca39-efae-44ab-bf0f-75998940c798,rice vermicelli,bee hoon|bihun,grain,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,730,,,pantry,false,pack,400,g,
-2aa1cb4a-ba28-4590-9687-a370a5b6db28,salt,table salt,condiment,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,1825,,,pantry,true,pack,500,g,
-6fb3b1dd-0b9a-4448-be1b-6ce5cd9db0a8,sesame oil,toasted sesame oil,condiment,false,,sesame,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,730,,,pantry,true,bottle,150,ml,
-c9b4749f-3fae-4918-b138-7b24f3bca52e,soba noodle,soba noodles,grain,false,,gluten,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,365,,,pantry,false,pack,200,g,
-7ad4c266-44c1-4c15-be3d-5cd9da236a79,soy sauce,light soy sauce,condiment,false,,soy|gluten,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,1095,30,,pantry,true,bottle,500,ml,
-864bff45-dfbf-4cdb-a16b-0c6dd366e725,spinach,,produce,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,,3,,fridge,false,pack,200,g,
-4e140ecf-eeaf-47f7-8c88-59d626f500a1,spring onion,spring onions|scallion|scallions,produce,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,30,7,,fridge,false,bunch,100,g,
-ca4c852e-630d-4677-b976-4a9f46fcf594,tempeh,tempe,other,false,,soy,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,,3,180,fridge,false,pack,200,g,
-24a3433f-731f-4179-9929-70ad09f5b6e1,tomato,tomatoes,produce,true,pcs,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,5,7,60,fridge,false,piece,1,pcs,120
-76c67651-04e7-4b55-9441-f17572135f40,turmeric powder,ground turmeric,condiment,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,730,,,pantry,false,jar,50,g,
-33adba37-89bf-49d9-abda-acd8ee82337a,uncooked rice,uncooked white rice|dry white rice,grain,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,730,,,pantry,false,bag,5000,g,
-c9b91651-0cb9-4632-a266-7c4d494fe19e,water,drinking water,other,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,,,,pantry,true,,,,
-c2850538-2939-4ae3-8134-0dcecb50c272,water spinach,kangkong|kang kong,produce,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,,3,,fridge,false,bunch,300,g,
-47ea5a95-1021-474e-a545-6cb82510ce1a,cod fillet,,seafood,false,,fish,pescatarian|halal|no_pork|no_beef,,1,180,fridge,false,pack,200,g,
+id,canonical_name,aliases,category,countable,default_unit,allergen_tags,diet_flags,shelf_life_days_pantry,shelf_life_days_fridge,shelf_life_days_freezer,default_storage,is_staple,purchase_unit,purchase_unit_size,purchase_unit_measure
+def4868c-7923-489e-9de2-ae1bbccdfc7f,black pepper,ground black pepper,condiment,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,730,,,pantry,true,jar,50,g
+9928fde3-c038-443f-921d-18c1d6417a83,bok choy,pak choi|pak choy,produce,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,,2,300,fridge,false,pack,250,g
+94ded1f7-001c-4c9c-a2c7-b54126d16232,broccoli,,produce,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,,3,300,fridge,false,head,300,g
+a1b7b4c1-230e-45b5-b5b3-0e487847eca4,cabbage,white cabbage|green cabbage,produce,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,,7,300,fridge,false,head,800,g
+103e91ce-f810-493f-b9db-4a4d8e3d3bff,canned chickpea,canned chickpeas|tinned chickpeas,pantry,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,730,3,,pantry,false,can,240,g
+61a56c2d-8579-4041-a9ff-056a68c5d78d,carrot,carrots,produce,true,pcs,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,,14,300,fridge,false,pack,4,pcs
+fea84315-02bc-421f-b457-ed972bf4e5e8,cauliflower,,produce,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,,3,300,fridge,false,head,500,g
+4d2b490d-740c-44da-859a-e78d578c7691,chicken thigh,boneless chicken thigh,meat,false,,,no_pork|no_beef,,1,270,fridge,false,pack,500,g
+d9288306-fdd8-4283-afa2-8599ae9baa5c,chilli paste,plain chilli paste,condiment,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,365,180,,pantry,false,jar,200,g
+5885489c-39d7-4520-9ea0-e26a7d28175f,chye sim,choy sum|cai xin,produce,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,,2,300,fridge,false,pack,250,g
+d9378eac-e318-409e-98fd-4b5247778796,coconut milk,unsweetened coconut milk,pantry,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,730,4,90,pantry,false,can,400,ml
+368d4a6b-d357-4431-8960-b8fb3c85707a,cooked rice,cooked white rice,grain,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,,4,180,fridge,false,,,
+5658536e-bdbd-4014-801a-25600405adac,cucumber,cucumbers,produce,true,pcs,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,,4,,fridge,false,piece,1,pcs
+0af113ed-05ae-41d1-afe9-970307fcb697,cumin powder,ground cumin,condiment,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,1095,,,pantry,false,jar,50,g
+4ec6f234-be95-4bf6-a25c-53d8bf6dc9f3,egg,eggs|chicken egg|telur,egg,true,pcs,egg,vegetarian|pescatarian|halal|no_pork|no_beef,,21,,fridge,false,tray,10,pcs
+3524a936-adb8-4288-9416-a710e209a9a9,firm tofu,tau kwa|dou gan,other,true,pack,soy,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,,7,150,fridge,false,pack,300,g
+edea5fcb-ab87-4046-aa3f-9f402f917022,fresh shiitake mushroom,fresh shiitake mushrooms,produce,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,,3,300,fridge,false,pack,150,g
+2f463af8-3dd6-4997-8e17-3eae7b217b88,frozen pea,frozen peas|frozen green peas,frozen,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,,,240,freezer,false,bag,500,g
+60b35466-0fbe-4c3c-887d-0caea4e94251,garlic,garlic clove|garlic cloves,produce,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,30,3,30,pantry,false,pack,100,g
+a655f8e8-ab31-4ff5-a6dd-97dbe08d1f27,ginger,fresh ginger,produce,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,2,14,180,fridge,false,pack,100,g
+5e25c7b9-4021-425a-abae-c61cb1983d02,lemon,lemons,produce,true,pcs,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,10,10,,fridge,false,pack,2,pcs
+0a4e073a-1506-4a02-bea2-bd0c755807f0,long bean,long beans|yardlong bean|yardlong beans,produce,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,,3,240,fridge,false,bunch,250,g
+ec9de120-8b4d-4a94-8b3b-0a3aa905b25a,canola oil,,pantry,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,365,,,pantry,true,bottle,1000,ml
+dd3ef5c1-a806-4402-9818-41e8ff737f09,onion,onions,produce,true,pcs,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,30,60,300,pantry,false,pack,3,pcs
+aed930e9-a15c-44e5-88df-a45283a3be8e,potato,potatoes,produce,true,pcs,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,30,7,300,pantry,false,pack,4,pcs
+c85abe69-7e4f-49dc-90fc-ee20f029b021,prawn,prawns|shrimp,seafood,false,,shellfish,pescatarian|halal|no_pork|no_beef,,1,180,fridge,false,pack,250,g
+ef9fc22b-5194-4fa4-b687-e6aed2840776,pumpkin,,produce,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,60,5,,fridge,false,pack,500,g
+6ba08b2f-d19d-4a0d-b68f-f4e2364c1566,red lentil,red lentils|split red lentils|masoor dal,pantry,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,365,,,pantry,false,bag,500,g
+707cca39-efae-44ab-bf0f-75998940c798,rice vermicelli,bee hoon|bihun,grain,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,730,,,pantry,false,pack,400,g
+2aa1cb4a-ba28-4590-9687-a370a5b6db28,salt,table salt,condiment,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,1825,,,pantry,true,pack,500,g
+6fb3b1dd-0b9a-4448-be1b-6ce5cd9db0a8,sesame oil,toasted sesame oil,condiment,false,,sesame,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,730,,,pantry,true,bottle,150,ml
+c9b4749f-3fae-4918-b138-7b24f3bca52e,soba noodle,soba noodles,grain,false,,gluten,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,365,,,pantry,false,pack,200,g
+7ad4c266-44c1-4c15-be3d-5cd9da236a79,soy sauce,light soy sauce,condiment,false,,soy|gluten,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,1095,30,,pantry,true,bottle,500,ml
+864bff45-dfbf-4cdb-a16b-0c6dd366e725,spinach,,produce,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,,3,,fridge,false,pack,200,g
+4e140ecf-eeaf-47f7-8c88-59d626f500a1,spring onion,spring onions|scallion|scallions,produce,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,30,7,300,fridge,false,bunch,100,g
+ca4c852e-630d-4677-b976-4a9f46fcf594,tempeh,tempe,other,false,,soy,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,,3,180,fridge,false,pack,200,g
+24a3433f-731f-4179-9929-70ad09f5b6e1,tomato,tomatoes,produce,true,pcs,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,5,7,60,fridge,false,pack,4,pcs
+76c67651-04e7-4b55-9441-f17572135f40,turmeric powder,ground turmeric,condiment,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,730,,,pantry,false,jar,50,g
+33adba37-89bf-49d9-abda-acd8ee82337a,uncooked rice,uncooked white rice|dry white rice,grain,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,730,,,pantry,false,bag,5000,g
+c9b91651-0cb9-4632-a266-7c4d494fe19e,water,drinking water,other,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,,,,pantry,true,,,
+c2850538-2939-4ae3-8134-0dcecb50c272,water spinach,kangkong|kang kong,produce,false,,,vegetarian|vegan|pescatarian|halal|no_pork|no_beef,,3,,fridge,false,bunch,300,g
+47ea5a95-1021-474e-a545-6cb82510ce1a,cod fillet,,seafood,false,,fish,pescatarian|halal|no_pork|no_beef,,1,180,fridge,false,pack,200,g
