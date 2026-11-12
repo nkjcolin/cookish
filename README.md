@@ -10,14 +10,14 @@ Every screen runs on real data and is deployed at <https://main.d146krzza1ana.am
 
 ## Repository layout
 
-| Path | Contents | Owner |
-|---|---|---|
-| `frontend/` | React web app | Role 1 |
-| `backend/` | FastAPI service: API contract, inventory, Cook and Shop | Roles 1, 2, 5 |
-| `ai/` | Receipt, photo and text parsing | Role 4 |
-| `infra/` | AWS SAM template and deployment | Role 3 |
-| `eval/` | Load tests, recommendation scenarios, image test set, user study | all |
-| `docs/` | Specification, generated OpenAPI file, diagrams | all |
+| Path | Purpose and important files |
+|---|---|
+| `frontend/` | React pages and typed API client. src/pages/ holds Cook, Buy, Kitchen and review flows; src/api/schema.d.ts is generated from OpenAPI.|
+| `backend/app` | main.py registers FastAPI routers; auth.py resolves the caller; services/ holds inventory and workflow logic; db/models.py and db/session.py define persistence.|
+| `backend/app/reco` | Pure Cook and Shop algorithms, inventory assessment, scoring configuration and replaceable preference learning. |
+| `ai/` | Separate FastAPI AI app; app/main.py, model_client.py, receipts.py, photos.py, prompts/ and runtime.py handle parsing, validation and deadlines. |
+| `eval/ and docs/` | Recommendation fixtures and results, reproducible cost model, specification, handoffs and generated docs/openapi.json.|
+| `infra/ and .github/` | GitHub Actions uses OpenID Connect (OIDC) to assume a restricted AWS IAM deployment role without storing long-lived AWS access keys. The workflow builds the SAM application, runs the migration step and deploys the application stack using sam deploy. |
 
 ## Working agreements
 
